@@ -10,17 +10,32 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.13'
-
-}
-
-javafx {
-    version = "19"
-    modules = ['javafx.controls', 'javafx.fxml']
+    id 'jacoco'
+    id "com.adarshr.test-logger" version "3.1.0"
 }
 
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+}
+
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+}
+
+jacocoTestCoverageVerification {
+    dependsOn test // tests are required to run before generating the report
+    violationRules {
+        rule {
+            limit {
+                minimum = 1.0
+            }
+        }
+    }
 }
 
 dependencies {
@@ -29,31 +44,40 @@ dependencies {
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:30.1.1-jre'
+    implementation 'org.openjfx:javafx-controls:19.0.0'
+    implementation 'org.openjfx:javafx-fxml:19.0.0'
+    implementation 'org.openjfx:javafx-base:19.0.0'
 }
 
 application {
     // Define the main class for the application.
-    mainClass = 'marp.App'
+    mainClass = 'marp.core.Start'
+    applicationDefaultJvmArgs = ["-Xms1024m", "-Xmx8192m"]
+}
+
+mainClassName = 'marp.core.Start'
+
+jar {
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+  manifest {
+    attributes(
+        'Main-Class': 'marp.core.Start'
+    )
+  }
+  from {
+    configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+}
+
+test {
+  jvmArgs "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap"
 }
 
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
 }
-
-mainClassName = 'marp.App'
-
-compileJava.options.encoding = 'UTF-8'
-
-
-jar {
-  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-  manifest {
-    attributes(
-        'Main-Class': 'marp.App'
-    )
-  }
-  from {
-    configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-  }
+javafx{
+    version = "19"
+    modules = ['javafx.controls', 'javafx.fxml']
 }

@@ -20,6 +20,10 @@ public class SimpleElement extends Element {
 
     }
 
+    public long getID(){
+        return this.id;
+    }
+
     @Override
     public void draw(GraphicsContext gc) {
         throw new UnsupportedOperationException("Unimplemented method 'draw'");

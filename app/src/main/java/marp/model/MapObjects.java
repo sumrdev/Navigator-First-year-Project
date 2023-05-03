@@ -14,7 +14,9 @@ public class MapObjects {
     private ArrayList<SimpleElement> simpleElements = new ArrayList<>();
     private ArrayList<SinglePointElement> singlePointElements = new ArrayList<>();
     private ArrayList<Road> roads = new ArrayList<>();
+
     private HashMap<Long, SinglePointElement> pointIDtoPoint = new HashMap<>();
+    private HashMap<Long, SimpleElement> simpleElementIDtoElement = new HashMap<>();
 
     private ArrayList<SinglePointElement> unfinishedWayPoints = new ArrayList<>();
 
@@ -57,11 +59,12 @@ public class MapObjects {
 
     public void addSimpleElement(SimpleElement element){
         simpleElements.add(element);
+        simpleElementIDtoElement.put(element.getID(), element);
     }
 
     public void addSinglePointElement(SinglePointElement element){
         singlePointElements.add(element);
-        pointIDtoPoint.put(element.getID(),element);
+        pointIDtoPoint.put(element.getID(), element);
     }
 
     public SinglePointElement getSinglePointElementByID(long id){
@@ -99,7 +102,7 @@ public class MapObjects {
     public void setType(String type){
         this.unfinishedWayType = type;
     }
-    
+
     public void convertSimpleElementToRoad(){
         unfinishedRoad = new Road(unfinishedWayID, unfinishedWayPoints);
         this.isRoad = true;
@@ -123,6 +126,20 @@ public class MapObjects {
         unfinishedWayPoints = new ArrayList<>();
         unfinishedWayID = 0;
         unfinishedWayType = null;
+    }
+
+    public SimpleElement getSimpleElementByID(long id){
+        return this.simpleElementIDtoElement.get(id);
+    }
+
+    public void addSimpleElementToUnfinishedRelation(SimpleElement simpleElement) {
+        unfinishedRelationWays.add(simpleElement);
+    }
+
+    public void finishRelation(){
+        complexElements.add(new ComplexElement(unfinishedRelationID,this.unfinishedWayType,unfinishedRelationWays));
+        unfinishedRelationID = 0;
+        unfinishedRelationWays = new ArrayList<>();
     }
 
     private ArrayList<float[]> convertPointArrToUseableFloatArr() {

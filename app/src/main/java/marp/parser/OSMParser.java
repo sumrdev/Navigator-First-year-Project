@@ -44,6 +44,8 @@ public class OSMParser {
                             mapObjects.initializeEmptySimpleElement(Long.parseLong(xmlsr.getAttributeValue(null, "id")));
                             break;
                         case "member":
+                            long memberID = Long.parseLong(xmlsr.getAttributeValue(null, "ref"));
+                            mapObjects.addSimpleElementToUnfinishedRelation(mapObjects.getSimpleElementByID(memberID));
                             break;
                         case "relation":
                             mapObjects.initializeEmptyComplexElement(Long.parseLong(xmlsr.getAttributeValue(null, "id")));
@@ -159,6 +161,7 @@ public class OSMParser {
                             mapObjects.finishWay();
                         break;
                         case "relation":
+                            mapObjects.finishRelation();
                         break;
                     }
                     break;

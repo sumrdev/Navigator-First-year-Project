@@ -20,7 +20,7 @@ public class MapObjects {
 
     private ArrayList<SinglePointElement> unfinishedWayPoints = new ArrayList<>();
 
-    private String unfinishedWayType;
+    private String unfinishedType;
 
     private long unfinishedWayID; 
     private long unfinishedRelationID;
@@ -100,7 +100,7 @@ public class MapObjects {
     }
 
     public void setType(String type){
-        this.unfinishedWayType = type;
+        this.unfinishedType = type;
     }
 
     public void convertSimpleElementToRoad(){
@@ -119,17 +119,23 @@ public class MapObjects {
     public void finishWay(){
         if(!isRoad){
             ArrayList<float[]> coords = convertPointArrToUseableFloatArr();
-            simpleElements.add(new SimpleElement(this.unfinishedWayID, this.unfinishedWayType,coords.get(0),coords.get(1)));
+            simpleElements.add(new SimpleElement(this.unfinishedWayID, this.unfinishedType,coords.get(0),coords.get(1)));
         } else { 
             roads.add(this.unfinishedRoad);
         }
         unfinishedWayPoints = new ArrayList<>();
         unfinishedWayID = 0;
-        unfinishedWayType = null;
+        unfinishedType = null;
     }
 
     public SimpleElement getSimpleElementByID(long id){
         return this.simpleElementIDtoElement.get(id);
+    }
+
+    public void setRoleOnElement(long id, String role){
+        SimpleElement element = this.simpleElementIDtoElement.get(id);
+        if(element==null) return;
+        element.setRole(role);
     }
 
     public void addSimpleElementToUnfinishedRelation(SimpleElement simpleElement) {
@@ -137,9 +143,10 @@ public class MapObjects {
     }
 
     public void finishRelation(){
-        complexElements.add(new ComplexElement(unfinishedRelationID,this.unfinishedWayType,unfinishedRelationWays));
-        unfinishedRelationID = 0;
+        complexElements.add(new ComplexElement(unfinishedRelationID,this.unfinishedType, unfinishedRelationWays));
         unfinishedRelationWays = new ArrayList<>();
+        unfinishedRelationID = 0;
+        unfinishedType = null;
     }
 
     private ArrayList<float[]> convertPointArrToUseableFloatArr() {
@@ -162,6 +169,4 @@ public class MapObjects {
         }
         return result;
     }
-
-
 }

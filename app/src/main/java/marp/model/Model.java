@@ -18,6 +18,7 @@ public class Model {
         File file = Paths.get(fileURL.toURI()).toFile();
         OSMParser osmParser = new OSMParser();
         MapObjects mapObjects = osmParser.parseOSM(new FileInputStream(file));
+        System.out.println("beans");
     }
 
     public Model(String filename) throws FileNotFoundException, XMLStreamException, FactoryConfigurationError{

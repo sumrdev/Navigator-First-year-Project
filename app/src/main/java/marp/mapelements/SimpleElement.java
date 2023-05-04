@@ -7,6 +7,7 @@ public class SimpleElement extends Element {
     private String type;
     private float[] x;
     private float[] y;
+    private String role;
 
     protected SimpleElement(Long id){
         this.id = id;
@@ -22,6 +23,10 @@ public class SimpleElement extends Element {
 
     public long getID(){
         return this.id;
+    }
+
+    public void setRole(String role){
+        this.role = role;
     }
 
     @Override

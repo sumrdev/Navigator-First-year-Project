@@ -45,6 +45,14 @@ public class OSMParser {
                             break;
                         case "member":
                             long memberID = Long.parseLong(xmlsr.getAttributeValue(null, "ref"));
+                            String role = xmlsr.getAttributeValue(null, "role");
+                            switch (role) {
+                                case "inner":
+                                case "outer":
+                                    mapObjects.setRoleOnElement(memberID, role);
+                                default:
+                                    break;
+                            }
                             mapObjects.addSimpleElementToUnfinishedRelation(mapObjects.getSimpleElementByID(memberID));
                             break;
                         case "relation":

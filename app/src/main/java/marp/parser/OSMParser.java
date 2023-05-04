@@ -8,7 +8,7 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import marp.mapelements.SimpleElement;
+import marp.mapelements.SimpleShape;
 import marp.mapelements.Point;
 import marp.model.MapObjects;
 
@@ -38,10 +38,10 @@ public class OSMParser {
                             break;
                         case "nd":
                             long nodeID = Long.parseLong(xmlsr.getAttributeValue(null, "ref"));
-                            mapObjects.addPointToUnfinishedSimpleElement(mapObjects.getPointByID(nodeID));
+                            mapObjects.addPointToUnfinishedSimpleShape(mapObjects.getPointByID(nodeID));
                             break;
                         case "way":
-                            mapObjects.initializeEmptySimpleElement(Long.parseLong(xmlsr.getAttributeValue(null, "id")));
+                            mapObjects.initializeEmptySimpleShape(Long.parseLong(xmlsr.getAttributeValue(null, "id")));
                             break;
                         case "member":
                             long memberID = Long.parseLong(xmlsr.getAttributeValue(null, "ref"));
@@ -49,13 +49,13 @@ public class OSMParser {
                             switch (role) {
                                 case "inner":
                                 case "outer":
-                                    mapObjects.handleSimpleElement(memberID, role);
+                                    mapObjects.handleSimpleShape(memberID, role);
                                 default:
                                     break;
                             }
                             break;
                         case "relation":
-                            mapObjects.initializeEmptyComplexElement(Long.parseLong(xmlsr.getAttributeValue(null, "id")));
+                            mapObjects.initializeEmptyComplexShape(Long.parseLong(xmlsr.getAttributeValue(null, "id")));
                             break;
                         case "tag":
                         String key = xmlsr.getAttributeValue(null, "k");
@@ -271,7 +271,7 @@ public class OSMParser {
                             mapObjects.finishPoint();
                             break;
                         case "way":
-                            mapObjects.finishSimpleElement();
+                            mapObjects.finishSimpleShape();
                             break;
                         case "relation":
                             mapObjects.finishRelation();

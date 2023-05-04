@@ -1,30 +1,13 @@
 package marp.mapelements;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 
 import javafx.scene.canvas.GraphicsContext;
 
-public class Point extends Element {
-    long id;
-    float x;
-    float y;
+public class ComplexShape extends Element {
 
-    public Point(long id, float x, float y){
-        this.id = id;
-        this.x = 0.56f*x;
-        this.y = -y;
-    }
+    public ComplexShape(long id, String type, ArrayList<SimpleShape> elements){
 
-    public long getID(){
-        return this.id;
-    }
-
-    public float getX(){
-        return this.x;
-    }
-
-    public float getY(){
-        return this.y;
     }
 
     @Override

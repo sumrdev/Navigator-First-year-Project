@@ -2,7 +2,7 @@ package marp.mapelements;
 
 import java.util.ArrayList;
 
-public class Road extends SimpleElement {
+public class Road extends SimpleShape {
     ArrayList<Point> nodes;
     boolean oneway;
     String type;

@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import marp.mapelements.ComplexElement;
+import marp.mapelements.ComplexShape;
 import marp.mapelements.Road;
-import marp.mapelements.SimpleElement;
+import marp.mapelements.SimpleShape;
 import marp.mapelements.Point;
 
 public class MapObjects {
-    private ArrayList<ComplexElement> complexElements = new ArrayList<>();
-    private ArrayList<SimpleElement> simpleElements = new ArrayList<>();
+    private ArrayList<ComplexShape> complexShapes = new ArrayList<>();
+    private ArrayList<SimpleShape> SimpleShapes = new ArrayList<>();
     private ArrayList<Road> roads = new ArrayList<>();
 
     private HashMap<Long, Point> pointIDtoPoint = new HashMap<>();
-    private HashMap<Long, SimpleElement> simpleElementIDtoElement = new HashMap<>();
+    private HashMap<Long, SimpleShape> SimpleShapeIDToSimpleShape = new HashMap<>();
 
-    private ArrayList<Point> unfinishedSimpleElementPoints = new ArrayList<>();
+    private ArrayList<Point> unfinishedSimpleShapePoints = new ArrayList<>();
 
     private String unfinishedPointType;
     private String unfinishedShapeType;
@@ -25,7 +25,7 @@ public class MapObjects {
 
     private Point unfinishedPoint;
 
-    private long unfinishedSimpleElementID; 
+    private long unfinishedSimpleShapeID; 
     private long unfinishedRelationID;
 
     private Road unfinishedRoad;
@@ -42,7 +42,7 @@ public class MapObjects {
 
     private int fontSize;
 
-    private ArrayList<SimpleElement> unfinishedRelationSimpleElements = new ArrayList<>();
+    private ArrayList<SimpleShape> unfinishedRelationSimpleShapes = new ArrayList<>();
 
 
     private float minX;
@@ -54,21 +54,21 @@ public class MapObjects {
 
     }
 
-    public ArrayList<ComplexElement> getComplexElements() {
-        return complexElements;
+    public ArrayList<ComplexShape> getComplexShapes() {
+        return complexShapes;
     }
 
-    public ArrayList<SimpleElement> getSimpleElements() {
-        return simpleElements;
+    public ArrayList<SimpleShape> getSimpleShapes() {
+        return SimpleShapes;
     }
 
-    public void addComplexElement(ComplexElement element){
-        complexElements.add(element);
+    public void addComplexShape(ComplexShape element){
+        complexShapes.add(element);
     }
 
-    public void addSimpleElement(SimpleElement element){
-        simpleElements.add(element);
-        simpleElementIDtoElement.put(element.getID(), element);
+    public void addSimpleShape(SimpleShape element){
+        SimpleShapes.add(element);
+        SimpleShapeIDToSimpleShape.put(element.getID(), element);
     }
 
     public void addPointToHashMap(Point element){
@@ -96,15 +96,15 @@ public class MapObjects {
         this.maxY = value;
     }
 
-    public void addPointToUnfinishedSimpleElement(Point element){
-        this.unfinishedSimpleElementPoints.add(element);
+    public void addPointToUnfinishedSimpleShape(Point element){
+        this.unfinishedSimpleShapePoints.add(element);
     }
 
-    public void initializeEmptySimpleElement(long id){
-        this.unfinishedSimpleElementID = id;
+    public void initializeEmptySimpleShape(long id){
+        this.unfinishedSimpleShapeID = id;
     }
 
-    public void initializeEmptyComplexElement(long id){
+    public void initializeEmptyComplexShape(long id){
         this.unfinishedRelationID = id;
     }
 
@@ -116,13 +116,13 @@ public class MapObjects {
         this.unfinishedShapeType = type;
     }
 
-    public void convertSimpleElementToRoad(){
-        unfinishedRoad = new Road(unfinishedSimpleElementID, unfinishedSimpleElementPoints);
+    public void convertSimpleShapeToRoad(){
+        unfinishedRoad = new Road(unfinishedSimpleShapeID, unfinishedSimpleShapePoints);
         this.isRoad = true;
     }
 
     public void setRoadType(String type){
-        convertSimpleElementToRoad();
+        convertSimpleShapeToRoad();
         unfinishedRoad.setType(type);
     }
 
@@ -174,14 +174,14 @@ public class MapObjects {
     }
 
 
-    public void finishSimpleElement(){
+    public void finishSimpleShape(){
         if(!isRoad){
             ArrayList<float[]> coords = convertPointArrToUseableFloatArr();
             if(this.unfinishedPointType!=null){
                 //create POI element and add to trie
             }
             if(this.unfinishedShapeType==null){
-                this.simpleElementIDtoElement.put(this.unfinishedSimpleElementID, new SimpleElement(this.unfinishedSimpleElementID, this.unfinishedShapeType, coords.get(0),coords.get(1)));
+                this.SimpleShapeIDToSimpleShape.put(this.unfinishedSimpleShapeID, new SimpleShape(this.unfinishedSimpleShapeID, this.unfinishedShapeType, coords.get(0),coords.get(1)));
             }else {
                 switch (this.unfinishedShapeType) {
                     case "building":
@@ -202,7 +202,7 @@ public class MapObjects {
                         break;
                 }
             }
-            // add to tree command: new SimpleElement(this.unfinishedSimpleElementID, this.unfinishedShapeType, coords.get(0),coords.get(1));
+            // add to tree command: new SimpleShape(this.unfinishedSimpleShapeID, this.unfinishedShapeType, coords.get(0),coords.get(1));
         }else if (this.completeAddressCount==4){
             //create address element and add to trie
         } else { 
@@ -210,8 +210,8 @@ public class MapObjects {
             // add to tree
         }
         isRoad = false;
-        unfinishedSimpleElementPoints = new ArrayList<>();
-        unfinishedSimpleElementID = 0;
+        unfinishedSimpleShapePoints = new ArrayList<>();
+        unfinishedSimpleShapeID = 0;
         unfinishedShapeType = null;
         unfinishedPointType = null;
         cleanUpAddressVariables();
@@ -225,21 +225,21 @@ public class MapObjects {
         this.completeAddressCount = 0;
     }
 
-    public SimpleElement getSimpleElementByID(long id){
-        return this.simpleElementIDtoElement.get(id);
+    public SimpleShape getSimpleShapeByID(long id){
+        return this.SimpleShapeIDToSimpleShape.get(id);
     }
 
-    public void handleSimpleElement(long id, String role){
-        SimpleElement element = this.simpleElementIDtoElement.get(id);
+    public void handleSimpleShape(long id, String role){
+        SimpleShape element = this.SimpleShapeIDToSimpleShape.get(id);
         if(element==null) return;
         element.setRole(role);
-        unfinishedRelationSimpleElements.add(element);
+        unfinishedRelationSimpleShapes.add(element);
 
     }
 
     public void finishRelation(){
-        complexElements.add(new ComplexElement(unfinishedRelationID,this.unfinishedShapeType, unfinishedRelationSimpleElements));
-        unfinishedRelationSimpleElements = new ArrayList<>();
+        complexShapes.add(new ComplexShape(unfinishedRelationID,this.unfinishedShapeType, unfinishedRelationSimpleShapes));
+        unfinishedRelationSimpleShapes = new ArrayList<>();
         unfinishedRelationID = 0;
         unfinishedShapeType = null;
     }
@@ -249,7 +249,7 @@ public class MapObjects {
         ArrayList<Float> y = new ArrayList<>();
         ArrayList<float[]> result = new ArrayList<>();
         
-        for (Point point : unfinishedSimpleElementPoints) {
+        for (Point point : unfinishedSimpleShapePoints) {
             x.add(point.getX());
             y.add(point.getY());
         }

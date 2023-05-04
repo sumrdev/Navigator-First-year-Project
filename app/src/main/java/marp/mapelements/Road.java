@@ -3,11 +3,12 @@ package marp.mapelements;
 import java.util.ArrayList;
 
 public class Road extends SimpleElement {
-    ArrayList<SinglePointElement> nodes;
+    ArrayList<Point> nodes;
     boolean oneway;
     String type;
+    int speed;
     
-    public Road(Long id, ArrayList<SinglePointElement> nodes) {
+    public Road(Long id, ArrayList<Point> nodes) {
         super(id);
         this.nodes = nodes;
     }
@@ -18,5 +19,9 @@ public class Road extends SimpleElement {
 
     public void setOneWay(boolean oneway){
         this.oneway = oneway;
+    }
+
+    public void setSpeed(int speed){
+        this.speed = speed;
     }
 }

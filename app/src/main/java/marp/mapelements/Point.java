@@ -2,12 +2,12 @@ package marp.mapelements;
 
 import javafx.scene.canvas.GraphicsContext;
 
-public class SinglePointElement extends Element {
+public class Point extends Element {
     long id;
     float x;
     float y;
 
-    public SinglePointElement(long id, float x, float y){
+    public Point(long id, float x, float y){
         this.id = id;
         this.x = 0.56f*x;
         this.y = -y;

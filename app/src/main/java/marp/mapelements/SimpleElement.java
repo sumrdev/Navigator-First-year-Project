@@ -31,7 +31,7 @@ public class SimpleElement extends Element {
 
     @Override
     public void draw(GraphicsContext gc) {
+        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'draw'");
     }
-    
 }

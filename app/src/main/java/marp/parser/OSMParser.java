@@ -9,7 +9,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import marp.mapelements.SimpleElement;
-import marp.mapelements.SinglePointElement;
+import marp.mapelements.Point;
 import marp.model.MapObjects;
 
 public class OSMParser {
@@ -33,12 +33,12 @@ public class OSMParser {
                             long id = Long.parseLong(xmlsr.getAttributeValue(null, "id"));
                             float x = Float.parseFloat(xmlsr.getAttributeValue(null, "lon"));
                             float y = Float.parseFloat(xmlsr.getAttributeValue(null, "lat"));
-                            SinglePointElement spe = new SinglePointElement(id, x, y);
-                            mapObjects.addSinglePointElement(spe);
+                            Point point = new Point(id, x, y);
+                            mapObjects.addPointToHashMap(point);
                             break;
                         case "nd":
                             long nodeID = Long.parseLong(xmlsr.getAttributeValue(null, "ref"));
-                            mapObjects.addPointToUnfinishedWay(mapObjects.getSinglePointElementByID(nodeID));
+                            mapObjects.addPointToUnfinishedSimpleElement(mapObjects.getPointByID(nodeID));
                             break;
                         case "way":
                             mapObjects.initializeEmptySimpleElement(Long.parseLong(xmlsr.getAttributeValue(null, "id")));
@@ -49,11 +49,10 @@ public class OSMParser {
                             switch (role) {
                                 case "inner":
                                 case "outer":
-                                    mapObjects.setRoleOnElement(memberID, role);
+                                    mapObjects.handleSimpleElement(memberID, role);
                                 default:
                                     break;
                             }
-                            mapObjects.addSimpleElementToUnfinishedRelation(mapObjects.getSimpleElementByID(memberID));
                             break;
                         case "relation":
                             mapObjects.initializeEmptyComplexElement(Long.parseLong(xmlsr.getAttributeValue(null, "id")));
@@ -63,34 +62,45 @@ public class OSMParser {
                         String value = xmlsr.getAttributeValue(null, "v");
                         switch (key) {
                             case "highway":
-                            mapObjects.convertSimpleElementToRoad();
                                 switch (value) {
                                     case "motorway":
+                                        mapObjects.setRoadType("motorway");
+                                        break;
                                     case "primary":
                                     case "trunk":
+                                        mapObjects.setRoadType("primary");
+                                        break;
                                     case "secondary":
                                     case "tertiary":
                                     case "tertiary_link":
+                                        mapObjects.setRoadType("tertiary");
+                                        break;
                                     case "unclassified":
                                     case "residential":
+                                        mapObjects.setRoadType("residential");
+                                        break;
                                     case "pedestrian":
+                                        mapObjects.setRoadType("pedestrian");
+                                        break;
                                     case "footway":
                                     case "steps":
                                     case "escalator":
+                                        mapObjects.setRoadType("footpath");
+                                        break;
                                     case "path":
                                     case "cycleway":
                                     case "bridleway":
                                         mapObjects.setRoadType(value);
                                         break;
                                     default:
-                                        mapObjects.setRoadType("unclassified");
+                                        mapObjects.setRoadType("unknown");
                                         break;
                                     }
                             case "oneway":
                                 mapObjects.setRoadOneWay(value.equals("yes"));
                                 break;
                             case "building":
-                                mapObjects.setType(value);
+                                mapObjects.setShapeType(value);
                                 break;
                             case "natural":
                                 switch (value) {
@@ -100,22 +110,20 @@ public class OSMParser {
                                     case "moor":
                                     case "wetland":
                                     case "heath":
-                                        mapObjects.setType("grass");
+                                        mapObjects.setShapeType("grass");
                                         break;
                                     case "water":
                                     case "fountain":
-                                        mapObjects.setType("water");
+                                        mapObjects.setShapeType("water");
                                         break;
                                     case "coastline":
-                                        mapObjects.setType("coastline");
+                                        mapObjects.setShapeType("coastline");
                                     default:
                                         break;
                             }
                             case "water":
-                                mapObjects.setType("water");
-                                break;
                             case "habour":
-                                mapObjects.setType("water");
+                                mapObjects.setShapeType("water");
                                 break;
                             case "landuse":
                                 switch (value) {
@@ -128,49 +136,146 @@ public class OSMParser {
                                     case "wetland":
                                     case "heath":
                                     case "military":
-                                        mapObjects.setType("grassy");
+                                        mapObjects.setShapeType("grass");
                                         break;
                                     case "forest":
                                     case "shrub":
-                                        mapObjects.setType("forest");
+                                        mapObjects.setShapeType("forest");
                                         break;
                                     case "basin":
-                                        mapObjects.setType("water");
+                                        mapObjects.setShapeType("water");
                                         break;
                                     case "construction":
                                     case "industrial":
                                     case "residential":
                                     case "landfill":
-                                        mapObjects.setType("cement");
+                                        mapObjects.setShapeType("cement");
                                         break;
                                     case "commercial":
                                     case "retail":
-                                        mapObjects.setType("commercial");
+                                        mapObjects.setShapeType("commercial");
                                         break;
                                     case "allotments":
                                     case "farmland":
                                     case "orchard":
                                     case "vineyard":
-                                        mapObjects.setType("jungle");
+                                        mapObjects.setShapeType("farmland");
                                         break;
                                     default:
                                         break;
                                 }
-                        }
-
+                                case "addr:city":
+                                    mapObjects.setCity(value);
+                                    break;
+                                case "addr:housenumber":
+                                    mapObjects.setHouseNumber(value);
+                                    break;
+                                case "addr:postcode":
+                                    mapObjects.setPostcode(value);
+                                    break;
+                                case "addr:street":
+                                    mapObjects.setStreet(value);
+                                    break;
+                                case "shop":
+                                    mapObjects.setPointType("Shop");
+                                    break;
+                                case "bus":
+                                    mapObjects.setPointType("Bus stop");
+                                    break;
+                                case "station":
+                                    switch (value) {
+                                        case "subway":
+                                            mapObjects.setPointType("Metro station");
+                                            break;
+                                        default:
+                                            mapObjects.setPointType("Train station");
+                                            break;
+                                    }
+                                    break;
+                                case "amenity":
+                                    switch (value) {
+                                        case "place_of_worship":
+                                            mapObjects.setPointType("Place of worship");
+                                            break;
+                                        case "restaurant":
+                                        case "fast_food":
+                                        case "food_court":
+                                            mapObjects.setPointType("Restaurant");
+                                            break;
+                                        case "bar":
+                                        case "pub":
+                                            mapObjects.setPointType("Bar");
+                                            break;
+                                        case "cafe":
+                                            mapObjects.setPointType("Cafe");
+                                            break;
+                                        case "bank":
+                                            mapObjects.setPointType("Bank");
+                                            break;
+                                        case "clinic":
+                                        case "dentist":
+                                        case "doctors":
+                                        case "pharmacy":
+                                        case "hospital":
+                                            mapObjects.setPointType("Healthcare");
+                                            break;
+                                        case "cinema":
+                                        case "theatre":
+                                            mapObjects.setPointType("Theatre");
+                                            break;
+                                        case "toilets":
+                                            mapObjects.setPointType("Toilets");
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                case "name":
+                                    mapObjects.setName(value);
+                                    break;
+                                case "place":
+                                    switch (value) {
+                                        case "country":
+                                        case "region":
+                                        case "sea":
+                                            mapObjects.setFontSize(35);
+                                            break;
+                                        case "city":
+                                            mapObjects.setFontSize(30);
+                                            break;
+                                        case "town":
+                                        case "borough":
+                                        case "suburb":
+                                        case "island":
+                                            mapObjects.setFontSize(20);
+                                            break;
+                                        case "village":
+                                        case "hamlet":
+                                        case "smalltown":
+                                        case "quarter":
+                                        case "square":
+                                            mapObjects.setFontSize(15);
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                break;
+                            }
                         default:
-                        break;
+                            break;
                     }
                     break;
                 case XMLStreamConstants.END_ELEMENT:
                     String endTag = xmlsr.getLocalName();
                     switch(endTag){
+                        case "node":
+                            mapObjects.finishPoint();
+                            break;
                         case "way":
-                            mapObjects.finishWay();
-                        break;
+                            mapObjects.finishSimpleElement();
+                            break;
                         case "relation":
                             mapObjects.finishRelation();
-                        break;
+                            break;
                     }
                     break;
             }

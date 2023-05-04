@@ -15,7 +15,7 @@ public class App extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        String defaultFilename = "denmark-latest.osm";
+        String defaultFilename = "bornholm.osm";
         URL defaultFileURL = getClass().getClassLoader().getResource(defaultFilename);
         Model model = new Model(defaultFileURL);
         View view = new View(primaryStage, model);

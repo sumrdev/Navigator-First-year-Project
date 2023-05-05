@@ -6,23 +6,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.zip.ZipInputStream;
 
-import javax.swing.DefaultBoundedRangeModel;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
-
-import org.checkerframework.checker.units.qual.s;
 
 import marp.parser.OSMParser;
 import marp.utilities.DefaultPath;;
@@ -72,6 +65,9 @@ public class Model implements Serializable{
     private Model(MapObjects mapObjects, String filename) throws FileNotFoundException, IOException {
         this.mapObjects = mapObjects;
         save(filename);
+    }
+
+    public Model() {
     }
 
     private static Model loadBIN(FileInputStream fileInputStream) throws IOException, ClassNotFoundException {

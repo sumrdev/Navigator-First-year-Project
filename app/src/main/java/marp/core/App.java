@@ -17,9 +17,14 @@ public class App extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        String defaultFilename = "bornholm.osm";
-        URL defaultFileURL = new URL(DefaultPath.getDefaultPath()+defaultFilename);
-        Model model = Model.createModel(defaultFileURL);
+        Model model = new Model();
+        try {
+            String defaultFilename = "bornholm.osm";
+            URL defaultFileURL = new URL(DefaultPath.getDefaultPath()+defaultFilename);
+            model = Model.createModel(defaultFileURL);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         View view = new View(primaryStage, model);
         Controller controller = new Controller(view, model);
     }

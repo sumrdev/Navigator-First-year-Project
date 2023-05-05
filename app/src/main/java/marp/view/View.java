@@ -14,7 +14,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Affine;
 import javafx.stage.Stage;
 import marp.model.Model;
-import marp.view.gui.MapMenu;
+import marp.view.gui.*;
 
 public class View {
     public Stage primaryStage;
@@ -44,8 +44,8 @@ public class View {
         StackPane.setAlignment(appName, Pos.TOP_CENTER);
 
         Scene mainScene = new Scene(backgroundStackPane, 1000, 700);
-        
-        this.primaryStage.show();
+        ChooseMapScene chooseMapScene = new ChooseMapScene(primaryStage, mainScene, listView, this, model);
+        chooseMapScene.start();
     }
 
     public void pan(float dx, float dy){

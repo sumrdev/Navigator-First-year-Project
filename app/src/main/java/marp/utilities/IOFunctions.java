@@ -13,7 +13,7 @@ public class IOFunctions {
     }
     public static List<String> getFiles() throws MalformedURLException{
         // directory is resources
-        URL dir = new URL(DefaultPath.getDefaultPath());
+        URL dir = DefaultPath.getDefaultPath();
         return Stream.of(new File(dir.getFile()).listFiles())
                 .filter(file -> !file.isDirectory())
                 .map(File::getName)

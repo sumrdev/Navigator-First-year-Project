@@ -5,15 +5,30 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import marp.datastructures.RTree;
 import marp.mapelements.ComplexShape;
 import marp.mapelements.Road;
 import marp.mapelements.SimpleShape;
 import marp.mapelements.Point;
+import marp.mapelements.LandMark;
 
 public class MapObjects implements Serializable{
     private ArrayList<ComplexShape> complexShapes = new ArrayList<>();
     private ArrayList<SimpleShape> SimpleShapes = new ArrayList<>();
     private ArrayList<Road> roads = new ArrayList<>();
+
+    private RTree<Road> motorwayTree;
+    private RTree<Road> primaryRoadTree;
+    private RTree<Road> smallRoadTree;
+
+    private RTree<SimpleShape> buildingTree;
+    private RTree<SimpleShape> waterTree;
+    private RTree<SimpleShape> landuseTree;
+
+    private RTree<ComplexShape> coastlineTree;
+    private RTree<ComplexShape> complexBuildingTree;
+
+    private RTree<LandMark> landMarkTree;
 
     private HashMap<Long, Point> pointIDtoPoint = new HashMap<>();
     private HashMap<Long, SimpleShape> SimpleShapeIDToSimpleShape = new HashMap<>();
@@ -161,7 +176,7 @@ public class MapObjects implements Serializable{
 
     public void finishPoint() {
         if (unfinishedPointType!=null){
-            //create POI element 
+            new LandMark(name, unfinishedPointType, unfinishedPointType, unfinishedPoint.getX(), unfinishedPoint.getY());
         } else if(this.completeAddressCount==4){
             //create address element and add to trie
         } else if (fontSize!=0){

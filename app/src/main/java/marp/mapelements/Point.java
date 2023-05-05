@@ -15,6 +15,11 @@ public class Point extends Element {
         this.y = -y;
     }
 
+    public Point(float x, float y){
+        this.x = 0.56f*x;
+        this.y = -y;
+    }
+
     public long getID(){
         return this.id;
     }

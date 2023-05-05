@@ -43,7 +43,7 @@ public class Model implements Serializable{
         file = null;
         
         String filetype = filepath.split("\\.")[1];
-        System.out.println("Filetype: " + filetype + "\n filename: " + filename);
+        System.out.println("Filetype: " + filetype + "\nFilename: " + filename);
 
         switch (filetype) {
             case "bin":
@@ -85,7 +85,7 @@ public class Model implements Serializable{
                 try (var out = new ObjectOutputStream(
                         new FileOutputStream(getClass().getClassLoader().getResource("maps").getPath() + "\\" + fn))) {
                     out.writeObject(this);
-                    System.out.println("Saved to: " + fn);
+                    System.out.println("Saved as: " + fn);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

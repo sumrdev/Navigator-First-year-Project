@@ -22,8 +22,6 @@ import javax.swing.DefaultBoundedRangeModel;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
-import org.checkerframework.checker.units.qual.s;
-
 import marp.parser.OSMParser;
 import marp.utilities.DefaultPath;;
 

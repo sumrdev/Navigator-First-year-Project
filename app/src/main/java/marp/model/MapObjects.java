@@ -1,5 +1,6 @@
 package marp.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,7 +10,7 @@ import marp.mapelements.Road;
 import marp.mapelements.SimpleShape;
 import marp.mapelements.Point;
 
-public class MapObjects {
+public class MapObjects implements Serializable{
     private ArrayList<ComplexShape> complexShapes = new ArrayList<>();
     private ArrayList<SimpleShape> SimpleShapes = new ArrayList<>();
     private ArrayList<Road> roads = new ArrayList<>();

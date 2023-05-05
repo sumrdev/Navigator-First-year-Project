@@ -34,8 +34,7 @@ public class Point extends Element {
     }
 
     @Override
-    public double[] getBounds() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getBounds'");
+    public float[] getBounds() {
+        return new float[]{x,y,x,y};
     }
 }

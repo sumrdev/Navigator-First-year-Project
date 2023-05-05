@@ -12,7 +12,7 @@ import marp.mapelements.SimpleShape;
 import marp.mapelements.Point;
 import marp.model.MapObjects;
 
-public class OSMParser {
+public class OSMParser{
     public MapObjects parseOSM(InputStream inputStream) throws XMLStreamException, FactoryConfigurationError{
         XMLStreamReader xmlsr = XMLInputFactory.newInstance().createXMLStreamReader(inputStream);
         MapObjects mapObjects = new MapObjects();
@@ -90,7 +90,7 @@ public class OSMParser {
                                     case "path":
                                     case "cycleway":
                                     case "bridleway":
-                                        mapObjects.setRoadType(value);
+                                        mapObjects.setRoadType("path");
                                         break;
                                     default:
                                         mapObjects.setRoadType("unknown");

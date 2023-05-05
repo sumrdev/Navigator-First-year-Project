@@ -20,8 +20,12 @@ public class Digraph implements Serializable {
                 RoadNode node1 = road.getNode(i);
                 RoadNode node2 = road.getNode(i + 1);
                 nodes.put(node1.getID(), node1);
-                node1.addEdge(new Edge(node1.getID(), node2.getID(), road.getID()));
-                if(road.isOneWay()) node2.addEdge(new Edge(node2.getID(), node1.getID(), road.getID()));
+                node1.addEdge(
+                    new Edge(node1.getID(), node2.getID(), road.getID(), road.isDriveable(), road.isWalkable(), road.isBikeable())
+                );
+                if(road.isOneWay()) node2.addEdge(
+                    new Edge(node2.getID(), node1.getID(), road.getID(), road.isDriveable(), road.isWalkable(), road.isBikeable())
+                );
             }
         }
     }

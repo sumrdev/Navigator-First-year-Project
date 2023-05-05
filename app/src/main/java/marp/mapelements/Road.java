@@ -7,6 +7,9 @@ public class Road extends SimpleShape {
     boolean oneway;
     String type;
     int speed;
+    boolean driveable;
+    boolean walkable;
+    boolean bikeable;
     
     public Road(Long id, ArrayList<Point> nodes) {
         super(id);
@@ -37,6 +40,18 @@ public class Road extends SimpleShape {
         return this.oneway;
     }
 
+    public boolean isDriveable(){
+        return this.driveable;
+    }
+
+    public boolean isWalkable(){
+        return this.walkable;
+    }
+
+    public boolean isBikeable(){
+        return this.bikeable;
+    }
+
     public void setType(String type){
         this.type = type;
     }
@@ -48,4 +63,17 @@ public class Road extends SimpleShape {
     public void setSpeed(int speed){
         this.speed = speed;
     }
+
+    public void setDriveable(boolean driveable){
+        this.driveable = driveable;
+    }
+
+    public void setWalkable(boolean walkable){
+        this.walkable = walkable;
+    }
+
+    public void setBikeable(boolean bikeable){
+        this.bikeable = bikeable;
+    }
+
 }

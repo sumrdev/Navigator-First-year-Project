@@ -1,0 +1,6 @@
+.button {  
+    -fx-font : 14px "montserrat";  
+    -fx-text-fill : #FFFFFF;
+    -fx-padding : 10;  
+    -fx-background-color : #7000FF;  
+}   

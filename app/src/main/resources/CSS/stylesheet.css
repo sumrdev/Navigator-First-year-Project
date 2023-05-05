@@ -1,0 +1,126 @@
+.map-button {
+    -fx-background-color: D9D9D9;
+    -fx-border-width: 0px;
+    -fx-background-radius: 24px;
+    -fx-border-radius: 24px;
+    -fx-padding: 0px;
+    -fx-alignment: center;
+    -fx-font-size: 14;
+    -fx-text-fill: #363636;
+    -fx-min-height: 48px;
+}
+.map-button .graphic {
+    -fx-padding: 20px;
+}
+.map-button:hover {
+    -fx-background-color: darkgray;
+    -fx-text-fill: #363636;
+    -fx-cursor: pointer
+}
+.map-button-pressed-down {
+    -fx-background-color: darkgray;
+    -fx-border-width: 0px;
+    -fx-background-radius: 24px;
+    -fx-border-radius: 24px;
+    -fx-padding: 0px;
+    -fx-alignment: center;
+    -fx-max-height: 48px;
+    -fx-font-size: 14;
+    -fx-text-fill: #363636;
+}
+.map-button:selected {
+    -fx-background-color: darkgray;
+    -fx-border-width: 0px;
+    -fx-background-radius: 24px;
+    -fx-border-radius: 24px;
+    -fx-padding: 0px;
+    -fx-alignment: center;
+    -fx-max-height: 48px;
+    -fx-font-size: 14;
+    -fx-text-fill: #363636;
+}
+.menu-button {
+    -fx-background-color: darkgray;
+    -fx-color: white;
+    -fx-cursor: pointer;
+}
+.text-field {
+    -fx-background-color: white;
+    -fx-background-radius: 24px;
+    -fx-border-color: D9D9D9;
+    -fx-border-radius: 50%;
+    -fx-border-width: 4px;
+    -fx-min-height: 48px;
+    -fx-font-size: 14;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 15px 0 15px;
+
+}
+.text-field:hover {
+    -fx-background-color: D9D9D9;
+    -fx-text-fill: #363636;
+    -fx-prompt-text-fill: white;
+}
+
+.text-field:focused {
+    -fx-border-color: #D9D9D9; /* Set the border color when focused */
+}
+.map-vbox {
+    -fx-background-color: #efefef;
+    -fx-background-radius: 24;
+    -fx-padding: 20px;
+    -fx-spacing: 20px;
+    -fx-alignment: center;
+}
+.map-hbox {
+    -fx-background-color: #efefef;
+    -fx-background-radius: 24;
+    -fx-padding: 20px;
+    -fx-spacing: 20px;
+    -fx-alignment: center;
+}
+.map-label {
+    -fx-font-size: 18;
+    -fx-text-fill: #363636;
+    -fx-font-weight: bold;
+}
+.map-label-small {
+    -fx-font-size: 14;
+    -fx-text-fill: #363636;
+    -fx-font-weight: bold;
+}
+
+.map-check-box .box {
+    -fx-background-color: D9D9D9;
+    -fx-border-width: 0px;
+    -fx-background-radius: 50%;
+    -fx-scale-x: 1.5;
+    -fx-scale-y: 1.5;
+}
+.map-check-box:selected .mark {
+    -fx-background-color: #363636;
+}
+
+.file-list {
+    -fx-background-radius: 20px;
+    -fx-padding: 10px;
+    -fx-focus-color: transparent;
+}
+.list-cell:hover {
+    -fx-background-color: Lightgrey;
+}
+.slider {
+    -fx-background-color: transparent;
+}
+
+.slider .track {
+    -fx-background-color: #c2c2c2;
+}
+
+.slider .thumb {
+    -fx-background-color: #505050;
+    -fx-background-radius: 0;
+    -fx-border-color: #a8a8a8;
+    -fx-border-width: 1px;
+    -fx-border-radius: 0;
+}

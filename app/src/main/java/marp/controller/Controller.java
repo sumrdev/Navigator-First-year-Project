@@ -34,7 +34,7 @@ public class Controller {
         this.view = view;
         fileList = IOFunctions.getFiles();
         setFileChooser();
-        System.out.println(fileList.size());
+        //System.out.println(fileList.size());
         this.stage = view.getPrimaryStage();
         this.scene = view.getViewScene();
 

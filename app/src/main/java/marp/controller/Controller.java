@@ -1,5 +1,6 @@
 package marp.controller;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +29,12 @@ public class Controller {
     private float lastPressedX;
     private float lastPressedY;
 
-    public Controller(View view, Model model){
+    public Controller(View view, Model model) throws MalformedURLException{
         this.model = model;
         this.view = view;
         fileList = IOFunctions.getFiles();
         setFileChooser();
+        System.out.println(fileList.size());
         this.stage = view.getPrimaryStage();
         this.scene = view.getViewScene();
 

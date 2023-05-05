@@ -18,12 +18,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipInputStream;
 
+import javax.swing.DefaultBoundedRangeModel;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
 import org.checkerframework.checker.units.qual.s;
 
-import marp.parser.OSMParser;;
+import marp.parser.OSMParser;
+import marp.utilities.DefaultPath;;
 
 public class Model implements Serializable{
     private MapObjects mapObjects;
@@ -83,7 +85,7 @@ public class Model implements Serializable{
             String fn = filename.split("\\.")[0] + ".bin";
             try {
                 try (var out = new ObjectOutputStream(
-                        new FileOutputStream(getClass().getClassLoader().getResource("maps").getPath() + "\\" + fn))) {
+                        new FileOutputStream(new URL(DefaultPath.getDefaultPath() + fn).getPath()))) {
                     out.writeObject(this);
                     System.out.println("Saved as: " + fn);
                 }

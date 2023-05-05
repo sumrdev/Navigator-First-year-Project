@@ -19,7 +19,7 @@ public class App extends Application{
     public void start(Stage primaryStage) throws Exception {
         Model model = new Model();
         try {
-            String defaultFilename = "bornholm.osm";
+            String defaultFilename = "/bornholm.osm";
             URL defaultFileURL = new URL(DefaultPath.getDefaultPath()+defaultFilename);
             model = Model.createModel(defaultFileURL);
         } catch (Exception e) {

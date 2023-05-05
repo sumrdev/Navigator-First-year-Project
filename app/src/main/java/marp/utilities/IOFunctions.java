@@ -6,9 +6,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class IOFunctions {
+    IOFunctions() {
+
+    }
     public static List<String> getFiles(){
         // directory is resources
-        String dir = IOFunctions.class.getClass().getClassLoader().getResource("maps").getPath();
+        String dir = new IOFunctions().getClass().getClassLoader().getResource("maps").getPath();
         return Stream.of(new File(dir).listFiles())
                 .filter(file -> !file.isDirectory())
                 .map(File::getName)

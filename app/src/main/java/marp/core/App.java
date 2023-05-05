@@ -15,7 +15,7 @@ public class App extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        String defaultFilename = "maps/bornholm.bin";
+        String defaultFilename = "maps/bornholm.osm";
         URL defaultFileURL = getClass().getClassLoader().getResource(defaultFilename);
         Model model = Model.createModel(defaultFileURL);
         View view = new View(primaryStage, model);

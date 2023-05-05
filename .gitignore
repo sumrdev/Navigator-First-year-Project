@@ -17,10 +17,8 @@ build
 *.osm
 *.zip
 *.bin
-
-### .class ###
 *.class
+
 .vscode/settings.json
-app/scr/test/java/bfst23group19/SyntaxTest.java
 .gitignore
 .gradle/*

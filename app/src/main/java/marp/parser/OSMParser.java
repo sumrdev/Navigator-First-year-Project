@@ -280,6 +280,6 @@ public class OSMParser{
                     break;
             }
         }
-        return null;
+        return mapObjects;
     }
 }

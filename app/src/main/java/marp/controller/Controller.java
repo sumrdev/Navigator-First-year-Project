@@ -148,11 +148,15 @@ public class Controller {
         view.getMapMenu().getDirectionsPanel().minimizeButton.setOnAction(e -> {
             // Set the menu panel to the minimized menu panel
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
+            view.getMapMenu().getDirectionsPanel().setGuideShow(false);
+
             // Set the selectedPointMarker to null so no selected point is shown when the minimized menu is shown.
             model.setSelectedPointMarker(null);
         });
 
         view.getMapMenu().getDirectionsPanel().settingsButton.setOnAction(e -> {
+            view.getMapMenu().getDirectionsPanel().setGuideShow(false);
+
             // Set the menu panel to the settings menu panel
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getSettingsPanel());
         });
@@ -168,6 +172,8 @@ public class Controller {
         view.getMapMenu().getDirectionsPanel().findRouteButton.setOnAction( e -> {
             //TODO: Fix when this all works...
             //model.graph.runaStarWithNodeIndex(Integer.parseInt(view.getMapMenu().getDirectionsPanel().startLocationField.getText()), Integer.parseInt(view.getMapMenu().getDirectionsPanel().endLocationField.getText()));
+            //view.getMapMenu().getDirectionsPanel().receiveGuideList(null);
+            view.getMapMenu().getDirectionsPanel().setGuideShow(true);
             view.getMapScene().redraw();
         });
 

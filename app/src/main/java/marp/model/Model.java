@@ -103,7 +103,7 @@ public class Model implements Serializable{
     public SimpleTrie getSuggestionTrie() {
         //return suggestionTrie;
         //TODO: Fix
-        return new SimpleTrie();
+        return mapObjects.getTrie();
     }
 
     public List<String> getFileList() {

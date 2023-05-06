@@ -2,6 +2,7 @@ package marp.model;
 
 import com.google.common.base.MoreObjects;
 import marp.datastructures.RTree;
+import marp.datastructures.SimpleTrie;
 import marp.mapelements.*;
 
 import java.util.ArrayList;
@@ -236,5 +237,10 @@ public class MapObjects {
         smallRoadsTree = new RTree<>(smallRoadsList);
         footPathsTree = new RTree<>(smallRoadsList);
 
+    }
+
+    private SimpleTrie trie = new SimpleTrie();
+    public SimpleTrie getTrie(){
+        return trie;
     }
 }

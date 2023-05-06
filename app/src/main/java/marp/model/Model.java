@@ -4,8 +4,11 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -22,7 +25,8 @@ import marp.datastructures.SimpleTrie;
 import marp.mapelements.MapPoint;
 import marp.mapelements.PointOfInterest;
 
-import marp.parser.OSMParser;;
+import marp.parser.OSMParser;
+import marp.utilities.DefaultPath;;
 
 public class Model implements Serializable{
     private MapObjects mapObjects;
@@ -32,6 +36,12 @@ public class Model implements Serializable{
     public boolean isAddressVisible = true;
     public boolean isTerrainVisible = true;
     public boolean isBuildingsVisible = true;
+
+    public static Model createModel(URL fileURL) throws URISyntaxException, XMLStreamException,
+            FactoryConfigurationError, ClassNotFoundException, IOException {
+                File file = Paths.get(fileURL.toURI()).toFile();
+        return findLoadType(file.getAbsolutePath());
+    }
 
     public static Model createModel(File file) throws URISyntaxException, XMLStreamException,
             FactoryConfigurationError, ClassNotFoundException, IOException {
@@ -87,18 +97,18 @@ public class Model implements Serializable{
     }
 
     private void save(String filename) throws FileNotFoundException, IOException {
-        /*new Thread(() -> {
+        new Thread(() -> {
             String fn = filename.split("\\.")[0] + ".bin";
             try {
                 try (var out = new ObjectOutputStream(
-                        new FileOutputStream(getClass().getClassLoader().getResource("maps").getPath() + "\\" + fn))) {
-                    out.writeObject(this);
+                    new FileOutputStream(new URL(DefaultPath.getDefaultPath() + fn).getPath()))) {
+                        out.writeObject(this);
                     System.out.println("Saved to: " + fn);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }).start();*/
+        }).start();
     }
     public SimpleTrie getSuggestionTrie() {
         //return suggestionTrie;

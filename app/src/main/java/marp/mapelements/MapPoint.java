@@ -1,10 +1,11 @@
 package marp.mapelements;
 
+import marp.mapelements.details.PointType;
+
 public interface MapPoint {
     String getName();
-    String getType();
-    String getDisplayedType();
-    void setType(String newType);
+    PointType getType();
+    void setType(PointType newType);
 
     float getX();
 

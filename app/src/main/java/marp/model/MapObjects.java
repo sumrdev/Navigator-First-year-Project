@@ -1,85 +1,20 @@
 package marp.model;
 
-import java.io.Serializable;
+import com.google.common.base.MoreObjects;
+import marp.datastructures.RTree;
+import marp.mapelements.*;
+
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collection;
 
-import marp.mapelements.ComplexShape;
-import marp.mapelements.Road;
-import marp.mapelements.SimpleShape;
-import marp.mapelements.Point;
-
-public class MapObjects implements Serializable{
-    private ArrayList<ComplexShape> complexShapes = new ArrayList<>();
-    private ArrayList<SimpleShape> SimpleShapes = new ArrayList<>();
-    private ArrayList<Road> roads = new ArrayList<>();
-
-    private HashMap<Long, Point> pointIDtoPoint = new HashMap<>();
-    private HashMap<Long, SimpleShape> SimpleShapeIDToSimpleShape = new HashMap<>();
-
-    private ArrayList<Point> unfinishedSimpleShapePoints = new ArrayList<>();
-
-    private String unfinishedPointType;
-    private String unfinishedShapeType;
-
-
-    private Point unfinishedPoint;
-
-    private long unfinishedSimpleShapeID; 
-    private long unfinishedRelationID;
-
-    private Road unfinishedRoad;
-
-    private boolean isRoad;
-
-    private int completeAddressCount = 0;
-    private String city;
-    private String housenumber;
-    private String postcode;
-    private String street;
-    
-    private String name;
-
-    private int fontSize;
-
-    private ArrayList<SimpleShape> unfinishedRelationSimpleShapes = new ArrayList<>();
-
-
+public class MapObjects {
+    //#####################################################
+    //######## Bounds #####################################
+    //#####################################################
     private float minX;
     private float minY;
     private float maxX;
     private float maxY;
-
-    public MapObjects(){
-
-    }
-
-    public ArrayList<ComplexShape> getComplexShapes() {
-        return complexShapes;
-    }
-
-    public ArrayList<SimpleShape> getSimpleShapes() {
-        return SimpleShapes;
-    }
-
-    public void addComplexShape(ComplexShape element){
-        complexShapes.add(element);
-    }
-
-    public void addSimpleShape(SimpleShape element){
-        SimpleShapes.add(element);
-        SimpleShapeIDToSimpleShape.put(element.getID(), element);
-    }
-
-    public void addPointToHashMap(Point element){
-        unfinishedPoint = element;
-        pointIDtoPoint.put(element.getID(), element);
-    }
-
-    public Point getPointByID(long id){
-        return this.pointIDtoPoint.get(id);
-    }
 
     public void setMinX(float value){
         this.minX = value;
@@ -97,176 +32,200 @@ public class MapObjects implements Serializable{
         this.maxY = value;
     }
 
-    public void addPointToUnfinishedSimpleShape(Point element){
-        this.unfinishedSimpleShapePoints.add(element);
+    public float getMinX() {
+        return minX;
     }
 
-    public void initializeEmptySimpleShape(long id){
-        this.unfinishedSimpleShapeID = id;
+    public float getMinY() {
+        return minY;
     }
 
-    public void initializeEmptyComplexShape(long id){
-        this.unfinishedRelationID = id;
+    public float getMaxX() {
+        return maxX;
     }
 
-    public void setPointType(String type){
-        this.unfinishedPointType = type;
+    public float getMaxY() {
+        return maxY;
     }
 
-    public void setShapeType(String type){
-        this.unfinishedShapeType = type;
+    //#####################################################
+    //######## Address list and tree ######################
+    //#####################################################
+    private final ArrayList<Address> addressList = new ArrayList<>();
+    private RTree<Address> addressTree;
+    public RTree<Address> getAddressTree() {
+        return addressTree;
+    }
+    public ArrayList<Address> getAddressList() {
+        return addressList;
+    }
+    //#####################################################
+    //######## POI lists and trees ########################
+    //#####################################################
+    private final ArrayList<PointOfInterest> trainPOIList = new ArrayList<>();
+    private RTree<PointOfInterest> trainPOITree;
+    private final ArrayList<PointOfInterest> busPOIList = new ArrayList<>();
+    private RTree<PointOfInterest> busPOITree;
+    private final ArrayList<PointOfInterest> POIList = new ArrayList<>();
+    private RTree<PointOfInterest> POITree;
+    private final ArrayList<PointOfInterest> customPOIList = new ArrayList<>();
+    public ArrayList<PointOfInterest> getTrainPOIList() {
+        return trainPOIList;
+    }
+    public ArrayList<PointOfInterest> getBusPOIList() {
+        return busPOIList;
+    }
+    public ArrayList<PointOfInterest> getPOIList() {
+        return POIList;
+    }
+    public RTree<PointOfInterest> getTrainPOITree() {
+        return trainPOITree;
+    }
+    public RTree<PointOfInterest> getBusPOITree() {
+        return busPOITree;
+    }
+    public RTree<PointOfInterest> getPOITree() {
+        return POITree;
+    }
+    public ArrayList<PointOfInterest> getCustomPOIList() {
+        return customPOIList;
     }
 
-    public void convertSimpleShapeToRoad(){
-        unfinishedRoad = new Road(unfinishedSimpleShapeID, unfinishedSimpleShapePoints);
-        this.isRoad = true;
+    //#####################################################
+    //######## Place name lists and trees #################
+    //#####################################################
+    private final ArrayList<PlaceName> quiteSmallPlaceNameList = new ArrayList<>();
+    private RTree<PlaceName> quiteSmallPlaceNameTree;
+    private final ArrayList<PlaceName> smallPlaceNameList = new ArrayList<>();
+    private RTree<PlaceName> smallPlaceNameTree;
+    private final ArrayList<PlaceName> mediumPlaceNameList = new ArrayList<>();
+    private RTree<PlaceName> mediumPlaceNameTree;
+    private final ArrayList<PlaceName> mediumLargePlaceNameList = new ArrayList<>();
+    private RTree<PlaceName> mediumLargePlaceNameTree;
+    private final ArrayList<PlaceName> largePlaceNameList = new ArrayList<>();
+    private RTree<PlaceName> largeNameTree;
+    private final ArrayList<PlaceName> quiteLargePlaceNameList = new ArrayList<>();
+    private RTree<PlaceName> quiteLargeNameTree;
+    public RTree<PlaceName> getQuiteSmallPlaceNameTree() {
+        return quiteSmallPlaceNameTree;
+    }
+    public RTree<PlaceName> getSmallPlaceNameTree() {
+        return smallPlaceNameTree;
+    }
+    public RTree<PlaceName> getMediumPlaceNameTree() {
+        return mediumPlaceNameTree;
+    }
+    public RTree<PlaceName> getMediumLargePlaceNameTree() {
+        return mediumLargePlaceNameTree;
+    }
+    public RTree<PlaceName> getLargeNameTree() {
+        return largeNameTree;
+    }
+    public RTree<PlaceName> getQuiteLargeNameTree() {
+        return quiteLargeNameTree;
+    }
+    public ArrayList<PlaceName> getQuiteSmallPlaceNamesList() {
+        return quiteSmallPlaceNameList;
     }
 
-    public void setRoadType(String type){
-        convertSimpleShapeToRoad();
-        unfinishedRoad.setType(type);
+    public ArrayList<PlaceName> getSmallPlaceNamesList() {
+        return smallPlaceNameList;
+    }
+    public ArrayList<PlaceName> getMediumPlaceNamesList() {
+        return mediumPlaceNameList;
+    }
+    public ArrayList<PlaceName> getMediumLargePlaceNamesList() {
+        return mediumLargePlaceNameList;
+    }
+    public ArrayList<PlaceName> getLargePlaceNamesList() {
+        return largePlaceNameList;
+    }
+    public ArrayList<PlaceName> getQuiteLargePlaceNamesList() {
+        return quiteLargePlaceNameList;
     }
 
-    public void setRoadOneWay(boolean oneway){
-        unfinishedRoad.setOneWay(oneway);
+    //#####################################################
+    //######## Areas and buildings lists and trees ########
+    //#####################################################
+    private final ArrayList<Element> buildingsList = new ArrayList<>();
+    private RTree<Element> buildingsTree;
+    private final ArrayList<Element> waterAreasList = new ArrayList<>();
+    private RTree<Element> waterAreasTree;
+    private final ArrayList<Element> terrainAreasList = new ArrayList<>();
+    private RTree<Element> terrainAreasTree;
+    private final ArrayList<Element> coastLineAreasList = new ArrayList<>();
+    private RTree<Element> coastLineAreasTree;
+    public RTree<Element> getCoastLinesAreaTree() {
+        return coastLineAreasTree;
     }
-
-    public void setCity(String city){
-        this.completeAddressCount++;
-        this.city = city;
+    public RTree<Element> getBuildingsTree() {
+        return buildingsTree;
     }
-
-    public void setPostcode(String postcode){
-        this.completeAddressCount++;
-        this.postcode = postcode;
+    public RTree<Element> getWaterAreasTree() {
+        return waterAreasTree;
     }
-
-    public void setHouseNumber(String housenumber){
-        this.completeAddressCount++;
-        this.housenumber = housenumber;
+    public RTree<Element> getTerrainAreasTree() {
+        return terrainAreasTree;
     }
-
-    public void setStreet(String street){
-        this.completeAddressCount++;
-        this.street = street;
+    public ArrayList<Element> getBuildingsList() {
+        return buildingsList;
     }
-
-    public void setName(String value) {
-        this.name = value;
-	}
-
-    public void setFontSize(int value) {
-        this.fontSize = value;
+    public ArrayList<Element> getWaterAreasList() {
+        return waterAreasList;
     }
-
-    public void finishPoint() {
-        if (unfinishedPointType!=null){
-            //create POI element 
-        } else if(this.completeAddressCount==4){
-            //create address element and add to trie
-        } else if (fontSize!=0){
-            //create placename element
-        }
-        cleanUpAddressVariables();
-        this.unfinishedPoint = null;
-        this.unfinishedPointType = null;
-        this.fontSize = 0;
-        this.name = null;
+    public ArrayList<Element> getTerrainAreasList() {
+        return terrainAreasList;
     }
+    //#####################################################
+    //######## Roads lists and trees ######################
+    //#####################################################
+    private final ArrayList<Road> motorWaysList = new ArrayList<>();
+    private RTree<Road> motorWaysTree;
+    private final ArrayList<Road> largeRoadsList = new ArrayList<>();
+    private RTree<Road> largeRoadsTree;
+    private final ArrayList<Road> smallRoadsList = new ArrayList<>();
+    private RTree<Road> smallRoadsTree;
+    private final ArrayList<Road> footpathList = new ArrayList<>();
+    private RTree<Road> footPathsTree;
 
-
-    public void finishSimpleShape(){
-        if(!isRoad){
-            ArrayList<float[]> coords = convertPointArrToUseableFloatArr();
-            if(this.unfinishedPointType!=null){
-                //create POI element and add to trie
-            }
-            if(this.unfinishedShapeType==null){
-                this.SimpleShapeIDToSimpleShape.put(this.unfinishedSimpleShapeID, new SimpleShape(this.unfinishedSimpleShapeID, this.unfinishedShapeType, coords.get(0),coords.get(1)));
-            }else {
-                switch (this.unfinishedShapeType) {
-                    case "building":
-                        //add to separate tree
-                        break;
-                    case "water":
-                        //add to separate tree
-                        break;
-                    case "landuse":
-                    case "grass":
-                    case "forest":
-                    case "cement":
-                    case "commercial":
-                    case "farmland":
-                        //add to separate tree
-                        break;
-                    default:
-                        break;
-                }
-            }
-            // add to tree command: new SimpleShape(this.unfinishedSimpleShapeID, this.unfinishedShapeType, coords.get(0),coords.get(1));
-        }else if (this.completeAddressCount==4){
-            //create address element and add to trie
-        } else { 
-            roads.add(this.unfinishedRoad);
-            // add to tree
-        }
-        isRoad = false;
-        unfinishedSimpleShapePoints = new ArrayList<>();
-        unfinishedSimpleShapeID = 0;
-        unfinishedShapeType = null;
-        unfinishedPointType = null;
-        cleanUpAddressVariables();
+    public RTree<Road> getMotorWaysTree() {
+        return motorWaysTree;
     }
-
-    private void cleanUpAddressVariables(){
-        this.city = null;
-        this.postcode = null;
-        this.housenumber = null;
-        this.street = null;
-        this.completeAddressCount = 0;
+    public RTree<Road> getLargeRoadsTree() {
+        return largeRoadsTree;
     }
-
-    public SimpleShape getSimpleShapeByID(long id){
-        return this.SimpleShapeIDToSimpleShape.get(id);
+    public RTree<Road> getSmallRoadsTree() {
+        return smallRoadsTree;
     }
-
-    public void handleSimpleShape(long id, String role){
-        SimpleShape element = this.SimpleShapeIDToSimpleShape.get(id);
-        if(element==null) return;
-        element.setRole(role);
-        unfinishedRelationSimpleShapes.add(element);
-
+    public RTree<Road> getFootPathsTree() {
+        return footPathsTree;
     }
-
-    public void finishRelation(){
-        complexShapes.add(new ComplexShape(unfinishedRelationID,this.unfinishedShapeType, unfinishedRelationSimpleShapes));
-        unfinishedRelationSimpleShapes = new ArrayList<>();
-        unfinishedRelationID = 0;
-        unfinishedShapeType = null;
+    public ArrayList<Road> getMotorWaysList() {
+        return motorWaysList;
     }
-
-    private ArrayList<float[]> convertPointArrToUseableFloatArr() {
-        ArrayList<Float> x = new ArrayList<>();
-        ArrayList<Float> y = new ArrayList<>();
-        ArrayList<float[]> result = new ArrayList<>();
-        
-        for (Point point : unfinishedSimpleShapePoints) {
-            x.add(point.getX());
-            y.add(point.getY());
-        }
-
-        float[] xFinal = new float[x.size()];
-        float[] yFinal = new float[y.size()];
-        result.add(xFinal);
-        result.add(yFinal);
-
-        for (int i = 0; i > x.size()-1; i++) {
-            xFinal[i] = x.get(i);
-            yFinal[i] = y.get(i);
-        }
-        return result;
+    public ArrayList<Road> getLargeRoadsList() {
+        return largeRoadsList;
     }
-
-
-
+    public ArrayList<Road> getSmallRoadsList() {
+        return smallRoadsList;
+    }
+    public ArrayList<Road> getFootPathsList() {
+        return footpathList;
+    }
+    public void buildTrees() {
+        addressTree = new RTree<>(addressList);
+        trainPOITree = new RTree<>(trainPOIList);
+        busPOITree = new RTree<>(busPOIList);
+        POITree = new RTree<>(POIList);
+        quiteSmallPlaceNameTree = new RTree<>(quiteSmallPlaceNameList);
+        smallPlaceNameTree = new RTree<>(smallPlaceNameList);
+        mediumPlaceNameTree = new RTree<>(mediumPlaceNameList);
+        mediumLargePlaceNameTree = new RTree<>(mediumLargePlaceNameList);
+        largeNameTree = new RTree<>(largePlaceNameList);
+        quiteLargeNameTree = new RTree<>(quiteLargePlaceNameList);
+        buildingsTree = new RTree<>(buildingsList);
+        waterAreasTree = new RTree<>(waterAreasList);
+        terrainAreasTree = new RTree<>(terrainAreasList);
+        coastLineAreasTree = new RTree<>(coastLineAreasList);
+    }
 }

@@ -2,6 +2,7 @@ package marp.mapelements;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Font;
+import marp.mapelements.details.PointType;
 
 public class Address extends Point implements MapPoint {
     //decided we needed only street, houseNumber, postalCode, city
@@ -13,7 +14,7 @@ public class Address extends Point implements MapPoint {
     //don't need to parse it from where it is read from the file
     String postCode;
     String city;
-    String type = "Address";
+    PointType type = PointType.ADDRESS;
 
     public Address(String street, String houseNumber, String postCode, String city, float x, float y, long id){
         super(id,(float) x, (float) y);
@@ -35,15 +36,12 @@ public class Address extends Point implements MapPoint {
         return street + " " + houseNumber + " " + postCode + " " + city;
     }
     @Override
-    public String getType() {
+    public PointType getType() {
         return type;
     }
+
     @Override
-    public String getDisplayedType() {
-        return type;
-    }
-    @Override
-    public void setType(String newType) {
+    public void setType(PointType newType) {
         type = newType;
     }
 

@@ -4,34 +4,42 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.zip.ZipInputStream;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
-import org.checkerframework.checker.units.qual.s;
+import javafx.geometry.Point2D;
+import marp.datastructures.SimpleTrie;
+import marp.mapelements.MapPoint;
+import marp.mapelements.PointOfInterest;
 
 import marp.parser.OSMParser;;
 
 public class Model implements Serializable{
     private MapObjects mapObjects;
+    private PointOfInterest selectedPointMarker;
+    public boolean isRoadsVisible = true;
+    public boolean isLandmarksVisible = true;
+    public boolean isAddressVisible = true;
+    public boolean isTerrainVisible = true;
+    public boolean isBuildingsVisible = true;
 
-    public static Model createModel(URL fileURL) throws URISyntaxException, XMLStreamException,
+    public static Model createModel(File file) throws URISyntaxException, XMLStreamException,
             FactoryConfigurationError, ClassNotFoundException, IOException {
-        File file = Paths.get(fileURL.toURI()).toFile();
         return findLoadType(file.getAbsolutePath());
+    }
+
+    public MapObjects getMapObjects() {
+        return mapObjects;
     }
 
     private static Model findLoadType(String filepath)
@@ -79,7 +87,7 @@ public class Model implements Serializable{
     }
 
     private void save(String filename) throws FileNotFoundException, IOException {
-        new Thread(() -> {
+        /*new Thread(() -> {
             String fn = filename.split("\\.")[0] + ".bin";
             try {
                 try (var out = new ObjectOutputStream(
@@ -90,6 +98,65 @@ public class Model implements Serializable{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }).start();
+        }).start();*/
+    }
+    public SimpleTrie getSuggestionTrie() {
+        //return suggestionTrie;
+        //TODO: Fix
+        return new SimpleTrie();
+    }
+
+    public List<String> getFileList() {
+        //return getFiles();
+        //TODO: Should getFiles maybe be in model? If it's not, is it ok to call utilities from view?
+        return new ArrayList<String>();
+    }
+
+    public MapPoint getNearestPointForMapSelection(Point2D point) {
+        //We look for distance to mouse among addresses, then landmarks and update the selected element if we find a shorter distance.
+        MapPoint selectedElement;
+
+        MapPoint nearestAddress = mapObjects.getAddressTree().getNearest(new float[]{(float) point.getX(), (float) point.getY()}, 5);
+        //calculate distance
+        selectedElement = nearestAddress;
+        //address distance is calculated:
+        double currentDistance = Math.sqrt(Math.pow(nearestAddress.getX() - point.getX(), 2) + Math.pow(nearestAddress.getY() - point.getY(), 2));
+
+        MapPoint nearestLandmark = mapObjects.getPOITree().getNearest(new float[]{(float) point.getX(), (float) point.getY()}, 5);
+        //calculate distance to nearest POI
+        double landmarkDistance = Math.sqrt(Math.pow(nearestLandmark.getX() - point.getX(), 2) + Math.pow(nearestLandmark.getY() - point.getY(), 2));
+        if (landmarkDistance < currentDistance) {
+            currentDistance = landmarkDistance;
+            selectedElement = nearestLandmark;
+        }
+
+        MapPoint nearestTrainLandmark = mapObjects.getTrainPOITree().getNearest(new float[]{(float) point.getX(), (float) point.getY()}, 5);
+        //calculate distance to nearest train POI
+        double trainLandmarkDistance = Math.sqrt(Math.pow(nearestTrainLandmark.getX() - point.getX(), 2) + Math.pow(nearestTrainLandmark.getY() - point.getY(), 2));
+        if (trainLandmarkDistance < currentDistance) {
+            currentDistance = trainLandmarkDistance;
+            selectedElement = nearestTrainLandmark;
+        }
+
+
+        MapPoint nearestBusLandmark = mapObjects.getBusPOITree().getNearest(new float[]{(float) point.getX(), (float) point.getY()}, 5);
+        //calculate distance to nearest bus POI
+        double busLandmarkDistance = Math.sqrt(Math.pow(nearestBusLandmark.getX() - point.getX(), 2) + Math.pow(nearestBusLandmark.getY() - point.getY(), 2));
+        if (busLandmarkDistance < currentDistance) {
+            selectedElement = nearestBusLandmark;
+        }
+
+        //We use a point of interest to represent the currently selected point. We update selected point to a new point with the coordinates of the selected point.
+        selectedPointMarker = new PointOfInterest(selectedElement.getName(), selectedElement.getType(), selectedElement.getX()/0.56f, -selectedElement.getY(), false);
+        return selectedPointMarker;
+    }
+
+    public void setSelectedPointMarker(PointOfInterest newSelectedPoint) {
+        selectedPointMarker = newSelectedPoint;
+    }
+
+    public PointOfInterest getSelectedPointMarker() {
+        return selectedPointMarker;
     }
 }
+

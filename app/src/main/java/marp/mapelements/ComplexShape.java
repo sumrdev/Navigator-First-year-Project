@@ -5,13 +5,14 @@ import java.util.HashMap;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import marp.mapelements.details.ShapeType;
 
 public class ComplexShape extends Element {
     private long id;
-    private String type;
+    private ShapeType type;
     private ArrayList<SimpleShape> elements;
 
-    public ComplexShape(long id, String type, ArrayList<SimpleShape> elements){
+    public ComplexShape(long id, ShapeType type, ArrayList<SimpleShape> elements){
         this.id = id;
         this.type = type;
         this.elements = elements;

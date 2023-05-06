@@ -1,20 +1,43 @@
 package marp.mapelements;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import marp.mapelements.details.MapColor;
+import marp.mapelements.details.RoadType;
+
 import java.util.ArrayList;
 
 public class Road extends SimpleShape {
     ArrayList<Point> nodes;
     boolean oneway;
-    String type;
+    RoadType roadType;
     int speed;
+    String name;
     
-    public Road(Long id, ArrayList<Point> nodes) {
+    public Road(Long id, ArrayList<Point> nodes, RoadType type, int speed, boolean oneway, String name) {
         super(id);
         this.nodes = nodes;
+        this.roadType = type;
+        this.speed = speed;
+        this.oneway = oneway;
+        this.name = name;
     }
-
-    public void setType(String type){
-        this.type = type;
+    public Road(Road roadToCopy) {
+        super(roadToCopy.getID());
+        this.nodes = new ArrayList<>(roadToCopy.nodes);
+        this.roadType = roadToCopy.roadType;
+        this.speed = roadToCopy.speed;
+        this.oneway = roadToCopy.oneway;
+        this.name = roadToCopy.name;
+    }
+    /*
+    public RoadType getRoadType() {
+        return roadType;
+    }
+    public void setRoadType(RoadType roadType){
+        this.roadType = roadType;
     }
 
     public void setOneWay(boolean oneway){
@@ -24,4 +47,99 @@ public class Road extends SimpleShape {
     public void setSpeed(int speed){
         this.speed = speed;
     }
+    */
+    public void draw(GraphicsContext gc, double zoom){
+
+        gc.setLineWidth((zoom * roadType.getRoadWidth()));
+        gc.setStroke(MapColor.getInstance().colorMap.get(roadType.toString()));
+        //if(drawRoute){
+        //    gc.setLineWidth(0.0001);
+        //    gc.setStroke(Color.RED);
+        //}
+        drawArr(gc, x, y, 1, zoom);
+        //if(drawRoute) gc.strokeLine(xRoute[0], yRoute[0], xRoute[xRoute.length-1], yRoute[yRoute.length-1]);
+    }
+
+    public void drawOutline(GraphicsContext gc, double zoom) {
+        gc.setLineWidth(zoom*roadType.getOutlineWidth());
+        gc.setStroke(MapColor.getInstance().colorMap.get(roadType.toString()+"Outline"));
+        drawArr(gc, x, y, 1, zoom);
+    }
+    public void drawClose(GraphicsContext gc){
+        gc.setLineWidth((0.00002 + 0.000005 * roadType.getRoadWidth()));
+        gc.setStroke(MapColor.getInstance().colorMap.get(roadType.toString()));
+        //if(drawRoute){
+        //    gc.setLineWidth(0.0001);
+        //    gc.setStroke(Color.RED);
+        //}
+        drawArr(gc, x, y, 1, 1);
+        //if(drawRoute) drawArr(gc, xRoute, yRoute, 1, 1);
+        //if(drawRoute) drawArr(gc, xRoute, yRoute, 1, 1);
+    }
+    public void drawCloseOutline(GraphicsContext gc){
+        gc.setLineWidth((0.000025 + 0.000005 * roadType.getRoadWidth()));
+        gc.setStroke(MapColor.getInstance().colorMap.get(roadType.toString()+"Outline"));
+        drawArr(gc, x, y, 1, 1);
+    }
+
+    public void drawName(GraphicsContext gc, double zoom){
+        if (name != null) {
+            double firstX = nodes.get(0).x;
+            double firstY = nodes.get(0).y;
+            double lastX = nodes.get(nodes.size()-1).x;
+            double lastY = nodes.get(nodes.size()-1).y;
+            double middleX = nodes.get(nodes.size()/2).x;
+            double middleY = nodes.get(nodes.size()/2).y;
+            //determine if road is too short to have road displayed in order to avoid showing too many names:
+            double distanceX = lastX - firstX;
+            double distanceY = lastY - firstY;
+            double distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+            if (distance > 0.0005) {
+                gc.setFill(Color.rgb(30, 30, 30, 1));
+                gc.setStroke(Color.WHITE);
+                gc.setLineWidth(zoom * 2);
+                gc.setFont(Font.font("Helvetica Neue", zoom * 10));
+
+                //calculate angle from first and last node to get approximation of slope of road
+                double angle = Math.toDegrees(Math.atan2(lastY - firstY, lastX - firstX));
+                if (angle > 90) {
+                    angle = angle - 180;
+                } else if (angle < -90) {
+                    angle = angle + 180;
+                }
+
+                //Save the current state of the graphics context
+                gc.save();
+
+                //Translate the gc to the middleX and middleY coordinates and rotate by angle
+                gc.translate(middleX, middleY);
+                gc.rotate(angle);
+
+
+                // Calculates the dimensions of the text
+                Text text = new Text(name);
+                text.setFont(Font.font("Helvetica Neue", zoom * 10));
+                double textWidth = text.getLayoutBounds().getWidth();
+                double textHeight = text.getLayoutBounds().getHeight();
+
+                // Translates the gc back to the original position
+                gc.translate(-textWidth / 2, textHeight / 2);
+
+                // Draws the rotated text at (0, 0) in the translated gc
+                gc.strokeText(name, 0, 0);
+                gc.fillText(name, 0, 0);
+
+                gc.restore(); // Restores the saved state of the graphics context
+            }
+        }
+    }
+
+    private void drawArr(GraphicsContext gc, float[] xArr, float[] yArr, int add, double zoom){
+        if(add>xArr.length) return;
+        for (int i = 0; i < x.length-add; i+=add) {
+            gc.strokeLine(xArr[i], yArr[i], xArr[i+add], yArr[i+add]);
+        }
+        gc.strokeLine(xArr[x.length-add], yArr[x.length-add], xArr[x.length-1], yArr[x.length-1]);
+    }
 }
+

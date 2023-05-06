@@ -12,69 +12,46 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Affine;
+import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.stage.Stage;
 import marp.model.Model;
-import marp.view.gui.MapMenu;
+import marp.view.gui.ZoomMenu;
+import marp.view.gui.menugui.MapMenu;
 
 public class View {
     public Stage primaryStage;
     public Model model;
+    private MapScene mapScene;
+    public ChooseMapScene chooseMapScene;
 
-    StackPane backgroundStackPane = new StackPane();
-
-    public Scene viewScene;
-
-   public ListView<String> listView;
-
-
-    public Canvas canvas = new Canvas(1000, 700);
-    public GraphicsContext gc = canvas.getGraphicsContext2D();
-    public Affine trans = new Affine();
-    
     public View(Stage primaryStage, Model model){
         this.primaryStage = primaryStage;
         this.model = model;
 
-        this.listView = new ListView<String>();
-        
-        Text appName = new Text("MARP");
-        primaryStage.setTitle("MARP");
+        Text appName = new Text("Navigator");
         appName.setFont(Font.font("Montserrat", FontWeight.SEMI_BOLD, 36));
         appName.setTextAlignment(TextAlignment.CENTER);
         StackPane.setAlignment(appName, Pos.TOP_CENTER);
 
-        Scene mainScene = new Scene(backgroundStackPane, 1000, 700);
+        mapScene = new MapScene(model, this);
+        chooseMapScene = new ChooseMapScene(model);
+        primaryStage.setTitle("Navigator");
+        primaryStage.setScene(mapScene);
+        primaryStage.show();
         
         this.primaryStage.show();
     }
-
-    public void pan(float dx, float dy){
-
+    public void setScene(Scene scene) {
+        primaryStage.setScene(scene);
     }
-
-    public void zoom(double dx, double dy){
-
-    }
-
-    public Point2D mouseToModel(float x, float y){
-        return null;
-    }
-
-    public Canvas getCanvas(){
-        return null;
-
-    }
-
-    public MapMenu getMapMenu(){
-        return null;
-    }
-
     public Stage getPrimaryStage(){
         return this.primaryStage;
     }
 
-    public Scene getViewScene(){
-        return this.viewScene;
+    public MapScene getMapScene() {
+        return mapScene;
     }
-
+    public ChooseMapScene getChooseMapScene() {
+        return chooseMapScene;
+    }
 }

@@ -2,12 +2,14 @@ package marp.mapelements;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import marp.mapelements.details.MapColor;
+import marp.mapelements.details.ShapeType;
 
 public class SimpleShape extends Element {
     private long id;
-    private String type;
-    private float[] x;
-    private float[] y;
+    private ShapeType type;
+    protected float[] x;
+    protected float[] y;
     private String role;
     private float[] boundingCoords = {Float.MAX_VALUE, Float.MAX_VALUE, Float.MIN_VALUE, Float.MIN_VALUE};
 
@@ -15,7 +17,7 @@ public class SimpleShape extends Element {
         this.id = id;
     }
 
-    public SimpleShape(Long id, String type, float[] x, float[] y){
+    public SimpleShape(Long id, ShapeType type, float[] x, float[] y){
         this.id = id;
         this.type = type;
         this.x = x;
@@ -79,7 +81,7 @@ public class SimpleShape extends Element {
         return this.id;
     }
 
-    public String getType(){
+    public ShapeType getType(){
         return this.type;
     }
 
@@ -93,8 +95,15 @@ public class SimpleShape extends Element {
 
     @Override
     public void draw(GraphicsContext gc, int levelOfDetail, int zoom) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'draw'");
+        gc.setFill(MapColor.getInstance().colorMap.get(type.toString()));
+        if(levelOfDetail>x.length) return;
+        gc.beginPath();
+        gc.moveTo(x[0], y[0]);
+        for (int i = 1; i < x.length-levelOfDetail; i+=levelOfDetail) {
+            gc.lineTo(x[i], y[i]);
+        }
+        gc.closePath();
+        gc.fill();
     }
 
     @Override

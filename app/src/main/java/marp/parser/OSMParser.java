@@ -21,8 +21,15 @@ public class OSMParser{
         XMLStreamReader xmlsr = XMLInputFactory.newInstance().createXMLStreamReader(inputStream);
         MapObjects mapObjects = new MapObjects();
         MapObjectInParsing mapObjectInParsing = new MapObjectInParsing(mapObjects);
+        boolean onTheScrub;
 
         while(xmlsr.hasNext()){
+            if (mapObjectInParsing.unfinishedSimpleShapeID == 150330974){
+                System.out.println("on the scrub");
+                onTheScrub = true;
+            } else {
+                onTheScrub = false;
+            }
             int xmltag = xmlsr.next();
             switch (xmltag) {
                 case XMLStreamConstants.START_ELEMENT:
@@ -102,6 +109,7 @@ public class OSMParser{
                                         mapObjectInParsing.setRoadType(RoadType.RESIDENTIAL);
                                         break;
                                     }
+                                    break;
                             case "oneway":
                                 mapObjectInParsing.setRoadOneWay(value.equals("yes"));
                                 break;
@@ -117,6 +125,9 @@ public class OSMParser{
                                 break;
                             case "natural":
                                 switch (value) {
+                                    case "scrub":
+                                    mapObjectInParsing.setShapeType(ShapeType.FOREST);
+                                        break;
                                     case "grass":
                                     case "meadow":
                                     case "grassland":
@@ -134,8 +145,9 @@ public class OSMParser{
                                     default:
                                         break;
                             }
+                            break;
                             case "water":
-                            case "habour":
+                            case "harbour":
                                 mapObjectInParsing.setShapeType(ShapeType.WATER);
                                 break;
                             case "landuse":
@@ -170,6 +182,7 @@ public class OSMParser{
                                         break;
                                     case "allotments":
                                     case "farmland":
+                                    case "farmyard":
                                     case "orchard":
                                     case "vineyard":
                                         mapObjectInParsing.setShapeType(ShapeType.FARMLAND);
@@ -177,6 +190,7 @@ public class OSMParser{
                                     default:
                                         break;
                                 }
+                                break;
                                 case "addr:city":
                                     mapObjectInParsing.setCity(value);
                                     break;
@@ -242,6 +256,7 @@ public class OSMParser{
                                         default:
                                             break;
                                     }
+                                    break;
                                 case "name":
                                     mapObjectInParsing.setName(value);
                                     break;

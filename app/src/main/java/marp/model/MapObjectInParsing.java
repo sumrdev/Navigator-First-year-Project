@@ -28,7 +28,7 @@ public class MapObjectInParsing implements Serializable{
     private int speed;
     private Point unfinishedPoint;
 
-    private long unfinishedSimpleShapeID; 
+    public long unfinishedSimpleShapeID; 
     private long unfinishedRelationID;
 
     //private Road unfinishedRoad;

@@ -144,6 +144,7 @@ public class MapObjects {
         return quiteLargePlaceNameList;
     }
 
+
     //#####################################################
     //######## Areas and buildings lists and trees ########
     //#####################################################
@@ -175,6 +176,9 @@ public class MapObjects {
     }
     public ArrayList<Element> getTerrainAreasList() {
         return terrainAreasList;
+    }
+    public ArrayList<Element> getCoastLineAreasList() {
+        return coastLineAreasList;
     }
     //#####################################################
     //######## Roads lists and trees ######################

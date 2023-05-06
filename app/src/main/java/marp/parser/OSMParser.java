@@ -295,14 +295,20 @@ public class OSMParser{
             }
         }
         mapObjects.buildTrees();
-            System.out.println("Address list size: " + mapObjects.getAddressList().size());
-            System.out.println("Train POI list size: " + mapObjects.getTrainPOIList().size());
-            System.out.println("Bus POI list size: " + mapObjects.getBusPOIList().size());
-            System.out.println("POI list size: " + mapObjects.getPOIList().size());
-
-            System.out.println("Buildings list size: " + mapObjects.getBuildingsList().size());
-            System.out.println("Water areas list size: " + mapObjects.getWaterAreasList().size());
-            System.out.println("Terrain areas list size: " + mapObjects.getTerrainAreasList().size());
+        System.out.println("Address list size: " + mapObjects.getAddressList().size());
+        System.out.println("Train POI list size: " + mapObjects.getTrainPOIList().size());
+        System.out.println("Bus POI list size: " + mapObjects.getBusPOIList().size());
+        System.out.println("POI list size: " + mapObjects.getPOIList().size());
+        System.out.println("Quite small place name list size: " + mapObjects.getQuiteSmallPlaceNamesList().size());
+        System.out.println("Small place name list size: " + mapObjects.getSmallPlaceNamesList().size());
+        System.out.println("Medium place name list size: " + mapObjects.getMediumPlaceNamesList().size());
+        System.out.println("Medium large place name list size: " + mapObjects.getMediumLargePlaceNamesList().size());
+        System.out.println("Large place name list size: " + mapObjects.getLargePlaceNamesList().size());
+        System.out.println("Quite large place name list size: " + mapObjects.getQuiteLargePlaceNamesList().size());
+        System.out.println("Buildings list size: " + mapObjects.getBuildingsList().size());
+        System.out.println("Water areas list size: " + mapObjects.getWaterAreasList().size());
+        System.out.println("Terrain areas list size: " + mapObjects.getTerrainAreasList().size());
+        System.out.println("Coastline areas list size: " + mapObjects.getCoastLineAreasList().size());
 
         return mapObjects;
     }

@@ -91,7 +91,6 @@ public class Controller {
                     Point2D point = view.getMapScene().screenCoordsToMapCoords(new Point2D(lastX, lastY));
                     MapPoint nearestPoint = model.getNearestPointForMapSelection(point);
                     // make a POI as a marker of the selected point
-                    model.setSelectedPointMarker(new PointOfInterest(nearestPoint.getName(), PointType.SELECTED, nearestPoint.getX(), nearestPoint.getY(), false));
                     // focus on the point without panning
                     focusOnPoint(model.getSelectedPointMarker(), false);
                     System.out.println("TEST");
@@ -418,7 +417,7 @@ public class Controller {
                 view.getMapScene().pan(xDist, yDist);
             }
             // Make a custom landmark to show the selected point
-            model.setSelectedPointMarker(new PointOfInterest(mapPoint.getName(), mapPoint.getType(), mapPoint.getX()/0.56f, -mapPoint.getY(), false));
+            model.setSelectedPointMarker(new PointOfInterest(mapPoint.getName(), PointType.SELECTED, (float) (mapPoint.getX()/0.56), -mapPoint.getY(), false));
             // Redraw the view
             view.getMapScene().redraw();
         }

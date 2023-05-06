@@ -35,6 +35,7 @@ public class OSMParser{
                             float y = Float.parseFloat(xmlsr.getAttributeValue(null, "lat"));
                             Point point = new Point(id, x, y);
                             mapObjects.addPointToHashMap(point);
+                            mapObjects.addPoint(point);
                             break;
                         case "nd":
                             long nodeID = Long.parseLong(xmlsr.getAttributeValue(null, "ref"));
@@ -280,6 +281,7 @@ public class OSMParser{
                     break;
             }
         }
+        mapObjects.buildPointTree();
         return mapObjects;
     }
 }

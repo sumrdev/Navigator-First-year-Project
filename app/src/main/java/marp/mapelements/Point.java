@@ -3,6 +3,7 @@ package marp.mapelements;
 import java.io.Serializable;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class Point extends Element {
     long id;
@@ -34,8 +35,8 @@ public class Point extends Element {
 
     @Override
     public void draw(GraphicsContext gc, int levelOfDetail, int zoom) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'draw'");
+        gc.setFill(Color.RED);
+        gc.fillOval(x, y, 0.001, 0.001);
     }
 
     @Override

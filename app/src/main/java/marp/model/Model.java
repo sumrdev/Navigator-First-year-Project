@@ -28,6 +28,10 @@ import marp.utilities.DefaultPath;;
 public class Model implements Serializable{
     private MapObjects mapObjects;
 
+    public MapObjects getMapObjects(){
+        return mapObjects;
+    }
+
     public static Model createModel(URL fileURL) throws URISyntaxException, XMLStreamException,
             FactoryConfigurationError, ClassNotFoundException, IOException {
         File file = Paths.get(fileURL.toURI()).toFile();

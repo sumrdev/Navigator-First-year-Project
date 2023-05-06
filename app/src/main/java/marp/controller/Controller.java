@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -32,13 +33,25 @@ public class Controller {
     public Controller(View view, Model model) throws MalformedURLException{
         this.model = model;
         this.view = view;
-        fileList = IOFunctions.getFiles();
-        setFileChooser();
-        System.out.println(fileList.size());
-        this.stage = view.getPrimaryStage();
-        this.scene = view.getViewScene();
+        
+        view.canvas.setOnMousePressed(e -> {
+            lastX = (float) e.getX();
+            lastY = (float) e.getY();
+        });
+        view.canvas.setOnMouseDragged(e -> {
+            float dx = (float) (e.getX() - lastX);
+            float dy = (float) (e.getY() - lastY);
+            view.pan(dx, dy);
 
+            lastX = (float) e.getX();
+            lastY = (float) e.getY();
+        });
+        view.canvas.setOnScroll(e -> {
+            double factor = e.getDeltaY();
+            view.zoom( (float) e.getX(), (float) e.getY(), (float) Math.pow(1.01, factor));
+        });
     }
+  
 
     private void setFileChooser(){
         this.fileChooser.getExtensionFilters().addAll(

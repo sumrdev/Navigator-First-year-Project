@@ -16,6 +16,9 @@ public class MapObjects implements Serializable{
     private ArrayList<ComplexShape> complexShapes = new ArrayList<>();
     private ArrayList<SimpleShape> SimpleShapes = new ArrayList<>();
     private ArrayList<Road> roads = new ArrayList<>();
+    public ArrayList<Point> points = new ArrayList<>();
+
+    public RTree<Point> pointTree;
 
     private RTree<Road> motorwayTree;
     private RTree<Road> primaryRoadTree;
@@ -70,8 +73,32 @@ public class MapObjects implements Serializable{
 
     }
 
+    public float getMinX(){
+        return this.minX;
+    }
+
+    public float getMinY(){
+        return this.minY;
+    }
+
+    public float getMaxX(){
+        return this.maxX;
+    }
+
+    public float getMaxY(){
+        return this.maxY;
+    }
+
     public ArrayList<ComplexShape> getComplexShapes() {
         return complexShapes;
+    }
+
+    public void addPoint(Point element){
+        points.add(element);
+    }
+
+    public void buildPointTree(){
+        pointTree = new RTree<>(points);
     }
 
     public ArrayList<SimpleShape> getSimpleShapes() {

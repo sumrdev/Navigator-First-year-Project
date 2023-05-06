@@ -165,8 +165,6 @@ public class MapObjectInParsing implements Serializable{
                 }
         } else if (unfinishedPointType != PointType.UNDEFINED) {
             PointOfInterest pointOfInterest = new PointOfInterest(this.name, this.unfinishedPointType, this.unfinishedPoint.getX(), this.unfinishedPoint.getY(), false);
-            System.out.println(" A NEW POI AT " +  this.unfinishedPoint.getX() + " " + this.unfinishedPoint.getY());
-            System.out.println("THE BOUNDS OF THE POINT ARE: " + Arrays.toString(pointOfInterest.getBounds()));
             switch (unfinishedPointType) {
                 case BUS_STOP:
                     mapObjects.getBusPOIList().add(pointOfInterest);

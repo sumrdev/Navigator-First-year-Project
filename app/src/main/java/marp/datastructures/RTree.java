@@ -261,7 +261,4 @@ public class RTree<T extends Element> implements Serializable {
         T result = pq.peek().element;
         return result;
     }
-    public void printElementsInRange() {
-        System.out.println("bounds" + Arrays.toString(treeNode.boundingRect));
-    }
 }

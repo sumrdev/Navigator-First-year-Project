@@ -39,6 +39,6 @@ public class Point extends Element {
 
     @Override
     public float[] getBounds() {
-        return new float[]{(float) (x/0.56),-y, (float) (x/0.56),-y};
+        return new float[]{ x, y, x, y};
     }
 }

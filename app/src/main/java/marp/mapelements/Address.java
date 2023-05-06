@@ -32,7 +32,6 @@ public class Address extends Point implements MapPoint {
     public void draw(GraphicsContext gc, float zoom) {
         gc.setFont(Font.font("Helvetica Neue", zoom * 10));
         gc.fillText(houseNumber, x, y);
-        System.out.println("DRAWING AN ADDRESS!!!");
     }
     @Override
     public String getName() {

@@ -134,20 +134,11 @@ public class MapScene extends Scene{
         gc.setLineWidth(1 / Math.sqrt(trans.determinant()));
 
 
-
-        System.out.println("THE ZOOM LEVEL IS "+zoomMenu.getZoomlevel());
         Bounds bounds = null;
         try {
             bounds = trans.inverseTransform(canvas.getLayoutBounds());
         } catch (NonInvertibleTransformException e) {
             throw new RuntimeException(e);
-        }
-        System.out.println("Now calculating the bounds from the canvas lay out bounds. The map bounds are: Max and min x" + bounds.getMaxX() + " and " + bounds.getMinX() + " \n and the max and min y:" + bounds.getMaxY() + " and " + bounds.getMinY());
-        System.out.println("Buildings in bounds X " + bounds.getMaxX() + ", " + bounds.getMaxX() + " and y " + bounds.getMaxY() + " " + bounds.getMaxY() + " number of elements: " + model.getMapObjects().getBuildingsTree().getElementsInRange(bounds).size());
-
-
-        for (Address address : model.getMapObjects().getAddressList()) {
-           //System.out.println("DRAWING ADDRESS AT: " + address.getX() + " " + address.getY());
         }
 
         int levelOfDetails = 4;
@@ -161,8 +152,6 @@ public class MapScene extends Scene{
         //######################################################################################
 
         if (zoomMenu.getZoomlevel() > 300000 ) {
-            System.out.println("TEST! ");
-
             drawCoastlines(levelOfDetails, bounds);
             drawCustomLandmarks();
             drawCountryNames(bounds);
@@ -172,7 +161,6 @@ public class MapScene extends Scene{
         //###########################################################################################################################################
 
         if (zoomMenu.getZoomlevel() < 300000 && zoomMenu.getZoomlevel() > 15000) {
-            System.out.println("TEST!!! ");
             drawCoastlines(levelOfDetails, bounds);
             drawMotorways(bounds);
             drawCustomLandmarks();
@@ -184,7 +172,6 @@ public class MapScene extends Scene{
         //###############################################################################################################################
 
         if (zoomMenu.getZoomlevel() < 15000 && zoomMenu.getZoomlevel() > 2000) {
-            System.out.println("TEST!!!!!! ");
             drawCoastlines(levelOfDetails, bounds);
             drawWaterAreas(levelOfDetails, bounds);
             drawTerrain(levelOfDetails, bounds);

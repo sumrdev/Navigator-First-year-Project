@@ -58,7 +58,6 @@ public class Road extends Element{
     }
     */
     public void draw(GraphicsContext gc, double zoom){
-        System.out.println("Drawing a road");
 
         gc.setLineWidth((zoom * roadType.getRoadWidth()));
         gc.setStroke(MapColor.getInstance().colorMap.get(roadType.toString()));

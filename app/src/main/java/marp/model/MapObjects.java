@@ -1,12 +1,15 @@
 package marp.model;
 
 import com.google.common.base.MoreObjects;
+
+import marp.datastructures.Digraph;
 import marp.datastructures.RTree;
 import marp.datastructures.SimpleTrie;
 import marp.mapelements.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 public class MapObjects {
     //#####################################################
@@ -184,6 +187,7 @@ public class MapObjects {
     //#####################################################
     //######## Roads lists and trees ######################
     //#####################################################
+    private final ArrayList<Road> roadsList = new ArrayList<>();
     private final ArrayList<Road> motorWaysList = new ArrayList<>();
     private RTree<Road> motorWaysTree;
     private final ArrayList<Road> largeRoadsList = new ArrayList<>();
@@ -204,6 +208,9 @@ public class MapObjects {
     }
     public RTree<Road> getFootPathsTree() {
         return footPathsTree;
+    }
+    public ArrayList<Road> getRoadsList() {
+        return roadsList;
     }
     public ArrayList<Road> getMotorWaysList() {
         return motorWaysList;
@@ -239,8 +246,17 @@ public class MapObjects {
 
     }
 
+    public void buildDigraph(HashMap<Long, RoadNode> roadNodes){
+        digraph = new Digraph(roadsList, roadNodes);
+    }
+
     private SimpleTrie trie = new SimpleTrie();
     public SimpleTrie getTrie(){
         return trie;
+    }
+
+    private Digraph digraph;
+    public Digraph getDigraph(){
+        return digraph;
     }
 }

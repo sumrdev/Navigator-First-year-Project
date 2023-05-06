@@ -10,14 +10,22 @@ import marp.mapelements.details.RoadType;
 import java.util.ArrayList;
 
 public class Road extends Element{
-    ArrayList<Point> nodes;
+    ArrayList<RoadNode> nodes;
+
     boolean oneway;
+
+    boolean driveable;
+    boolean walkable;
+
     RoadType roadType;
+
     int speed;
+
     String name;
+
     private float[] boundingCoords = {Float.MAX_VALUE, Float.MAX_VALUE, -Float.MAX_VALUE, -Float.MAX_VALUE};
     
-    public Road(Long id, ArrayList<Point> nodes, RoadType type, int speed, boolean oneway, String name) {
+    public Road(Long id, ArrayList<RoadNode> nodes, RoadType type, int speed, boolean oneway, String name) {
         this.id = id;
         this.nodes = nodes;
         this.roadType = type;
@@ -25,28 +33,31 @@ public class Road extends Element{
         this.oneway = oneway;
         this.name = name;
 
-        for (Point point: nodes) {
-            if(point.getX() < boundingCoords[0]){
-                boundingCoords[0] = point.getX();
+        for (RoadNode roadNode : nodes) {
+            if(roadNode.getX() < boundingCoords[0]){
+                boundingCoords[0] = roadNode.getX();
             }
-            if (point.getX() > boundingCoords[2]){
-                boundingCoords[2] = point.getX();
+            if (roadNode.getX() > boundingCoords[2]){
+                boundingCoords[2] = roadNode.getX();
             }
-            if(point.getY() < boundingCoords[1]){
-                boundingCoords[1] = point.getY();
+            if(roadNode.getY() < boundingCoords[1]){
+                boundingCoords[1] = roadNode.getY();
             }
-            if (point.getY() > boundingCoords[3]){
-                boundingCoords[3] = point.getY();
+            if (roadNode.getY() > boundingCoords[3]){
+                boundingCoords[3] = roadNode.getY();
             }
         }
     }
 
-    /*
     public RoadType getRoadType() {
         return roadType;
     }
     public void setRoadType(RoadType roadType){
         this.roadType = roadType;
+    }
+
+    public long getID(){
+        return this.id;
     }
 
     public void setOneWay(boolean oneway){
@@ -56,7 +67,51 @@ public class Road extends Element{
     public void setSpeed(int speed){
         this.speed = speed;
     }
-    */
+    
+    private ArrayList<RoadNode> convertPointArrayToRoadNodeArray(ArrayList<Point> nodes){
+        ArrayList<RoadNode> roadNodes = new ArrayList<>();
+        for (Point node : nodes) {
+            roadNodes.add(new RoadNode(node));
+        }
+        return roadNodes;
+    }
+
+    public ArrayList<RoadNode> getNodes(){
+        return nodes;
+    }
+
+    public RoadNode getNode(int index){
+        return nodes.get(index);
+    }
+
+    public int getNodeSize(){
+        return nodes.size();
+    }
+
+    public boolean isOneWay(){
+        return this.oneway;
+    }
+
+    public void setDriveable(boolean driveable){
+        this.driveable = driveable;
+    }
+
+    public void setWalkable(boolean walkable){
+        this.walkable = walkable;
+    }
+
+    public boolean isDriveable(){
+        return this.driveable;
+    }
+
+    public boolean isWalkable(){
+        return this.walkable;
+    }
+
+    public int getSpeed(){
+        return this.speed;
+    }
+
     public void draw(GraphicsContext gc, double zoom){
 
         gc.setLineWidth((zoom * roadType.getRoadWidth()));

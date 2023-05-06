@@ -47,7 +47,6 @@ public class MapScene extends Scene{
         StackPane stackedElements = new StackPane();
 
         canvas.widthProperty().addListener(observable -> redraw());
-        //canvas.widthProperty().addListener(observable -> System.out.println("canvas: " + canvas.widthProperty().getValue() + " and primary stage " + view.primaryStage.widthProperty().getValue()));
         canvas.heightProperty().addListener(observable -> redraw());
 
         // Pan and zoom to frame the map.
@@ -127,7 +126,7 @@ public class MapScene extends Scene{
     }
     public void redraw() {
         gc.setTransform(new Affine());
-        gc.setFill(MapColor.getInstance().colorMap.get("Background"));
+        gc.setFill(MapColor.getInstance().colorMap.get("BACKGROUND"));
         gc.setLineCap(StrokeLineCap.ROUND);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         gc.setTransform(trans);
@@ -187,8 +186,8 @@ public class MapScene extends Scene{
 
         if(zoomMenu.getZoomlevel() < 2000 && zoomMenu.getZoomlevel() > 750){
             drawCoastlines(levelOfDetails, bounds);
-            drawTerrain(levelOfDetails, bounds);
             drawWaterAreas(levelOfDetails, bounds);
+            drawTerrain(levelOfDetails, bounds);
             drawLargeRoads(bounds);
             drawMotorways(bounds);
             drawCustomLandmarks();
@@ -201,8 +200,8 @@ public class MapScene extends Scene{
 
         if(zoomMenu.getZoomlevel() < 750 && zoomMenu.getZoomlevel() > 500){
             drawCoastlines(levelOfDetails, bounds);
-            drawTerrain(levelOfDetails, bounds);
             drawWaterAreas(levelOfDetails, bounds);
+            drawTerrain(levelOfDetails, bounds);
             drawNormalRoads(bounds);
             drawLargeRoads(bounds);
             drawMotorways(bounds);
@@ -217,8 +216,8 @@ public class MapScene extends Scene{
 
         if(zoomMenu.getZoomlevel() < 500 && zoomMenu.getZoomlevel() > 250){
             drawCoastlines(levelOfDetails, bounds);
-            drawTerrain(levelOfDetails, bounds);
             drawWaterAreas(levelOfDetails, bounds);
+            drawTerrain(levelOfDetails, bounds);
             drawNormalRoads(bounds);
             drawLargeRoads(bounds);
             drawMotorways(bounds);
@@ -234,8 +233,8 @@ public class MapScene extends Scene{
 
         if(zoomMenu.getZoomlevel() < 250 && zoomMenu.getZoomlevel() > 150){
             drawCoastlines(levelOfDetails, bounds);
-            drawTerrain(levelOfDetails, bounds);
             drawWaterAreas(levelOfDetails, bounds);
+            drawTerrain(levelOfDetails, bounds);
             drawBuildings(levelOfDetails, bounds);
             drawPaths(bounds);
             drawNormalRoads(bounds);
@@ -253,8 +252,8 @@ public class MapScene extends Scene{
         //################################################################################################
         if(zoomMenu.getZoomlevel() < 150 && zoomMenu.getZoomlevel() > 50){
             drawCoastlines(levelOfDetails, bounds);
-            drawTerrain(levelOfDetails, bounds);
             drawWaterAreas(levelOfDetails, bounds);
+            drawTerrain(levelOfDetails, bounds);
             drawBuildings(levelOfDetails, bounds);
             drawPaths(bounds);
             drawNormalRoads(bounds);
@@ -274,8 +273,8 @@ public class MapScene extends Scene{
 
         if(zoomMenu.getZoomlevel() < 50 && zoomMenu.getZoomlevel() > 20){
             drawCoastlines(levelOfDetails, bounds);
-            drawTerrain(levelOfDetails, bounds);
             drawWaterAreas(levelOfDetails, bounds);
+            drawTerrain(levelOfDetails, bounds);
             drawBuildings(levelOfDetails, bounds);
             drawPaths(bounds);
             drawRoadsClose(bounds);
@@ -295,8 +294,8 @@ public class MapScene extends Scene{
 
         if(zoomMenu.getZoomlevel() < 20){
             drawCoastlines(levelOfDetails, bounds);
-            drawTerrain(levelOfDetails, bounds);
             drawWaterAreas(levelOfDetails, bounds);
+            drawTerrain(levelOfDetails, bounds);
             drawBuildings(levelOfDetails, bounds);
             drawPaths(bounds);
             drawRoadsClose(bounds);

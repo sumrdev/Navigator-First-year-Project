@@ -111,4 +111,7 @@ public class SimpleShape extends Element {
     public float[] getBounds() {
         return this.boundingCoords;
     }
+    public void printType() {
+        System.out.println(type.toString());
+    }
 }

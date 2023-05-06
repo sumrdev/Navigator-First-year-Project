@@ -117,6 +117,11 @@ public class OSMParser{
                                 break;
                             case "natural":
                                 switch (value) {
+                                    case "scrub":
+                                    case "wood":
+                                    case "forest":
+                                        mapObjectInParsing.setShapeType(ShapeType.FOREST);
+                                        break;
                                     case "grass":
                                     case "meadow":
                                     case "grassland":
@@ -131,11 +136,12 @@ public class OSMParser{
                                         break;
                                     case "coastline":
                                         mapObjectInParsing.setShapeType(ShapeType.COASTLINE);
+                                        break;
                                     default:
                                         break;
                             }
                             case "water":
-                            case "habour":
+                            case "harbour":
                                 mapObjectInParsing.setShapeType(ShapeType.WATER);
                                 break;
                             case "landuse":

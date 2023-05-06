@@ -124,30 +124,35 @@ public class Model implements Serializable{
 
         MapPoint nearestLandmark = mapObjects.getPOITree().getNearest(new float[]{(float) point.getX(), (float) point.getY()}, 5);
         //calculate distance to nearest POI
-        double landmarkDistance = Math.sqrt(Math.pow(nearestLandmark.getX() - point.getX(), 2) + Math.pow(nearestLandmark.getY() - point.getY(), 2));
-        if (landmarkDistance < currentDistance) {
-            currentDistance = landmarkDistance;
-            selectedElement = nearestLandmark;
+        if (nearestLandmark != null) {
+            double landmarkDistance = Math.sqrt(Math.pow(nearestLandmark.getX() - point.getX(), 2) + Math.pow(nearestLandmark.getY() - point.getY(), 2));
+            if (landmarkDistance < currentDistance) {
+                currentDistance = landmarkDistance;
+                selectedElement = nearestLandmark;
+            }
         }
 
         MapPoint nearestTrainLandmark = mapObjects.getTrainPOITree().getNearest(new float[]{(float) point.getX(), (float) point.getY()}, 5);
         //calculate distance to nearest train POI
-        double trainLandmarkDistance = Math.sqrt(Math.pow(nearestTrainLandmark.getX() - point.getX(), 2) + Math.pow(nearestTrainLandmark.getY() - point.getY(), 2));
-        if (trainLandmarkDistance < currentDistance) {
-            currentDistance = trainLandmarkDistance;
-            selectedElement = nearestTrainLandmark;
+        if (nearestTrainLandmark != null) {
+            double trainLandmarkDistance = Math.sqrt(Math.pow(nearestTrainLandmark.getX() - point.getX(), 2) + Math.pow(nearestTrainLandmark.getY() - point.getY(), 2));
+            if (trainLandmarkDistance < currentDistance) {
+                currentDistance = trainLandmarkDistance;
+                selectedElement = nearestTrainLandmark;
+            }
         }
-
 
         MapPoint nearestBusLandmark = mapObjects.getBusPOITree().getNearest(new float[]{(float) point.getX(), (float) point.getY()}, 5);
         //calculate distance to nearest bus POI
-        double busLandmarkDistance = Math.sqrt(Math.pow(nearestBusLandmark.getX() - point.getX(), 2) + Math.pow(nearestBusLandmark.getY() - point.getY(), 2));
-        if (busLandmarkDistance < currentDistance) {
-            selectedElement = nearestBusLandmark;
+        if (nearestBusLandmark != null) {
+            double busLandmarkDistance = Math.sqrt(Math.pow(nearestBusLandmark.getX() - point.getX(), 2) + Math.pow(nearestBusLandmark.getY() - point.getY(), 2));
+            if (busLandmarkDistance < currentDistance) {
+                selectedElement = nearestBusLandmark;
+            }
         }
-
         //We use a point of interest to represent the currently selected point. We update selected point to a new point with the coordinates of the selected point.
-        selectedPointMarker = new PointOfInterest(selectedElement.getName(), selectedElement.getType(), selectedElement.getX()/0.56f, -selectedElement.getY(), false);
+        System.out.println("THESE ARE THE COORDS OF THE SELECTED POINT... " + selectedElement.getX() + " and " + selectedElement.getY());
+        selectedPointMarker = new PointOfInterest(selectedElement.getName(), selectedElement.getType(), selectedElement.getX()*0.56f, -selectedElement.getY(), false);
         return selectedPointMarker;
     }
 

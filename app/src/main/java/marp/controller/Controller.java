@@ -1,6 +1,7 @@
 package marp.controller;
 
 import java.io.File;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -60,30 +61,40 @@ public class Controller {
 
     private void createButtonControl() {
         //Clicking on the map updates the latest clicked coordinates. if isCreatingCustomPointOfInterest is true, lastPressedX is set as well.
+
+
         view.getCanvas().setOnMousePressed(e -> {
+            System.out.println("TEST?!");
             lastX = (float) e.getX();
+            System.out.println("NOW SETTING LAST X TO " + ((float) e.getX()));
             lastY = (float) e.getY();
-            if (isCreatingCustomPointOfInterest){
+            //if (isCreatingCustomPointOfInterest){
                 mouseDragStartPositionX = lastX;
                 mouseDragStartPositionY = lastY;
-            }
+            //}
         });
-
         view.getCanvas().setOnMouseReleased(e -> {
+            System.out.println("TEST 1");
+            System.out.println("Last X = " + lastX);
+            System.out.println(mouseDragStartPositionX + " " + e.getX());
             //When releasing the mouse, if the mouse drag start position is equal to the current position, it counts as a mouse click.
             if (mouseDragStartPositionX == e.getX() && mouseDragStartPositionY == e.getY()) {
+                System.out.println("TEST 2");
                 //There are two cases: Either we are making a new POI or we are selecting a point.
                 if (isCreatingCustomPointOfInterest) {
+                    System.out.println("TEST 3");
                     view.getMapMenu().changeMenuPanel(view.getMapMenu().getPointOfInterestPanel());
                     toggleIsCreatingCustomPointOfInterest();
                 } else {
+                    System.out.println("TEST 4");
                     //convert the screen coords of the mouse click to map coords and find the nearest selectable element.
                     Point2D point = view.getMapScene().screenCoordsToMapCoords(new Point2D(lastX, lastY));
                     MapPoint nearestPoint = model.getNearestPointForMapSelection(point);
                     // make a POI as a marker of the selected point
-                    model.setSelectedPointMarker(new PointOfInterest(nearestPoint.getName(), PointType.SELECTED, nearestPoint.getX(), nearestPoint.getX(), false));
+                    model.setSelectedPointMarker(new PointOfInterest(nearestPoint.getName(), PointType.SELECTED, nearestPoint.getX(), nearestPoint.getY(), false));
                     // focus on the point without panning
                     focusOnPoint(model.getSelectedPointMarker(), false);
+                    System.out.println("TEST");
                 }
             }
         });
@@ -348,7 +359,7 @@ public class Controller {
         if (isCreatingCustomPointOfInterest){
             isCreatingCustomPointOfInterest = false;
             // set the cursor to the default cursor.
-            view.getMapScene().gc.getCanvas().setCursor(Cursor.DEFAULT);
+            view.getCanvas().setCursor(Cursor.DEFAULT);
 
             //Change the graphic of the button for creating new points of interest in the minimized menu.
             Image newPointIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/star.png")));
@@ -360,7 +371,7 @@ public class Controller {
         else {
             isCreatingCustomPointOfInterest = true;
             // set the cursor to the crosshair cursor.
-            view.getMapScene().gc.getCanvas().setCursor(Cursor.CROSSHAIR);
+            view.getCanvas().setCursor(Cursor.CROSSHAIR);
 
             // Change the graphic of the button for creating new points of interest in the minimized menu.
             Image cancelIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/cross.png")));

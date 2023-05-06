@@ -272,15 +272,34 @@ public class MapObjectInParsing implements Serializable{
         if(element==null) return;
         element.setRole(role);
         unfinishedRelationSimpleShapes.add(element);
-
     }
 
     public void finishRelation(){
-        //TODO: We have to add the relation to more specific lists based on type.
-        //complexShapes.add(new ComplexShape(unfinishedRelationID,this.unfinishedShapeType, unfinishedRelationSimpleShapes));
+        switch (unfinishedShapeType) {
+            case COASTLINE:
+                mapObjects.getCoastLineAreasList().add(new ComplexShape(unfinishedRelationID, this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
+                break;
+            case BUILDING:
+                mapObjects.getBuildingsList().add(new ComplexShape(unfinishedRelationID, this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
+                break;
+            case WATER:
+                mapObjects.getWaterAreasList().add(new ComplexShape(unfinishedRelationID, this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
+                break;
+            case GRASS:
+            case FOREST:
+            case CEMENT:
+            case COMMERCIAL_GROUND:
+            case FARMLAND:
+                mapObjects.getTerrainAreasList().add(new ComplexShape(unfinishedRelationID, this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
+                break;
+            default:
+                break;
+        }
+
         unfinishedRelationSimpleShapes = new ArrayList<>();
         unfinishedRelationID = 0;
         unfinishedShapeType = ShapeType.UNDEFINED;
+        unfinishedPointType = PointType.UNDEFINED;
     }
 
     private ArrayList<float[]> convertPointArrToUseableFloatArr() {

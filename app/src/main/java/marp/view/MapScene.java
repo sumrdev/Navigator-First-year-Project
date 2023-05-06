@@ -149,6 +149,7 @@ public class MapScene extends Scene{
             levelOfDetails = 1;
         }
 
+
         //######################################################################################
 
         if (zoomMenu.getZoomlevel() > 300000 ) {
@@ -310,6 +311,9 @@ public class MapScene extends Scene{
             drawCustomLandmarks();
             drawSelectedPoint();
         }
+
+        model.getMapObjects().getDigraph().draw(gc);
+
     }
     private void drawCoastlines(int levelOfDetail, Bounds bounds) {
         for (Element coastline : model.getMapObjects().getCoastLinesAreaTree().getElementsInRange(bounds)) {

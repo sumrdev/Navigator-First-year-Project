@@ -15,6 +15,7 @@ import marp.mapelements.details.ShapeType;
 public class MapObjectInParsing implements Serializable{
 
     private HashMap<Long, Point> pointIDtoPoint = new HashMap<>();
+    private HashMap<Long, RoadNode> roadNodeIDtoRoadNode = new HashMap<>();
     private HashMap<Long, SimpleShape> SimpleShapeIDToSimpleShape = new HashMap<>();
 
     private ArrayList<Point> unfinishedSimpleShapePoints = new ArrayList<>();
@@ -124,6 +125,10 @@ public class MapObjectInParsing implements Serializable{
         this.housenumber = housenumber;
     }
 
+    public HashMap<Long, RoadNode> getRoadNodeIDtoRoadNode() {
+        return roadNodeIDtoRoadNode;
+    }
+
     public void setStreet(String street){
         this.completeAddressCount++;
         this.street = street;
@@ -230,20 +235,29 @@ public class MapObjectInParsing implements Serializable{
                     speed = unfinishedRoadType.getSpeed();
                 }
             }
+            ArrayList<RoadNode> roadNodes = new ArrayList<>(); 
+            for(Point point: this.unfinishedSimpleShapePoints){
+                if(!roadNodeIDtoRoadNode.containsKey(point.getID())){
+                    roadNodeIDtoRoadNode.put(point.getID(), new RoadNode(point));
+                }
+                roadNodes.add(roadNodeIDtoRoadNode.get(point.getID()));
+            }
+            Road road = new Road(this.unfinishedSimpleShapeID, roadNodes, this.unfinishedRoadType, this.speed, this.oneWay, this.name);
+            mapObjects.getRoadsList().add(road);
             switch (unfinishedRoadType) {
                 case MOTORWAY:
-                    mapObjects.getMotorWaysList().add(new Road(this.unfinishedSimpleShapeID, this.unfinishedSimpleShapePoints, this.unfinishedRoadType, this.speed, this.oneWay, this.name));
+                    mapObjects.getMotorWaysList().add(road);
                     break;
                 case PRIMARY:
                 case TERTIARY:
-                    mapObjects.getLargeRoadsList().add(new Road(this.unfinishedSimpleShapeID, this.unfinishedSimpleShapePoints, this.unfinishedRoadType, this.speed, this.oneWay, this.name));
+                    mapObjects.getLargeRoadsList().add(road);
                     break;
                 case RESIDENTIAL:
                 case PEDESTRIAN:
-                    mapObjects.getSmallRoadsList().add(new Road(this.unfinishedSimpleShapeID, this.unfinishedSimpleShapePoints, this.unfinishedRoadType, this.speed, this.oneWay, this.name));
+                    mapObjects.getSmallRoadsList().add(road);
                     break;
                 case PATH:
-                    mapObjects.getFootPathsList().add(new Road(this.unfinishedSimpleShapeID, this.unfinishedSimpleShapePoints, this.unfinishedRoadType, this.speed, this.oneWay, this.name));
+                    mapObjects.getFootPathsList().add(road);
                     break;
             }
         }

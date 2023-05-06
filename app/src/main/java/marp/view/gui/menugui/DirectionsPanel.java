@@ -1,6 +1,9 @@
 package marp.view.gui.menugui;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -12,6 +15,7 @@ import marp.view.gui.SearchBar;
 import marp.view.gui.buttons.MapButton;
 import marp.view.gui.buttons.MapTextButton;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class DirectionsPanel extends MenuPanel {
@@ -24,6 +28,11 @@ public class DirectionsPanel extends MenuPanel {
     public MapTextButton findRouteButton;
     public MapButton startSearchButton;
     public MapButton endSearchButton;
+
+    public ObservableList<String> guideList;
+    public ListView<String> guideView;
+
+    VBox startAndEndLocation;
 
 
     // Constructor
@@ -60,16 +69,42 @@ public class DirectionsPanel extends MenuPanel {
         VBox endSearchBarBox = new VBox(new MapLabelSmall("Destination: "), endLocationSearchbarBox);
         endSearchBarBox.setSpacing(5);
 
+        guideList = FXCollections.observableArrayList();
+        guideView = new ListView<>();
+        guideView.getStylesheets().add("CSS/stylesheet.css");
+        guideView.getStyleClass().add("file-list");
+        guideView.setMaxWidth(400);
+        guideView.setItems(guideList);
+        guideView.setVisible(false);
+
         // Create a VBox to hold start and end location search bars with buttons and labels, swap button, find route button, and labels
-        VBox startAndEndLocation = new VBox(new MapLabel("Find the best route to your destination"), startSearchBarBox, swapButton, endSearchBarBox, findRouteButton);
+        startAndEndLocation = new VBox(new MapLabel("Find the best route to your destination"), startSearchBarBox, swapButton, endSearchBarBox, findRouteButton, guideView);
         startAndEndLocation.getStylesheets().add("CSS/stylesheet.css");
         startAndEndLocation.getStyleClass().add("map-vbox");
         startAndEndLocation.setMaxHeight(400);
+
 
         //Add generic menu navigation buttons
         this.getChildren().addAll(startAndEndLocation, minimizeButton, directionsButton, settingsButton);
         this.setPadding(new Insets(20, 20, 20, 20));
         this.setSpacing(10);
         this.setPickOnBounds(false);
+    }
+    public void receiveGuideList(ArrayList<String> list){
+        guideList.clear();
+        for (String element : list){
+            guideList.add(element);
+        }
+    }
+    
+    public void setGuideShow(boolean shouldShow){
+        guideView.setVisible(shouldShow);
+        if (shouldShow){
+            startAndEndLocation.setMaxHeight(10000);
+        }
+        else {
+            startAndEndLocation.setMaxHeight(400);
+        }
+
     }
 }

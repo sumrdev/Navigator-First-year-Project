@@ -141,6 +141,7 @@ public class MapObjectInParsing implements Serializable{
         if (unfinishedPointType==PointType.UNDEFINED && this.completeAddressCount==4){
             Address address = new Address(this.street, this.housenumber, this.postcode, this.city, unfinishedPoint.getX(), unfinishedPoint.getY(), -1);
             mapObjects.getAddressList().add(address);
+            mapObjects.getTrie().insert(address);
         } else if(fontSize != FontSize.UNDEFINED){
             PlaceName placeName = new PlaceName(this.name, this.fontSize, this.unfinishedPoint.getX(), this.unfinishedPoint.getY());
             switch (fontSize) {
@@ -199,6 +200,7 @@ public class MapObjectInParsing implements Serializable{
                 Point2D shapeCenterCoords = findCenterOfShape(coords.get(0), coords.get(1));
                 Address address = new Address(street, housenumber, postcode, city, (float) shapeCenterCoords.getX(), (float) shapeCenterCoords.getY(), -1);
                 mapObjects.getAddressList().add(address);
+                mapObjects.getTrie().insert(address);
             }
             if(this.unfinishedShapeType==ShapeType.UNDEFINED){
                 this.SimpleShapeIDToSimpleShape.put(this.unfinishedSimpleShapeID, new SimpleShape(this.unfinishedSimpleShapeID, this.unfinishedShapeType, coords.get(0),coords.get(1)));

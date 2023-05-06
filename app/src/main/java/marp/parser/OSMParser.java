@@ -312,6 +312,7 @@ public class OSMParser{
                     break;
             }
         }
+
         mapObjects.buildTrees();
         mapObjects.buildDigraph(mapObjectInParsing.getRoadNodeIDtoRoadNode());
         return mapObjects;

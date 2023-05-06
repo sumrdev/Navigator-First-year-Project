@@ -22,29 +22,33 @@ import marp.view.gui.ZoomMenu;
 import marp.view.gui.buttons.MapTextButton;
 import marp.view.gui.menugui.MapMenu;
 
+import javax.crypto.spec.PSource;
+
 public class MapScene extends Scene{
     public MapTextButton loadButton;
     private Model model;
     private ZoomMenu zoomMenu;
-    private MapMenu mapMenu;
-    private Canvas canvas = new Canvas(1000, 700);
-    public GraphicsContext gc = canvas.getGraphicsContext2D();
+    private  MapMenu mapMenu;
+
+    private Canvas canvas;
+    public GraphicsContext gc;
     public Affine trans = new Affine();
 
-    public MapScene(Model model, View view) {
+
+    public MapScene(Model model, MapMenu mapMenu, Canvas canvas) {
         super(new VBox());
         this.model = model;
+        this.canvas = canvas;
+        gc = canvas.getGraphicsContext2D();
 
-        mapMenu = new MapMenu(model);
+        this.mapMenu = mapMenu;
         zoomMenu = new ZoomMenu(100);
+
         StackPane stackedElements = new StackPane();
 
-        // Bind the size of the map to the size of the window and check if window is resized, then redraw
-        canvas.widthProperty().bind(view.primaryStage.widthProperty());
-        canvas.heightProperty().bind(view.primaryStage.heightProperty());
         canvas.widthProperty().addListener(observable -> redraw());
+        //canvas.widthProperty().addListener(observable -> System.out.println("canvas: " + canvas.widthProperty().getValue() + " and primary stage " + view.primaryStage.widthProperty().getValue()));
         canvas.heightProperty().addListener(observable -> redraw());
-
 
         // Pan and zoom to frame the map.
         pan(-0.56 * model.getMapObjects().getMinX(), model.getMapObjects().getMaxY());
@@ -109,35 +113,42 @@ public class MapScene extends Scene{
         }
     }
 
-    public Canvas getCanvas(){
-        return canvas;
-    }
-
     private void calculateZoomMenuDistance() {
         Bounds bounds = screenBoundsToMapBounds(canvas.getLayoutBounds());
+
         double x = MathFunctions.distanceInMeters((float) (bounds.getMinX()/0.56), (float) bounds.getMinY(), (float) (bounds.getMaxX()/0.56), (float) bounds.getMinY());
         System.out.println(x);
-        getZoomMenu().setDistance(x);
+        zoomMenu.setDistance(x);
     }
-    public ZoomMenu getZoomMenu() {
-        return zoomMenu;
-    }
-    public MapMenu getMapMenu(){
-        return mapMenu;
-    }
+
 
     public void resetAffine() {
         trans = new Affine();
     }
     public void redraw() {
-        //gc.setTransform(new Affine());
+        gc.setTransform(new Affine());
         gc.setFill(MapColor.getInstance().colorMap.get("Background"));
         gc.setLineCap(StrokeLineCap.ROUND);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        //gc.setTransform(trans);
+        gc.setTransform(trans);
         gc.setLineWidth(1 / Math.sqrt(trans.determinant()));
 
-        Bounds bounds = screenBoundsToMapBounds(canvas.getLayoutBounds());
+
+
+        System.out.println("THE ZOOM LEVEL IS "+zoomMenu.getZoomlevel());
+        Bounds bounds = null;
+        try {
+            bounds = trans.inverseTransform(canvas.getLayoutBounds());
+        } catch (NonInvertibleTransformException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Now calculating the bounds from the canvas lay out bounds. The map bounds are: Max and min x" + bounds.getMaxX() + " and " + bounds.getMinX() + " \n and the max and min y:" + bounds.getMaxY() + " and " + bounds.getMinY());
+        System.out.println("Buildings in bounds X " + bounds.getMaxX() + ", " + bounds.getMaxX() + " and y " + bounds.getMaxY() + " " + bounds.getMaxY() + " number of elements: " + model.getMapObjects().getBuildingsTree().getElementsInRange(bounds).size());
+
+
+        for (Address address : model.getMapObjects().getAddressList()) {
+           //System.out.println("DRAWING ADDRESS AT: " + address.getX() + " " + address.getY());
+        }
 
         int levelOfDetails = 4;
 
@@ -150,6 +161,7 @@ public class MapScene extends Scene{
         //######################################################################################
 
         if (zoomMenu.getZoomlevel() > 300000 ) {
+            System.out.println("TEST! ");
 
             drawCoastlines(levelOfDetails, bounds);
             drawCustomLandmarks();
@@ -160,6 +172,7 @@ public class MapScene extends Scene{
         //###########################################################################################################################################
 
         if (zoomMenu.getZoomlevel() < 300000 && zoomMenu.getZoomlevel() > 15000) {
+            System.out.println("TEST!!! ");
             drawCoastlines(levelOfDetails, bounds);
             drawMotorways(bounds);
             drawCustomLandmarks();
@@ -171,6 +184,7 @@ public class MapScene extends Scene{
         //###############################################################################################################################
 
         if (zoomMenu.getZoomlevel() < 15000 && zoomMenu.getZoomlevel() > 2000) {
+            System.out.println("TEST!!!!!! ");
             drawCoastlines(levelOfDetails, bounds);
             drawWaterAreas(levelOfDetails, bounds);
             drawTerrain(levelOfDetails, bounds);

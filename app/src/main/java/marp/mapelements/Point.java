@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Point extends Element {
-    long id;
     float x;
     float y;
 
@@ -16,8 +15,8 @@ public class Point extends Element {
     }
     public Point(float x, float y){
         this.id = -1;
-        this.x = 0.56f*x;
-        this.y = -y;
+        this.x = x;
+        this.y = y;
     }
 
     public long getID(){
@@ -33,13 +32,13 @@ public class Point extends Element {
     }
 
     @Override
-    public void draw(GraphicsContext gc, int levelOfDetail, int zoom) {
+    public void draw(GraphicsContext gc, int levelOfDetail, double zoom) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'draw'");
     }
 
     @Override
     public float[] getBounds() {
-        return new float[]{x,y,x,y};
+        return new float[]{(float) (x/0.56),-y, (float) (x/0.56),-y};
     }
 }

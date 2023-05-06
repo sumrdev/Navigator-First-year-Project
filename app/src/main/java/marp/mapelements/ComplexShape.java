@@ -70,7 +70,7 @@ public class ComplexShape extends Element {
     }
 
     @Override
-    public void draw(GraphicsContext gc, int levelOfDetail, int zoom) {
+    public void draw(GraphicsContext gc, int levelOfDetail, double zoom) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'draw'");
     }

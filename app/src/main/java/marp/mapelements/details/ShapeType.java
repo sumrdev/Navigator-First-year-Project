@@ -14,5 +14,4 @@ public enum ShapeType {
     COMMERCIAL_GROUND,
     FARMLAND,
     UNDEFINED;
-
 }

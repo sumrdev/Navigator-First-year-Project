@@ -9,8 +9,6 @@ import java.util.Set;
 
 import marp.mapelements.Address;
 
-
-
 public class TrieNode implements Serializable {
     public boolean isEnd;
     public HashMap<Character, TrieNode> branches;

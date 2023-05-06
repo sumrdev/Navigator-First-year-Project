@@ -4,13 +4,9 @@ import javafx.geometry.Bounds;
 import marp.mapelements.Element;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class RTree<T extends Element> implements Serializable {
-    private T reallyBadClosestGuess;
     private Node treeNode;
     private final int dimensions;
     private final int maxElementsPerLeaf;
@@ -18,13 +14,11 @@ public class RTree<T extends Element> implements Serializable {
         maxElementsPerLeaf = 100;
         dimensions = 2;
         treeNode = new Node(values, 0);
-        // reallyBadClosestGuess = values.get(values.size()/2);
     }
     public RTree(List<T> values, int maxElementsPerLeaf){
         this.maxElementsPerLeaf = maxElementsPerLeaf;
         dimensions = 2;
         treeNode = new Node(values, 0);
-        reallyBadClosestGuess = values.get(values.size()/2);
     }
     //could be used to return rTree for an area instead of a list
     /*protected RTree(Node newTreeNode){
@@ -266,5 +260,8 @@ public class RTree<T extends Element> implements Serializable {
         treeNode.getNearest(ds, pq, elements);
         T result = pq.peek().element;
         return result;
+    }
+    public void printElementsInRange() {
+        System.out.println("bounds" + Arrays.toString(treeNode.boundingRect));
     }
 }

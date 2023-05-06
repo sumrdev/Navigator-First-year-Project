@@ -46,6 +46,7 @@ public class Controller {
         fileList = IOFunctions.getFiles();
         setFileChooser();
         this.stage = view.getPrimaryStage();
+        createButtonControl();
 
     }
 
@@ -59,7 +60,7 @@ public class Controller {
 
     private void createButtonControl() {
         //Clicking on the map updates the latest clicked coordinates. if isCreatingCustomPointOfInterest is true, lastPressedX is set as well.
-        view.getMapScene().getCanvas().setOnMousePressed(e -> {
+        view.getCanvas().setOnMousePressed(e -> {
             lastX = (float) e.getX();
             lastY = (float) e.getY();
             if (isCreatingCustomPointOfInterest){
@@ -68,12 +69,12 @@ public class Controller {
             }
         });
 
-        view.getMapScene().setOnMouseReleased(e -> {
+        view.getCanvas().setOnMouseReleased(e -> {
             //When releasing the mouse, if the mouse drag start position is equal to the current position, it counts as a mouse click.
             if (mouseDragStartPositionX == e.getX() && mouseDragStartPositionY == e.getY()) {
                 //There are two cases: Either we are making a new POI or we are selecting a point.
                 if (isCreatingCustomPointOfInterest) {
-                    view.getMapScene().getMapMenu().changeMenuPanel(view.getMapScene().getMapMenu().getPointOfInterestPanel());
+                    view.getMapMenu().changeMenuPanel(view.getMapMenu().getPointOfInterestPanel());
                     toggleIsCreatingCustomPointOfInterest();
                 } else {
                     //convert the screen coords of the mouse click to map coords and find the nearest selectable element.
@@ -87,7 +88,7 @@ public class Controller {
             }
         });
 
-        view.getMapScene().getCanvas().setOnMouseDragged(e -> {
+        view.getCanvas().setOnMouseDragged(e -> {
             // When dragging the mouse we pan with the difference in mouse x and y of the mouse position.
             float dx = (float) (e.getX() - lastX);
             float dy = (float) (e.getY() - lastY);
@@ -98,7 +99,7 @@ public class Controller {
             lastY = (float) e.getY();
         });
 
-        view.getMapScene().getCanvas().setOnScroll(e -> {
+        view.getCanvas().setOnScroll(e -> {
             double factor = e.getDeltaY();
             view.getMapScene().zoom((float) e.getX(), (float) e.getY(), (float) Math.pow(1.01, factor));
             view.getMapScene().redraw();
@@ -108,13 +109,13 @@ public class Controller {
         //############# Zoom menu buttons ##########################
         //##########################################################
 
-        view.getMapScene().getZoomMenu().zoomIn.setOnAction(e -> {
-            view.getMapScene().zoom(500, 350, 2 * view.getMapScene().getZoomMenu().getZoomMultiplier());
+        view.getZoomMenu().zoomIn.setOnAction(e -> {
+            view.getMapScene().zoom(500, 350, 2 * view.getZoomMenu().getZoomMultiplier());
             view.getMapScene().redraw();
         });
 
-        view.getMapScene().getZoomMenu().zoomOut.setOnAction(e -> {
-            view.getMapScene().zoom(500F, 350F, (float) (0.5 / view.getMapScene().getZoomMenu().getZoomMultiplier()));
+        view.getZoomMenu().zoomOut.setOnAction(e -> {
+            view.getMapScene().zoom(500F, 350F, (float) (0.5 / view.getZoomMenu().getZoomMultiplier()));
             view.getMapScene().redraw();
         });
 
@@ -122,21 +123,21 @@ public class Controller {
         //############# Minimized panel buttons ####################
         //##########################################################
 
-        view.getMapScene().getMapMenu().getMinimizedPanel().directionsButton.setOnAction(e -> {
-            view.getMapScene().getMapMenu().changeMenuPanel(view.getMapScene().getMapMenu().getDirectionsPanel());
+        view.getMapMenu().getMinimizedPanel().directionsButton.setOnAction(e -> {
+            view.getMapMenu().changeMenuPanel(view.getMapMenu().getDirectionsPanel());
         });
-        view.getMapScene().getMapMenu().getMinimizedPanel().settingsButton.setOnAction(e -> {
-            view.getMapScene().getMapMenu().changeMenuPanel(view.getMapScene().getMapMenu().getSettingsPanel());
+        view.getMapMenu().getMinimizedPanel().settingsButton.setOnAction(e -> {
+            view.getMapMenu().changeMenuPanel(view.getMapMenu().getSettingsPanel());
         });
-        view.getMapScene().getMapMenu().getMinimizedPanel().searchBar.setOnAction(e -> {
-            focusOnPoint(view.getMapScene().getMapMenu().getMinimizedPanel().searchBar.getAddress(), true);
-            view.getMapScene().getMapMenu().getMinimizedPanel().searchBar.clear();
+        view.getMapMenu().getMinimizedPanel().searchBar.setOnAction(e -> {
+            focusOnPoint(view.getMapMenu().getMinimizedPanel().searchBar.getAddress(), true);
+            view.getMapMenu().getMinimizedPanel().searchBar.clear();
         });
-        view.getMapScene().getMapMenu().getMinimizedPanel().searchButton.setOnAction(e -> {
-            focusOnPoint(view.getMapScene().getMapMenu().getMinimizedPanel().searchBar.getAddress(), true);
-            view.getMapScene().getMapMenu().getMinimizedPanel().searchBar.clear();
+        view.getMapMenu().getMinimizedPanel().searchButton.setOnAction(e -> {
+            focusOnPoint(view.getMapMenu().getMinimizedPanel().searchBar.getAddress(), true);
+            view.getMapMenu().getMinimizedPanel().searchBar.clear();
         });
-        view.getMapScene().getMapMenu().getMinimizedPanel().pointOfInterestButton.setOnAction(e -> {
+        view.getMapMenu().getMinimizedPanel().pointOfInterestButton.setOnAction(e -> {
             toggleIsCreatingCustomPointOfInterest();
         });
 
@@ -144,27 +145,27 @@ public class Controller {
         //############# Directions panel buttons ###################
         //##########################################################
 
-        view.getMapScene().getMapMenu().getDirectionsPanel().minimizeButton.setOnAction(e -> {
+        view.getMapMenu().getDirectionsPanel().minimizeButton.setOnAction(e -> {
             // Set the menu panel to the minimized menu panel
-            view.getMapScene().getMapMenu().changeMenuPanel(view.getMapScene().getMapMenu().getMinimizedPanel());
+            view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
             // Set the selectedPointMarker to null so no selected point is shown when the minimized menu is shown.
             model.setSelectedPointMarker(null);
         });
 
-        view.getMapScene().getMapMenu().getDirectionsPanel().settingsButton.setOnAction(e -> {
+        view.getMapMenu().getDirectionsPanel().settingsButton.setOnAction(e -> {
             // Set the menu panel to the settings menu panel
-            view.getMapScene().getMapMenu().changeMenuPanel(view.getMapScene().getMapMenu().getSettingsPanel());
+            view.getMapMenu().changeMenuPanel(view.getMapMenu().getSettingsPanel());
         });
 
-        view.getMapScene().getMapMenu().getDirectionsPanel().swapButton.setOnAction(e -> {
+        view.getMapMenu().getDirectionsPanel().swapButton.setOnAction(e -> {
             // First get the start location field text and save it as temp text,
             // then set ge start location field text to the text from the end location field,
             // then set the temp text in the end location field.
-            String tempText = view.getMapScene().getMapMenu().getDirectionsPanel().startLocationField.getText();
-            view.getMapScene().getMapMenu().getDirectionsPanel().startLocationField.setText(view.getMapScene().getMapMenu().getDirectionsPanel().endLocationField.getText());
-            view.getMapScene().getMapMenu().getDirectionsPanel().endLocationField.setText(tempText);
+            String tempText = view.getMapMenu().getDirectionsPanel().startLocationField.getText();
+            view.getMapMenu().getDirectionsPanel().startLocationField.setText(view.getMapMenu().getDirectionsPanel().endLocationField.getText());
+            view.getMapMenu().getDirectionsPanel().endLocationField.setText(tempText);
         });
-        view.getMapScene().getMapMenu().getDirectionsPanel().findRouteButton.setOnAction( e -> {
+        view.getMapMenu().getDirectionsPanel().findRouteButton.setOnAction( e -> {
             //TODO: Fix when this all works...
             //model.graph.runaStarWithNodeIndex(Integer.parseInt(view.getMapMenu().getDirectionsPanel().startLocationField.getText()), Integer.parseInt(view.getMapMenu().getDirectionsPanel().endLocationField.getText()));
             view.getMapScene().redraw();
@@ -174,47 +175,47 @@ public class Controller {
         //############# Selected point panel #######################
         //##########################################################
 
-        view.getMapScene().getMapMenu().getSelectedPointPanel().minimizeButton.setOnAction(e -> {
+        view.getMapMenu().getSelectedPointPanel().minimizeButton.setOnAction(e -> {
             // Set the menu panel to the minimized menu panel
-            view.getMapScene().getMapMenu().changeMenuPanel(view.getMapScene().getMapMenu().getMinimizedPanel());
+            view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
             // Set the selectedPointMarker to null so no selected point is shown when the minimized menu is shown.
             model.setSelectedPointMarker(null);
         });
 
-        view.getMapScene().getMapMenu().getSelectedPointPanel().directionsButton.setOnAction(e -> {
+        view.getMapMenu().getSelectedPointPanel().directionsButton.setOnAction(e -> {
             // Set the menu panel to the directions menu panel
-            view.getMapScene().getMapMenu().changeMenuPanel(view.getMapScene().getMapMenu().getDirectionsPanel());
+            view.getMapMenu().changeMenuPanel(view.getMapMenu().getDirectionsPanel());
         });
-        view.getMapScene().getMapMenu().getSelectedPointPanel().settingsButton.setOnAction(e -> {
+        view.getMapMenu().getSelectedPointPanel().settingsButton.setOnAction(e -> {
             // Set the menu panel to the settings menu panel
-            view.getMapScene().getMapMenu().changeMenuPanel(view.getMapScene().getMapMenu().getSettingsPanel());
+            view.getMapMenu().changeMenuPanel(view.getMapMenu().getSettingsPanel());
         });
-        view.getMapScene().getMapMenu().getSelectedPointPanel().searchBar.setOnAction(e -> {
+        view.getMapMenu().getSelectedPointPanel().searchBar.setOnAction(e -> {
             // On enter pressed in the searchbar, focus on and pan to the point of the address in the search bar.
-            focusOnPoint(view.getMapScene().getMapMenu().getSelectedPointPanel().searchBar.getAddress(), true);
+            focusOnPoint(view.getMapMenu().getSelectedPointPanel().searchBar.getAddress(), true);
             // Clear the searchbar text
-            view.getMapScene().getMapMenu().getSelectedPointPanel().searchBar.clear();
+            view.getMapMenu().getSelectedPointPanel().searchBar.clear();
         });
-        view.getMapScene().getMapMenu().getSelectedPointPanel().searchButton.setOnAction(e -> {
+        view.getMapMenu().getSelectedPointPanel().searchButton.setOnAction(e -> {
             // On clicking search button, focus on and pan to the point of the address in the search bar.
-            focusOnPoint(view.getMapScene().getMapMenu().getSelectedPointPanel().searchBar.getAddress(), true);
+            focusOnPoint(view.getMapMenu().getSelectedPointPanel().searchBar.getAddress(), true);
             // Clear the searchbar text
-            view.getMapScene().getMapMenu().getSelectedPointPanel().searchBar.clear();
+            view.getMapMenu().getSelectedPointPanel().searchBar.clear();
         });
-        view.getMapScene().getMapMenu().getSelectedPointPanel().directionsToSelectedPointButton.setOnAction(e -> {
+        view.getMapMenu().getSelectedPointPanel().directionsToSelectedPointButton.setOnAction(e -> {
             // Not all selected points are addresses. We find the closest address and add it to the destination searchbar on the directions panel.
             Address closestAddress = model.getMapObjects().getAddressTree().getNearest(new float[]{model.getSelectedPointMarker().getX(), model.getSelectedPointMarker().getY()}, 5);
             // Add the address to the searchbar as text.
-            view.getMapScene().getMapMenu().getDirectionsPanel().endLocationField.setText(closestAddress.getStreet() + " " + closestAddress.getHouseNumber() + " " + closestAddress.getPostCode() + " " + closestAddress.getCity());
+            view.getMapMenu().getDirectionsPanel().endLocationField.setText(closestAddress.getStreet() + " " + closestAddress.getHouseNumber() + " " + closestAddress.getPostCode() + " " + closestAddress.getCity());
             // Change the menu panel to the directions panel
-            view.getMapScene().getMapMenu().changeMenuPanel(view.getMapScene().getMapMenu().getDirectionsPanel());
+            view.getMapMenu().changeMenuPanel(view.getMapMenu().getDirectionsPanel());
         });
-        view.getMapScene().getMapMenu().getSelectedPointPanel().saveLocationButton.setOnAction(e -> {
+        view.getMapMenu().getSelectedPointPanel().saveLocationButton.setOnAction(e -> {
             // When saving the selected point, we make a new point of interest with the type Favourite to mark the location of the saved point.
             //TODO: Possitble to delete saved points.
-            model.getMapObjects().getCustomPOIList().add(new PointOfInterest(view.getMapScene().getMapMenu().getPointOfInterestPanel().pointNameField.getText(), PointType.FAVOURITE, (float) (view.getMapScene().getMapMenu().getSelectedPointPanel().mapPoint.getX()/0.56), -view.getMapScene().getMapMenu().getSelectedPointPanel().mapPoint.getY(), true));
-            view.getMapScene().getMapMenu().getPointOfInterestPanel().pointNameField.clear();
-            view.getMapScene().getMapMenu().changeMenuPanel(view.getMapScene().getMapMenu().getMinimizedPanel());
+            model.getMapObjects().getCustomPOIList().add(new PointOfInterest(view.getMapMenu().getPointOfInterestPanel().pointNameField.getText(), PointType.FAVOURITE, (float) (view.getMapMenu().getSelectedPointPanel().mapPoint.getX()/0.56), -view.getMapMenu().getSelectedPointPanel().mapPoint.getY(), true));
+            view.getMapMenu().getPointOfInterestPanel().pointNameField.clear();
+            view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
             view.getMapScene().redraw();
         });
 
@@ -222,19 +223,19 @@ public class Controller {
         //############# Settings panel #############################
         //##########################################################
 
-        view.getMapScene().getMapMenu().getSettingsPanel().minimizeButton.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().minimizeButton.setOnAction(e -> {
             // Set the menu panel to the minimized menu panel
-            view.getMapScene().getMapMenu().changeMenuPanel(view.getMapScene().getMapMenu().getMinimizedPanel());
+            view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
             // Set the selectedPointMarker to null so no selected point is shown when the minimized menu is shown.
             model.setSelectedPointMarker(null);
         });
 
-        view.getMapScene().getMapMenu().getSettingsPanel().directionsButton.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().directionsButton.setOnAction(e -> {
             // Set the menu panel to the directions menu panel
-            view.getMapScene().getMapMenu().changeMenuPanel(view.getMapScene().getMapMenu().getDirectionsPanel());
+            view.getMapMenu().changeMenuPanel(view.getMapMenu().getDirectionsPanel());
         });
 
-        view.getMapScene().getMapMenu().getSettingsPanel().saveMapButton.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().saveMapButton.setOnAction(e -> {
             //TODO: Is this even a function we have?
             //try {
             //    model.save(model.filename);
@@ -243,45 +244,45 @@ public class Controller {
             //}
         });
 
-        view.getMapScene().getMapMenu().getSettingsPanel().loadAnotherOSMButton.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().loadAnotherOSMButton.setOnAction(e -> {
             //set the scene to chooseMapScene
             this.stage.setScene(view.chooseMapScene);
             this.stage.show();
         });
 
-        view.getMapScene().getMapMenu().getSettingsPanel().normalModeButton.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().normalModeButton.setOnAction(e -> {
             MapColor.getInstance().changeTheme("default");
             view.getMapScene().redraw();
         });
 
-        view.getMapScene().getMapMenu().getSettingsPanel().nightModeButton.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().nightModeButton.setOnAction(e -> {
             MapColor.getInstance().changeTheme("dark");
             view.getMapScene().redraw();
         });
 
-        view.getMapScene().getMapMenu().getSettingsPanel().colorBlindModeButton.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().colorBlindModeButton.setOnAction(e -> {
             MapColor.getInstance().changeTheme("colorblind");
             view.getMapScene().redraw();
         });
 
-        view.getMapScene().getMapMenu().getSettingsPanel().hideRoadsCheckbox.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().hideRoadsCheckbox.setOnAction(e -> {
             model.isRoadsVisible = !model.isRoadsVisible;
             view.getMapScene().redraw();
         });
 
-        view.getMapScene().getMapMenu().getSettingsPanel().hideBuildingsCheckbox.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().hideBuildingsCheckbox.setOnAction(e -> {
             model.isBuildingsVisible = !model.isBuildingsVisible;
             view.getMapScene().redraw();
         });
-        view.getMapScene().getMapMenu().getSettingsPanel().hideTerrainCheckbox.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().hideTerrainCheckbox.setOnAction(e -> {
             model.isTerrainVisible = !model.isTerrainVisible;
             view.getMapScene().redraw();
         });
-        view.getMapScene().getMapMenu().getSettingsPanel().hideLandmarkCheckbox.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().hideLandmarkCheckbox.setOnAction(e -> {
             model.isLandmarksVisible = !model.isLandmarksVisible;
             view.getMapScene().redraw();
         });
-        view.getMapScene().getMapMenu().getSettingsPanel().hideAddressesCheckbox.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().hideAddressesCheckbox.setOnAction(e -> {
             model.isAddressVisible = !model.isAddressVisible;
             view.getMapScene().redraw();
         });
@@ -290,17 +291,17 @@ public class Controller {
         //############# Create point panel #########################
         //##########################################################
 
-        view.getMapScene().getMapMenu().getPointOfInterestPanel().createPointButton.setOnAction(e -> {
+        view.getMapMenu().getPointOfInterestPanel().createPointButton.setOnAction(e -> {
             Point2D landmarkCoords = view.getMapScene().screenCoordsToMapCoords(new Point2D(lastX, lastY));
 
-            model.getMapObjects().getCustomPOIList().add(new PointOfInterest(view.getMapScene().getMapMenu().getPointOfInterestPanel().pointNameField.getText(), PointType.CUSTOM, (float) (landmarkCoords.getX()/0.56), (float) -landmarkCoords.getY(), false));
-            view.getMapScene().getMapMenu().getPointOfInterestPanel().pointNameField.clear();
-            view.getMapScene().getMapMenu().changeMenuPanel(view.getMapScene().getMapMenu().getMinimizedPanel());
+            model.getMapObjects().getCustomPOIList().add(new PointOfInterest(view.getMapMenu().getPointOfInterestPanel().pointNameField.getText(), PointType.CUSTOM, (float) (landmarkCoords.getX()/0.56), (float) -landmarkCoords.getY(), false));
+            view.getMapMenu().getPointOfInterestPanel().pointNameField.clear();
+            view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
             view.getMapScene().redraw();
         });
 
-        view.getMapScene().getMapMenu().getPointOfInterestPanel().cancelButton.setOnAction(e -> {
-            view.getMapScene().getMapMenu().changeMenuPanel(view.getMapScene().getMapMenu().getMinimizedPanel());
+        view.getMapMenu().getPointOfInterestPanel().cancelButton.setOnAction(e -> {
+            view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
         });
 
         //##########################################################
@@ -308,7 +309,12 @@ public class Controller {
         //##########################################################
 
         view.chooseMapScene.loadButton.setOnAction(e -> {
-            FileChooser fileChooser = new FileChooser();
+            view.createNewMapScene();
+            view.setScene(view.getMapScene());
+                }
+                );
+    }
+            /*FileChooser fileChooser = new FileChooser();
             try {
                 fileChooser.getExtensionFilters().addAll(
                     new FileChooser.ExtensionFilter("OSM files", "*.osm"),
@@ -323,7 +329,8 @@ public class Controller {
                         view.getMapScene().resetAffine();
                         this.model = Model.createModel(selectedFile);
                         view.model = this.model;
-                        view.setScene(view.getChooseMapScene());
+                        view.createNewMapScene();
+                        view.setScene(view.getMapScene());
                     } catch (javax.xml.parsers.FactoryConfigurationError e2) {
                         e2.printStackTrace();
                     }
@@ -335,7 +342,7 @@ public class Controller {
             }
         });
 
-    }
+    }*/
 
     public void toggleIsCreatingCustomPointOfInterest(){
         if (isCreatingCustomPointOfInterest){
@@ -348,7 +355,7 @@ public class Controller {
             ImageView imageView = new ImageView(newPointIcon);
             imageView.setFitHeight(48);
             imageView.setFitWidth(48);
-            view.getMapScene().getMapMenu().getMinimizedPanel().pointOfInterestButton.setGraphic(imageView);
+            view.getMapMenu().getMinimizedPanel().pointOfInterestButton.setGraphic(imageView);
         }
         else {
             isCreatingCustomPointOfInterest = true;
@@ -360,7 +367,7 @@ public class Controller {
             ImageView imageView = new ImageView(cancelIcon);
             imageView.setFitHeight(48);
             imageView.setFitWidth(48);
-            view.getMapScene().getMapMenu().getMinimizedPanel().pointOfInterestButton.setGraphic(imageView);
+            view.getMapMenu().getMinimizedPanel().pointOfInterestButton.setGraphic(imageView);
 
         }
     }
@@ -368,17 +375,17 @@ public class Controller {
         // Attempt pan only if the point to pan to is not null
         if (mapPoint != null) {
             // Update the menu panel to the selected point menu
-            view.getMapScene().getMapMenu().changeMenuPanel(view.getMapScene().getMapMenu().getSelectedPointPanel());
-            view.getMapScene().getMapMenu().getSelectedPointPanel().setMapPoint(mapPoint);
+            view.getMapMenu().changeMenuPanel(view.getMapMenu().getSelectedPointPanel());
+            view.getMapMenu().getSelectedPointPanel().setMapPoint(mapPoint);
 
             //We only pan if the point to focus on is found through a search bar. Not when clicking on a point.
             if (shouldPan) {
                 // Find the middle screen coordinate and find the map coordinates for this point.
-                Point2D firstPoint = view.getMapScene().screenCoordsToMapCoords(new Point2D(view.getMapScene().getCanvas().getWidth()/2, view.getMapScene().getCanvas().getHeight()/2));
+                Point2D firstPoint = view.getMapScene().screenCoordsToMapCoords(new Point2D(view.getCanvas().getWidth()/2, view.getMapScene().getHeight()/2));
 
                 // Pan once to the side and do the same again. In this way we find the relationship between the panning and the distance.
                 view.getMapScene().pan(10, 10);
-                Point2D secondPoint = view.getMapScene().screenCoordsToMapCoords(new Point2D(view.getMapScene().getCanvas().getWidth()/2, view.getMapScene().getCanvas().getHeight()/2));
+                Point2D secondPoint = view.getMapScene().screenCoordsToMapCoords(new Point2D(view.getMapScene().getWidth()/2, view.getMapScene().getHeight()/2));
 
                 // Calculate the factors needed to convert between screen coordinates and map coordinates
                 float xfactor = (float) (10/(secondPoint.getX()-firstPoint.getX()));

@@ -1,7 +1,9 @@
 package marp.mapelements;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import marp.mapelements.details.MapColor;
 import marp.mapelements.details.PointType;
 
 public class Address extends Point implements MapPoint {
@@ -17,7 +19,7 @@ public class Address extends Point implements MapPoint {
     PointType type = PointType.ADDRESS;
 
     public Address(String street, String houseNumber, String postCode, String city, float x, float y, long id){
-        super(id,(float) x, (float) y);
+        super((float) x, (float) y);
         this.street = street.intern();
         this.houseNumber = houseNumber.intern();
         if(postCode != null) {
@@ -30,6 +32,7 @@ public class Address extends Point implements MapPoint {
     public void draw(GraphicsContext gc, float zoom) {
         gc.setFont(Font.font("Helvetica Neue", zoom * 10));
         gc.fillText(houseNumber, x, y);
+        System.out.println("DRAWING AN ADDRESS!!!");
     }
     @Override
     public String getName() {

@@ -5,13 +5,14 @@ import javafx.scene.canvas.GraphicsContext;
 import marp.mapelements.details.MapColor;
 import marp.mapelements.details.ShapeType;
 
+import java.util.Arrays;
+
 public class SimpleShape extends Element {
-    private long id;
     private ShapeType type;
     protected float[] x;
     protected float[] y;
     private String role;
-    private float[] boundingCoords = {Float.MAX_VALUE, Float.MAX_VALUE, Float.MIN_VALUE, Float.MIN_VALUE};
+    private float[] boundingCoords = {Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY};
 
     protected SimpleShape(Long id){
         this.id = id;
@@ -94,7 +95,7 @@ public class SimpleShape extends Element {
     }
 
     @Override
-    public void draw(GraphicsContext gc, int levelOfDetail, int zoom) {
+    public void draw(GraphicsContext gc, int levelOfDetail, double zoom) {
         gc.setFill(MapColor.getInstance().colorMap.get(type.toString()));
         if(levelOfDetail>x.length) return;
         gc.beginPath();

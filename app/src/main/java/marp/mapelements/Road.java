@@ -9,29 +9,38 @@ import marp.mapelements.details.RoadType;
 
 import java.util.ArrayList;
 
-public class Road extends SimpleShape {
+public class Road extends Element{
     ArrayList<Point> nodes;
     boolean oneway;
     RoadType roadType;
     int speed;
     String name;
+    private float[] boundingCoords = {Float.MAX_VALUE, Float.MAX_VALUE, -Float.MAX_VALUE, -Float.MAX_VALUE};
     
     public Road(Long id, ArrayList<Point> nodes, RoadType type, int speed, boolean oneway, String name) {
-        super(id);
+        this.id = id;
         this.nodes = nodes;
         this.roadType = type;
         this.speed = speed;
         this.oneway = oneway;
         this.name = name;
+
+        for (Point point: nodes) {
+            if(point.getX() < boundingCoords[0]){
+                boundingCoords[0] = point.getX();
+            }
+            if (point.getX() > boundingCoords[2]){
+                boundingCoords[2] = point.getX();
+            }
+            if(point.getY() < boundingCoords[1]){
+                boundingCoords[1] = point.getY();
+            }
+            if (point.getY() > boundingCoords[3]){
+                boundingCoords[3] = point.getY();
+            }
+        }
     }
-    public Road(Road roadToCopy) {
-        super(roadToCopy.getID());
-        this.nodes = new ArrayList<>(roadToCopy.nodes);
-        this.roadType = roadToCopy.roadType;
-        this.speed = roadToCopy.speed;
-        this.oneway = roadToCopy.oneway;
-        this.name = roadToCopy.name;
-    }
+
     /*
     public RoadType getRoadType() {
         return roadType;
@@ -49,6 +58,7 @@ public class Road extends SimpleShape {
     }
     */
     public void draw(GraphicsContext gc, double zoom){
+        System.out.println("Drawing a road");
 
         gc.setLineWidth((zoom * roadType.getRoadWidth()));
         gc.setStroke(MapColor.getInstance().colorMap.get(roadType.toString()));
@@ -56,14 +66,14 @@ public class Road extends SimpleShape {
         //    gc.setLineWidth(0.0001);
         //    gc.setStroke(Color.RED);
         //}
-        drawArr(gc, x, y, 1, zoom);
+        draw(gc,1, zoom);
         //if(drawRoute) gc.strokeLine(xRoute[0], yRoute[0], xRoute[xRoute.length-1], yRoute[yRoute.length-1]);
     }
 
     public void drawOutline(GraphicsContext gc, double zoom) {
         gc.setLineWidth(zoom*roadType.getOutlineWidth());
-        gc.setStroke(MapColor.getInstance().colorMap.get(roadType.toString()+"Outline"));
-        drawArr(gc, x, y, 1, zoom);
+        gc.setStroke(MapColor.getInstance().colorMap.get(roadType.toString()+"_OUTLINE"));
+        draw(gc,1, zoom);
     }
     public void drawClose(GraphicsContext gc){
         gc.setLineWidth((0.00002 + 0.000005 * roadType.getRoadWidth()));
@@ -72,14 +82,14 @@ public class Road extends SimpleShape {
         //    gc.setLineWidth(0.0001);
         //    gc.setStroke(Color.RED);
         //}
-        drawArr(gc, x, y, 1, 1);
+        draw(gc,1, 1);
         //if(drawRoute) drawArr(gc, xRoute, yRoute, 1, 1);
         //if(drawRoute) drawArr(gc, xRoute, yRoute, 1, 1);
     }
     public void drawCloseOutline(GraphicsContext gc){
         gc.setLineWidth((0.000025 + 0.000005 * roadType.getRoadWidth()));
-        gc.setStroke(MapColor.getInstance().colorMap.get(roadType.toString()+"Outline"));
-        drawArr(gc, x, y, 1, 1);
+        gc.setStroke(MapColor.getInstance().colorMap.get(roadType.toString()+"_OUTLINE"));
+        draw(gc,1, 1);
     }
 
     public void drawName(GraphicsContext gc, double zoom){
@@ -133,13 +143,18 @@ public class Road extends SimpleShape {
             }
         }
     }
-
-    private void drawArr(GraphicsContext gc, float[] xArr, float[] yArr, int add, double zoom){
-        if(add>xArr.length) return;
-        for (int i = 0; i < x.length-add; i+=add) {
-            gc.strokeLine(xArr[i], yArr[i], xArr[i+add], yArr[i+add]);
+    @Override
+    public void draw(GraphicsContext gc, int levelOfDetail, double zoom){
+        if(levelOfDetail>nodes.size()) return;
+        for (int i = 0; i < nodes.size()-levelOfDetail; i+=levelOfDetail) {
+            gc.strokeLine(nodes.get(i).getX(), nodes.get(i).getY(), nodes.get(i+levelOfDetail).getX(), nodes.get(i+levelOfDetail).getY());
         }
-        gc.strokeLine(xArr[x.length-add], yArr[x.length-add], xArr[x.length-1], yArr[x.length-1]);
+        gc.strokeLine(nodes.get(nodes.size()-levelOfDetail).getX(), nodes.get(nodes.size()-levelOfDetail).getY(), nodes.get(nodes.size()-1).getX(), nodes.get(nodes.size()-1).getY());
+    }
+
+    @Override
+    public float[] getBounds() {
+        return boundingCoords;
     }
 }
 

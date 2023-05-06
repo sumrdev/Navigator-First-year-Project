@@ -7,8 +7,8 @@ import javafx.scene.paint.Color;
 
 
 public abstract class Element implements Serializable{
+    protected long id;
     public String type;
-    private Color color;
-    public abstract void draw(GraphicsContext gc, int levelOfDetail, int zoom);
+    public abstract void draw(GraphicsContext gc, int levelOfDetail, double zoom);
     public abstract float[] getBounds();
 }

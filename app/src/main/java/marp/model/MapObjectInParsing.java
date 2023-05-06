@@ -2,6 +2,7 @@ package marp.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import javafx.geometry.Point2D;
@@ -164,6 +165,8 @@ public class MapObjectInParsing implements Serializable{
                 }
         } else if (unfinishedPointType != PointType.UNDEFINED) {
             PointOfInterest pointOfInterest = new PointOfInterest(this.name, this.unfinishedPointType, this.unfinishedPoint.getX(), this.unfinishedPoint.getY(), false);
+            System.out.println(" A NEW POI AT " +  this.unfinishedPoint.getX() + " " + this.unfinishedPoint.getY());
+            System.out.println("THE BOUNDS OF THE POINT ARE: " + Arrays.toString(pointOfInterest.getBounds()));
             switch (unfinishedPointType) {
                 case BUS_STOP:
                     mapObjects.getBusPOIList().add(pointOfInterest);
@@ -297,7 +300,7 @@ public class MapObjectInParsing implements Serializable{
         result.add(xFinal);
         result.add(yFinal);
 
-        for (int i = 0; i > x.size()-1; i++) {
+        for (int i = 0; i < x.size(); i++) {
             xFinal[i] = x.get(i);
             yFinal[i] = y.get(i);
         }

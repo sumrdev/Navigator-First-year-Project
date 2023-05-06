@@ -218,6 +218,8 @@ public class MapObjects {
     }
     public void buildTrees() {
         addressTree = new RTree<>(addressList);
+            System.out.println("ADDRESS TREE BOUNDS ");
+            addressTree.printElementsInRange();
         trainPOITree = new RTree<>(trainPOIList);
         busPOITree = new RTree<>(busPOIList);
         POITree = new RTree<>(POIList);
@@ -228,8 +230,17 @@ public class MapObjects {
         largeNameTree = new RTree<>(largePlaceNameList);
         quiteLargeNameTree = new RTree<>(quiteLargePlaceNameList);
         buildingsTree = new RTree<>(buildingsList);
+            System.out.println("BUILDINGS TREE BOUNDS");
+            buildingsTree.printElementsInRange();
         waterAreasTree = new RTree<>(waterAreasList);
         terrainAreasTree = new RTree<>(terrainAreasList);
         coastLineAreasTree = new RTree<>(coastLineAreasList);
+        motorWaysTree = new RTree<>(motorWaysList);
+        largeRoadsTree = new RTree<>(largeRoadsList);
+            System.out.println("LARGE ROADS TREE BOUNDS");
+            largeRoadsTree.printElementsInRange();
+        smallRoadsTree = new RTree<>(smallRoadsList);
+        footPathsTree = new RTree<>(smallRoadsList);
+
     }
 }

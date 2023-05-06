@@ -12,15 +12,15 @@ public class MapColor {
     public HashMap<String, Color> colorMap = new HashMap<String, Color>();
 
     private MapColor() {
-        defaultColorMap.put("Background", Color.rgb(255, 255, 255,1));
-        defaultColorMap.put("Water", Color.rgb(156, 192, 249,1));
-        defaultColorMap.put("Building", Color.rgb(190, 190, 190,1));
-        defaultColorMap.put("Coastline", Color.rgb(206, 234, 214,1));
-        defaultColorMap.put("Grassy", Color.rgb(206, 234, 214,1));
-        defaultColorMap.put("Forest", Color.rgb(145, 189, 159,1));
-        defaultColorMap.put("BuildingGround", Color.rgb(233, 233, 233,1));
-        defaultColorMap.put("FarmlandGround", Color.rgb(204, 227, 175,1));
-        defaultColorMap.put("CommercialGround", Color.LIGHTYELLOW);
+        defaultColorMap.put("BACKGROUND", Color.rgb(255, 255, 255,1));
+        defaultColorMap.put("WATER", Color.rgb(156, 192, 249,1));
+        defaultColorMap.put("BUILDING", Color.rgb(190, 190, 190,1));
+        defaultColorMap.put("COASTLINE", Color.rgb(206, 234, 214,1));
+        defaultColorMap.put("GRASSY", Color.rgb(206, 234, 214,1));
+        defaultColorMap.put("FOREST", Color.rgb(145, 189, 159,1));
+        defaultColorMap.put("CEMENT", Color.rgb(233, 233, 233,1));
+        defaultColorMap.put("FARMLAND", Color.rgb(204, 227, 175,1));
+        defaultColorMap.put("COMMERCIAL_GROUND", Color.LIGHTYELLOW);
         defaultColorMap.put("SECONDARY", Color.WHITE);
         defaultColorMap.put("SECONDARY_OUTLINE", Color.LIGHTGRAY);
         defaultColorMap.put("MOTORWAY", Color.YELLOW);
@@ -37,15 +37,15 @@ public class MapColor {
         defaultColorMap.put("TERTIARY_OUTLINE", Color.LIGHTGRAY);
         colorMap = defaultColorMap;
 
-        darkColorMap.put("Background", Color.rgb(44, 44, 46,1));
-        darkColorMap.put("Water", Color.rgb(45, 99, 140,1));
-        darkColorMap.put("Building", Color.rgb(87, 87, 87,1));
-        darkColorMap.put("Coastline", Color.rgb(52, 90, 68,1));
-        darkColorMap.put("Grassy", Color.rgb(52, 90, 68,1));
-        darkColorMap.put("Forest", Color.rgb(41, 69, 55,1));
-        darkColorMap.put("BuildingGround", Color.rgb(67, 67, 69,1));
-        darkColorMap.put("FarmlandGround", Color.rgb(94, 116, 63,1));
-        darkColorMap.put("CommercialGround", Color.rgb(104, 98, 73,1));
+        darkColorMap.put("BACKGROUND", Color.rgb(44, 44, 46,1));
+        darkColorMap.put("WATER", Color.rgb(45, 99, 140,1));
+        darkColorMap.put("BUILDING", Color.rgb(87, 87, 87,1));
+        darkColorMap.put("COASTLINE", Color.rgb(52, 90, 68,1));
+        darkColorMap.put("GRASSY", Color.rgb(52, 90, 68,1));
+        darkColorMap.put("FOREST", Color.rgb(41, 69, 55,1));
+        darkColorMap.put("CEMENT", Color.rgb(67, 67, 69,1));
+        darkColorMap.put("FARMLAND", Color.rgb(94, 116, 63,1));
+        darkColorMap.put("COMMERCIAL_GROUND", Color.rgb(104, 98, 73,1));
         darkColorMap.put("SECONDARY", Color.rgb(166, 166, 168,1));
         darkColorMap.put("SECONDARY_OUTLINE", Color.rgb(102, 102, 102,1));
         darkColorMap.put("MOTORWAY", Color.rgb(221, 206, 66,1));
@@ -61,15 +61,15 @@ public class MapColor {
         darkColorMap.put("TERTIARY", Color.rgb(166, 166, 168,1));
         darkColorMap.put("TERTIARY_OUTLINE", Color.rgb(102, 102, 102,1));
 
-        colorBlindColorMap.put("Background",  Color.rgb(255, 255, 255,1));
-        colorBlindColorMap.put("Water", Color.rgb(53, 104, 161, 1));
-        colorBlindColorMap.put("Building", Color.rgb(190, 190, 190,1));
-        colorBlindColorMap.put("Coastline", Color.rgb(118, 137, 130, 1));
-        colorBlindColorMap.put("Grassy", Color.rgb(159, 203, 159, 1));
-        colorBlindColorMap.put("Forest", Color.rgb(102, 136, 102, 1));
-        colorBlindColorMap.put("BuildingGround", Color.rgb(225, 223, 221, 1));
-        colorBlindColorMap.put("FarmlandGround", Color.rgb(154, 174, 121, 1));
-        colorBlindColorMap.put("CommercialGround", Color.rgb(185, 175, 160, 1));
+        colorBlindColorMap.put("BACKGROUND",  Color.rgb(255, 255, 255,1));
+        colorBlindColorMap.put("WATER", Color.rgb(53, 104, 161, 1));
+        colorBlindColorMap.put("BUILDING", Color.rgb(190, 190, 190,1));
+        colorBlindColorMap.put("COASTLINE", Color.rgb(118, 137, 130, 1));
+        colorBlindColorMap.put("GRASSY", Color.rgb(159, 203, 159, 1));
+        colorBlindColorMap.put("FOREST", Color.rgb(102, 136, 102, 1));
+        colorBlindColorMap.put("CEMENT", Color.rgb(225, 223, 221, 1));
+        colorBlindColorMap.put("FARMLAND", Color.rgb(154, 174, 121, 1));
+        colorBlindColorMap.put("COMMERCIAL_GROUND", Color.rgb(185, 175, 160, 1));
         colorBlindColorMap.put("SECONDARY", Color.rgb(182, 182, 182, 1));
         colorBlindColorMap.put("SECONDARY_OUTLINE", Color.rgb(128, 128, 128, 1));
         colorBlindColorMap.put("MOTORWAY", Color.rgb(188, 72, 72, 1));

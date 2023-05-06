@@ -1,10 +1,11 @@
 package marp.mapelements;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import marp.datastructures.Edge;
 
-public class RoadNode {
+public class RoadNode implements Serializable {
     float x,y;
     ArrayList<Edge> edges;
     long id;

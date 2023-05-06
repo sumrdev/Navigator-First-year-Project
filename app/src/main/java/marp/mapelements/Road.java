@@ -1,8 +1,9 @@
 package marp.mapelements;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Road extends SimpleShape {
+public class Road extends SimpleShape  {
     ArrayList<RoadNode> nodes;
     boolean oneway;
     String type;
@@ -75,5 +76,4 @@ public class Road extends SimpleShape {
     public void setBikeable(boolean bikeable){
         this.bikeable = bikeable;
     }
-
 }

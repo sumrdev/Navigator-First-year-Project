@@ -20,6 +20,9 @@ public class Digraph implements Serializable {
     HashMap<Long, RoadNode> nodes;
     ArrayList<ArrayList<Edge>> connectedComponents;
     ArrayList<Edge> navigation;
+    HashSet<RoadNode> closedSet = new HashSet<>();
+    int averageSpeedCount;
+    float averageSpeed;
 
     public Digraph(ArrayList<Road> roads, HashMap<Long, RoadNode> nodes) {
         this.nodes = nodes;
@@ -75,68 +78,72 @@ public class Digraph implements Serializable {
         return edges;
     }
 
-    public void aStar(RoadNode start, RoadNode end, boolean walkable){
-        HashSet<Long> closedSet = new HashSet<>();
-        HashMap<Long, Long> cameFrom = new HashMap<>();
-        HashMap<Long, Float> gScore = new HashMap<>();
-        HashMap<Long, Float> fScore = new HashMap<>();
-        PriorityQueue<RoadNode> openSet = new PriorityQueue<>(new Comparator<RoadNode>(){
+    public void setAverageSpeed(int speed){
+        float temp = averageSpeed*averageSpeedCount;
+        temp+=speed*10;
+        this.averageSpeedCount++;
+        this.averageSpeed = temp/averageSpeedCount;
+        this.averageSpeed = 70;
+    }
+
+    public void aStar(RoadNode start, RoadNode end, boolean walking){
+        averageSpeedCount = 0;
+        averageSpeed = 0;
+        HashMap<RoadNode, RoadNode> cameFrom = new HashMap<>();
+        HashMap<RoadNode, Float> gScore = new HashMap<>();
+        HashMap<RoadNode, Float> fScore = new HashMap<>();
+        PriorityQueue<RoadNode> openSetQueue = new PriorityQueue<>(new Comparator<RoadNode>() {
             @Override
             public int compare(RoadNode o1, RoadNode o2) {
-                return Float.compare(fScore.get(o1.getID()), fScore.get(o2.getID()));
+                return fScore.get(o1).compareTo(fScore.get(o2));
             }
-        } );
-        for (RoadNode node : nodes.values()) {
-            gScore.put(node.getID(), Float.MAX_VALUE);
-            fScore.put(node.getID(), Float.MAX_VALUE);
-        }
-        gScore.put(start.getID(), 0f);
-        fScore.put(start.getID(), (float) MathFunctions.distanceInMeters(start.getX(), start.getY(), end.getX(), end.getY()));
-        openSet.add(start);
-        while(!openSet.isEmpty()){
-            RoadNode current = openSet.poll();
+        });
+        gScore.put(start, 0f);   
+        fScore.put(start, gScore.get(start) + (float) MathFunctions.distanceInMeters(start.getX(), start.getY(), end.getX(), end.getY()));
+        
+        openSetQueue.add(start);
+        while(!openSetQueue.isEmpty()){
+            RoadNode current = openSetQueue.poll();
             if(current.getID() == end.getID()){
-                navigation = reconstructPath(cameFrom, current.getID());
+                reconstructPath(cameFrom, current);
                 return;
             }
-            closedSet.add(current.getID());
+            closedSet.add(current);
             for (Edge edge : current.getEdges()) {
-                if(!closedSet.contains(edge.end)){
-                    float tentativeGScore = gScore.get(current.getID()) + getWeight(edge, walkable);
-                    if(tentativeGScore < gScore.get(edge.end)){
-                        cameFrom.put(edge.end, current.getID());
-                        gScore.put(edge.end, tentativeGScore);
-                        fScore.put(edge.end, tentativeGScore + (float) MathFunctions.distanceInMeters(nodes.get(edge.end).getX(), nodes.get(edge.end).getY(), end.getX(), end.getY()));
-                        if(!openSet.contains(nodes.get(edge.end))) openSet.add(nodes.get(edge.end));
-                    }
+                if(!closedSet.contains(nodes.get(edge.end))){
+                    setAverageSpeed(roadsMap.get(edge.road).getSpeed());
+                    float tentativeGScore = gScore.get(current) + getWeight(edge, walking);
+                    if(gScore.get(nodes.get(edge.end)) != null && tentativeGScore >= gScore.get(nodes.get(edge.end))) continue;
+                    cameFrom.put(nodes.get(edge.end), current);
+                    gScore.put(nodes.get(edge.end), tentativeGScore);
+                    fScore.put(nodes.get(edge.end), gScore.get(nodes.get(edge.end)) + getHScore(nodes.get(edge.end), end, walking));
+                    if(!openSetQueue.contains(nodes.get(edge.end))) openSetQueue.add(nodes.get(edge.end));
                 }
             }
         }
+        System.out.println("No path found");
     }
 
-    private ArrayList<Edge> reconstructPath(HashMap<Long, Long> cameFrom, long id) {
-        ArrayList<Edge> path = new ArrayList<>();
-        Stack<Long> stack = new Stack<>();
-        stack.push(id);
-        while(cameFrom.containsKey(id)){
-            id = cameFrom.get(id);
-            stack.push(id);
-        }
-        while(!stack.isEmpty()){
-            long id1 = stack.pop();
-            long id2 = stack.isEmpty() ? -1 : stack.peek();
-            for (Edge edge : nodes.get(id1).getEdges()) {
-                if(edge.end == id2){
-                    path.add(edge);
+    private float getHScore(RoadNode start, RoadNode end, boolean walking){
+        if(walking) return (float) MathFunctions.distanceInMeters(start.getX(), start.getY(), end.getX(), end.getY());
+        else return (float) MathFunctions.distanceInMeters(start.getX(), start.getY(), end.getX(), end.getY())/averageSpeed;
+    }
+
+    private void reconstructPath(HashMap<RoadNode, RoadNode> cameFrom, RoadNode current){
+        navigation = new ArrayList<>();
+        while(cameFrom.containsKey(current)){
+            for (Edge edge : current.getEdges()) {
+                if(edge.end == cameFrom.get(current).getID()){
+                    navigation.add(edge);
                     break;
                 }
             }
+            current = cameFrom.get(current);
         }
-        return path;
     }
 
     public void draw(GraphicsContext gc) {
-        // drawNavigation(gc);
+        drawNavigation(gc);
     }
 
     public void drawNavigation(GraphicsContext gc){

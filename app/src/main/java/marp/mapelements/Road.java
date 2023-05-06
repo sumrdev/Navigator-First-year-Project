@@ -92,20 +92,13 @@ public class Road extends Element{
         return this.oneway;
     }
 
-    public void setDriveable(boolean driveable){
-        this.driveable = driveable;
-    }
-
-    public void setWalkable(boolean walkable){
-        this.walkable = walkable;
-    }
 
     public boolean isDriveable(){
-        return this.driveable;
+        return this.roadType.isDriveable();
     }
 
     public boolean isWalkable(){
-        return this.walkable;
+        return this.roadType.isWalkable();
     }
 
     public int getSpeed(){

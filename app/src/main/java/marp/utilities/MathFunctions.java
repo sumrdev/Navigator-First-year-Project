@@ -2,12 +2,12 @@ package marp.utilities;
 
 public class MathFunctions {
     public static double distanceInMeters(float x1, float y1, float x2, float y2){
-        double dx1 = x1;
+        double dx1 = x1/0.56;
         double dy1 = y1;
-        double dx2 = x2;
+        double dx2 = x2/0.56;
         double dy2 = y2;
 
-        int earthRadius = 6371*1000;
+        int earthRadius = 6_371_000;
         dy1 = dy1 * Math.PI/180f;
         dy2 = dy2 * Math.PI/180f;
         double diffY = dy2-dy1;

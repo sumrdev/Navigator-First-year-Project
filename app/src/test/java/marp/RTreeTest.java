@@ -4,19 +4,21 @@ import marp.datastructures.RTree;
 import marp.mapelements.Element;
 import marp.model.Model;
 
-import marp.utilities.DefaultPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.net.URL;
+import java.nio.file.Paths;
 
 public class RTreeTest {
     Model model;
     @BeforeEach
     public void getData()throws Exception{
+        String defaultSubDir = "data/maps/";
         String defaultFilename = "bornholm.osm";
-        URL defaultFileURL = new URL(DefaultPath.getDefaultPath()+defaultFilename);
-        model = Model.createModel(defaultFileURL);
+        File defaultFile = Paths.get(defaultSubDir, defaultFilename).toFile();
+        model = Model.createModel(defaultFile);
     }
     @Test
     public void fillBuildingsRTree(){

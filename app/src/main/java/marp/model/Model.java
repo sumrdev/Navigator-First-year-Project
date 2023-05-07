@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -27,7 +28,6 @@ import marp.mapelements.MapPoint;
 import marp.mapelements.PointOfInterest;
 
 import marp.parser.OSMParser;
-import marp.utilities.DefaultPath;;
 
 public class Model implements Serializable{
     private MapObjects mapObjects;
@@ -41,44 +41,44 @@ public class Model implements Serializable{
     public static Model createModel(URL fileURL) throws URISyntaxException, XMLStreamException,
             FactoryConfigurationError, ClassNotFoundException, IOException {
                 File file = Paths.get(fileURL.toURI()).toFile();
-        return findLoadType(file.getAbsolutePath());
+        return findLoadType(new FileInputStream(file), file.getName());
+    }
+
+    public static Model createModel(InputStream inputStream, String filename) throws URISyntaxException, XMLStreamException,
+            FactoryConfigurationError, ClassNotFoundException, IOException {
+        return findLoadType(inputStream, filename);
     }
 
     public static Model createModel(File file) throws URISyntaxException, XMLStreamException,
             FactoryConfigurationError, ClassNotFoundException, IOException {
-        return findLoadType(file.getAbsolutePath());
+        return findLoadType(new FileInputStream(file), file.getName());
     }
 
     public MapObjects getMapObjects() {
         return mapObjects;
     }
 
-    private static Model findLoadType(String filepath)
+    private static Model findLoadType(InputStream inputStream, String filename)
             throws XMLStreamException, FactoryConfigurationError, ClassNotFoundException, IOException {
         OSMParser osmParser = new OSMParser();
-        System.out.println(filepath);
-        File file = new File(filepath);
-        String filename = file.getName();
-        file = null;
-        
-        String filetype = filepath.split("\\.")[1];
-        System.out.println("Filetype: " + filetype + "\n filename: " + filename);
+        String filetype = filename.split("\\.")[1];
+        System.out.println("Filetype: " + filetype + "\nFilename: " + filename);
 
         switch (filetype) {
             case "bin":
-                return loadBIN(new FileInputStream(filepath));
+                return loadBIN(inputStream);
             case "zip":
-                return loadZIP(filepath, filename);
+                return loadZIP(inputStream, filename);
             case "osm":
-                MapObjects mapObjects = osmParser.parseOSM(new FileInputStream(filepath));
+                MapObjects mapObjects = osmParser.parseOSM(inputStream);
                 return new Model(mapObjects, filename);
             default:
                 throw new IOException("Filetype not supported");
         }
     }
 
-    private static Model loadZIP(String filepath, String filename) throws IOException, XMLStreamException, FactoryConfigurationError {
-        ZipInputStream input = new ZipInputStream(new FileInputStream(filepath));
+    private static Model loadZIP(InputStream inputStream, String filename) throws IOException, XMLStreamException, FactoryConfigurationError {
+        ZipInputStream input = new ZipInputStream(inputStream);
         input.getNextEntry();
         OSMParser osmParser = new OSMParser();
         MapObjects mapObjects = osmParser.parseOSM(input);
@@ -91,7 +91,7 @@ public class Model implements Serializable{
         save(filename);
     }
 
-    private static Model loadBIN(FileInputStream fileInputStream) throws IOException, ClassNotFoundException {
+    private static Model loadBIN(InputStream fileInputStream) throws IOException, ClassNotFoundException {
         try (var bin = new ObjectInputStream(new BufferedInputStream(fileInputStream))) {
             return (Model) bin.readObject();
         }
@@ -100,7 +100,7 @@ public class Model implements Serializable{
     private void save(String filename) {
         new Thread(() -> {
             String fn = filename.split("\\.")[0] + ".bin";
-            try (var out = new ObjectOutputStream(new FileOutputStream(DefaultPath.getDefaultPath() + fn))) {
+            try (var out = new ObjectOutputStream(new FileOutputStream("data/maps/"+fn))) {
                 out.writeObject(this);
                 System.out.println("Saved to: " + fn);
             } catch (Exception e) {

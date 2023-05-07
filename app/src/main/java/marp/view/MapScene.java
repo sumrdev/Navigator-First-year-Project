@@ -218,21 +218,21 @@ public class MapScene extends Scene{
         }
     }
     private void drawCityNames(Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 300000 && zoomMenu.getZoomlevel() > 150) {
+        if (zoomMenu.getZoomlevel() < 5000 && zoomMenu.getZoomlevel() > 150) {
             for (PlaceName placeName : model.getMapObjects().getLargeNameTree().getElementsInRange(bounds)) {
                 placeName.draw(gc, (float) (1 / Math.sqrt(trans.determinant())));
             }
         }
     }
     private void drawTownNames(Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 20000 && zoomMenu.getZoomlevel() > 150) {
+        if (zoomMenu.getZoomlevel() < 4000 && zoomMenu.getZoomlevel() > 150) {
             for (PlaceName placeName : model.getMapObjects().getMediumLargePlaceNameTree().getElementsInRange(bounds)) {
                 placeName.draw(gc, (float) (1 / Math.sqrt(trans.determinant())));
             }
         }
     }
     private void drawPlaceNames(Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 15000 && zoomMenu.getZoomlevel() > 150) {
+        if (zoomMenu.getZoomlevel() < 3000 && zoomMenu.getZoomlevel() > 150) {
             for (PlaceName placeName : model.getMapObjects().getMediumPlaceNameTree().getElementsInRange(bounds)) {
                 placeName.draw(gc, (float) (1 / Math.sqrt(trans.determinant())));
             }
@@ -249,7 +249,7 @@ public class MapScene extends Scene{
         }
     }
     private void drawLargeRoads(Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 15000 && zoomMenu.getZoomlevel() > 50) {
+        if (zoomMenu.getZoomlevel() < 2000 && zoomMenu.getZoomlevel() > 50) {
             if (model.isRoadsVisible) {
                 for (Road road : model.getMapObjects().getLargeRoadsTree().getElementsInRange(bounds)) {
                     road.drawOutline(gc, (1 / Math.sqrt(trans.determinant())));

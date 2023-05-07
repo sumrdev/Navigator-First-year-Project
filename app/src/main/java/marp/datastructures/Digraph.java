@@ -1,6 +1,7 @@
 package marp.datastructures;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.*;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -85,6 +86,7 @@ public class Digraph implements Serializable {
         return aStar(start, end, walking);
     }
     public List<String> aStar(RoadNode start, RoadNode end, boolean walking){
+        Time startTime = new Time(System.currentTimeMillis());
         averageSpeedCount = 0;
         averageSpeed = 0;
         closedSet = new HashSet<>();
@@ -105,6 +107,8 @@ public class Digraph implements Serializable {
             RoadNode current = openSetQueue.poll();
             if(current.getID() == end.getID()){
                 reconstructPath(cameFrom, current);
+                Time endTime = new Time(System.currentTimeMillis());
+                System.out.println("Ran astar with : " + this.nodes.size() + " nodes in " + (endTime.getTime() - startTime.getTime())/1000 + " s");
                 return createTextDescriptionFromNavigation();
             }
             closedSet.add(current);
@@ -122,6 +126,7 @@ public class Digraph implements Serializable {
         }
         String info = "No path found";
         System.out.println(info);
+
         return new ArrayList<>();
     }
 

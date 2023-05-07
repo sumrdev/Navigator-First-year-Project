@@ -79,7 +79,7 @@ public class SearchBar extends TextField {
             String fullAddress = matcher.group("street") + " " + houseNumber + " " + matcher.group("postcode") + " "
                     + matcher.group("city");
             createPopupElement(fullAddress, true);
-            System.out.println(matcher.group("street"));
+            //System.out.println(matcher.group("street"));
         }
         createHouseExpander(newText);
 

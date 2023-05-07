@@ -19,7 +19,7 @@ public class Address extends Point implements MapPoint {
     PointType type = PointType.ADDRESS;
 
     public Address(String street, String houseNumber, String postCode, String city, float x, float y, long id){
-        super((float) x, (float) y);
+        super(x,y);
         this.street = street.intern();
         this.houseNumber = houseNumber.intern();
         if(postCode != null) {

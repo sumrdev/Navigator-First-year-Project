@@ -189,7 +189,7 @@ public class MapObjects implements Serializable{
     private RTree<Road> smallRoadsTree;
     private final ArrayList<Road> footpathList = new ArrayList<>();
     private RTree<Road> footPathsTree;
-
+    private RTree<RoadNode> roadNodeRTree;
     public RTree<Road> getMotorWaysTree() {
         return motorWaysTree;
     }
@@ -228,6 +228,9 @@ public class MapObjects implements Serializable{
     public RTree<SimpleShape> getCoastLinesAreaTree() {
         return coastLineAreasTree;
     }
+    public RTree<RoadNode> getRoadNodeRTree(){
+        return roadNodeRTree;
+    }
 
     public void buildTrees() {
         addressTree = new RTree<>(addressList);
@@ -248,10 +251,10 @@ public class MapObjects implements Serializable{
         largeRoadsTree = new RTree<>(largeRoadsList);
         smallRoadsTree = new RTree<>(smallRoadsList);
         footPathsTree = new RTree<>(smallRoadsList);
-
     }
 
     public void buildDigraph(HashMap<Long, RoadNode> roadNodes){
+        roadNodeRTree = new RTree<>(new ArrayList<>(roadNodes.values()));
         digraph = new Digraph(roadsList, roadNodes);
     }
 

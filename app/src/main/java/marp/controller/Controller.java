@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import marp.mapelements.Address;
 import marp.mapelements.MapPoint;
 import marp.mapelements.PointOfInterest;
+import marp.mapelements.RoadNode;
 import marp.mapelements.details.MapColor;
 import marp.model.Model;
 import marp.mapelements.details.PointType;
@@ -66,7 +67,6 @@ public class Controller {
 
         view.getCanvas().setOnMousePressed(e -> {
             lastX = (float) e.getX();
-            System.out.println("NOW SETTING LAST X TO " + ((float) e.getX()));
             lastY = (float) e.getY();
             //if (isCreatingCustomPointOfInterest){
                 mouseDragStartPositionX = lastX;
@@ -74,8 +74,6 @@ public class Controller {
             //}
         });
         view.getCanvas().setOnMouseReleased(e -> {
-            System.out.println("Last X = " + lastX);
-            System.out.println(mouseDragStartPositionX + " " + e.getX());
             //When releasing the mouse, if the mouse drag start position is equal to the current position, it counts as a mouse click.
             if (mouseDragStartPositionX == (float) e.getX() && mouseDragStartPositionY == (float) e.getY()) {
                 //There are two cases: Either we are making a new POI or we are selecting a point.
@@ -179,10 +177,13 @@ public class Controller {
             view.getMapMenu().getDirectionsPanel().endLocationField.setText(tempText);
         });
         view.getMapMenu().getDirectionsPanel().findRouteButton.setOnAction( e -> {
-            //TODO: Fix when this all works...
+            RoadNode start = model.getMapObjects().getRoadNodeRTree().getNearest(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress());
+            RoadNode end = model.getMapObjects().getRoadNodeRTree().getNearest(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress());
+            List <String> directions = model.getMapObjects().getDigraph().aStar(start, end, true);
             //model.graph.runaStarWithNodeIndex(Integer.parseInt(view.getMapMenu().getDirectionsPanel().startLocationField.getText()), Integer.parseInt(view.getMapMenu().getDirectionsPanel().endLocationField.getText()));
             //view.getMapMenu().getDirectionsPanel().receiveGuideList(null);
             view.getMapMenu().getDirectionsPanel().setGuideShow(true);
+            view.getMapMenu().getDirectionsPanel().receiveGuideList(directions);
             view.getMapScene().redraw();
         });
 
@@ -220,7 +221,7 @@ public class Controller {
         });
         view.getMapMenu().getSelectedPointPanel().directionsToSelectedPointButton.setOnAction(e -> {
             // Not all selected points are addresses. We find the closest address and add it to the destination searchbar on the directions panel.
-            Address closestAddress = model.getMapObjects().getAddressTree().getNearest(new float[]{model.getSelectedPointMarker().getX(), model.getSelectedPointMarker().getY()}, 5);
+            Address closestAddress = model.getMapObjects().getAddressTree().getNearest(new float[]{model.getSelectedPointMarker().getX(), model.getSelectedPointMarker().getY()});
             // Add the address to the searchbar as text.
             view.getMapMenu().getDirectionsPanel().endLocationField.setText(closestAddress.getStreet() + " " + closestAddress.getHouseNumber() + " " + closestAddress.getPostCode() + " " + closestAddress.getCity());
             // Change the menu panel to the directions panel

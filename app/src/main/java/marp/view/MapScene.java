@@ -30,8 +30,6 @@ public class MapScene extends Scene{
     private ZoomMenu zoomMenu;
     private  MapMenu mapMenu;
 
-    private PointOfInterest selectedPointMarker;
-
     private Canvas canvas;
     public GraphicsContext gc;
     public Affine trans = new Affine();
@@ -118,7 +116,6 @@ public class MapScene extends Scene{
         Bounds bounds = screenBoundsToMapBounds(canvas.getLayoutBounds());
 
         double x = MathFunctions.distanceInMeters((float) (bounds.getMinX()/0.56), (float) bounds.getMinY(), (float) (bounds.getMaxX()/0.56), (float) bounds.getMinY());
-        System.out.println(x);
         zoomMenu.setDistance(x);
     }
 
@@ -168,7 +165,6 @@ public class MapScene extends Scene{
         drawCustomLandmarks();
         drawSelectedPoint();
         model.getMapObjects().getDigraph().draw(gc);
-        System.out.println("THE CURRENT ZOOM LEVEL IS: " + zoomMenu.getZoomlevel());
 
     }
     private void drawCoastlines(int levelOfDetail, Bounds bounds) {

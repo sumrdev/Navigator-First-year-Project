@@ -63,7 +63,6 @@ public class Model implements Serializable{
         OSMParser osmParser = new OSMParser();
         String filetype = filename.split("\\.")[1];
         System.out.println("Filetype: " + filetype + "\nFilename: " + filename);
-
         switch (filetype) {
             case "bin":
                 return loadBIN(inputStream);
@@ -91,8 +90,9 @@ public class Model implements Serializable{
         save(filename);
     }
 
-    private static Model loadBIN(InputStream fileInputStream) throws IOException, ClassNotFoundException {
-        try (var bin = new ObjectInputStream(new BufferedInputStream(fileInputStream))) {
+    private static Model loadBIN(InputStream inputStream) throws IOException, ClassNotFoundException {
+        System.out.println(inputStream);
+        try (var bin = new ObjectInputStream(inputStream)) {
             return (Model) bin.readObject();
         }
     }

@@ -18,11 +18,11 @@ public class App extends Application{
     public void start(Stage primaryStage) throws Exception {
         String defaultFilename = "bornholm.osm";
         InputStream defaultFile = getClass().getResourceAsStream("/maps/"+defaultFilename);
+        
         Model model = Model.createModel(defaultFile, defaultFilename);
         View view = new View(primaryStage, model);
         Controller controller = new Controller(view, model);
 
-        //if no data/maps folder exists, create it
         File mapsFolder = Paths.get("data/maps").toFile();
         if(!mapsFolder.exists()){
             mapsFolder.mkdirs();

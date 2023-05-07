@@ -183,11 +183,9 @@ public class Digraph implements Serializable {
                             break;
                     }
                     String direction = turnInformation + roadsMap.get(edge.road).getName() + " after " + distanceSinceLastRoad + " meters";
-                    System.out.println(direction);
                     result.add(direction);
                 } else {
                     String direction = "Start on " + roadsMap.get(edge.road).getName();
-                    System.out.println(direction);
                     result.add(direction);
                 }
                 previousRoad = roadsMap.get(edge.road).getName();

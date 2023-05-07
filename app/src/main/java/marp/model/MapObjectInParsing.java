@@ -171,6 +171,10 @@ public class MapObjectInParsing implements Serializable{
                     break;
                 }
         } else if (unfinishedPointType != PointType.UNDEFINED) {
+            //some points of interest only have a type and no name
+            if (this.name == null){
+                this.name = unfinishedPointType.typeName;
+            }
             PointOfInterest pointOfInterest = new PointOfInterest(this.name, this.unfinishedPointType, this.unfinishedPoint.getX(), this.unfinishedPoint.getY(), false);
             switch (unfinishedPointType) {
                 case BUS_STOP:

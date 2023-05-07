@@ -72,7 +72,7 @@ public class SettingsPanel extends MenuPanel {
         hideRoadsCheckbox = new MapCheckBox("     Roads");
         hideBuildingsCheckbox = new MapCheckBox("     Buildings");
         hideTerrainCheckbox = new MapCheckBox("     Terrain");
-        zoomAdjustSlider =  new Slider(1, 10, 1);
+        zoomAdjustSlider =  new Slider(1, 10, 5.5);
         VBox hideMapItemsCheckboxesAndZoomSettings = new VBox(new MapLabelSmall("Don't show:"), hideAddressesCheckbox,
                 hideLandmarkCheckbox, hideRoadsCheckbox, hideBuildingsCheckbox, hideTerrainCheckbox, new MapLabel("Adjust zoom buttons strength"), zoomAdjustSlider);
         hideMapItemsCheckboxesAndZoomSettings.setSpacing(20);

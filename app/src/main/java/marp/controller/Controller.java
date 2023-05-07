@@ -170,14 +170,7 @@ public class Controller {
         });
 
         view.getMapMenu().getMinimizedPanel().takeSnapshotButton.setOnAction(e -> {
-            PrinterJob job = PrinterJob.createPrinterJob();
-            job.getPrinter().createPageLayout(Paper.A4, PageOrientation.LANDSCAPE, Printer.MarginType.DEFAULT);
-            if (job != null) {
-                view.getCanvas().getTransforms().add(new Scale(0.2, 0.2));
-                job.printPage(view.getCanvas());
-                job.endJob();
-                view.getCanvas().getTransforms().add(new Scale(5, 5));
-            }
+            takeSnapShot();
         });
 
         // ##########################################################
@@ -220,6 +213,9 @@ public class Controller {
             view.getMapMenu().getDirectionsPanel().setGuideShow(true);
             view.getMapMenu().getDirectionsPanel().receiveGuideList(directions);
             view.getMapScene().redraw();
+        });
+        view.getMapMenu().getDirectionsPanel().takeSnapshotButton.setOnAction(e -> {
+            takeSnapShot();
         });
 
         // ##########################################################
@@ -310,14 +306,7 @@ public class Controller {
         });
 
         view.getMapMenu().getSettingsPanel().takeSnapshotButton.setOnAction(e -> {
-            PrinterJob job = PrinterJob.createPrinterJob();
-            job.getPrinter().createPageLayout(Paper.A4, PageOrientation.LANDSCAPE, Printer.MarginType.DEFAULT);
-            if (job != null) {
-                view.getCanvas().getTransforms().add(new Scale(0.2, 0.2));
-                job.printPage(view.getCanvas());
-                job.endJob();
-                view.getCanvas().getTransforms().add(new Scale(5, 5));
-            }
+            takeSnapShot();
         });
 
         view.getMapMenu().getSettingsPanel().loadAnotherOSMButton.setOnAction(e -> {
@@ -391,6 +380,10 @@ public class Controller {
         view.getMapMenu().getSettingsPanel().hideAddressesCheckbox.setOnAction(e -> {
             model.isAddressVisible = !model.isAddressVisible;
             view.getMapScene().redraw();
+        });
+        view.getMapMenu().getSettingsPanel().zoomAdjustSlider.setOnMouseReleased(e ->{
+            System.out.print("zoom value: ");
+            System.out.println(view.getMapMenu().getSettingsPanel().zoomAdjustSlider.getValue());
         });
 
         // ##########################################################
@@ -526,5 +519,16 @@ public class Controller {
                 view.getMapScene().redraw();
             }
         }
+    }
+
+    private void takeSnapShot(){
+        PrinterJob job = PrinterJob.createPrinterJob();
+            job.getPrinter().createPageLayout(Paper.A4, PageOrientation.LANDSCAPE, Printer.MarginType.DEFAULT);
+            if (job != null) {
+                view.getCanvas().getTransforms().add(new Scale(0.2, 0.2));
+                job.printPage(view.getCanvas());
+                job.endJob();
+                view.getCanvas().getTransforms().add(new Scale(5, 5));
+            }
     }
 }

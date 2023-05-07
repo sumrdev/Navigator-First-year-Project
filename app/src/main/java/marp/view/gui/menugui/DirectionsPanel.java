@@ -29,6 +29,7 @@ public class DirectionsPanel extends MenuPanel {
     public MapTextButton findRouteButton;
     public MapButton startSearchButton;
     public MapButton endSearchButton;
+    public MapButton takeSnapshotButton;
 
     public ObservableList<String> guideList;
     public ListView<String> guideView;
@@ -49,6 +50,7 @@ public class DirectionsPanel extends MenuPanel {
         findRouteButton = new MapTextButton("Find the best route!");
         findRouteButton.setMinHeight(48);
         findRouteButton.setMinWidth(200);
+        takeSnapshotButton = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/camera.png"))));
 
         //Create new search bars for start and end locations
         startLocationField = new SearchBar(model, 5);
@@ -86,7 +88,7 @@ public class DirectionsPanel extends MenuPanel {
 
 
         //Add generic menu navigation buttons
-        this.getChildren().addAll(startAndEndLocation, minimizeButton, directionsButton, settingsButton);
+        this.getChildren().addAll(startAndEndLocation, minimizeButton, directionsButton, settingsButton, takeSnapshotButton);
         this.setPadding(new Insets(20, 20, 20, 20));
         this.setSpacing(10);
         this.setPickOnBounds(false);

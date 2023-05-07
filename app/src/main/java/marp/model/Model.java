@@ -158,6 +158,16 @@ public class Model implements Serializable{
                 selectedElement = nearestBusLandmark;
             }
         }
+
+        //calculate distance to nearest custom point of interest, by iterating through the list of all of them. Inefficient but necessary, as they are not part of a tree.
+        
+        for (PointOfInterest poi : mapObjects.getCustomPOIList()){
+            double customPOIDistance = Math.sqrt(Math.pow(poi.getX() - point.getX(), 2) + Math.pow(poi.getY() - point.getY(), 2));
+            if (customPOIDistance < currentDistance) {
+                selectedElement = poi;
+            }
+        }
+
         //We use a point of interest to represent the currently selected point. We update selected point to a new point with the coordinates of the selected point.
         selectedPointMarker = new PointOfInterest(selectedElement.getName(), selectedElement.getType(), selectedElement.getX()*0.56f, -selectedElement.getY(), false);
         return selectedPointMarker;

@@ -58,8 +58,8 @@ public class Controller {
         this.view.listView.setOnMouseClicked(e -> {
             try {
                 URL fileURL = new URL(DefaultPath.getDefaultPath() + this.view.listView.getSelectionModel().getSelectedItem());
-                Model.createModel(fileURL);
-                this.view.createNewMapScene();
+                Model newModel = Model.createModel(fileURL);
+                this.view.createNewMapScene(newModel);
                 this.view.setScene(this.view.getMapScene());
             } catch (Exception e1) {
                 System.out.println(e1.getMessage());

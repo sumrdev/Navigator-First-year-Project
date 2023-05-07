@@ -61,6 +61,10 @@ public class View {
     }
 
     public void createNewMapScene() {
+        mapScene = new MapScene(this.model, mapMenu, zoomMenu, canvas);
+    }
+
+    public void createNewMapScene(Model model) {
         mapScene = new MapScene(model, mapMenu, zoomMenu, canvas);
     }
 

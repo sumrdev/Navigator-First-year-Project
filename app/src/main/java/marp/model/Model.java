@@ -126,13 +126,13 @@ public class Model implements Serializable{
         //We look for distance to mouse among addresses, then landmarks and update the selected element if we find a shorter distance.
         MapPoint selectedElement;
 
-        MapPoint nearestAddress = mapObjects.getAddressTree().getNearest(new float[]{(float) point.getX(), (float) point.getY()}, 5);
+        MapPoint nearestAddress = mapObjects.getAddressTree().getNearest(new float[]{(float) point.getX(), (float) point.getY()});
         //calculate distance
         selectedElement = nearestAddress;
         //address distance is calculated:
         double currentDistance = Math.sqrt(Math.pow(nearestAddress.getX() - point.getX(), 2) + Math.pow(nearestAddress.getY() - point.getY(), 2));
 
-        MapPoint nearestLandmark = mapObjects.getPOITree().getNearest(new float[]{(float) point.getX(), (float) point.getY()}, 5);
+        MapPoint nearestLandmark = mapObjects.getPOITree().getNearest(new float[]{(float) point.getX(), (float) point.getY()});
         //calculate distance to nearest POI
         if (nearestLandmark != null) {
             double landmarkDistance = Math.sqrt(Math.pow(nearestLandmark.getX() - point.getX(), 2) + Math.pow(nearestLandmark.getY() - point.getY(), 2));
@@ -142,7 +142,7 @@ public class Model implements Serializable{
             }
         }
 
-        MapPoint nearestTrainLandmark = mapObjects.getTrainPOITree().getNearest(new float[]{(float) point.getX(), (float) point.getY()}, 5);
+        MapPoint nearestTrainLandmark = mapObjects.getTrainPOITree().getNearest(new float[]{(float) point.getX(), (float) point.getY()});
         //calculate distance to nearest train POI
         if (nearestTrainLandmark != null) {
             double trainLandmarkDistance = Math.sqrt(Math.pow(nearestTrainLandmark.getX() - point.getX(), 2) + Math.pow(nearestTrainLandmark.getY() - point.getY(), 2));
@@ -152,7 +152,7 @@ public class Model implements Serializable{
             }
         }
 
-        MapPoint nearestBusLandmark = mapObjects.getBusPOITree().getNearest(new float[]{(float) point.getX(), (float) point.getY()}, 5);
+        MapPoint nearestBusLandmark = mapObjects.getBusPOITree().getNearest(new float[]{(float) point.getX(), (float) point.getY()});
         //calculate distance to nearest bus POI
         if (nearestBusLandmark != null) {
             double busLandmarkDistance = Math.sqrt(Math.pow(nearestBusLandmark.getX() - point.getX(), 2) + Math.pow(nearestBusLandmark.getY() - point.getY(), 2));

@@ -116,7 +116,6 @@ public class MapScene extends Scene{
         Bounds bounds = screenBoundsToMapBounds(canvas.getLayoutBounds());
 
         double x = MathFunctions.distanceInMeters((float) (bounds.getMinX()/0.56), (float) bounds.getMinY(), (float) (bounds.getMaxX()/0.56), (float) bounds.getMinY());
-        System.out.println(x);
         zoomMenu.setDistance(x);
     }
 
@@ -133,7 +132,7 @@ public class MapScene extends Scene{
         gc.setLineWidth(1 / Math.sqrt(trans.determinant()));
 
 
-        Bounds bounds = null;
+        Bounds bounds;
         try {
             bounds = trans.inverseTransform(canvas.getLayoutBounds());
         } catch (NonInvertibleTransformException e) {
@@ -149,7 +148,7 @@ public class MapScene extends Scene{
         }
 
         drawCoastlines(levelOfDetails, bounds);
-        /*//######################################################################################
+        //######################################################################################
 
         if (zoomMenu.getZoomlevel() > 300000 ) {
             drawCoastlines(levelOfDetails, bounds);
@@ -309,7 +308,7 @@ public class MapScene extends Scene{
             drawTrainLandmarks(bounds);
             drawCustomLandmarks();
             drawSelectedPoint();
-        }*/
+        }
 
         model.getMapObjects().getDigraph().draw(gc);
 

@@ -68,7 +68,6 @@ public class SimpleTrie implements Serializable{
         for (TrieNode branch : currentNode.branches.values()) {
             suggestionFinder(suggestionList, branch, suggestionAmount);
         }
-
     }
 
     public boolean containsSearch(String searchInput) {

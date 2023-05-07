@@ -2,6 +2,7 @@ package marp.datastructures;
 
 import javafx.geometry.Bounds;
 import marp.mapelements.Element;
+import marp.mapelements.Point;
 
 import java.io.Serializable;
 import java.util.*;
@@ -15,15 +16,6 @@ public class RTree<T extends Element> implements Serializable {
         dimensions = 2;
         treeNode = new Node(values, 0);
     }
-    public RTree(List<T> values, int maxElementsPerLeaf){
-        this.maxElementsPerLeaf = maxElementsPerLeaf;
-        dimensions = 2;
-        treeNode = new Node(values, 0);
-    }
-    //could be used to return rTree for an area instead of a list
-    /*protected RTree(Node newTreeNode){
-        this.treeNode = newTreeNode;
-    }*/
     protected class Node implements Serializable{
         int size;
         //      protected Node[]
@@ -233,32 +225,22 @@ public class RTree<T extends Element> implements Serializable {
         coords[3] = (float) box.getMaxY();
         return getElementsInRange(coords);
     }
-    public List<T> getElementsInRange(float[] minCoord, float[] maxCoord){
-        return getElementsInRange(new float[]{minCoord[0], minCoord[1], maxCoord[0], maxCoord[1]});
-    }
-    //public T getClosest(float[] coord){    }
-    //not working
-    public List<T> getElementsInRange(float xMin, float yMin, float xMax, float yMax){
-        return getElementsInRange(new float[]{xMin,yMin,xMax,yMax});
-    }
     public List<T> getElementsInRange(float[] coords){
         List<T> result = new ArrayList<>();
         treeNode.getElementsInRange(coords, result);
         return result;
     }
-    public List<T> getElements(){
-        List<T> result = new ArrayList<>();
-        treeNode.getElementsInRange(treeNode.boundingRect, result);
-        return result;
-    }
-    public int Size(){
+    public int size(){
         return treeNode.size;
     }
-    public T getNearest(float[] ds, int elements){
+    public T getNearest(float[] ds){
         PriorityQueue<NodeDistance> pq = new PriorityQueue<>();
         pq.add(new NodeDistance(null, Float.MAX_VALUE));
-        treeNode.getNearest(ds, pq, elements);
+        treeNode.getNearest(ds, pq,1);
         T result = pq.peek().element;
         return result;
+    }
+    public T getNearest(Point point){
+        return getNearest(new float[]{point.getX(), point.getY()});
     }
 }

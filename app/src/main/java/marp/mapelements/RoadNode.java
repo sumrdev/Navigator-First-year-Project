@@ -5,35 +5,22 @@ import java.util.ArrayList;
 
 import marp.datastructures.Edge;
 
-public class RoadNode implements Serializable {
-    float x,y;
+public class RoadNode extends Point implements Serializable {
     ArrayList<Edge> edges;
-    long id;
     public RoadNode(Point node) {
-        this.x = node.getX();
-        this.y = node.getY();
+        super(node.getX(),node.getY());
         this.id = node.getID();
         this.edges = new ArrayList<Edge>();        
     }
-
-    public float getX(){
-        return this.x;
-    }
-
-    public float getY(){
-        return this.y;
-    }
-
-    public long getID(){
-        return this.id;
-    }
-
-    
     public ArrayList<Edge> getEdges(){
         return this.edges;
     }
     
     public void addEdge(Edge edge){
         this.edges.add(edge);
+    }
+    @Override
+    public String toString(){
+        return "[" + x + "," + y + "]";
     }
 }

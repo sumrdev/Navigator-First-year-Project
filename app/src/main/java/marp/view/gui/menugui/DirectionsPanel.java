@@ -16,6 +16,7 @@ import marp.view.gui.buttons.MapButton;
 import marp.view.gui.buttons.MapTextButton;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class DirectionsPanel extends MenuPanel {
@@ -90,11 +91,9 @@ public class DirectionsPanel extends MenuPanel {
         this.setSpacing(10);
         this.setPickOnBounds(false);
     }
-    public void receiveGuideList(ArrayList<String> list){
+    public void receiveGuideList(List<String> list){
         guideList.clear();
-        for (String element : list){
-            guideList.add(element);
-        }
+        guideList.addAll(list);
     }
     
     public void setGuideShow(boolean shouldShow){

@@ -1,12 +1,7 @@
 package marp.datastructures;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.PriorityQueue;
-import java.util.Stack;
+import java.util.*;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -20,7 +15,7 @@ public class Digraph implements Serializable {
     HashMap<Long, RoadNode> nodes;
     ArrayList<ArrayList<Edge>> connectedComponents;
     ArrayList<Edge> navigation;
-    HashSet<RoadNode> closedSet = new HashSet<>();
+    HashSet<RoadNode> closedSet;
     int averageSpeedCount;
     float averageSpeed;
 
@@ -87,9 +82,10 @@ public class Digraph implements Serializable {
         this.averageSpeed = 70;
     }
 
-    public void aStar(RoadNode start, RoadNode end, boolean walking){
+    public List<String> aStar(RoadNode start, RoadNode end, boolean walking){
         averageSpeedCount = 0;
         averageSpeed = 0;
+        closedSet = new HashSet<>();
         HashMap<RoadNode, RoadNode> cameFrom = new HashMap<>();
         HashMap<RoadNode, Float> gScore = new HashMap<>();
         HashMap<RoadNode, Float> fScore = new HashMap<>();
@@ -107,7 +103,7 @@ public class Digraph implements Serializable {
             RoadNode current = openSetQueue.poll();
             if(current.getID() == end.getID()){
                 reconstructPath(cameFrom, current);
-                return;
+                return createTextDescriptionFromNavigation();
             }
             closedSet.add(current);
             for (Edge edge : current.getEdges()) {
@@ -122,7 +118,9 @@ public class Digraph implements Serializable {
                 }
             }
         }
-        System.out.println("No path found");
+        String info = "No path found";
+        System.out.println(info);
+        return new ArrayList<>();
     }
 
     private float getHScore(RoadNode start, RoadNode end, boolean walking){
@@ -143,7 +141,8 @@ public class Digraph implements Serializable {
         }
     }
 
-    public void createTextDescriptionFromNavigation(){
+    public List<String> createTextDescriptionFromNavigation(){
+        List<String> result= new ArrayList<>();
         String previousRoad = "";
         int distanceSinceLastRoad = 0;
 
@@ -168,17 +167,21 @@ public class Digraph implements Serializable {
                         default:
                             turnInformation = "Continue straight onto ";
                             break;
-                    } 
-                    System.out.println(turnInformation + roadsMap.get(edge.road).getName() + " after " + distanceSinceLastRoad + " meters");
-
+                    }
+                    String direction = turnInformation + roadsMap.get(edge.road).getName() + " after " + distanceSinceLastRoad + " meters";
+                    System.out.println(direction);
+                    result.add(direction);
                 } else {
-                    System.out.println("Start on " + roadsMap.get(edge.road).getName());
+                    String direction = "Start on " + roadsMap.get(edge.road).getName();
+                    System.out.println(direction);
+                    result.add(direction);
                 }
                 previousRoad = roadsMap.get(edge.road).getName();
                 distanceSinceLastRoad = 0;
             }
             distanceSinceLastRoad += MathFunctions.distanceInMeters(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(), nodes.get(edge.end).getY());
         }
+        return result;
     }
 
     public int getTurnInformation(Edge e1, Edge e2){
@@ -192,7 +195,6 @@ public class Digraph implements Serializable {
         float y4 = nodes.get(e2.start).getY();
 
         int angle = MathFunctions.getAngleBetweenTwoLines(x1, y1, x2, y2, x3, y3, x4, y4 );
-        System.out.println(angle);
         if(angle > 0 && angle < 180) return 1;
         else if(angle < 0 && angle > -180) return 2;
         else if(angle == 180 || angle == -180) return 3;

@@ -57,24 +57,24 @@ public class ComplexShape extends Element {
     }
 
     private void orderAndFlipWays() {
-        ArrayList<SimpleShape> orderedElements = new ArrayList<SimpleShape>();
+        ArrayList<SimpleShape> orderedElements = new ArrayList<>();
         HashMap<Point2D, SimpleShape> coordsMap = new HashMap<>();
 
         for (SimpleShape simpleShape : this.elements) {
-            if(simpleShape.getRole() != null){
-                if(simpleShape.getRole().equals("outer")){
-                    orderedElements.add(simpleShape);
-                    continue;
-                }
-            }
+            //if(simpleShape.getRole() != null){
+            //    if(simpleShape.getRole().equals("outer")){
+            //        orderedElements.add(simpleShape);
+            //        continue;
+            //    }
+            //}
             SimpleShape containsFirstCoordsInWay = coordsMap.get(simpleShape.getFirst());
             SimpleShape containsLastCoordsInWay = coordsMap.get(simpleShape.getLast());
             SimpleShape currentElement = null;
 
             if(containsFirstCoordsInWay!=null){
                 if(simpleShape.getFirst().equals(containsFirstCoordsInWay.getFirst())){
+                    containsFirstCoordsInWay.flip();
                     currentElement = SimpleShape.merge(containsFirstCoordsInWay, simpleShape);
-                    currentElement.flip();
                 }
                 else if(simpleShape.getFirst().equals(containsFirstCoordsInWay.getLast())){
                     currentElement = SimpleShape.merge(containsFirstCoordsInWay, simpleShape);

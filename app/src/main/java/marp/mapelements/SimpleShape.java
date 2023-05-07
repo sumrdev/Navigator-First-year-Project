@@ -69,6 +69,39 @@ public class SimpleShape extends Element {
 
         return new SimpleShape(s1.id, s1.type, newX, newY);
     }
+    public static SimpleShape mergeThreeWays(SimpleShape s1, SimpleShape s2, SimpleShape s3) {
+        int length = 0;
+        if (s1 != null) length += s1.x.length;
+        if (s2 != null) length += s2.x.length;
+        if (s3 != null) length += s3.x.length;
+
+
+        float[] newX = new float[length];
+        float[] newY = new float[length];
+
+        int offsetIndex = 0;
+        if (s1 != null) {
+            for (int i = 0; i < s1.x.length; i++) {
+                newX[i] = s1.x[i];
+                newY[i] = s1.y[i];
+            }
+            offsetIndex += s1.x.length;
+        }
+        if (s2 != null) {
+            for (int i = 0; i < s2.x.length; i++) {
+                newX[i + offsetIndex] = s2.x[i];
+                newY[i + offsetIndex] = s2.y[i];
+            }
+            offsetIndex += s2.x.length;
+        }
+        if (s3 != null) {
+            for (int i = 0; i < s3.x.length; i++) {
+                newX[i + offsetIndex] = s3.x[i];
+                newY[i + offsetIndex] = s3.y[i];
+            }
+        }
+        return new SimpleShape(s2.id, s2.type, newX, newY);
+    }
     
     public Point2D getFirst(){
         return new Point2D(this.x[0], this.y[0]);
@@ -114,4 +147,6 @@ public class SimpleShape extends Element {
     public void printType() {
         System.out.println(type.toString());
     }
+
+
 }

@@ -148,7 +148,6 @@ public class MapObjects {
         return quiteLargePlaceNameList;
     }
 
-
     //#####################################################
     //######## Areas and buildings lists and trees ########
     //#####################################################
@@ -158,11 +157,6 @@ public class MapObjects {
     private RTree<Element> waterAreasTree;
     private final ArrayList<Element> terrainAreasList = new ArrayList<>();
     private RTree<Element> terrainAreasTree;
-    private final ArrayList<Element> coastLineAreasList = new ArrayList<>();
-    private RTree<Element> coastLineAreasTree;
-    public RTree<Element> getCoastLinesAreaTree() {
-        return coastLineAreasTree;
-    }
     public RTree<Element> getBuildingsTree() {
         return buildingsTree;
     }
@@ -181,9 +175,7 @@ public class MapObjects {
     public ArrayList<Element> getTerrainAreasList() {
         return terrainAreasList;
     }
-    public ArrayList<Element> getCoastLineAreasList() {
-        return coastLineAreasList;
-    }
+
     //#####################################################
     //######## Roads lists and trees ######################
     //#####################################################
@@ -224,6 +216,18 @@ public class MapObjects {
     public ArrayList<Road> getFootPathsList() {
         return footpathList;
     }
+    //#####################################################
+    //######## Coastline lists and trees ##################
+    //#####################################################
+    ArrayList<SimpleShape> coastLineAreasList = new ArrayList<>();
+    public ArrayList<SimpleShape> getCoastLineAreasList() {
+        return coastLineAreasList;
+    }
+    private RTree<SimpleShape> coastLineAreasTree;
+    public RTree<SimpleShape> getCoastLinesAreaTree() {
+        return coastLineAreasTree;
+    }
+
     public void buildTrees() {
         addressTree = new RTree<>(addressList);
         trainPOITree = new RTree<>(trainPOIList);
@@ -259,4 +263,5 @@ public class MapObjects {
     public Digraph getDigraph(){
         return digraph;
     }
+
 }

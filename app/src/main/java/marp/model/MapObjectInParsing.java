@@ -30,6 +30,7 @@ public class MapObjectInParsing implements Serializable{
 
     public long unfinishedSimpleShapeID; 
     private long unfinishedRelationID;
+    private ArrayList<SimpleShape> coastLineSegmentList = new ArrayList<>();
 
     //private Road unfinishedRoad;
     private int completeAddressCount = 0;
@@ -211,6 +212,8 @@ public class MapObjectInParsing implements Serializable{
                 this.SimpleShapeIDToSimpleShape.put(this.unfinishedSimpleShapeID, new SimpleShape(this.unfinishedSimpleShapeID, this.unfinishedShapeType, coords.get(0),coords.get(1)));
             }else {
                 switch (this.unfinishedShapeType) {
+                    case COASTLINE:
+                        coastLineSegmentList.add(new SimpleShape(this.unfinishedSimpleShapeID, this.unfinishedShapeType, coords.get(0), coords.get(1)));
                     case BUILDING:
                         mapObjects.getBuildingsList().add(new SimpleShape(this.unfinishedSimpleShapeID, this.unfinishedShapeType, coords.get(0), coords.get(1)));
                         break;
@@ -291,25 +294,24 @@ public class MapObjectInParsing implements Serializable{
     }
 
     public void finishRelation(){
-        switch (unfinishedShapeType) {
-            case COASTLINE:
-                mapObjects.getCoastLineAreasList().add(new ComplexShape(unfinishedRelationID, this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
-                break;
-            case BUILDING:
-                mapObjects.getBuildingsList().add(new ComplexShape(unfinishedRelationID, this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
-                break;
-            case WATER:
-                mapObjects.getWaterAreasList().add(new ComplexShape(unfinishedRelationID, this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
-                break;
-            case GRASS:
-            case FOREST:
-            case CEMENT:
-            case COMMERCIAL_GROUND:
-            case FARMLAND:
-                mapObjects.getTerrainAreasList().add(new ComplexShape(unfinishedRelationID, this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
-                break;
-            default:
-                break;
+        if (unfinishedRelationSimpleShapes.size() > 0) {
+            switch (unfinishedShapeType) {
+                case BUILDING:
+                    mapObjects.getBuildingsList().add(new ComplexShape(unfinishedRelationID, this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
+                    break;
+                case WATER:
+                    mapObjects.getWaterAreasList().add(new ComplexShape(unfinishedRelationID, this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
+                    break;
+                case GRASS:
+                case FOREST:
+                case CEMENT:
+                case COMMERCIAL_GROUND:
+                case FARMLAND:
+                    mapObjects.getTerrainAreasList().add(new ComplexShape(unfinishedRelationID, this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
+                    break;
+                default:
+                    break;
+            }
         }
 
         unfinishedRelationSimpleShapes = new ArrayList<>();
@@ -317,6 +319,47 @@ public class MapObjectInParsing implements Serializable{
         unfinishedShapeType = ShapeType.UNDEFINED;
         unfinishedPointType = PointType.UNDEFINED;
     }
+
+    public void getDistinctCoastlineSegments() {
+            ArrayList<SimpleShape> distinctCoastlineSegmentList = new ArrayList<SimpleShape>();
+            HashMap<Point2D, SimpleShape> coordsMap = new HashMap<>();
+
+            for (SimpleShape simpleShape : this.coastLineSegmentList) {
+
+                SimpleShape containsFirstCoordsInWay = coordsMap.remove(simpleShape.getFirst());
+                SimpleShape containsLastCoordsInWay = coordsMap.remove(simpleShape.getLast());
+
+                //To avoid issues where the same way is located from both ends, set containsLastCoordsInWay to null if they are the same.
+                if (containsFirstCoordsInWay != null && containsLastCoordsInWay != null) {
+                    if (containsFirstCoordsInWay == containsLastCoordsInWay) {
+                        containsLastCoordsInWay = null;
+                    }
+                }
+                if(containsFirstCoordsInWay!=null){
+                    if(simpleShape.getFirst().equals(containsFirstCoordsInWay.getFirst())){
+                        containsFirstCoordsInWay.flip();
+                    }
+                }
+                if(containsLastCoordsInWay!=null){
+                    if(simpleShape.getLast().equals(containsLastCoordsInWay.getLast())){
+                        containsLastCoordsInWay.flip();
+                    }
+                }
+                SimpleShape mergedShape = SimpleShape.mergeThreeWays(containsFirstCoordsInWay, simpleShape, containsLastCoordsInWay);
+                coordsMap.put(mergedShape.getFirst(), mergedShape);
+                coordsMap.put(mergedShape.getLast(), mergedShape);
+
+            }
+            coordsMap.forEach((coord, simpleShape)->{
+                if(simpleShape.getLast().equals(coord)){
+                    distinctCoastlineSegmentList.add(simpleShape);
+                }
+            });
+            System.out.println("THE TOTAL NUMBER OF COASTLINE SEGMENTS: " + coastLineSegmentList.size());
+            mapObjects.coastLineAreasList = distinctCoastlineSegmentList;
+            System.out.println("THE NUMBER OF COASTLINE SEGMENTS: " + distinctCoastlineSegmentList.size());
+        }
+
 
     private ArrayList<float[]> convertPointArrToUseableFloatArr() {
         ArrayList<Float> x = new ArrayList<>();

@@ -35,14 +35,14 @@ public class MapScene extends Scene{
     public Affine trans = new Affine();
 
 
-    public MapScene(Model model, MapMenu mapMenu, Canvas canvas) {
+    public MapScene(Model model, MapMenu mapMenu, ZoomMenu zoomMenu, Canvas canvas) {
         super(new VBox());
         this.model = model;
         this.canvas = canvas;
         gc = canvas.getGraphicsContext2D();
 
         this.mapMenu = mapMenu;
-        zoomMenu = new ZoomMenu(100);
+        this.zoomMenu = zoomMenu;
 
         StackPane stackedElements = new StackPane();
 
@@ -148,8 +148,8 @@ public class MapScene extends Scene{
             levelOfDetails = 1;
         }
 
-
-        //######################################################################################
+        drawCoastlines(levelOfDetails, bounds);
+        /*//######################################################################################
 
         if (zoomMenu.getZoomlevel() > 300000 ) {
             drawCoastlines(levelOfDetails, bounds);
@@ -309,7 +309,7 @@ public class MapScene extends Scene{
             drawTrainLandmarks(bounds);
             drawCustomLandmarks();
             drawSelectedPoint();
-        }
+        }*/
 
         model.getMapObjects().getDigraph().draw(gc);
 

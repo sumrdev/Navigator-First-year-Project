@@ -1,6 +1,8 @@
 package marp.parser;
 
 import java.io.InputStream;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
@@ -9,6 +11,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import marp.mapelements.Point;
+import marp.mapelements.SimpleShape;
 import marp.mapelements.details.FontSize;
 import marp.mapelements.details.PointType;
 import marp.mapelements.details.RoadType;
@@ -21,15 +24,9 @@ public class OSMParser{
         XMLStreamReader xmlsr = XMLInputFactory.newInstance().createXMLStreamReader(inputStream);
         MapObjects mapObjects = new MapObjects();
         MapObjectInParsing mapObjectInParsing = new MapObjectInParsing(mapObjects);
-        boolean onTheScrub;
 
         while(xmlsr.hasNext()){
-            if (mapObjectInParsing.unfinishedSimpleShapeID == 150330974){
-                System.out.println("on the scrub");
-                onTheScrub = true;
-            } else {
-                onTheScrub = false;
-            }
+
             int xmltag = xmlsr.next();
             switch (xmltag) {
                 case XMLStreamConstants.START_ELEMENT:
@@ -313,6 +310,7 @@ public class OSMParser{
             }
         }
 
+        mapObjectInParsing.getDistinctCoastlineSegments();
         mapObjects.buildTrees();
         mapObjects.buildDigraph(mapObjectInParsing.getRoadNodeIDtoRoadNode());
         return mapObjects;

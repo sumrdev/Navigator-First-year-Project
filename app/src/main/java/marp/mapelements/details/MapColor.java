@@ -13,7 +13,7 @@ public class MapColor {
 
     private MapColor() {
         defaultColorMap.put("BACKGROUND", Color.rgb(255, 255, 255,1));
-        defaultColorMap.put("WATER", Color.rgb(156, 0, 249,1));
+        defaultColorMap.put("WATER", Color.rgb(176, 211, 232,1));
         defaultColorMap.put("BUILDING", Color.rgb(190, 190, 190,1));
         defaultColorMap.put("COASTLINE", Color.rgb(206, 234, 214,1));
         defaultColorMap.put("GRASSY", Color.rgb(206, 234, 214,1));

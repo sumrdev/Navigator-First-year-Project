@@ -64,7 +64,7 @@ public class View {
     }
 
     public void createNewMapScene() {
-        mapScene = new MapScene(model, mapMenu, canvas);
+        mapScene = new MapScene(model, mapMenu, zoomMenu, canvas);
         // Bind the size of the map to the size of the window and check if window is resized, then redraw
 
     }

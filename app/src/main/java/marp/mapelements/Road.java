@@ -56,6 +56,10 @@ public class Road extends Element{
         this.roadType = roadType;
     }
 
+    public String getName(){
+        return this.name;
+    }
+
     public long getID(){
         return this.id;
     }

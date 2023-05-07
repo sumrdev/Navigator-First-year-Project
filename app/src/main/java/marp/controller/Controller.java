@@ -1,6 +1,7 @@
 package marp.controller;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class Controller {
     private float mouseDragStartPositionY;
     private boolean isCreatingCustomPointOfInterest = false;
 
-    public Controller(View view, Model model){
+    public Controller(View view, Model model) throws MalformedURLException{
         this.model = model;
         this.view = view;
         fileList = IOFunctions.getFiles();
@@ -64,7 +65,6 @@ public class Controller {
 
 
         view.getCanvas().setOnMousePressed(e -> {
-            System.out.println("TEST?!");
             lastX = (float) e.getX();
             System.out.println("NOW SETTING LAST X TO " + ((float) e.getX()));
             lastY = (float) e.getY();
@@ -74,26 +74,21 @@ public class Controller {
             //}
         });
         view.getCanvas().setOnMouseReleased(e -> {
-            System.out.println("TEST 1");
             System.out.println("Last X = " + lastX);
             System.out.println(mouseDragStartPositionX + " " + e.getX());
             //When releasing the mouse, if the mouse drag start position is equal to the current position, it counts as a mouse click.
             if (mouseDragStartPositionX == e.getX() && mouseDragStartPositionY == e.getY()) {
-                System.out.println("TEST 2");
                 //There are two cases: Either we are making a new POI or we are selecting a point.
                 if (isCreatingCustomPointOfInterest) {
-                    System.out.println("TEST 3");
                     view.getMapMenu().changeMenuPanel(view.getMapMenu().getPointOfInterestPanel());
                     toggleIsCreatingCustomPointOfInterest();
                 } else {
-                    System.out.println("TEST 4");
                     //convert the screen coords of the mouse click to map coords and find the nearest selectable element.
                     Point2D point = view.getMapScene().screenCoordsToMapCoords(new Point2D(lastX, lastY));
                     MapPoint nearestPoint = model.getNearestPointForMapSelection(point);
                     // make a POI as a marker of the selected point
                     // focus on the point without panning
                     focusOnPoint(model.getSelectedPointMarker(), false);
-                    System.out.println("TEST");
                 }
             }
         });

@@ -161,7 +161,6 @@ public class Model implements Serializable{
             }
         }
         //We use a point of interest to represent the currently selected point. We update selected point to a new point with the coordinates of the selected point.
-        System.out.println("THESE ARE THE COORDS OF THE SELECTED POINT... " + selectedElement.getX() + " and " + selectedElement.getY());
         selectedPointMarker = new PointOfInterest(selectedElement.getName(), selectedElement.getType(), selectedElement.getX()*0.56f, -selectedElement.getY(), false);
         return selectedPointMarker;
     }

@@ -1,7 +1,8 @@
 package marp.utilities;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -10,14 +11,12 @@ public class IOFunctions {
     IOFunctions() {
 
     }
-    public static List<String> getFiles(){
+    public static List<String> getFiles() throws MalformedURLException{
         // directory is resources
-        // String dir = IOFunctions.class.getClassLoader().getResource("maps").getPath();
-        // System.out.println(dir);
-        //return Stream.of(new File(dir).listFiles())
-        //        .filter(file -> !file.isDirectory())
-        //        .map(File::getName)
-        //        .collect(Collectors.toList());
-        return new ArrayList<>();
+        URL dir = DefaultPath.getDefaultPath();
+        return Stream.of(new File(dir.getFile()).listFiles())
+                .filter(file -> !file.isDirectory())
+                .map(File::getName)
+                .collect(Collectors.toList());
     }   
 }

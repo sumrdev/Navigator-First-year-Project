@@ -44,6 +44,7 @@ public class Digraph implements Serializable {
         connectedComponents = categorizeEdgesOnConnectedComponents();
         ArrayList<RoadNode> roadNodesAsArray = new ArrayList<>(nodes.values());
         aStar(roadNodesAsArray.get(100), roadNodesAsArray.get(1000), true);
+        createTextDescriptionFromNavigation();
     }
 
     private float getWeight(Edge edge, boolean walking){
@@ -140,6 +141,64 @@ public class Digraph implements Serializable {
             }
             current = cameFrom.get(current);
         }
+    }
+
+    public void createTextDescriptionFromNavigation(){
+        String previousRoad = "";
+        int distanceSinceLastRoad = 0;
+
+        for (int i = 0; i < navigation.size(); i++) {
+            Edge edge = navigation.get(i);
+            if(!previousRoad.equals(roadsMap.get(edge.road).getName())){
+                if(!previousRoad.equals("")){
+                    String turnInformation;
+                    switch (getTurnInformation(navigation.get(i-1), navigation.get(i))) {
+                        case 0:
+                            turnInformation = "Continue straight onto ";
+                            break;
+                        case 1:
+                            turnInformation = "Turn right on ";
+                            break;
+                        case 2:
+                            turnInformation = "Turn left on ";
+                            break;
+                        case 3:
+                            turnInformation = "Turn around on ";
+                            break;
+                        default:
+                            turnInformation = "Continue straight onto ";
+                            break;
+                    } 
+                    System.out.println(turnInformation + roadsMap.get(edge.road).getName() + " after " + distanceSinceLastRoad + " meters");
+
+                } else {
+                    System.out.println("Start on " + roadsMap.get(edge.road).getName());
+                }
+                previousRoad = roadsMap.get(edge.road).getName();
+                distanceSinceLastRoad = 0;
+            }
+            distanceSinceLastRoad += MathFunctions.distanceInMeters(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(), nodes.get(edge.end).getY());
+        }
+    }
+
+    public int getTurnInformation(Edge e1, Edge e2){
+        float x1 = nodes.get(e1.start).getX();
+        float y1 = nodes.get(e1.start).getY();
+        float x2 = nodes.get(e1.end).getX();
+        float y2 = nodes.get(e1.end).getY();
+        float x3 = nodes.get(e2.end).getX();
+        float y3 = nodes.get(e2.end).getY();
+        float x4 = nodes.get(e2.start).getX();
+        float y4 = nodes.get(e2.start).getY();
+
+        int angle = MathFunctions.getAngleBetweenTwoLines(x1, y1, x2, y2, x3, y3, x4, y4 );
+        System.out.println(angle);
+        if(angle > 0 && angle < 180) return 1;
+        else if(angle < 0 && angle > -180) return 2;
+        else if(angle == 180 || angle == -180) return 3;
+        else return 0;
+
+
     }
 
     public void draw(GraphicsContext gc) {

@@ -26,7 +26,6 @@ public class OSMParser{
         MapObjectInParsing mapObjectInParsing = new MapObjectInParsing(mapObjects);
 
         while(xmlsr.hasNext()){
-
             int xmltag = xmlsr.next();
             switch (xmltag) {
                 case XMLStreamConstants.START_ELEMENT:

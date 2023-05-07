@@ -27,7 +27,7 @@ import marp.mapelements.MapPoint;
 import marp.mapelements.PointOfInterest;
 
 import marp.parser.OSMParser;
-import marp.utilities.DefaultPath;;
+import marp.utilities.DefaultPath;
 
 public class Model implements Serializable{
     private MapObjects mapObjects;

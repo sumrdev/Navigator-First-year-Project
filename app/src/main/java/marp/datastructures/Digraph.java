@@ -40,7 +40,7 @@ public class Digraph implements Serializable {
         }
         connectedComponents = categorizeEdgesOnConnectedComponents();
         ArrayList<RoadNode> roadNodesAsArray = new ArrayList<>(nodes.values());
-        aStar(roadNodesAsArray.get(100), roadNodesAsArray.get(1000), true);
+        aStar(roadNodesAsArray.get(0), roadNodesAsArray.get(0), true);
         createTextDescriptionFromNavigation();
     }
 
@@ -83,9 +83,7 @@ public class Digraph implements Serializable {
         this.averageSpeed = temp/averageSpeedCount;
         this.averageSpeed = 70;
     }
-    public List<String> aStar(RoadNode start, RoadNode end){
-        return aStar(start, end, walking);
-    }
+
     public List<String> aStar(RoadNode start, RoadNode end, boolean walking){
         Time startTime = new Time(System.currentTimeMillis());
         averageSpeedCount = 0;
@@ -129,13 +127,6 @@ public class Digraph implements Serializable {
         System.out.println(info);
 
         return new ArrayList<>();
-    }
-
-    private float getWeight(Edge edge, boolean walking){
-        if(walking && !edge.isWalkable()) return Float.MAX_VALUE;
-        else if(!walking && !edge.isDriveable()) return Float.MAX_VALUE;
-        else if(walking) return (float) MathFunctions.distanceInMeters(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(), nodes.get(edge.end).getY());
-        else return (float) MathFunctions.distanceInMeters(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(), nodes.get(edge.end).getY())/roadsMap.get(edge.road).getSpeed();
     }
 
     private float getHScore(RoadNode start, RoadNode end, boolean walking){
@@ -238,8 +229,7 @@ public class Digraph implements Serializable {
     public float getDistance() {
         float distance = 0;
         for (Edge edge : navigation) {
-            distance = (float) (distance + MathFunctions.distanceInMeters((float) (nodes.get(edge.start).getX()*0.56), nodes.get(edge.start).getY(), (float) (nodes.get(edge.end).getX()*0.56), nodes.get(edge.end).getY()));
-            System.out.println("The distance of the edge is " + MathFunctions.distanceInMeters((float) (nodes.get(edge.start).getX()*0.56), nodes.get(edge.start).getY(), (float) (nodes.get(edge.end).getX()*0.56), nodes.get(edge.end).getY()));
+            distance = (float) (distance + MathFunctions.distanceInMeters((float) (nodes.get(edge.start).getX()), nodes.get(edge.start).getY(), (float) (nodes.get(edge.end).getX()), nodes.get(edge.end).getY()));
         }
         return Math.round((distance/1000.0));
     }

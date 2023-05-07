@@ -182,24 +182,32 @@ public class Controller {
             if (view.getMapMenu().getDirectionsPanel().startLocationField.getAddress() != null) {
                 setStartLocation(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress(), true);
                 view.getMapMenu().getMinimizedPanel().searchBar.clear();
+                model.getMapObjects().clearRoute();
+                view.getMapScene().redraw();
             }
         });
         view.getMapMenu().getDirectionsPanel().startSearchButton.setOnAction(e -> {
             if (view.getMapMenu().getDirectionsPanel().startLocationField.getAddress() != null) {
                 setStartLocation(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress(), true);
                 view.getMapMenu().getMinimizedPanel().searchBar.clear();
+                model.getMapObjects().clearRoute();
+                view.getMapScene().redraw();
             }
         });
         view.getMapMenu().getDirectionsPanel().endLocationField.setOnAction(e -> {
             if (view.getMapMenu().getDirectionsPanel().endLocationField.getAddress() != null) {
                 setEndLocation(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress(), true);
                 view.getMapMenu().getMinimizedPanel().searchBar.clear();
+                model.getMapObjects().clearRoute();
+                view.getMapScene().redraw();
             }
         });
         view.getMapMenu().getDirectionsPanel().endSearchButton.setOnAction(e -> {
             if (view.getMapMenu().getDirectionsPanel().endLocationField.getAddress() != null) {
                 setEndLocation(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress(), true);
                 view.getMapMenu().getMinimizedPanel().searchBar.clear();
+                model.getMapObjects().clearRoute();
+                view.getMapScene().redraw();
             }
         });
         view.getMapMenu().getDirectionsPanel().carButton.setOnAction(e -> {

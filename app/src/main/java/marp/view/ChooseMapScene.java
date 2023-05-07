@@ -58,8 +58,8 @@ public class ChooseMapScene extends Scene{
                 String dragBoardUrl = dragBoard.getUrl().replaceAll("file\\:", "");
                 File file = new File(dragBoardUrl);
                 URL fileToURL = file.toURI().toURL();
-                Model.createModel(fileToURL);
-                view.createNewMapScene();
+                Model newModel = Model.createModel(fileToURL);
+                view.createNewMapScene(newModel);
                 view.setScene(view.getMapScene());
             } catch (Exception e) {
                 e.printStackTrace();

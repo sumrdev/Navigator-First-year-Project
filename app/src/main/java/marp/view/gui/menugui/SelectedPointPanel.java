@@ -34,7 +34,7 @@ public class SelectedPointPanel  extends MenuPanel {
     public MapButton searchButton;
 
 
-    public SelectedPointPanel(MapMenu mapMenu, Model model) {
+    public SelectedPointPanel(Model model) {
         super();
 
         //create buttons

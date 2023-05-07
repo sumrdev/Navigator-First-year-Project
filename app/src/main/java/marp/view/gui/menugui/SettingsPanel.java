@@ -33,7 +33,7 @@ public class SettingsPanel extends MenuPanel {
     // slider for zoom adjustment
     public Slider zoomAdjustSlider;
 
-    public SettingsPanel(MapMenu mapMenu) {
+    public SettingsPanel() {
         super();
 
         //create buttons

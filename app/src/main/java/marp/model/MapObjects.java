@@ -250,7 +250,7 @@ public class MapObjects implements Serializable{
         motorWaysTree = new RTree<>(motorWaysList);
         largeRoadsTree = new RTree<>(largeRoadsList);
         smallRoadsTree = new RTree<>(smallRoadsList);
-        footPathsTree = new RTree<>(smallRoadsList);
+        footPathsTree = new RTree<>(footpathList);
     }
 
     public void buildDigraph(HashMap<Long, RoadNode> roadNodes){
@@ -267,5 +267,7 @@ public class MapObjects implements Serializable{
     public Digraph getDigraph(){
         return digraph;
     }
-
+    public void clearRoute(){
+        digraph.clearNavigation();
+    }
 }

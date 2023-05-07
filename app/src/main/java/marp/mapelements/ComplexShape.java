@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.FillRule;
 import marp.mapelements.details.MapColor;
 import marp.mapelements.details.ShapeType;
@@ -120,5 +121,15 @@ public class ComplexShape extends Element {
     @Override
     public float[] getBounds() {
         return boundingCoords;
+    }
+    public void drawBounds(GraphicsContext gc) {
+        gc.beginPath();
+        gc.moveTo(boundingCoords[0], boundingCoords[1]);
+        gc.moveTo(boundingCoords[2], boundingCoords[1]);
+        gc.moveTo(boundingCoords[2], boundingCoords[3]);
+        gc.moveTo(boundingCoords[0], boundingCoords[3]);
+        gc.closePath();
+        gc.setFill(Color.PURPLE);
+        gc.fill();
     }
 }

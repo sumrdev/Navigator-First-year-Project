@@ -151,6 +151,7 @@ public class MapScene extends Scene{
         drawLargeRoads(bounds);
         drawMotorways(bounds);
         drawRoadsClose(bounds);
+        drawRoute();
         drawAddress(bounds);
         drawMotorwayNames(bounds);
         drawLargeRoadNames(bounds);
@@ -164,7 +165,7 @@ public class MapScene extends Scene{
         drawTrainLandmarks(bounds);
         drawCustomLandmarks();
         drawSelectedPoint();
-        model.getMapObjects().getDigraph().draw(gc);
+        drawStartAndEndPoint();
 
     }
     private void drawCoastlines(int levelOfDetail, Bounds bounds) {
@@ -208,6 +209,14 @@ public class MapScene extends Scene{
     private void drawSelectedPoint() {
         if (model.getSelectedPointMarker() != null) {
             model.getSelectedPointMarker().draw(gc, (1 / Math.sqrt(trans.determinant())) * 30);
+        }
+    }
+    private void drawStartAndEndPoint() {
+        if (model.getStartLocationMarker() != null) {
+            model.getStartLocationMarker().draw(gc, (1 / Math.sqrt(trans.determinant())) * 30);
+        }
+        if (model.getEndLocationMarker() != null) {
+            model.getEndLocationMarker().draw(gc, (1 / Math.sqrt(trans.determinant())) * 30);
         }
     }
     private void drawCountryNames(Bounds bounds) {
@@ -350,6 +359,7 @@ public class MapScene extends Scene{
             if (model.isTerrainVisible) {
                 for (Element terrainElement : model.getMapObjects().getTerrainAreasTree().getElementsInRange(bounds)) {
                     terrainElement.draw(gc, levelOfDetail, 1);
+                    terrainElement.drawBounds(gc);
                 }
             }
         }
@@ -368,6 +378,11 @@ public class MapScene extends Scene{
                     elementBuilding.draw(gc, levelOfDetail, 1);
                 }
             }
+        }
+    }
+    private void drawRoute() {
+        if ( model.getMapObjects().getDigraph() != null) {
+            model.getMapObjects().getDigraph().draw(gc);
         }
     }
 }

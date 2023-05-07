@@ -18,7 +18,7 @@ public class PointOfInterestPanel  extends MenuPanel {
     public MapButton cancelButton;
 
     // Constructor
-    public PointOfInterestPanel(MapMenu mapMenu) {
+    public PointOfInterestPanel() {
 
 
         //Create text field + button for inputting the name of the custom point

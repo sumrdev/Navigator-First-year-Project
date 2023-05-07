@@ -2,10 +2,12 @@ package marp.mapelements;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import marp.mapelements.details.MapColor;
 import marp.mapelements.details.ShapeType;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class SimpleShape extends Element {
     private ShapeType type;
@@ -144,9 +146,14 @@ public class SimpleShape extends Element {
     public float[] getBounds() {
         return this.boundingCoords;
     }
-    public void printType() {
-        System.out.println(type.toString());
+    public void drawBounds(GraphicsContext gc) {
+        gc.beginPath();
+        gc.moveTo(boundingCoords[0], boundingCoords[1]);
+        gc.moveTo(boundingCoords[2], boundingCoords[1]);
+        gc.moveTo(boundingCoords[2], boundingCoords[3]);
+        gc.moveTo(boundingCoords[0], boundingCoords[3]);
+        gc.closePath();
+        gc.setFill(Color.PURPLE);
+        gc.fill();
     }
-
-
 }

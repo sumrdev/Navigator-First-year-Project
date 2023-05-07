@@ -17,11 +17,11 @@ public class MapMenu extends HBox {
     public MapMenu(Model model) {
 
         //Set up the various menu panels
-        minimizedPanel = new MinimizedPanel(this, model);
-        directionsPanel = new DirectionsPanel(this, model);
-        settingsPanel = new SettingsPanel(this);
-        selectedPointPanel = new SelectedPointPanel(this, model);
-        pointOfInterestPanel = new PointOfInterestPanel(this);
+        minimizedPanel = new MinimizedPanel(model);
+        directionsPanel = new DirectionsPanel(model);
+        settingsPanel = new SettingsPanel();
+        selectedPointPanel = new SelectedPointPanel(model);
+        pointOfInterestPanel = new PointOfInterestPanel();
 
         //add the minimized menu as the initial menu panel
         this.getChildren().add(minimizedPanel);

@@ -113,12 +113,7 @@ public class Road extends Element{
 
         gc.setLineWidth((zoom * roadType.getRoadWidth()));
         gc.setStroke(MapColor.getInstance().colorMap.get(roadType.toString()));
-        //if(drawRoute){
-        //    gc.setLineWidth(0.0001);
-        //    gc.setStroke(Color.RED);
-        //}
         draw(gc,1, zoom);
-        //if(drawRoute) gc.strokeLine(xRoute[0], yRoute[0], xRoute[xRoute.length-1], yRoute[yRoute.length-1]);
     }
 
     public void drawOutline(GraphicsContext gc, double zoom) {
@@ -129,13 +124,7 @@ public class Road extends Element{
     public void drawClose(GraphicsContext gc){
         gc.setLineWidth((0.00002 + 0.000005 * roadType.getRoadWidth()));
         gc.setStroke(MapColor.getInstance().colorMap.get(roadType.toString()));
-        //if(drawRoute){
-        //    gc.setLineWidth(0.0001);
-        //    gc.setStroke(Color.RED);
-        //}
         draw(gc,1, 1);
-        //if(drawRoute) drawArr(gc, xRoute, yRoute, 1, 1);
-        //if(drawRoute) drawArr(gc, xRoute, yRoute, 1, 1);
     }
     public void drawCloseOutline(GraphicsContext gc){
         gc.setLineWidth((0.000025 + 0.000005 * roadType.getRoadWidth()));
@@ -206,6 +195,10 @@ public class Road extends Element{
     @Override
     public float[] getBounds() {
         return boundingCoords;
+    }
+    @Override
+    public void drawBounds(GraphicsContext gc) {
+
     }
 }
 

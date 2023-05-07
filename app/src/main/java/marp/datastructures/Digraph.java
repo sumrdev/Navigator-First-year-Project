@@ -42,10 +42,10 @@ public class Digraph implements Serializable {
         createTextDescriptionFromNavigation();
     }
 
-    private float getWeight(Edge edge, boolean walking){
-        if(walking && !edge.isWalkable()) return Float.MAX_VALUE;
-        else if(!walking && !edge.isDriveable()) return Float.MAX_VALUE;
-        else if(walking) return (float) MathFunctions.distanceInMeters(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(), nodes.get(edge.end).getY());
+    private float getWeight(Edge edge, boolean notInCar){
+        if(notInCar && !edge.isWalkable()) return Float.MAX_VALUE;
+        else if(!notInCar && !edge.isDriveable()) return Float.MAX_VALUE;
+        else if(notInCar) return (float) MathFunctions.distanceInMeters(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(), nodes.get(edge.end).getY());
         else return (float) MathFunctions.distanceInMeters(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(), nodes.get(edge.end).getY())/roadsMap.get(edge.road).getSpeed();
     }
 
@@ -208,7 +208,7 @@ public class Digraph implements Serializable {
     }
 
     public void drawNavigation(GraphicsContext gc){
-        gc.setStroke(Color.RED);
+        gc.setStroke(Color.rgb(192, 48, 48));
         for (Edge edge : navigation) {
             gc.strokeLine(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(), nodes.get(edge.end).getY());
         }
@@ -221,5 +221,36 @@ public class Digraph implements Serializable {
                 gc.strokeLine(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(), nodes.get(edge.end).getY());
             }
         }
+    }
+
+    public void clearNavigation() {
+        navigation.clear();
+    }
+
+    public float getDistance() {
+        float distance = 0;
+        for (Edge edge : navigation) {
+            distance = (float) (distance + MathFunctions.distanceInMeters((float) (nodes.get(edge.start).getX()*0.56), nodes.get(edge.start).getY(), (float) (nodes.get(edge.end).getX()*0.56), nodes.get(edge.end).getY()));
+            System.out.println("The distance of the edge is " + MathFunctions.distanceInMeters((float) (nodes.get(edge.start).getX()*0.56), nodes.get(edge.start).getY(), (float) (nodes.get(edge.end).getX()*0.56), nodes.get(edge.end).getY()));
+        }
+        return Math.round((distance/1000.0));
+    }
+
+    public int getTravelTime(int transportationMethod) {
+        double travelTime = 0;
+        for (Edge edge : navigation) {
+            if (transportationMethod == 0) {
+                if (getWeight(edge, false) < Float.MAX_VALUE) {
+                    travelTime = travelTime + (getWeight(edge, false));
+                }
+            }
+            else if (transportationMethod == 1) {
+                travelTime = travelTime + ((getWeight(edge, true)/5000)*60);
+                System.out.println(getWeight(edge, true));
+            } else if (transportationMethod == 2) {
+                travelTime = travelTime + ((getWeight(edge, true)/20000)*60);
+            }
+        }
+        return (int) travelTime;
     }
 }

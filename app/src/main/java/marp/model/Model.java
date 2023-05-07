@@ -23,8 +23,7 @@ import javax.xml.stream.XMLStreamException;
 
 import javafx.geometry.Point2D;
 import marp.datastructures.SimpleTrie;
-import marp.mapelements.MapPoint;
-import marp.mapelements.PointOfInterest;
+import marp.mapelements.*;
 
 import marp.parser.OSMParser;
 import marp.utilities.DefaultPath;;
@@ -32,6 +31,9 @@ import marp.utilities.DefaultPath;;
 public class Model implements Serializable{
     private MapObjects mapObjects;
     private PointOfInterest selectedPointMarker;
+    private PointOfInterest startLocationMarker;
+    private PointOfInterest endLocationMarker;
+    public int transportMode = 0;
     public boolean isRoadsVisible = true;
     public boolean isLandmarksVisible = true;
     public boolean isAddressVisible = true;
@@ -162,13 +164,29 @@ public class Model implements Serializable{
         selectedPointMarker = new PointOfInterest(selectedElement.getName(), selectedElement.getType(), selectedElement.getX()*0.56f, -selectedElement.getY(), false);
         return selectedPointMarker;
     }
-
     public void setSelectedPointMarker(PointOfInterest newSelectedPoint) {
         selectedPointMarker = newSelectedPoint;
     }
 
     public PointOfInterest getSelectedPointMarker() {
         return selectedPointMarker;
+    }
+    public PointOfInterest getStartLocationMarker() {
+        return startLocationMarker;
+    }
+    public PointOfInterest getEndLocationMarker() {
+        return endLocationMarker;
+    }
+
+    public void setStartLocationMarker(PointOfInterest newStartLocationMarker) {
+        startLocationMarker = newStartLocationMarker;
+    }
+    public void setEndLocationMarker(PointOfInterest newEndLocationMarker) {
+        endLocationMarker = newEndLocationMarker;
+    }
+
+    public int getTransportMode() {
+        return transportMode;
     }
 }
 

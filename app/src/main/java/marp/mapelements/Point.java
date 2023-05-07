@@ -41,4 +41,8 @@ public class Point extends Element {
     public float[] getBounds() {
         return new float[]{ x, y, x, y};
     }
+    @Override
+    public void drawBounds(GraphicsContext gc) {
+        ;
+    }
 }

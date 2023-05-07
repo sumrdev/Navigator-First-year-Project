@@ -70,7 +70,7 @@
     -fx-background-radius: 24;
     -fx-padding: 20px;
     -fx-spacing: 20px;
-    -fx-alignment: center;
+    -fx-alignment: center_top;
 }
 .map-label {
     -fx-font-size: 18;

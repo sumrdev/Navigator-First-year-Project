@@ -15,10 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import marp.mapelements.Address;
-import marp.mapelements.MapPoint;
-import marp.mapelements.PointOfInterest;
-import marp.mapelements.RoadNode;
+import marp.mapelements.*;
 import marp.mapelements.details.MapColor;
 import marp.model.Model;
 import marp.mapelements.details.PointType;
@@ -87,11 +84,13 @@ public class Controller {
                     // focus on the point without panning
                     focusOnPoint(nearestPoint, false, false);
                     //set marker point on selected point.
-                    PointOfInterest pointMarker = new PointOfInterest("", PointType.SELECTED, (float) (nearestPoint.getX()/0.56), -nearestPoint.getY(), false);
                     model.setSelectedPointMarker(new PointOfInterest("", PointType.SELECTED, (float) (nearestPoint.getX()/0.56), -nearestPoint.getY(), false));
-                    view.getMapScene().redraw();
-
+                    //set the start and end locations markers from navigation to null to avoid showing them in case the user selects a point while having active start and end locations.
+                    setStartLocation(null, false);
+                    setEndLocation(null, false);
+                    model.getMapObjects().clearRoute();
                 }
+                view.getMapScene().redraw();
             }
         });
 
@@ -176,15 +175,58 @@ public class Controller {
             view.getMapMenu().getDirectionsPanel().startLocationField.setText(view.getMapMenu().getDirectionsPanel().endLocationField.getText());
             view.getMapMenu().getDirectionsPanel().endLocationField.setText(tempText);
         });
+        view.getMapMenu().getDirectionsPanel().startLocationField.setOnAction(e -> {
+            if (view.getMapMenu().getDirectionsPanel().startLocationField.getAddress() != null) {
+                setStartLocation(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress(), true);
+                view.getMapMenu().getMinimizedPanel().searchBar.clear();
+            }
+        });
+        view.getMapMenu().getDirectionsPanel().startSearchButton.setOnAction(e -> {
+            if (view.getMapMenu().getDirectionsPanel().startLocationField.getAddress() != null) {
+                setStartLocation(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress(), true);
+                view.getMapMenu().getMinimizedPanel().searchBar.clear();
+            }
+        });
+        view.getMapMenu().getDirectionsPanel().endLocationField.setOnAction(e -> {
+            if (view.getMapMenu().getDirectionsPanel().endLocationField.getAddress() != null) {
+                setEndLocation(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress(), true);
+                view.getMapMenu().getMinimizedPanel().searchBar.clear();
+            }
+        });
+        view.getMapMenu().getDirectionsPanel().endSearchButton.setOnAction(e -> {
+            if (view.getMapMenu().getDirectionsPanel().endLocationField.getAddress() != null) {
+                setEndLocation(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress(), true);
+                view.getMapMenu().getMinimizedPanel().searchBar.clear();
+            }
+        });
+        view.getMapMenu().getDirectionsPanel().carButton.setOnAction(e -> {
+            model.transportMode = 0;
+            System.out.println(model.transportMode);
+        });
+        view.getMapMenu().getDirectionsPanel().walkButton.setOnAction(e -> {
+            model.transportMode = 1;
+            System.out.println(model.transportMode);
+        });
+        view.getMapMenu().getDirectionsPanel().bikeButton.setOnAction(e -> {
+            model.transportMode = 2;
+            System.out.println(model.transportMode);
+        });
         view.getMapMenu().getDirectionsPanel().findRouteButton.setOnAction( e -> {
-            RoadNode start = model.getMapObjects().getRoadNodeRTree().getNearest(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress());
-            RoadNode end = model.getMapObjects().getRoadNodeRTree().getNearest(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress());
-            List <String> directions = model.getMapObjects().getDigraph().aStar(start, end, true);
-            //model.graph.runaStarWithNodeIndex(Integer.parseInt(view.getMapMenu().getDirectionsPanel().startLocationField.getText()), Integer.parseInt(view.getMapMenu().getDirectionsPanel().endLocationField.getText()));
-            //view.getMapMenu().getDirectionsPanel().receiveGuideList(null);
-            view.getMapMenu().getDirectionsPanel().setGuideShow(true);
-            view.getMapMenu().getDirectionsPanel().receiveGuideList(directions);
-            view.getMapScene().redraw();
+            if (view.getMapMenu().getDirectionsPanel().startLocationField.getAddress() != null && view.getMapMenu().getDirectionsPanel().endLocationField.getAddress() != null) {
+                RoadNode start = model.getMapObjects().getRoadNodeRTree().getNearest(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress());
+                RoadNode end = model.getMapObjects().getRoadNodeRTree().getNearest(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress());
+                setStartLocation(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress(), false);
+                setEndLocation(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress(), false);
+                List<String> directions = model.getMapObjects().getDigraph().aStar(start, end, true);
+                float distance = model.getMapObjects().getDigraph().getDistance();
+                int travelTime = model.getMapObjects().getDigraph().getTravelTime(model.getTransportMode());
+                //model.graph.runaStarWithNodeIndex(Integer.parseInt(view.getMapMenu().getDirectionsPanel().startLocationField.getText()), Integer.parseInt(view.getMapMenu().getDirectionsPanel().endLocationField.getText()));
+                //view.getMapMenu().getDirectionsPanel().receiveGuideList(null);
+                view.getMapMenu().getDirectionsPanel().setGuideShow(true);
+                view.getMapMenu().getDirectionsPanel().receiveGuideList(directions);
+                view.getMapMenu().getDirectionsPanel().updateDistanceAndTime(distance, travelTime);
+                view.getMapScene().redraw();
+            }
         });
 
         //##########################################################
@@ -328,38 +370,37 @@ public class Controller {
         view.chooseMapScene.loadButton.setOnAction(e -> {
             view.createNewMapScene();
             view.setScene(view.getMapScene());
-                }
-                );
-    }
-            /*FileChooser fileChooser = new FileChooser();
-            try {
-                fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("OSM files", "*.osm"),
-                    new FileChooser.ExtensionFilter("BIN files", "*.bin"),
-                    new FileChooser.ExtensionFilter("All files", "*.*"));
-
-                File selectedFile = fileChooser.showOpenDialog(stage);
-                if (selectedFile == null) {
-
-                } else {
-                    try {
-                        view.getMapScene().resetAffine();
-                        this.model = Model.createModel(selectedFile);
-                        view.model = this.model;
-                        view.createNewMapScene();
-                        view.setScene(view.getMapScene());
-                    } catch (javax.xml.parsers.FactoryConfigurationError e2) {
-                        e2.printStackTrace();
-                    }
-                }
-            } catch (Exception e1) {
-                // TODO: handle exception
-                System.out.println("Error getting items from listview: ");
-                e1.printStackTrace();
-            }
         });
+    }
 
-    }*/
+    private void setStartLocation(Address address, boolean shouldPan) {
+        if (shouldPan) {
+            panToPoint(address);
+        }
+        // Make a custom landmark to show the selected point
+        if (address != null) {
+            model.setStartLocationMarker(new PointOfInterest("", PointType.START_LOCATION, (float) (address.getX()), address.getY(), false));
+        } else {
+            model.setStartLocationMarker(null);
+        }
+        // Redraw the view
+        view.getMapScene().redraw();
+    }
+
+
+    private void setEndLocation(Address address, boolean shouldPan) {
+        if (shouldPan) {
+            panToPoint(address);
+        }
+        // Make a custom landmark to show the selected point
+        if (address != null) {
+            model.setEndLocationMarker(new PointOfInterest("", PointType.END_LOCATION, (float) (address.getX()), address.getY(), false));
+        } else {
+            model.setEndLocationMarker(null);
+        }
+        // Redraw the view
+        view.getMapScene().redraw();
+    }
 
     public void toggleIsCreatingCustomPointOfInterest(){
         if (isCreatingCustomPointOfInterest){
@@ -397,25 +438,7 @@ public class Controller {
 
             //We only pan if the point to focus on is found through a search bar. Not when clicking on a point.
             if (shouldPan) {
-                // Find the middle screen coordinate and find the map coordinates for this point.
-                Point2D firstPoint = view.getMapScene().screenCoordsToMapCoords(new Point2D(view.getCanvas().getWidth()/2, view.getMapScene().getHeight()/2));
-
-                // Pan once to the side and do the same again. In this way we find the relationship between the panning and the distance.
-                view.getMapScene().pan(10, 10);
-                Point2D secondPoint = view.getMapScene().screenCoordsToMapCoords(new Point2D(view.getMapScene().getWidth()/2, view.getMapScene().getHeight()/2));
-
-                // Calculate the factors needed to convert between screen coordinates and map coordinates
-                float xfactor = (float) (10/(secondPoint.getX()-firstPoint.getX()));
-                float yfactor = (float) (10/(secondPoint.getY()-firstPoint.getY()));
-
-                // Calculate the distance to the point in map coordinates
-                float xDiff = (float) (mapPoint.getX() - secondPoint.getX());
-                float yDiff = (float) (mapPoint.getY() - secondPoint.getY());
-                float xDist = xDiff * xfactor;
-                float yDist = yDiff * yfactor;
-
-                // Pan to the selected point
-                view.getMapScene().pan(xDist, yDist);
+               panToPoint(mapPoint);
             }
             if (shouldSetMarker) {
                 // Make a custom landmark to show the selected point
@@ -424,5 +447,26 @@ public class Controller {
                 view.getMapScene().redraw();
             }
         }
+    }
+    public void panToPoint(MapPoint mapPoint) {
+        // Find the middle screen coordinate and find the map coordinates for this point.
+        Point2D firstPoint = view.getMapScene().screenCoordsToMapCoords(new Point2D(view.getCanvas().getWidth()/2, view.getMapScene().getHeight()/2));
+
+        // Pan once to the side and do the same again. In this way we find the relationship between the panning and the distance.
+        view.getMapScene().pan(10, 10);
+        Point2D secondPoint = view.getMapScene().screenCoordsToMapCoords(new Point2D(view.getMapScene().getWidth()/2, view.getMapScene().getHeight()/2));
+
+        // Calculate the factors needed to convert between screen coordinates and map coordinates
+        float xfactor = (float) (10/(secondPoint.getX()-firstPoint.getX()));
+        float yfactor = (float) (10/(secondPoint.getY()-firstPoint.getY()));
+
+        // Calculate the distance to the point in map coordinates
+        float xDiff = (float) (mapPoint.getX() - secondPoint.getX());
+        float yDiff = (float) (mapPoint.getY() - secondPoint.getY());
+        float xDist = xDiff * xfactor;
+        float yDist = yDiff * yfactor;
+
+        // Pan to the selected point
+        view.getMapScene().pan(xDist, yDist);
     }
 }

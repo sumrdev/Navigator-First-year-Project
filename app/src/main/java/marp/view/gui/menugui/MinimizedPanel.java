@@ -17,7 +17,7 @@ public class MinimizedPanel extends MenuPanel {
     public MapButton searchButton;
     public MapButton pointOfInterestButton;
 
-    public MinimizedPanel(MapMenu mapMenu, Model model) {
+    public MinimizedPanel(Model model) {
 
         // Set up the minimized menu
         searchBar = new SearchBar(model, 5);

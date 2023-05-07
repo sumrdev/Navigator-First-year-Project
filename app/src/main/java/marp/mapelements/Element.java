@@ -11,4 +11,5 @@ public abstract class Element implements Serializable{
     public String type;
     public abstract void draw(GraphicsContext gc, int levelOfDetail, double zoom);
     public abstract float[] getBounds();
+    public abstract void drawBounds(GraphicsContext gc);
 }

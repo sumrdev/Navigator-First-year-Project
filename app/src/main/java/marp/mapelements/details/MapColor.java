@@ -16,7 +16,7 @@ public class MapColor {
         defaultColorMap.put("WATER", Color.rgb(176, 211, 232,1));
         defaultColorMap.put("BUILDING", Color.rgb(190, 190, 190,1));
         defaultColorMap.put("COASTLINE", Color.rgb(206, 234, 214,1));
-        defaultColorMap.put("GRASSY", Color.rgb(206, 234, 214,1));
+        defaultColorMap.put("GRASS", Color.rgb(206, 234, 214,1));
         defaultColorMap.put("FOREST", Color.rgb(145, 189, 159,1));
         defaultColorMap.put("CEMENT", Color.rgb(233, 233, 233,1));
         defaultColorMap.put("FARMLAND", Color.rgb(204, 227, 175,1));
@@ -29,8 +29,8 @@ public class MapColor {
         defaultColorMap.put("PEDESTRIAN_OUTLINE", Color.LIGHTGRAY);
         defaultColorMap.put("PRIMARY", Color.LIGHTYELLOW);
         defaultColorMap.put("PRIMARY_OUTLINE", Color.YELLOW);
-        defaultColorMap.put("FOOTPATH", Color.GREEN);
-        defaultColorMap.put("FOOTPATH_OUTLINE", Color.TRANSPARENT);
+        defaultColorMap.put("PATH", Color.GREEN);
+        defaultColorMap.put("PATH_OUTLINE", Color.TRANSPARENT);
         defaultColorMap.put("RESIDENTIAL", Color.WHITE);
         defaultColorMap.put("RESIDENTIAL_OUTLINE", Color.LIGHTGRAY);
         defaultColorMap.put("TERTIARY", Color.WHITE);
@@ -41,7 +41,7 @@ public class MapColor {
         darkColorMap.put("WATER", Color.rgb(45, 99, 140,1));
         darkColorMap.put("BUILDING", Color.rgb(87, 87, 87,1));
         darkColorMap.put("COASTLINE", Color.rgb(52, 90, 68,1));
-        darkColorMap.put("GRASSY", Color.rgb(52, 90, 68,1));
+        darkColorMap.put("GRASS", Color.rgb(52, 90, 68,1));
         darkColorMap.put("FOREST", Color.rgb(41, 69, 55,1));
         darkColorMap.put("CEMENT", Color.rgb(67, 67, 69,1));
         darkColorMap.put("FARMLAND", Color.rgb(94, 116, 63,1));
@@ -54,8 +54,8 @@ public class MapColor {
         darkColorMap.put("PEDESTRIAN_OUTLINE", Color.rgb(102, 102, 102,1));
         darkColorMap.put("PRIMARY", Color.rgb(174, 165, 63,1));
         darkColorMap.put("PRIMARY_OUTLINE", Color.rgb(194, 175, 66,1));
-        darkColorMap.put("FOOTPATH", Color.rgb(85, 125, 73,1));
-        darkColorMap.put("FOOTPATH_OUTLINE", Color.TRANSPARENT);
+        darkColorMap.put("PATH", Color.rgb(85, 125, 73,1));
+        darkColorMap.put("PATH_OUTLINE", Color.TRANSPARENT);
         darkColorMap.put("RESIDENTIAL", Color.rgb(166, 166, 168,1));
         darkColorMap.put("RESIDENTIAL_OUTLINE", Color.rgb(102, 102, 102,1));
         darkColorMap.put("TERTIARY", Color.rgb(166, 166, 168,1));
@@ -65,7 +65,7 @@ public class MapColor {
         colorBlindColorMap.put("WATER", Color.rgb(53, 104, 161, 1));
         colorBlindColorMap.put("BUILDING", Color.rgb(190, 190, 190,1));
         colorBlindColorMap.put("COASTLINE", Color.rgb(118, 137, 130, 1));
-        colorBlindColorMap.put("GRASSY", Color.rgb(159, 203, 159, 1));
+        colorBlindColorMap.put("GRASS", Color.rgb(159, 203, 159, 1));
         colorBlindColorMap.put("FOREST", Color.rgb(102, 136, 102, 1));
         colorBlindColorMap.put("CEMENT", Color.rgb(225, 223, 221, 1));
         colorBlindColorMap.put("FARMLAND", Color.rgb(154, 174, 121, 1));
@@ -78,8 +78,8 @@ public class MapColor {
         colorBlindColorMap.put("PEDESTRIAN_OUTLINE", Color.rgb(108, 108, 108, 1));
         colorBlindColorMap.put("PRIMARY", Color.rgb(140, 107, 177, 1));
         colorBlindColorMap.put("PRIMARY_OUTLINE", Color.rgb(112, 77, 145, 1));
-        colorBlindColorMap.put("FOOTPATH", Color.rgb(153, 57, 57, 1));
-        colorBlindColorMap.put("FOOTPATH_OUTLINE", Color.TRANSPARENT);
+        colorBlindColorMap.put("PATH", Color.rgb(153, 57, 57, 1));
+        colorBlindColorMap.put("PATH_OUTLINE", Color.TRANSPARENT);
         colorBlindColorMap.put("RESIDENTIAL", Color.rgb(198, 198, 198, 1));
         colorBlindColorMap.put("ResidentialRoadOutline", Color.rgb(142, 142, 142, 1));
         colorBlindColorMap.put("TERTIARY", Color.rgb(198, 198, 198, 1));

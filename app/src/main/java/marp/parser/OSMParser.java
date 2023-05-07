@@ -160,7 +160,6 @@ public class OSMParser{
                                     case "cemetery":
                                     case "wetland":
                                     case "heath":
-                                    case "military":
                                         mapObjectInParsing.setShapeType(ShapeType.GRASS);
                                         break;
                                     case "forest":

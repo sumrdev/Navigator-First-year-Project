@@ -8,11 +8,16 @@ import java.util.List;
 import java.util.Objects;
 
 import javafx.geometry.Point2D;
+import javafx.print.PageOrientation;
+import javafx.print.Paper;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.transform.NonInvertibleTransformException;
+import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import marp.mapelements.Address;
@@ -144,6 +149,28 @@ public class Controller {
             toggleIsCreatingCustomPointOfInterest();
         });
 
+        view.getMapMenu().getMinimizedPanel().takeSnapshotButton.setOnAction(e -> {
+            PrinterJob job = PrinterJob.createPrinterJob();
+            job.getPrinter().createPageLayout(Paper.A4, PageOrientation.LANDSCAPE, Printer.MarginType.DEFAULT);
+            if (job != null) {
+                view.getCanvas().getTransforms().add(new Scale(0.2, 0.2));
+                job.printPage(view.getCanvas());
+                job.endJob();
+                view.getCanvas().getTransforms().add(new Scale(5, 5));
+            }
+        });
+
+        view.getMapMenu().getSettingsPanel().takeSnapshotButton.setOnAction(e -> {
+            PrinterJob job = PrinterJob.createPrinterJob();
+            job.getPrinter().createPageLayout(Paper.A4, PageOrientation.LANDSCAPE, Printer.MarginType.DEFAULT);
+            if (job != null) {
+                view.getCanvas().getTransforms().add(new Scale(0.2, 0.2));
+                job.printPage(view.getCanvas());
+                job.endJob();
+                view.getCanvas().getTransforms().add(new Scale(5, 5));
+            }
+        });
+
         //##########################################################
         //############# Directions panel buttons ###################
         //##########################################################
@@ -273,7 +300,31 @@ public class Controller {
         });
 
         view.getMapMenu().getSettingsPanel().colorBlindModeButton.setOnAction(e -> {
-            MapColor.getInstance().changeTheme("colorblind");
+            view.getMapMenu().changeMenuPanel(view.getMapMenu().getColorblindnessmode());
+            view.getMapScene().redraw();
+        });
+
+        view.getMapMenu().getColorblindnessmode().exitButton.setOnAction(e -> {
+            view.getMapMenu().changeMenuPanel(view.getMapMenu().getSettingsPanel());
+        });
+
+        view.getMapMenu().getColorblindnessmode().deuteranopiaButton.setOnAction(e -> {
+            MapColor.getInstance().changeTheme("deuteranopia");
+            view.getMapScene().redraw();
+        });
+        
+        view.getMapMenu().getColorblindnessmode().protanopiaButton.setOnAction(e -> {
+            MapColor.getInstance().changeTheme("protanopia");
+            view.getMapScene().redraw();
+        });
+
+        view.getMapMenu().getColorblindnessmode().tritanopiaButton.setOnAction(e -> {
+            MapColor.getInstance().changeTheme("tritanopia");
+            view.getMapScene().redraw();
+        });
+
+        view.getMapMenu().getColorblindnessmode().monochromacyButton.setOnAction(e -> {
+            MapColor.getInstance().changeTheme("monochromia");
             view.getMapScene().redraw();
         });
 

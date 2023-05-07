@@ -13,6 +13,7 @@ public class MapMenu extends HBox {
     private SettingsPanel settingsPanel;
     private SelectedPointPanel selectedPointPanel;
     private PointOfInterestPanel pointOfInterestPanel;
+    private Colorblindnessmode colorblindnessmode;
 
     public MapMenu(Model model) {
 
@@ -48,5 +49,8 @@ public class MapMenu extends HBox {
     }
     public PointOfInterestPanel getPointOfInterestPanel() {
         return pointOfInterestPanel;
+    }
+    public Colorblindnessmode getColorblindnessmode() {
+        return colorblindnessmode;
     }
 }

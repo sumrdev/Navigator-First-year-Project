@@ -1,10 +1,5 @@
 package marp.utilities;
 
-import java.util.HashMap;
-
-import marp.datastructures.Edge;
-import marp.mapelements.RoadNode;
-
 public class MathFunctions {
     public static double distanceInMeters(float x1, float y1, float x2, float y2){
         double dx1 = x1/0.56;

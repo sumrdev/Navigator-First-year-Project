@@ -72,26 +72,17 @@ public class MapScene extends Scene{
         //We then prepend the scale, which has the effect of zooming.
         //Then we add the position of the mouse back in order to move the map back into its original position.
 
-        pan(-x, -y);
-        trans.prependScale(factor, factor);
-        pan(x, y);
+        if((zoomMenu.getZoomlevel() <= 15) && (factor > 1)){
+            System.out.println("CANNOT ZOOM IN FURTHER");
+        } else if((zoomMenu.getZoomlevel() >= 50000) && (factor < 1)){
+            System.out.println("CANNOT ZOOM OUT FURTHER");
+        } else {
+            pan(-x, -y);
+            trans.prependScale(factor, factor);
+            pan(x, y);
 
-        if(factor < 100){
-            zoomMenu.updateZoomLevel(factor);
-
-            if (zoomMenu.getZoomlevel() > 1000){
-                // if zooming out
-                if (factor < 1){
-                    double test = (zoomMenu.getZoomlevel()*factor - 1000);
-                    //zoomMenu.distanceLine.setEndX(test);
-                }
-                // if zooming in
-                if (factor > 1){
-                    double test = (zoomMenu.getZoomlevel()*factor - 1000);
-                    //zoomMenu.distanceLine.setEndX(test);
-                }
-            } else {
-                zoomMenu.distanceLine.setEndX(200);
+            if(factor < 100){
+                zoomMenu.updateZoomLevel(factor);
             }
         }
     }
@@ -134,7 +125,10 @@ public class MapScene extends Scene{
         Bounds bounds = screenBoundsToMapBounds(canvas.getLayoutBounds());
 
         //Calculate levelOfDetails value, which indicates how many points to skip when drawing map elements.
-        int levelOfDetails = 4;
+        int levelOfDetails = 8;
+        if (zoomMenu.getZoomlevel() < 10000) {
+            levelOfDetails = 4;
+        }
         if (zoomMenu.getZoomlevel() < 3000) {
             levelOfDetails = 2;
         } if (zoomMenu.getZoomlevel() < 1500) {
@@ -318,7 +312,7 @@ public class MapScene extends Scene{
         }
     }
     private void drawNormalRoadNames(Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 50) {
+        if (zoomMenu.getZoomlevel() < 35) {
             if (model.isRoadsVisible) {
                 for (Road road : model.getMapObjects().getSmallRoadsTree().getElementsInRange(bounds)) {
                     road.drawName(gc, (1 / Math.sqrt(trans.determinant())));
@@ -359,7 +353,6 @@ public class MapScene extends Scene{
             if (model.isTerrainVisible) {
                 for (Element terrainElement : model.getMapObjects().getTerrainAreasTree().getElementsInRange(bounds)) {
                     terrainElement.draw(gc, levelOfDetail, 1);
-                    terrainElement.drawBounds(gc);
                 }
             }
         }

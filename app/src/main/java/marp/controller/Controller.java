@@ -3,6 +3,7 @@ package marp.controller;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.*;
 
 import javafx.geometry.Point2D;
@@ -56,7 +57,7 @@ public class Controller {
 
         this.view.listView.setOnMouseClicked(e -> {
             try {
-                URL fileURL = new URL("/data/maps/" + this.view.listView.getSelectionModel().getSelectedItem());
+                URL fileURL = new URL(Paths.get("data/maps/" + this.view.listView.getSelectionModel().getSelectedItem()).toUri().toURL().toString());
                 Model newModel = Model.createModel(fileURL);
                 this.view.createNewMapScene(newModel);
                 this.view.setScene(this.view.getMapScene());

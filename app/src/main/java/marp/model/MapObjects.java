@@ -220,7 +220,7 @@ public class MapObjects implements Serializable{
     //#####################################################
     //######## Coastline lists and trees ##################
     //#####################################################
-    ArrayList<SimpleShape> coastLineAreasList = new ArrayList<>();
+    public ArrayList<SimpleShape> coastLineAreasList = new ArrayList<>();
     public ArrayList<SimpleShape> getCoastLineAreasList() {
         return coastLineAreasList;
     }

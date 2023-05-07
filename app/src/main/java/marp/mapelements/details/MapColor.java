@@ -12,7 +12,7 @@ public class MapColor {
     public HashMap<String, Color> colorMap = new HashMap<String, Color>();
 
     private MapColor() {
-        defaultColorMap.put("BACKGROUND", Color.rgb(255, 255, 255,1));
+        defaultColorMap.put("BACKGROUND", Color.rgb(176, 211, 232,1));
         defaultColorMap.put("WATER", Color.rgb(176, 211, 232,1));
         defaultColorMap.put("BUILDING", Color.rgb(190, 190, 190,1));
         defaultColorMap.put("COASTLINE", Color.rgb(206, 234, 214,1));

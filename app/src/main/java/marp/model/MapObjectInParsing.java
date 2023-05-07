@@ -214,6 +214,7 @@ public class MapObjectInParsing implements Serializable{
                 switch (this.unfinishedShapeType) {
                     case COASTLINE:
                         coastLineSegmentList.add(new SimpleShape(this.unfinishedSimpleShapeID, this.unfinishedShapeType, coords.get(0), coords.get(1)));
+                        break;
                     case BUILDING:
                         mapObjects.getBuildingsList().add(new SimpleShape(this.unfinishedSimpleShapeID, this.unfinishedShapeType, coords.get(0), coords.get(1)));
                         break;
@@ -320,47 +321,6 @@ public class MapObjectInParsing implements Serializable{
         unfinishedPointType = PointType.UNDEFINED;
     }
 
-    public void getDistinctCoastlineSegments() {
-            ArrayList<SimpleShape> distinctCoastlineSegmentList = new ArrayList<SimpleShape>();
-            HashMap<Point2D, SimpleShape> coordsMap = new HashMap<>();
-
-            for (SimpleShape simpleShape : this.coastLineSegmentList) {
-
-                SimpleShape containsFirstCoordsInWay = coordsMap.remove(simpleShape.getFirst());
-                SimpleShape containsLastCoordsInWay = coordsMap.remove(simpleShape.getLast());
-
-                //To avoid issues where the same way is located from both ends, set containsLastCoordsInWay to null if they are the same.
-                if (containsFirstCoordsInWay != null && containsLastCoordsInWay != null) {
-                    if (containsFirstCoordsInWay == containsLastCoordsInWay) {
-                        containsLastCoordsInWay = null;
-                    }
-                }
-                if(containsFirstCoordsInWay!=null){
-                    if(simpleShape.getFirst().equals(containsFirstCoordsInWay.getFirst())){
-                        containsFirstCoordsInWay.flip();
-                    }
-                }
-                if(containsLastCoordsInWay!=null){
-                    if(simpleShape.getLast().equals(containsLastCoordsInWay.getLast())){
-                        containsLastCoordsInWay.flip();
-                    }
-                }
-                SimpleShape mergedShape = SimpleShape.mergeThreeWays(containsFirstCoordsInWay, simpleShape, containsLastCoordsInWay);
-                coordsMap.put(mergedShape.getFirst(), mergedShape);
-                coordsMap.put(mergedShape.getLast(), mergedShape);
-
-            }
-            coordsMap.forEach((coord, simpleShape)->{
-                if(simpleShape.getLast().equals(coord)){
-                    distinctCoastlineSegmentList.add(simpleShape);
-                }
-            });
-            System.out.println("THE TOTAL NUMBER OF COASTLINE SEGMENTS: " + coastLineSegmentList.size());
-            mapObjects.coastLineAreasList = distinctCoastlineSegmentList;
-            System.out.println("THE NUMBER OF COASTLINE SEGMENTS: " + distinctCoastlineSegmentList.size());
-        }
-
-
     private ArrayList<float[]> convertPointArrToUseableFloatArr() {
         ArrayList<Float> x = new ArrayList<>();
         ArrayList<Float> y = new ArrayList<>();
@@ -397,5 +357,9 @@ public class MapObjectInParsing implements Serializable{
 
     public void setSpeed(int speed) {
         this.speed = speed;
+    }
+
+    public ArrayList<SimpleShape> getCoastlineSegments() {
+        return coastLineSegmentList;
     }
 }

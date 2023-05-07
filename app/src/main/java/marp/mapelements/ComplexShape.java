@@ -20,10 +20,9 @@ public class ComplexShape extends Element {
     public ComplexShape(long id, ShapeType type, ArrayList<SimpleShape> elements){
         this.id = id;
         this.type = type;
-        this.elements = elements;
+        this.elements = orderAndFlipWays(elements);
         outerElements = new ArrayList<>();
         innerElements = new ArrayList<>();
-        orderAndFlipWays();
         findInnerAndOuterElements();
 
         float[] bounds;
@@ -56,55 +55,44 @@ public class ComplexShape extends Element {
         }
     }
 
-    private void orderAndFlipWays() {
-        ArrayList<SimpleShape> orderedElements = new ArrayList<>();
+    public static ArrayList<SimpleShape> orderAndFlipWays(ArrayList<SimpleShape> elements) {
+        ArrayList<SimpleShape> distinctSimpleShapes = new ArrayList<>();
         HashMap<Point2D, SimpleShape> coordsMap = new HashMap<>();
 
-        for (SimpleShape simpleShape : this.elements) {
-            //if(simpleShape.getRole() != null){
-            //    if(simpleShape.getRole().equals("outer")){
-            //        orderedElements.add(simpleShape);
-            //        continue;
-            //    }
-            //}
-            SimpleShape containsFirstCoordsInWay = coordsMap.get(simpleShape.getFirst());
-            SimpleShape containsLastCoordsInWay = coordsMap.get(simpleShape.getLast());
-            SimpleShape currentElement = null;
+        for (SimpleShape simpleShape : elements) {
 
+            SimpleShape containsFirstCoordsInWay = coordsMap.remove(simpleShape.getFirst());
+            SimpleShape containsLastCoordsInWay = coordsMap.remove(simpleShape.getLast());
+
+            //To avoid issues where the same way is located from both ends, set containsLastCoordsInWay to null if they are the same.
+            if (containsFirstCoordsInWay != null && containsLastCoordsInWay != null) {
+                if (containsFirstCoordsInWay == containsLastCoordsInWay) {
+                    containsLastCoordsInWay = null;
+                }
+            }
             if(containsFirstCoordsInWay!=null){
                 if(simpleShape.getFirst().equals(containsFirstCoordsInWay.getFirst())){
                     containsFirstCoordsInWay.flip();
-                    currentElement = SimpleShape.merge(containsFirstCoordsInWay, simpleShape);
-                }
-                else if(simpleShape.getFirst().equals(containsFirstCoordsInWay.getLast())){
-                    currentElement = SimpleShape.merge(containsFirstCoordsInWay, simpleShape);
                 }
             }
-            else if(containsLastCoordsInWay!=null){
-                if(simpleShape.getLast().equals(containsLastCoordsInWay.getFirst())){
-                    currentElement = SimpleShape.merge(simpleShape, containsLastCoordsInWay);
-                }
-                else if(simpleShape.getLast().equals(containsLastCoordsInWay.getLast())){
-                    currentElement = SimpleShape.merge(simpleShape, containsLastCoordsInWay);
-                    currentElement.flip();
+            if(containsLastCoordsInWay!=null){
+                if(simpleShape.getLast().equals(containsLastCoordsInWay.getLast())){
+                    containsLastCoordsInWay.flip();
                 }
             }
-            if(currentElement != null){
-                coordsMap.put(currentElement.getFirst(), currentElement);
-                coordsMap.put(currentElement.getLast(), currentElement);
-            }
-            else{
-                coordsMap.put(simpleShape.getFirst(), simpleShape);
-                coordsMap.put(simpleShape.getLast(), simpleShape);
-            }
+            SimpleShape mergedShape = SimpleShape.mergeThreeWays(containsFirstCoordsInWay, simpleShape, containsLastCoordsInWay);
+            coordsMap.put(mergedShape.getFirst(), mergedShape);
+            coordsMap.put(mergedShape.getLast(), mergedShape);
+
         }
         coordsMap.forEach((coord, simpleShape)->{
             if(simpleShape.getLast().equals(coord)){
-                orderedElements.add(simpleShape);
+                distinctSimpleShapes.add(simpleShape);
             }
         });
-        this.elements = orderedElements;
+        return distinctSimpleShapes;
     }
+
 
     @Override
     public void draw(GraphicsContext gc, int levelOfDetail, double zoom){

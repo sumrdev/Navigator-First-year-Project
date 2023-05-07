@@ -26,6 +26,7 @@ public class View {
     private final ZoomMenu zoomMenu;
     private final Canvas canvas;
     public ChooseMapScene chooseMapScene;
+    public ListView<String> listView;
 
     public View(Stage primaryStage, Model model){
         this.primaryStage = primaryStage;
@@ -42,7 +43,7 @@ public class View {
         canvas.widthProperty().bind(primaryStage.widthProperty());
         canvas.heightProperty().bind(primaryStage.heightProperty());
 
-        chooseMapScene = new ChooseMapScene(model);
+        chooseMapScene = new ChooseMapScene(model, this);
         primaryStage.setTitle("Navigator");
         primaryStage.setScene(chooseMapScene);
         primaryStage.show();

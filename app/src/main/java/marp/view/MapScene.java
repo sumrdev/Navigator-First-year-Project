@@ -72,26 +72,17 @@ public class MapScene extends Scene{
         //We then prepend the scale, which has the effect of zooming.
         //Then we add the position of the mouse back in order to move the map back into its original position.
 
-        pan(-x, -y);
-        trans.prependScale(factor, factor);
-        pan(x, y);
-
-        if(factor < 100){
-            zoomMenu.updateZoomLevel(factor);
-
-            if (zoomMenu.getZoomlevel() > 1000){
-                // if zooming out
-                if (factor < 1){
-                    double test = (zoomMenu.getZoomlevel()*factor - 1000);
-                    //zoomMenu.distanceLine.setEndX(test);
-                }
-                // if zooming in
-                if (factor > 1){
-                    double test = (zoomMenu.getZoomlevel()*factor - 1000);
-                    //zoomMenu.distanceLine.setEndX(test);
-                }
-            } else {
-                zoomMenu.distanceLine.setEndX(200);
+        if((zoomMenu.getZoomlevel() <= 15) && (factor > 1)){
+            System.out.println("CANNOT ZOOM IN FURTHER");
+        } else if((zoomMenu.getZoomlevel() >= 50000) && (factor < 1)){
+            System.out.println("CANNOT ZOOM OUT FURTHER");
+        } else {
+            pan(-x, -y);
+            trans.prependScale(factor, factor);
+            pan(x, y);
+    
+            if(factor < 100){
+                zoomMenu.updateZoomLevel(factor);
             }
         }
     }
@@ -147,30 +138,24 @@ public class MapScene extends Scene{
             levelOfDetails = 1;
         }
 
-        drawCoastlines(levelOfDetails, bounds);
+        // drawCoastlines(levelOfDetails, bounds);
         //######################################################################################
 
         if (zoomMenu.getZoomlevel() > 300000 ) {
             drawCoastlines(levelOfDetails, bounds);
-            drawCustomLandmarks();
-            drawCountryNames(bounds);
-            drawSelectedPoint();
+            drawMotorways(bounds);
         }
 
         //###########################################################################################################################################
 
-        if (zoomMenu.getZoomlevel() < 300000 && zoomMenu.getZoomlevel() > 15000) {
+        if (zoomMenu.getZoomlevel() < 300000 && zoomMenu.getZoomlevel() >= 15000) {
             drawCoastlines(levelOfDetails, bounds);
             drawMotorways(bounds);
-            drawCustomLandmarks();
-            drawCountryNames(bounds);
-            drawCityNames(bounds);
-            drawSelectedPoint();
         }
 
         //###############################################################################################################################
 
-        if (zoomMenu.getZoomlevel() < 15000 && zoomMenu.getZoomlevel() > 2000) {
+        if (zoomMenu.getZoomlevel() < 15000 && zoomMenu.getZoomlevel() >= 2000) {
             drawCoastlines(levelOfDetails, bounds);
             drawWaterAreas(levelOfDetails, bounds);
             drawTerrain(levelOfDetails, bounds);
@@ -184,7 +169,7 @@ public class MapScene extends Scene{
 
         //#################################################################################################################
 
-        if(zoomMenu.getZoomlevel() < 2000 && zoomMenu.getZoomlevel() > 750){
+        if(zoomMenu.getZoomlevel() < 2000 && zoomMenu.getZoomlevel() >= 750){
             drawCoastlines(levelOfDetails, bounds);
             drawWaterAreas(levelOfDetails, bounds);
             drawTerrain(levelOfDetails, bounds);
@@ -198,7 +183,7 @@ public class MapScene extends Scene{
 
         //######################################################################################################################################
 
-        if(zoomMenu.getZoomlevel() < 750 && zoomMenu.getZoomlevel() > 500){
+        if(zoomMenu.getZoomlevel() < 750 && zoomMenu.getZoomlevel() >= 500){
             drawCoastlines(levelOfDetails, bounds);
             drawWaterAreas(levelOfDetails, bounds);
             drawTerrain(levelOfDetails, bounds);
@@ -214,7 +199,7 @@ public class MapScene extends Scene{
 
         //######################################################################################################
 
-        if(zoomMenu.getZoomlevel() < 500 && zoomMenu.getZoomlevel() > 250){
+        if(zoomMenu.getZoomlevel() < 500 && zoomMenu.getZoomlevel() >= 250){
             drawCoastlines(levelOfDetails, bounds);
             drawWaterAreas(levelOfDetails, bounds);
             drawTerrain(levelOfDetails, bounds);
@@ -231,7 +216,7 @@ public class MapScene extends Scene{
 
         //#############################################################################################################################
 
-        if(zoomMenu.getZoomlevel() < 250 && zoomMenu.getZoomlevel() > 150){
+        if(zoomMenu.getZoomlevel() < 250 && zoomMenu.getZoomlevel() >= 150){
             drawCoastlines(levelOfDetails, bounds);
             drawWaterAreas(levelOfDetails, bounds);
             drawTerrain(levelOfDetails, bounds);
@@ -250,7 +235,7 @@ public class MapScene extends Scene{
             drawSelectedPoint();
         }
         //################################################################################################
-        if(zoomMenu.getZoomlevel() < 150 && zoomMenu.getZoomlevel() > 50){
+        if(zoomMenu.getZoomlevel() < 150 && zoomMenu.getZoomlevel() >= 50){
             drawCoastlines(levelOfDetails, bounds);
             drawWaterAreas(levelOfDetails, bounds);
             drawTerrain(levelOfDetails, bounds);
@@ -271,7 +256,7 @@ public class MapScene extends Scene{
 
         //#####################################################################################################
 
-        if(zoomMenu.getZoomlevel() < 50 && zoomMenu.getZoomlevel() > 20){
+        if(zoomMenu.getZoomlevel() < 50 && zoomMenu.getZoomlevel() >= 20){
             drawCoastlines(levelOfDetails, bounds);
             drawWaterAreas(levelOfDetails, bounds);
             drawTerrain(levelOfDetails, bounds);

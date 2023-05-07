@@ -10,6 +10,7 @@ import javafx.scene.image.*;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import marp.datastructures.Digraph;
 import marp.mapelements.*;
 import marp.model.Model;
 import marp.mapelements.details.*;
@@ -314,11 +315,13 @@ public class Controller {
 
         view.getMapMenu().getSettingsPanel().normalModeButton.setOnAction(e -> {
             MapColor.getInstance().changeTheme("default");
+            Digraph.setColor(1);
             view.getMapScene().redraw();
         });
 
         view.getMapMenu().getSettingsPanel().nightModeButton.setOnAction(e -> {
             MapColor.getInstance().changeTheme("dark");
+            Digraph.setColor(1);
             view.getMapScene().redraw();
         });
 
@@ -333,21 +336,25 @@ public class Controller {
 
         view.getMapMenu().getColorblindnessmode().deuteranopiaButton.setOnAction(e -> {
             MapColor.getInstance().changeTheme("deuteranopia");
+            Digraph.setColor(1);
             view.getMapScene().redraw();
         });
 
         view.getMapMenu().getColorblindnessmode().protanopiaButton.setOnAction(e -> {
             MapColor.getInstance().changeTheme("protanopia");
+            Digraph.setColor(2);
             view.getMapScene().redraw();
         });
 
         view.getMapMenu().getColorblindnessmode().tritanopiaButton.setOnAction(e -> {
             MapColor.getInstance().changeTheme("tritanopia");
+            Digraph.setColor(1);
             view.getMapScene().redraw();
         });
 
         view.getMapMenu().getColorblindnessmode().monochromacyButton.setOnAction(e -> {
             MapColor.getInstance().changeTheme("monochromia");
+            Digraph.setColor(3);
             view.getMapScene().redraw();
         });
 

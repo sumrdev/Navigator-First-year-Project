@@ -18,7 +18,9 @@ build
 *.zip
 *.bin
 *.class
+*.bz2
 .gradle/*
 
 .vscode/settings.json
 .gitignore
+

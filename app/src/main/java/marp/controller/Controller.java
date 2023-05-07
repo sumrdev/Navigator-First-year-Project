@@ -179,7 +179,7 @@ public class Controller {
         view.getMapMenu().getDirectionsPanel().findRouteButton.setOnAction( e -> {
             RoadNode start = model.getMapObjects().getRoadNodeRTree().getNearest(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress());
             RoadNode end = model.getMapObjects().getRoadNodeRTree().getNearest(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress());
-            List <String> directions = model.getMapObjects().getDigraph().aStar(start, end, true);
+            List <String> directions = model.getMapObjects().getDigraph().aStar(start, end);
             //model.graph.runaStarWithNodeIndex(Integer.parseInt(view.getMapMenu().getDirectionsPanel().startLocationField.getText()), Integer.parseInt(view.getMapMenu().getDirectionsPanel().endLocationField.getText()));
             //view.getMapMenu().getDirectionsPanel().receiveGuideList(null);
             view.getMapMenu().getDirectionsPanel().setGuideShow(true);

@@ -19,9 +19,15 @@ public class Colorblindnessmode extends MenuPanel {
     public MapButton exitButton;
     private int buttonsMinWidth = 20;
 
+    /**
+     * Constructor for creating buttons for enabling/disabling color modes
+     * 
+     * @param MapMenu
+     */
     public Colorblindnessmode(MapMenu mapMenu) {
         super();
-        exitButton = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/menu.png"))));
+        exitButton = new MapButton(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/menu.png"))));
 
         deuteranopiaButton = new MapToggleButton("Deuteranopia");
         deuteranopiaButton.setMinWidth(buttonsMinWidth);
@@ -33,8 +39,10 @@ public class Colorblindnessmode extends MenuPanel {
         monochromacyButton.setMinWidth(buttonsMinWidth);
 
         ToggleGroup colorBlindnessModeToggleGroup = new ToggleGroup();
-        colorBlindnessModeToggleGroup.getToggles().addAll(deuteranopiaButton, tritanopiaButton, protanopiaButton, monochromacyButton);
-        VBox colorBlindModesDisplay = new VBox(exitButton, new MapLabel("Choose color blind mode:"), deuteranopiaButton, tritanopiaButton, protanopiaButton, monochromacyButton);
+        colorBlindnessModeToggleGroup.getToggles().addAll(deuteranopiaButton, tritanopiaButton, protanopiaButton,
+                monochromacyButton);
+        VBox colorBlindModesDisplay = new VBox(exitButton, new MapLabel("Choose color blind mode:"), deuteranopiaButton,
+                tritanopiaButton, protanopiaButton, monochromacyButton);
         colorBlindModesDisplay.setSpacing(10);
 
         colorBlindModesDisplay.getStylesheets().add("CSS/stylesheet.css");

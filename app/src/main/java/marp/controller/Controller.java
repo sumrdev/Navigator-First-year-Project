@@ -1,8 +1,6 @@
 package marp.controller;
 
-import java.io.File;
 import java.net.MalformedURLException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -13,10 +11,8 @@ import javafx.print.Paper;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
 import javafx.scene.Cursor;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -56,6 +52,13 @@ public class Controller {
         this.stage = view.getPrimaryStage();
         createButtonControl();
 
+        try {
+            this.view.listView.getItems().addAll(fileList);
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error getting items from List View: ");
+            e.printStackTrace();
+        }
     }
 
     private void setFileChooser(){
@@ -65,6 +68,8 @@ public class Controller {
             new FileChooser.ExtensionFilter("ZIP files", "*.zip"),
             new FileChooser.ExtensionFilter("All files", "*.*"));
     }
+
+    
 
     private void createButtonControl() {
         //Clicking on the map updates the latest clicked coordinates. if isCreatingCustomPointOfInterest is true, lastPressedX is set as well.

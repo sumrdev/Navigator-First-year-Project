@@ -1,18 +1,19 @@
 package marp.utilities;
 
 import java.io.File;
-import java.lang.reflect.Array;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class IOFunctions {
     IOFunctions() {
 
     }
+
+    /**
+     * Returns a list of files available under 'data/maps'
+     * 
+     * @return List<String> of file names
+     */
     public static List<String> getFiles() {
         File folder = new File("data/maps");
         File[] arrayOfFiles = folder.listFiles();

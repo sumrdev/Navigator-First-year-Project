@@ -32,6 +32,8 @@ public class View {
         this.primaryStage = primaryStage;
         this.model = model;
 
+        listView = new ListView<>();
+
         Text appName = new Text("Navigator");
         appName.setFont(Font.font("Montserrat", FontWeight.SEMI_BOLD, 36));
         appName.setTextAlignment(TextAlignment.CENTER);
@@ -43,7 +45,7 @@ public class View {
         canvas.widthProperty().bind(primaryStage.widthProperty());
         canvas.heightProperty().bind(primaryStage.heightProperty());
 
-        chooseMapScene = new ChooseMapScene(model, this);
+        chooseMapScene = new ChooseMapScene(model, listView, this);
         primaryStage.setTitle("Navigator");
         primaryStage.setScene(chooseMapScene);
         primaryStage.show();

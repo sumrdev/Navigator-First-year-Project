@@ -80,7 +80,7 @@ public class Controller {
         });
         view.getCanvas().setOnMouseReleased(e -> {
             //When releasing the mouse, if the mouse drag start position is equal to the current position, it counts as a mouse click.
-            if (mouseDragStartPositionX == e.getX() && mouseDragStartPositionY == e.getY()) {
+            if (mouseDragStartPositionX == (float) e.getX() && mouseDragStartPositionY == (float) e.getY()) {
                 //There are two cases: Either we are making a new POI or we are selecting a point.
                 if (isCreatingCustomPointOfInterest) {
                     view.getMapMenu().changeMenuPanel(view.getMapMenu().getPointOfInterestPanel());
@@ -89,9 +89,13 @@ public class Controller {
                     //convert the screen coords of the mouse click to map coords and find the nearest selectable element.
                     Point2D point = view.getMapScene().screenCoordsToMapCoords(new Point2D(lastX, lastY));
                     MapPoint nearestPoint = model.getNearestPointForMapSelection(point);
-                    // make a POI as a marker of the selected point
                     // focus on the point without panning
-                    focusOnPoint(model.getSelectedPointMarker(), false);
+                    focusOnPoint(nearestPoint, false, false);
+                    //set marker point on selected point.
+                    PointOfInterest pointMarker = new PointOfInterest("", PointType.SELECTED, (float) (nearestPoint.getX()/0.56), -nearestPoint.getY(), false);
+                    model.setSelectedPointMarker(new PointOfInterest("", PointType.SELECTED, (float) (nearestPoint.getX()/0.56), -nearestPoint.getY(), false));
+                    view.getMapScene().redraw();
+
                 }
             }
         });
@@ -138,11 +142,11 @@ public class Controller {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getSettingsPanel());
         });
         view.getMapMenu().getMinimizedPanel().searchBar.setOnAction(e -> {
-            focusOnPoint(view.getMapMenu().getMinimizedPanel().searchBar.getAddress(), true);
+            focusOnPoint(view.getMapMenu().getMinimizedPanel().searchBar.getAddress(), true, true);
             view.getMapMenu().getMinimizedPanel().searchBar.clear();
         });
         view.getMapMenu().getMinimizedPanel().searchButton.setOnAction(e -> {
-            focusOnPoint(view.getMapMenu().getMinimizedPanel().searchBar.getAddress(), true);
+            focusOnPoint(view.getMapMenu().getMinimizedPanel().searchBar.getAddress(), true, true);
             view.getMapMenu().getMinimizedPanel().searchBar.clear();
         });
         view.getMapMenu().getMinimizedPanel().pointOfInterestButton.setOnAction(e -> {
@@ -219,6 +223,7 @@ public class Controller {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
             // Set the selectedPointMarker to null so no selected point is shown when the minimized menu is shown.
             model.setSelectedPointMarker(null);
+            view.getMapScene().redraw();
         });
 
         view.getMapMenu().getSelectedPointPanel().directionsButton.setOnAction(e -> {
@@ -231,13 +236,13 @@ public class Controller {
         });
         view.getMapMenu().getSelectedPointPanel().searchBar.setOnAction(e -> {
             // On enter pressed in the searchbar, focus on and pan to the point of the address in the search bar.
-            focusOnPoint(view.getMapMenu().getSelectedPointPanel().searchBar.getAddress(), true);
+            focusOnPoint(view.getMapMenu().getSelectedPointPanel().searchBar.getAddress(), true, true);
             // Clear the searchbar text
             view.getMapMenu().getSelectedPointPanel().searchBar.clear();
         });
         view.getMapMenu().getSelectedPointPanel().searchButton.setOnAction(e -> {
             // On clicking search button, focus on and pan to the point of the address in the search bar.
-            focusOnPoint(view.getMapMenu().getSelectedPointPanel().searchBar.getAddress(), true);
+            focusOnPoint(view.getMapMenu().getSelectedPointPanel().searchBar.getAddress(), true, true);
             // Clear the searchbar text
             view.getMapMenu().getSelectedPointPanel().searchBar.clear();
         });
@@ -355,9 +360,9 @@ public class Controller {
         //##########################################################
 
         view.getMapMenu().getPointOfInterestPanel().createPointButton.setOnAction(e -> {
-            Point2D landmarkCoords = view.getMapScene().screenCoordsToMapCoords(new Point2D(lastX, lastY));
+            Point2D customPointCoords = view.getMapScene().screenCoordsToMapCoords(new Point2D(lastX, lastY));
 
-            model.getMapObjects().getCustomPOIList().add(new PointOfInterest(view.getMapMenu().getPointOfInterestPanel().pointNameField.getText(), PointType.CUSTOM, (float) (landmarkCoords.getX()/0.56), (float) -landmarkCoords.getY(), false));
+            model.getMapObjects().getCustomPOIList().add(new PointOfInterest(view.getMapMenu().getPointOfInterestPanel().pointNameField.getText(), PointType.FAVOURITE, (float) (customPointCoords.getX()), (float) customPointCoords.getY(), false));
             view.getMapMenu().getPointOfInterestPanel().pointNameField.clear();
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
             view.getMapScene().redraw();
@@ -434,7 +439,7 @@ public class Controller {
 
         }
     }
-    public void focusOnPoint(MapPoint mapPoint, boolean shouldPan) {
+    public void focusOnPoint(MapPoint mapPoint, boolean shouldPan, boolean shouldSetMarker) {
         // Attempt pan only if the point to pan to is not null
         if (mapPoint != null) {
             // Update the menu panel to the selected point menu
@@ -463,10 +468,12 @@ public class Controller {
                 // Pan to the selected point
                 view.getMapScene().pan(xDist, yDist);
             }
-            // Make a custom landmark to show the selected point
-            model.setSelectedPointMarker(new PointOfInterest(mapPoint.getName(), PointType.SELECTED, (float) (mapPoint.getX()/0.56), -mapPoint.getY(), false));
-            // Redraw the view
-            view.getMapScene().redraw();
+            if (shouldSetMarker) {
+                // Make a custom landmark to show the selected point
+                model.setSelectedPointMarker(new PointOfInterest("", PointType.SELECTED, (float) (mapPoint.getX()), mapPoint.getY(), false));
+                // Redraw the view
+                view.getMapScene().redraw();
+            }
         }
     }
 }

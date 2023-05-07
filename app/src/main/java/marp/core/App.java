@@ -18,7 +18,7 @@ public class App extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
         String defaultFilename = "bornholm.osm";
-        URL defaultFileURL = new URL(DefaultPath.getDefaultPath()+defaultFilename);
+            URL defaultFileURL = new URL(DefaultPath.getDefaultPath()+defaultFilename);
         Model model = Model.createModel(defaultFileURL);
         View view = new View(primaryStage, model);
         Controller controller = new Controller(view, model);

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -96,15 +97,12 @@ public class Model implements Serializable{
         }
     }
 
-    private void save(String filename) throws FileNotFoundException, IOException {
+    private void save(String filename) {
         new Thread(() -> {
             String fn = filename.split("\\.")[0] + ".bin";
-            try {
-                try (var out = new ObjectOutputStream(
-                    new FileOutputStream(new URL(DefaultPath.getDefaultPath() + fn).getPath()))) {
-                        out.writeObject(this);
-                    System.out.println("Saved to: " + fn);
-                }
+            try (var out = new ObjectOutputStream(new FileOutputStream(DefaultPath.getDefaultPath() + fn))) {
+                out.writeObject(this);
+                System.out.println("Saved to: " + fn);
             } catch (Exception e) {
                 e.printStackTrace();
             }

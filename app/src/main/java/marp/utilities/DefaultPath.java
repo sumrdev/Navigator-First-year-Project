@@ -8,8 +8,8 @@ import java.nio.file.Paths;
 public class DefaultPath {
     public static URL getDefaultPath() throws MalformedURLException{
         String dir = "/data/maps/";
-        Paths.get("").toAbsolutePath().toString();
-        URL path = new URL(new File(Paths.get("").toAbsolutePath().toString() + dir).toURI().toString());
+
+        URL path = new URL(new File(Paths.get("").toAbsolutePath() + dir).toURI().toString());
         return path;
     }
 }

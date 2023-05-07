@@ -10,6 +10,7 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import marp.mapelements.ComplexShape;
 import marp.mapelements.Point;
 import marp.mapelements.SimpleShape;
 import marp.mapelements.details.FontSize;
@@ -309,7 +310,7 @@ public class OSMParser{
             }
         }
 
-        mapObjectInParsing.getDistinctCoastlineSegments();
+        mapObjects.coastLineAreasList = ComplexShape.orderAndFlipWays(mapObjectInParsing.getCoastlineSegments());
         mapObjects.buildTrees();
         mapObjects.buildDigraph(mapObjectInParsing.getRoadNodeIDtoRoadNode());
         return mapObjects;

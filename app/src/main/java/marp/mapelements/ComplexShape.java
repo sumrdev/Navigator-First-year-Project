@@ -11,15 +11,13 @@ import marp.mapelements.details.MapColor;
 import marp.mapelements.details.ShapeType;
 
 public class ComplexShape extends Element {
-    private long id;
     private ShapeType type;
     private ArrayList<SimpleShape> elements;
     private ArrayList<SimpleShape> outerElements;
     private ArrayList<SimpleShape> innerElements;
     private float[] boundingCoords;
 
-    public ComplexShape(long id, ShapeType type, ArrayList<SimpleShape> elements){
-        this.id = id;
+    public ComplexShape( ShapeType type, ArrayList<SimpleShape> elements){
         this.type = type;
         this.elements = orderAndFlipWays(elements);
         outerElements = new ArrayList<>();

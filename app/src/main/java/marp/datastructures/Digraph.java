@@ -1,6 +1,7 @@
 package marp.datastructures;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.*;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -10,6 +11,7 @@ import marp.mapelements.RoadNode;
 import marp.utilities.MathFunctions;
 
 public class Digraph implements Serializable {
+    boolean notInCar;
     ArrayList<Road> roads;
     HashMap<Long, Road> roadsMap;
     HashMap<Long, RoadNode> nodes;
@@ -81,8 +83,11 @@ public class Digraph implements Serializable {
         this.averageSpeed = temp/averageSpeedCount;
         this.averageSpeed = 70;
     }
-
+    public List<String> aStar(RoadNode start, RoadNode end){
+        return aStar(start, end, walking);
+    }
     public List<String> aStar(RoadNode start, RoadNode end, boolean walking){
+        Time startTime = new Time(System.currentTimeMillis());
         averageSpeedCount = 0;
         averageSpeed = 0;
         closedSet = new HashSet<>();
@@ -95,14 +100,16 @@ public class Digraph implements Serializable {
                 return fScore.get(o1).compareTo(fScore.get(o2));
             }
         });
-        gScore.put(start, 0f);   
+        gScore.put(start, 0f);
         fScore.put(start, gScore.get(start) + (float) MathFunctions.distanceInMeters(start.getX(), start.getY(), end.getX(), end.getY()));
-        
+
         openSetQueue.add(start);
         while(!openSetQueue.isEmpty()){
             RoadNode current = openSetQueue.poll();
             if(current.getID() == end.getID()){
                 reconstructPath(cameFrom, current);
+                Time endTime = new Time(System.currentTimeMillis());
+                System.out.println("Ran astar with : " + this.nodes.size() + " nodes in " + (endTime.getTime() - startTime.getTime())/1000 + " s");
                 return createTextDescriptionFromNavigation();
             }
             closedSet.add(current);
@@ -120,7 +127,15 @@ public class Digraph implements Serializable {
         }
         String info = "No path found";
         System.out.println(info);
+
         return new ArrayList<>();
+    }
+
+    private float getWeight(Edge edge, boolean walking){
+        if(walking && !edge.isWalkable()) return Float.MAX_VALUE;
+        else if(!walking && !edge.isDriveable()) return Float.MAX_VALUE;
+        else if(walking) return (float) MathFunctions.distanceInMeters(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(), nodes.get(edge.end).getY());
+        else return (float) MathFunctions.distanceInMeters(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(), nodes.get(edge.end).getY())/roadsMap.get(edge.road).getSpeed();
     }
 
     private float getHScore(RoadNode start, RoadNode end, boolean walking){
@@ -169,11 +184,9 @@ public class Digraph implements Serializable {
                             break;
                     }
                     String direction = turnInformation + roadsMap.get(edge.road).getName() + " after " + distanceSinceLastRoad + " meters";
-                    System.out.println(direction);
                     result.add(direction);
                 } else {
                     String direction = "Start on " + roadsMap.get(edge.road).getName();
-                    System.out.println(direction);
                     result.add(direction);
                 }
                 previousRoad = roadsMap.get(edge.road).getName();
@@ -199,21 +212,16 @@ public class Digraph implements Serializable {
         else if(angle < 0 && angle > -180) return 2;
         else if(angle == 180 || angle == -180) return 3;
         else return 0;
-
-
     }
-
     public void draw(GraphicsContext gc) {
         drawNavigation(gc);
     }
-
     public void drawNavigation(GraphicsContext gc){
         gc.setStroke(Color.rgb(192, 48, 48));
         for (Edge edge : navigation) {
             gc.strokeLine(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(), nodes.get(edge.end).getY());
         }
     }
-
     public void drawConnectedComponents(GraphicsContext gc){
         for (ArrayList<Edge> arrayList : connectedComponents) {
             gc.setStroke(Color.rgb((int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255)));

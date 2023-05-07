@@ -1,7 +1,13 @@
 package marp.parser;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.lang.reflect.Array;
+import java.sql.Time;
 import java.util.ArrayList;
 
 import javax.xml.stream.FactoryConfigurationError;
@@ -22,10 +28,11 @@ import marp.model.MapObjects;
 
 public class OSMParser{
     public MapObjects parseOSM(InputStream inputStream) throws XMLStreamException, FactoryConfigurationError{
-        XMLStreamReader xmlsr = XMLInputFactory.newInstance().createXMLStreamReader(inputStream);
+        Time start = new Time(System.currentTimeMillis());
+        Time result;
+        XMLStreamReader xmlsr = XMLInputFactory.newInstance().createXMLStreamReader(new BufferedInputStream(inputStream));
         MapObjects mapObjects = new MapObjects();
         MapObjectInParsing mapObjectInParsing = new MapObjectInParsing(mapObjects);
-
         while(xmlsr.hasNext()){
             int xmltag = xmlsr.next();
             switch (xmltag) {
@@ -308,10 +315,16 @@ public class OSMParser{
                     break;
             }
         }
+        result = new Time(System.currentTimeMillis());
+        System.out.println("OSM Parsed in: " + (result.getTime() - start.getTime())/1000 + "s");
 
+        start = new Time(System.currentTimeMillis());
         mapObjects.coastLineAreasList = ComplexShape.orderAndFlipWays(mapObjectInParsing.getCoastlineSegments());
         mapObjects.buildTrees();
         mapObjects.buildDigraph(mapObjectInParsing.getRoadNodeIDtoRoadNode());
+        result = new Time(System.currentTimeMillis());
+        System.out.println("Trees and Digraph built in: " + (result.getTime() - start.getTime())/1000 + "s");
+        System.gc();
         return mapObjects;
     }
 }

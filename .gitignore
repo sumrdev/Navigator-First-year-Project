@@ -17,8 +17,10 @@ build
 *.osm
 *.zip
 *.bin
-
-### .class ###
 *.class
-
+*.bz2
 .gradle/*
+
+.vscode/settings.json
+.gitignore
+

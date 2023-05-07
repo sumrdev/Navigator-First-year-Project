@@ -16,12 +16,10 @@ public class SimpleShape extends Element {
     private String role;
     private float[] boundingCoords = {Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY};
 
-    protected SimpleShape(Long id){
-        this.id = id;
+    protected SimpleShape(){
     }
 
-    public SimpleShape(Long id, ShapeType type, float[] x, float[] y){
-        this.id = id;
+    public SimpleShape(ShapeType type, float[] x, float[] y){
         this.type = type;
         this.x = x;
         this.y = y;
@@ -69,7 +67,7 @@ public class SimpleShape extends Element {
             newY[i+s1.y.length] = s2.y[i];
         }
 
-        return new SimpleShape(s1.id, s1.type, newX, newY);
+        return new SimpleShape( s1.type, newX, newY);
     }
     public static SimpleShape mergeThreeWays(SimpleShape s1, SimpleShape s2, SimpleShape s3) {
         int length = 0;
@@ -102,7 +100,7 @@ public class SimpleShape extends Element {
                 newY[i + offsetIndex] = s3.y[i];
             }
         }
-        return new SimpleShape(s2.id, s2.type, newX, newY);
+        return new SimpleShape(s2.type, newX, newY);
     }
     
     public Point2D getFirst(){
@@ -111,10 +109,6 @@ public class SimpleShape extends Element {
 
     public Point2D getLast(){
         return new Point2D(this.x[this.x.length-1], this.y[this.y.length-1]);
-    }
-
-    public long getID(){
-        return this.id;
     }
 
     public ShapeType getType(){

@@ -1,12 +1,14 @@
 package marp.model;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -14,6 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipInputStream;
@@ -26,7 +29,6 @@ import marp.datastructures.SimpleTrie;
 import marp.mapelements.*;
 
 import marp.parser.OSMParser;
-import marp.utilities.DefaultPath;;
 
 public class Model implements Serializable{
     private MapObjects mapObjects;
@@ -40,47 +42,50 @@ public class Model implements Serializable{
     public boolean isTerrainVisible = true;
     public boolean isBuildingsVisible = true;
 
+    private Model(MapObjects mapObjects, String filename) throws FileNotFoundException, IOException {
+        this.mapObjects = mapObjects;
+        save(filename);
+    }
     public static Model createModel(URL fileURL) throws URISyntaxException, XMLStreamException,
             FactoryConfigurationError, ClassNotFoundException, IOException {
                 File file = Paths.get(fileURL.toURI()).toFile();
-        return findLoadType(file.getAbsolutePath());
+        return findLoadType(new FileInputStream(file), file.getName());
+    }
+
+    public static Model createModel(InputStream inputStream, String filename) throws URISyntaxException, XMLStreamException,
+            FactoryConfigurationError, ClassNotFoundException, IOException {
+        return findLoadType(inputStream, filename);
     }
 
     public static Model createModel(File file) throws URISyntaxException, XMLStreamException,
             FactoryConfigurationError, ClassNotFoundException, IOException {
-        return findLoadType(file.getAbsolutePath());
+        return findLoadType(new FileInputStream(file), file.getName());
     }
 
     public MapObjects getMapObjects() {
         return mapObjects;
     }
 
-    private static Model findLoadType(String filepath)
+    private static Model findLoadType(InputStream inputStream, String filename)
             throws XMLStreamException, FactoryConfigurationError, ClassNotFoundException, IOException {
         OSMParser osmParser = new OSMParser();
-        System.out.println(filepath);
-        File file = new File(filepath);
-        String filename = file.getName();
-        file = null;
-        
-        String filetype = filepath.split("\\.")[1];
-        System.out.println("Filetype: " + filetype + "\n filename: " + filename);
-
+        String filetype = filename.split("\\.")[1];
+        System.out.println("Filetype: " + filetype + "\nFilename: " + filename);
         switch (filetype) {
             case "bin":
-                return loadBIN(new FileInputStream(filepath));
+                return loadBIN(inputStream);
             case "zip":
-                return loadZIP(filepath, filename);
+                return loadZIP(inputStream, filename);
             case "osm":
-                MapObjects mapObjects = osmParser.parseOSM(new FileInputStream(filepath));
+                MapObjects mapObjects = osmParser.parseOSM(inputStream);
                 return new Model(mapObjects, filename);
             default:
                 throw new IOException("Filetype not supported");
         }
     }
 
-    private static Model loadZIP(String filepath, String filename) throws IOException, XMLStreamException, FactoryConfigurationError {
-        ZipInputStream input = new ZipInputStream(new FileInputStream(filepath));
+    private static Model loadZIP(InputStream inputStream, String filename) throws IOException, XMLStreamException, FactoryConfigurationError {
+        ZipInputStream input = new ZipInputStream(inputStream);
         input.getNextEntry();
         OSMParser osmParser = new OSMParser();
         MapObjects mapObjects = osmParser.parseOSM(input);
@@ -88,23 +93,23 @@ public class Model implements Serializable{
         return new Model(mapObjects,filename);
     }
 
-    private Model(MapObjects mapObjects, String filename) throws FileNotFoundException, IOException {
-        this.mapObjects = mapObjects;
-        save(filename);
-    }
 
-    private static Model loadBIN(FileInputStream fileInputStream) throws IOException, ClassNotFoundException {
-        try (var bin = new ObjectInputStream(new BufferedInputStream(fileInputStream))) {
+    private static Model loadBIN(InputStream inputStream) throws IOException, ClassNotFoundException {
+        System.out.println(inputStream);
+        try (var bin = new ObjectInputStream(new BufferedInputStream(inputStream))) {
+            System.gc();
             return (Model) bin.readObject();
         }
     }
 
     private void save(String filename) {
         new Thread(() -> {
+            Time time = new Time(System.currentTimeMillis());
             String fn = filename.split("\\.")[0] + ".bin";
-            try (var out = new ObjectOutputStream(new FileOutputStream(DefaultPath.getDefaultPath() + fn))) {
+            try (var out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("data/maps/"+fn)))) {
                 out.writeObject(this);
                 System.out.println("Saved to: " + fn);
+                System.out.println("Saved in: " + (new Time(System.currentTimeMillis()).getTime() - time.getTime())/1000 + "s");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -160,6 +165,16 @@ public class Model implements Serializable{
                 selectedElement = nearestBusLandmark;
             }
         }
+
+        //calculate distance to nearest custom point of interest, by iterating through the list of all of them. Inefficient but necessary, as they are not part of a tree.
+        
+        for (PointOfInterest poi : mapObjects.getCustomPOIList()){
+            double customPOIDistance = Math.sqrt(Math.pow(poi.getX() - point.getX(), 2) + Math.pow(poi.getY() - point.getY(), 2));
+            if (customPOIDistance < currentDistance) {
+                selectedElement = poi;
+            }
+        }
+
         //We use a point of interest to represent the currently selected point. We update selected point to a new point with the coordinates of the selected point.
         selectedPointMarker = new PointOfInterest(selectedElement.getName(), selectedElement.getType(), selectedElement.getX()*0.56f, -selectedElement.getY(), false);
         return selectedPointMarker;

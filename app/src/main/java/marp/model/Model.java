@@ -1,6 +1,7 @@
 package marp.model;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,6 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipInputStream;
@@ -38,6 +40,10 @@ public class Model implements Serializable{
     public boolean isTerrainVisible = true;
     public boolean isBuildingsVisible = true;
 
+    private Model(MapObjects mapObjects, String filename) throws FileNotFoundException, IOException {
+        this.mapObjects = mapObjects;
+        save(filename);
+    }
     public static Model createModel(URL fileURL) throws URISyntaxException, XMLStreamException,
             FactoryConfigurationError, ClassNotFoundException, IOException {
                 File file = Paths.get(fileURL.toURI()).toFile();
@@ -85,24 +91,23 @@ public class Model implements Serializable{
         return new Model(mapObjects,filename);
     }
 
-    private Model(MapObjects mapObjects, String filename) throws FileNotFoundException, IOException {
-        this.mapObjects = mapObjects;
-        save(filename);
-    }
 
     private static Model loadBIN(InputStream inputStream) throws IOException, ClassNotFoundException {
         System.out.println(inputStream);
-        try (var bin = new ObjectInputStream(inputStream)) {
+        try (var bin = new ObjectInputStream(new BufferedInputStream(inputStream))) {
+            System.gc();
             return (Model) bin.readObject();
         }
     }
 
     private void save(String filename) {
         new Thread(() -> {
+            Time time = new Time(System.currentTimeMillis());
             String fn = filename.split("\\.")[0] + ".bin";
-            try (var out = new ObjectOutputStream(new FileOutputStream("data/maps/"+fn))) {
+            try (var out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("data/maps/"+fn)))) {
                 out.writeObject(this);
                 System.out.println("Saved to: " + fn);
+                System.out.println("Saved in: " + (new Time(System.currentTimeMillis()).getTime() - time.getTime())/1000 + "s");
             } catch (Exception e) {
                 e.printStackTrace();
             }

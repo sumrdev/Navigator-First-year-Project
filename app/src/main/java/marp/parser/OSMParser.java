@@ -1,5 +1,6 @@
 package marp.parser;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.InputStream;
@@ -29,7 +30,7 @@ public class OSMParser{
     public MapObjects parseOSM(InputStream inputStream) throws XMLStreamException, FactoryConfigurationError{
         Time start = new Time(System.currentTimeMillis());
         Time result;
-        XMLStreamReader xmlsr = XMLInputFactory.newInstance().createXMLStreamReader(inputStream);
+        XMLStreamReader xmlsr = XMLInputFactory.newInstance().createXMLStreamReader(new BufferedInputStream(inputStream));
         MapObjects mapObjects = new MapObjects();
         MapObjectInParsing mapObjectInParsing = new MapObjectInParsing(mapObjects);
         while(xmlsr.hasNext()){
@@ -324,6 +325,7 @@ public class OSMParser{
         mapObjects.buildDigraph(mapObjectInParsing.getRoadNodeIDtoRoadNode());
         result = new Time(System.currentTimeMillis());
         System.out.println("Trees and Digraph built in: " + (result.getTime() - start.getTime())/1000 + "s");
+        System.gc();
         return mapObjects;
     }
 }

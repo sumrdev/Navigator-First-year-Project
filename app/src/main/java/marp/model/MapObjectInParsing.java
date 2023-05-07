@@ -209,24 +209,24 @@ public class MapObjectInParsing implements Serializable{
                 mapObjects.getTrie().insert(address);
             }
             if(this.unfinishedShapeType==ShapeType.UNDEFINED){
-                this.SimpleShapeIDToSimpleShape.put(this.unfinishedSimpleShapeID, new SimpleShape(this.unfinishedSimpleShapeID, this.unfinishedShapeType, coords.get(0),coords.get(1)));
+                this.SimpleShapeIDToSimpleShape.put(this.unfinishedSimpleShapeID, new SimpleShape(this.unfinishedShapeType, coords.get(0),coords.get(1)));
             }else {
                 switch (this.unfinishedShapeType) {
                     case COASTLINE:
-                        coastLineSegmentList.add(new SimpleShape(this.unfinishedSimpleShapeID, this.unfinishedShapeType, coords.get(0), coords.get(1)));
+                        coastLineSegmentList.add(new SimpleShape(this.unfinishedShapeType, coords.get(0), coords.get(1)));
                         break;
                     case BUILDING:
-                        mapObjects.getBuildingsList().add(new SimpleShape(this.unfinishedSimpleShapeID, this.unfinishedShapeType, coords.get(0), coords.get(1)));
+                        mapObjects.getBuildingsList().add(new SimpleShape( this.unfinishedShapeType, coords.get(0), coords.get(1)));
                         break;
                     case WATER:
-                        mapObjects.getWaterAreasList().add(new SimpleShape(this.unfinishedSimpleShapeID, this.unfinishedShapeType, coords.get(0), coords.get(1)));
+                        mapObjects.getWaterAreasList().add(new SimpleShape( this.unfinishedShapeType, coords.get(0), coords.get(1)));
                         break;
                     case GRASS:
                     case FOREST:
                     case CEMENT:
                     case COMMERCIAL_GROUND:
                     case FARMLAND:
-                        mapObjects.getTerrainAreasList().add(new SimpleShape(this.unfinishedSimpleShapeID, this.unfinishedShapeType, coords.get(0), coords.get(1)));
+                        mapObjects.getTerrainAreasList().add(new SimpleShape( this.unfinishedShapeType, coords.get(0), coords.get(1)));
                         break;
                     default:
                         break;
@@ -298,17 +298,17 @@ public class MapObjectInParsing implements Serializable{
         if (unfinishedRelationSimpleShapes.size() > 0) {
             switch (unfinishedShapeType) {
                 case BUILDING:
-                    mapObjects.getBuildingsList().add(new ComplexShape(unfinishedRelationID, this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
+                    mapObjects.getBuildingsList().add(new ComplexShape( this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
                     break;
                 case WATER:
-                    mapObjects.getWaterAreasList().add(new ComplexShape(unfinishedRelationID, this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
+                    mapObjects.getWaterAreasList().add(new ComplexShape( this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
                     break;
                 case GRASS:
                 case FOREST:
                 case CEMENT:
                 case COMMERCIAL_GROUND:
                 case FARMLAND:
-                    mapObjects.getTerrainAreasList().add(new ComplexShape(unfinishedRelationID, this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
+                    mapObjects.getTerrainAreasList().add(new ComplexShape(this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
                     break;
                 default:
                     break;

@@ -7,11 +7,12 @@ import marp.datastructures.RTree;
 import marp.datastructures.SimpleTrie;
 import marp.mapelements.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class MapObjects {
+public class MapObjects implements Serializable{
     //#####################################################
     //######## Bounds #####################################
     //#####################################################

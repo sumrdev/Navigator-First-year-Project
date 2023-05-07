@@ -1,11 +1,14 @@
 package marp.controller;
 
+import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 
 import javafx.geometry.Point2D;
 import javafx.print.*;
 import javafx.scene.Cursor;
+import javafx.scene.control.ListView;
 import javafx.scene.image.*;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
@@ -14,6 +17,7 @@ import marp.datastructures.Digraph;
 import marp.mapelements.*;
 import marp.model.Model;
 import marp.mapelements.details.*;
+import marp.utilities.DefaultPath;
 import marp.utilities.IOFunctions;
 import marp.view.View;
 
@@ -50,6 +54,18 @@ public class Controller {
             System.out.println("Error getting items from List View: ");
             e.printStackTrace();
         }
+
+        this.view.listView.setOnMouseClicked(e -> {
+            try {
+                URL fileURL = new URL(DefaultPath.getDefaultPath() + this.view.listView.getSelectionModel().getSelectedItem());
+                Model.createModel(fileURL);
+                this.view.createNewMapScene();
+                this.view.setScene(this.view.getMapScene());
+            } catch (Exception e1) {
+                System.out.println(e1.getMessage());
+            }
+
+        });
     }
 
     private void setFileChooser() {

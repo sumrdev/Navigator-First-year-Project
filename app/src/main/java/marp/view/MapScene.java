@@ -72,26 +72,17 @@ public class MapScene extends Scene{
         //We then prepend the scale, which has the effect of zooming.
         //Then we add the position of the mouse back in order to move the map back into its original position.
 
-        pan(-x, -y);
-        trans.prependScale(factor, factor);
-        pan(x, y);
-
-        if(factor < 100){
-            zoomMenu.updateZoomLevel(factor);
-
-            if (zoomMenu.getZoomlevel() > 1000){
-                // if zooming out
-                if (factor < 1){
-                    double test = (zoomMenu.getZoomlevel()*factor - 1000);
-                    //zoomMenu.distanceLine.setEndX(test);
-                }
-                // if zooming in
-                if (factor > 1){
-                    double test = (zoomMenu.getZoomlevel()*factor - 1000);
-                    //zoomMenu.distanceLine.setEndX(test);
-                }
-            } else {
-                zoomMenu.distanceLine.setEndX(200);
+        if((zoomMenu.getZoomlevel() <= 15) && (factor > 1)){
+            System.out.println("CANNOT ZOOM IN FURTHER");
+        } else if((zoomMenu.getZoomlevel() >= 50000) && (factor < 1)){
+            System.out.println("CANNOT ZOOM OUT FURTHER");
+        } else {
+            pan(-x, -y);
+            trans.prependScale(factor, factor);
+            pan(x, y);
+    
+            if(factor < 100){
+                zoomMenu.updateZoomLevel(factor);
             }
         }
     }

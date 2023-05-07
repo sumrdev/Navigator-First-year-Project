@@ -8,11 +8,15 @@ public class MapColor {
     private static MapColor instance = new MapColor();
     private HashMap<String, Color> defaultColorMap = new HashMap<String, Color>();
     private HashMap<String, Color> darkColorMap = new HashMap<String, Color>();
-    private HashMap<String, Color> colorBlindColorMap = new HashMap<String, Color>();
+    private HashMap<String, Color> deuteranopiaBlindColorMap = new HashMap<String, Color>();
+    private HashMap<String, Color> protanopiaBlindColorMap = new HashMap<String, Color>();
+    private HashMap<String, Color> tritanBlindColorMap = new HashMap<String, Color>();
+    private HashMap<String, Color> monochromaBlindColorMap = new HashMap<String, Color>();
     public HashMap<String, Color> colorMap = new HashMap<String, Color>();
 
     private MapColor() {
-        defaultColorMap.put("BACKGROUND", Color.rgb(176, 211, 232,1));
+        // Default colors
+        defaultColorMap.put("BACKGROUND", Color.rgb(255, 255, 255,1));
         defaultColorMap.put("WATER", Color.rgb(176, 211, 232,1));
         defaultColorMap.put("BUILDING", Color.rgb(190, 190, 190,1));
         defaultColorMap.put("COASTLINE", Color.rgb(206, 234, 214,1));
@@ -35,67 +39,154 @@ public class MapColor {
         defaultColorMap.put("RESIDENTIAL_OUTLINE", Color.LIGHTGRAY);
         defaultColorMap.put("TERTIARY", Color.WHITE);
         defaultColorMap.put("TERTIARY_OUTLINE", Color.LIGHTGRAY);
-        colorMap = defaultColorMap;
-
-        darkColorMap.put("BACKGROUND", Color.rgb(44, 44, 46,1));
-        darkColorMap.put("WATER", Color.rgb(45, 99, 140,1));
-        darkColorMap.put("BUILDING", Color.rgb(87, 87, 87,1));
-        darkColorMap.put("COASTLINE", Color.rgb(52, 90, 68,1));
-        darkColorMap.put("GRASSY", Color.rgb(52, 90, 68,1));
-        darkColorMap.put("FOREST", Color.rgb(41, 69, 55,1));
-        darkColorMap.put("CEMENT", Color.rgb(67, 67, 69,1));
-        darkColorMap.put("FARMLAND", Color.rgb(94, 116, 63,1));
-        darkColorMap.put("COMMERCIAL_GROUND", Color.rgb(104, 98, 73,1));
-        darkColorMap.put("SECONDARY", Color.rgb(166, 166, 168,1));
-        darkColorMap.put("SECONDARY_OUTLINE", Color.rgb(102, 102, 102,1));
-        darkColorMap.put("MOTORWAY", Color.rgb(221, 206, 66,1));
-        darkColorMap.put("MOTORWAY_OUTLINE", Color.rgb(180, 93, 0,1));
-        darkColorMap.put("PEDESTRIAN", Color.rgb(72, 72, 72,1));
-        darkColorMap.put("PEDESTRIAN_OUTLINE", Color.rgb(102, 102, 102,1));
-        darkColorMap.put("PRIMARY", Color.rgb(174, 165, 63,1));
-        darkColorMap.put("PRIMARY_OUTLINE", Color.rgb(194, 175, 66,1));
-        darkColorMap.put("FOOTPATH", Color.rgb(85, 125, 73,1));
+        
+        // Dark mode
+        darkColorMap.put("BACKGROUND", Color.rgb(40, 40, 40,1));
+        darkColorMap.put("WATER", Color.rgb(1, 8, 107,1));
+        darkColorMap.put("BUILDING", Color.rgb(51, 51, 51,1));
+        darkColorMap.put("COASTLINE", Color.rgb(52, 109, 83,1));
+        darkColorMap.put("GRASSY", Color.rgb(117, 151, 126,1));
+        darkColorMap.put("FOREST", Color.rgb(45, 98, 64,1));
+        darkColorMap.put("CEMENT", Color.rgb(180, 180, 180,1));
+        darkColorMap.put("FARMLAND", Color.web("#687F4B"));
+        darkColorMap.put("COMMERCIAL_GROUND", Color.web("#AFAF8D"));
+        darkColorMap.put("SECONDARY", Color.BLACK);
+        darkColorMap.put("SECONDARY_OUTLINE", Color.DARKGRAY);
+        darkColorMap.put("MOTORWAY", Color.web("#414100"));
+        darkColorMap.put("MOTORWAY_OUTLINE", Color.ORANGE);
+        darkColorMap.put("PEDESTRIAN", Color.web("#AFAFAF"));
+        darkColorMap.put("PEDESTRIAN_OUTLINE", Color.DARKGRAY);
+        darkColorMap.put("PRIMARY", Color.web("#414100"));
+        darkColorMap.put("PRIMARY_OUTLINE", Color.web("#B4B400"));
+        darkColorMap.put("FOOTPATH", Color.web("#003400"));
         darkColorMap.put("FOOTPATH_OUTLINE", Color.TRANSPARENT);
-        darkColorMap.put("RESIDENTIAL", Color.rgb(166, 166, 168,1));
-        darkColorMap.put("RESIDENTIAL_OUTLINE", Color.rgb(102, 102, 102,1));
-        darkColorMap.put("TERTIARY", Color.rgb(166, 166, 168,1));
-        darkColorMap.put("TERTIARY_OUTLINE", Color.rgb(102, 102, 102,1));
+        darkColorMap.put("RESIDENTIAL", Color.LIGHTGRAY);
+        darkColorMap.put("RESIDENTIAL_OUTLINE", Color.DARKGRAY);
+        darkColorMap.put("TERTIARY", Color.LIGHTGRAY);
+        darkColorMap.put("TERTIARY_OUTLINE", Color.DARKGRAY);
 
-        colorBlindColorMap.put("BACKGROUND",  Color.rgb(255, 255, 255,1));
-        colorBlindColorMap.put("WATER", Color.rgb(53, 104, 161, 1));
-        colorBlindColorMap.put("BUILDING", Color.rgb(190, 190, 190,1));
-        colorBlindColorMap.put("COASTLINE", Color.rgb(118, 137, 130, 1));
-        colorBlindColorMap.put("GRASSY", Color.rgb(159, 203, 159, 1));
-        colorBlindColorMap.put("FOREST", Color.rgb(102, 136, 102, 1));
-        colorBlindColorMap.put("CEMENT", Color.rgb(225, 223, 221, 1));
-        colorBlindColorMap.put("FARMLAND", Color.rgb(154, 174, 121, 1));
-        colorBlindColorMap.put("COMMERCIAL_GROUND", Color.rgb(185, 175, 160, 1));
-        colorBlindColorMap.put("SECONDARY", Color.rgb(182, 182, 182, 1));
-        colorBlindColorMap.put("SECONDARY_OUTLINE", Color.rgb(128, 128, 128, 1));
-        colorBlindColorMap.put("MOTORWAY", Color.rgb(188, 72, 72, 1));
-        colorBlindColorMap.put("MOTORWAY_OUTLINE", Color.rgb(153, 57, 57, 1));
-        colorBlindColorMap.put("PEDESTRIAN", Color.rgb(162, 162, 162, 1));
-        colorBlindColorMap.put("PEDESTRIAN_OUTLINE", Color.rgb(108, 108, 108, 1));
-        colorBlindColorMap.put("PRIMARY", Color.rgb(140, 107, 177, 1));
-        colorBlindColorMap.put("PRIMARY_OUTLINE", Color.rgb(112, 77, 145, 1));
-        colorBlindColorMap.put("FOOTPATH", Color.rgb(153, 57, 57, 1));
-        colorBlindColorMap.put("FOOTPATH_OUTLINE", Color.TRANSPARENT);
-        colorBlindColorMap.put("RESIDENTIAL", Color.rgb(198, 198, 198, 1));
-        colorBlindColorMap.put("ResidentialRoadOutline", Color.rgb(142, 142, 142, 1));
-        colorBlindColorMap.put("TERTIARY", Color.rgb(198, 198, 198, 1));
-        colorBlindColorMap.put("TERTIARY_OUTLINE", Color.rgb(142, 142, 142, 1));
+        // Green blindness
+        deuteranopiaBlindColorMap.put("BACKGROUND", Color.rgb(255, 255, 255,1));
+        deuteranopiaBlindColorMap.put("WATER", Color.rgb(176, 211, 232,1));
+        deuteranopiaBlindColorMap.put("BUILDING", Color.rgb(190, 190, 190,1));
+        deuteranopiaBlindColorMap.put("COASTLINE", Color.web("#CEBCD6"));
+        deuteranopiaBlindColorMap.put("GRASSY", Color.web("#CEC4D6"));
+        deuteranopiaBlindColorMap.put("FOREST", Color.web("#917A9F"));
+        deuteranopiaBlindColorMap.put("CEMENT", Color.rgb(233, 233, 233,1));
+        deuteranopiaBlindColorMap.put("FARMLAND", Color.web("#CCABAF"));
+        deuteranopiaBlindColorMap.put("COMMERCIAL_GROUND", Color.LIGHTYELLOW);
+        deuteranopiaBlindColorMap.put("SECONDARY", Color.WHITE);
+        deuteranopiaBlindColorMap.put("SECONDARY_OUTLINE", Color.LIGHTGRAY);
+        deuteranopiaBlindColorMap.put("MOTORWAY", Color.YELLOW);
+        deuteranopiaBlindColorMap.put("MOTORWAY_OUTLINE", Color.ORANGE);
+        deuteranopiaBlindColorMap.put("PEDESTRIAN", Color.rgb(230, 230, 230,1));
+        deuteranopiaBlindColorMap.put("PEDESTRIAN_OUTLINE", Color.LIGHTGRAY);
+        deuteranopiaBlindColorMap.put("PRIMARY", Color.LIGHTYELLOW);
+        deuteranopiaBlindColorMap.put("PRIMARY_OUTLINE", Color.YELLOW);
+        deuteranopiaBlindColorMap.put("FOOTPATH", Color.PURPLE);
+        deuteranopiaBlindColorMap.put("FOOTPATH_OUTLINE", Color.TRANSPARENT);
+        deuteranopiaBlindColorMap.put("RESIDENTIAL", Color.WHITE);
+        deuteranopiaBlindColorMap.put("RESIDENTIAL_OUTLINE", Color.LIGHTGRAY);
+        deuteranopiaBlindColorMap.put("TERTIARY", Color.WHITE);
+        deuteranopiaBlindColorMap.put("TERTIARY_OUTLINE", Color.LIGHTGRAY);
+
+        // Red blindness
+        protanopiaBlindColorMap.put("BACKGROUND", Color.rgb(255, 255, 255,1));
+        protanopiaBlindColorMap.put("WATER", Color.rgb(176, 211, 232,1));
+        protanopiaBlindColorMap.put("BUILDING", Color.rgb(190, 190, 190,1));
+        protanopiaBlindColorMap.put("COASTLINE", Color.rgb(206, 234, 214,1));
+        protanopiaBlindColorMap.put("GRASSY", Color.rgb(206, 234, 214,1));
+        protanopiaBlindColorMap.put("FOREST", Color.rgb(145, 189, 159,1));
+        protanopiaBlindColorMap.put("CEMENT", Color.rgb(233, 233, 233,1));
+        protanopiaBlindColorMap.put("FARMLAND", Color.rgb(204, 227, 175,1));
+        protanopiaBlindColorMap.put("COMMERCIAL_GROUND", Color.LIGHTYELLOW);
+        protanopiaBlindColorMap.put("SECONDARY", Color.WHITE);
+        protanopiaBlindColorMap.put("SECONDARY_OUTLINE", Color.LIGHTGRAY);
+        protanopiaBlindColorMap.put("MOTORWAY", Color.YELLOW);
+        protanopiaBlindColorMap.put("MOTORWAY_OUTLINE", Color.PURPLE);
+        protanopiaBlindColorMap.put("PEDESTRIAN", Color.rgb(230, 230, 230,1));
+        protanopiaBlindColorMap.put("PEDESTRIAN_OUTLINE", Color.LIGHTGRAY);
+        protanopiaBlindColorMap.put("PRIMARY", Color.LIGHTYELLOW);
+        protanopiaBlindColorMap.put("PRIMARY_OUTLINE", Color.YELLOW);
+        protanopiaBlindColorMap.put("FOOTPATH", Color.GREEN);
+        protanopiaBlindColorMap.put("FOOTPATH_OUTLINE", Color.TRANSPARENT);
+        protanopiaBlindColorMap.put("RESIDENTIAL", Color.WHITE);
+        protanopiaBlindColorMap.put("RESIDENTIAL_OUTLINE", Color.LIGHTGRAY);
+        protanopiaBlindColorMap.put("TERTIARY", Color.WHITE);
+        protanopiaBlindColorMap.put("TERTIARY_OUTLINE", Color.LIGHTGRAY);
+
+        // Blue blindness
+        tritanBlindColorMap.put("BACKGROUND", Color.rgb(255, 255, 255,1));
+        tritanBlindColorMap.put("WATER", Color.web("#D5D3DD"));
+        tritanBlindColorMap.put("BUILDING", Color.rgb(190, 190, 190,1));
+        tritanBlindColorMap.put("COASTLINE", Color.rgb(206, 234, 214,1));
+        tritanBlindColorMap.put("GRASSY", Color.rgb(206, 234, 214,1));
+        tritanBlindColorMap.put("FOREST", Color.rgb(145, 189, 159,1));
+        tritanBlindColorMap.put("CEMENT", Color.rgb(233, 233, 233,1));
+        tritanBlindColorMap.put("FARMLAND", Color.rgb(204, 227, 175,1));
+        tritanBlindColorMap.put("COMMERCIAL_GROUND", Color.LIGHTYELLOW);
+        tritanBlindColorMap.put("SECONDARY", Color.WHITE);
+        tritanBlindColorMap.put("SECONDARY_OUTLINE", Color.LIGHTGRAY);
+        tritanBlindColorMap.put("MOTORWAY", Color.YELLOW);
+        tritanBlindColorMap.put("MOTORWAY_OUTLINE", Color.ORANGE);
+        tritanBlindColorMap.put("PEDESTRIAN", Color.rgb(230, 230, 230,1));
+        tritanBlindColorMap.put("PEDESTRIAN_OUTLINE", Color.LIGHTGRAY);
+        tritanBlindColorMap.put("PRIMARY", Color.LIGHTYELLOW);
+        tritanBlindColorMap.put("PRIMARY_OUTLINE", Color.YELLOW);
+        tritanBlindColorMap.put("FOOTPATH", Color.GREEN);
+        tritanBlindColorMap.put("FOOTPATH_OUTLINE", Color.TRANSPARENT);
+        tritanBlindColorMap.put("RESIDENTIAL", Color.WHITE);
+        tritanBlindColorMap.put("RESIDENTIAL_OUTLINE", Color.LIGHTGRAY);
+        tritanBlindColorMap.put("TERTIARY", Color.WHITE);
+        tritanBlindColorMap.put("TERTIARY_OUTLINE", Color.LIGHTGRAY);
+
+        // Grey-scale
+        monochromaBlindColorMap.put("BACKGROUND", Color.rgb(255, 255, 255,1));
+        monochromaBlindColorMap.put("WATER", Color.web("#D3D3D3"));
+        monochromaBlindColorMap.put("BUILDING", Color.rgb(190, 190, 190,1));
+        monochromaBlindColorMap.put("COASTLINE", Color.web("#E4E4E4"));
+        monochromaBlindColorMap.put("GRASSY", Color.web("#C1C1C1"));
+        monochromaBlindColorMap.put("FOREST", Color.web("#6E6E6E"));
+        monochromaBlindColorMap.put("CEMENT", Color.rgb(233, 233, 233,1));
+        monochromaBlindColorMap.put("FARMLAND", Color.web("#D0CFCF"));
+        monochromaBlindColorMap.put("COMMERCIAL_GROUND", Color.LIGHTGRAY);
+        monochromaBlindColorMap.put("SECONDARY", Color.WHITE);
+        monochromaBlindColorMap.put("SECONDARY_OUTLINE", Color.LIGHTGRAY);
+        monochromaBlindColorMap.put("MOTORWAY", Color.web("#F2F1F1"));
+        monochromaBlindColorMap.put("MOTORWAY_OUTLINE", Color.DARKGRAY);
+        monochromaBlindColorMap.put("PEDESTRIAN", Color.rgb(230, 230, 230,1));
+        monochromaBlindColorMap.put("PEDESTRIAN_OUTLINE", Color.LIGHTGRAY);
+        monochromaBlindColorMap.put("PRIMARY", Color.LIGHTGRAY);
+        monochromaBlindColorMap.put("PRIMARY_OUTLINE", Color.DARKGRAY);
+        monochromaBlindColorMap.put("FOOTPATH", Color.web("#5E5E5E"));
+        monochromaBlindColorMap.put("FOOTPATH_OUTLINE", Color.TRANSPARENT);
+        monochromaBlindColorMap.put("RESIDENTIAL", Color.WHITE);
+        monochromaBlindColorMap.put("RESIDENTIAL_OUTLINE", Color.LIGHTGRAY);
+        monochromaBlindColorMap.put("TERTIARY", Color.WHITE);
+        monochromaBlindColorMap.put("TERTIARY_OUTLINE", Color.LIGHTGRAY);
+
+        colorMap = defaultColorMap;
     }
 
-    public void changeTheme(String theme){
-        switch(theme){
+    public void changeTheme(String theme) {
+        switch (theme) {
             case "default":
                 colorMap = defaultColorMap;
                 break;
             case "dark":
                 colorMap = darkColorMap;
                 break;
-            case "colorblind":
-                colorMap = colorBlindColorMap;
+            case "deuteranopia":
+                colorMap = deuteranopiaBlindColorMap;
+                break;
+            case "protanopia":
+                colorMap = protanopiaBlindColorMap;
+                break;
+            case "tritanopia":
+                colorMap = tritanBlindColorMap;
+                break;
+            case "monochromia":
+                colorMap = monochromaBlindColorMap;
                 break;
             default:
                 colorMap = defaultColorMap;

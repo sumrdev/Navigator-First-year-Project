@@ -27,4 +27,18 @@ public class IOFunctions {
         }
         return filenames;
     }
+
+    public static List<String> getFileNames() {
+        File folder = new File("data/maps");
+        File[] arrayOfFiles = folder.listFiles();
+        ArrayList<String> filenames = new ArrayList<>();
+        if (arrayOfFiles != null) {
+            for (File arrayOfFile : arrayOfFiles) {
+                if (arrayOfFile.isFile()) {
+                    filenames.add(arrayOfFile.getName());
+                }
+            }
+        }
+        return filenames;
+    }
 }

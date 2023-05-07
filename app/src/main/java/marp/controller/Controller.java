@@ -47,7 +47,7 @@ public class Controller {
     public Controller(View view, Model model) throws MalformedURLException{
         this.model = model;
         this.view = view;
-        fileList = IOFunctions.getFiles();
+        fileList = IOFunctions.getFileNames();
         setFileChooser();
         this.stage = view.getPrimaryStage();
         createButtonControl();

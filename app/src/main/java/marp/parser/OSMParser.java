@@ -123,9 +123,10 @@ public class OSMParser {
                                     mapObjectInParsing.setRoadOneWay(value.equals("yes"));
                                     break;
                                 case "junction":
-                                if(value.equals("roundabout")) {
+                                    if(value.equals("roundabout")) {
                                         mapObjectInParsing.setRoadRoundabout(true);
                                     }
+                                    break;
                                 case "maxspeed":
                                     try {
                                         int speed = Integer.parseInt(value);
@@ -133,11 +134,9 @@ public class OSMParser {
                                     } catch (NumberFormatException e) {
                                         // value could not be parsed to int, do nothing
                                     }
+                                    break;
                                 case "building":
                                     mapObjectInParsing.setShapeType(ShapeType.BUILDING);
-                                    break;
-                                case "railway":
-                                    mapObjectInParsing.setShapeType(ShapeType.UNDEFINED);
                                     break;
                                 case "natural":
                                     switch (value) {

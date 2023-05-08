@@ -16,9 +16,9 @@ public class View {
     public Stage primaryStage;
     public Model model;
     private MapScene mapScene;
-    private final MapMenu mapMenu;
-    private final ZoomMenu zoomMenu;
-    private final Canvas canvas;
+    private MapMenu mapMenu;
+    private ZoomMenu zoomMenu;
+    private Canvas canvas;
     public ChooseMapScene chooseMapScene;
     public ListView<String> listView;
     public NearestRoadInfo nearestRoadInfo;
@@ -33,18 +33,23 @@ public class View {
         appName.setFont(Font.font("Montserrat", FontWeight.SEMI_BOLD, 36));
         appName.setTextAlignment(TextAlignment.CENTER);
         StackPane.setAlignment(appName, Pos.TOP_CENTER);
-        mapMenu = new MapMenu(model);
-        canvas = new Canvas(1000, 700);
-        zoomMenu = new ZoomMenu(1000);
-        nearestRoadInfo = new NearestRoadInfo();
-        // bind canvas width + height to screen size
-        canvas.widthProperty().bind(primaryStage.widthProperty());
-        canvas.heightProperty().bind(primaryStage.heightProperty());
+        
 
         chooseMapScene = new ChooseMapScene(model, listView, this);
         primaryStage.setTitle("Navigator");
         primaryStage.setScene(chooseMapScene);
         primaryStage.show();
+    }
+
+    public void creatMenusForMapScene(){
+        this.mapMenu = new MapMenu(model);
+        this.canvas = new Canvas(1000, 700);
+        this.zoomMenu = new ZoomMenu(1000);
+        nearestRoadInfo = new NearestRoadInfo();
+        createNewMapScene();
+        
+        canvas.widthProperty().bind(primaryStage.widthProperty());
+        canvas.heightProperty().bind(primaryStage.heightProperty());
     }
 
     public void setScene(Scene scene) {
@@ -65,10 +70,6 @@ public class View {
 
     public void createNewMapScene() {
         mapScene = new MapScene(this.model, mapMenu, zoomMenu, nearestRoadInfo, canvas);
-    }
-
-    public void createNewMapScene(Model model) {
-        mapScene = new MapScene(model, mapMenu, zoomMenu, nearestRoadInfo, canvas);
     }
 
     public Canvas getCanvas() {

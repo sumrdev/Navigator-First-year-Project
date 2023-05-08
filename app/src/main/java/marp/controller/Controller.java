@@ -1,10 +1,15 @@
 package marp.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.*;
+
+import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLStreamException;
 
 import javafx.geometry.Point2D;
 import javafx.print.*;
@@ -49,7 +54,7 @@ public class Controller {
         fileList = IOFunctions.getFileNames();
         setFileChooser();
         this.stage = view.getPrimaryStage();
-        createButtonControl();
+        createChooseMapSceneButtons();
 
         try {
             this.view.listView.getItems().addAll(fileList);
@@ -63,9 +68,10 @@ public class Controller {
             try {
                 URL fileURL = new URL(Paths.get("data/maps/" + this.view.listView.getSelectionModel().getSelectedItem())
                         .toUri().toURL().toString());
-                Model newModel = Model.createModel(fileURL);
-                this.view.createNewMapScene(newModel);
+                Model.createModel(fileURL);
+                this.view.creatMenusForMapScene();
                 this.view.setScene(this.view.getMapScene());
+                createMapSceneButtons();
             } catch (Exception e1) {
                 System.out.println(e1.getMessage());
             }
@@ -81,7 +87,7 @@ public class Controller {
                 new FileChooser.ExtensionFilter("All files", "*.*"));
     }
 
-    private void createButtonControl() {
+    private void createMapSceneButtons() {
         // Clicking on the map updates the latest clicked coordinates. if
         // isCreatingCustomPointOfInterest is true, lastPressedX is set as well.
 
@@ -327,7 +333,6 @@ public class Controller {
                 model.getMapObjects().clearRoute();
                 view.getMapScene().redraw();
             }
-            //IDIOT
         });
         view.getMapMenu().getSelectedPointPanel().saveLocationButton.setOnAction(e -> {
             // When pressing the save point button we first check the status of the button
@@ -509,12 +514,25 @@ public class Controller {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
         });
 
-        // ##########################################################
-        // ############# CHOOSE MAP SCENE ###########################
-        // ##########################################################
+        
+    }
+    
+    // ##########################################################
+    // ############# CHOOSE MAP SCENE ###########################
+    // ##########################################################
 
+    public void createChooseMapSceneButtons() {
         view.chooseMapScene.loadButton.setOnAction(e -> {
+            try {
+                Model.createModel(getClass().getResource("/maps/"+Model.getDefaultMap()));
+            } catch (ClassNotFoundException | URISyntaxException | XMLStreamException | FactoryConfigurationError
+                    | IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+            view.creatMenusForMapScene();
             view.createNewMapScene();
+            createMapSceneButtons();
             view.setScene(view.getMapScene());
         });
     }

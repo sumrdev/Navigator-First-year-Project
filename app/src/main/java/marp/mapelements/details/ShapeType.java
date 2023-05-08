@@ -13,5 +13,6 @@ public enum ShapeType {
     CEMENT,
     COMMERCIAL_GROUND,
     FARMLAND,
-    UNDEFINED;
+    UNDEFINED, 
+    DELETE;
 }

@@ -369,7 +369,7 @@ public class Controller {
         // ############# Settings panel #############################
         // ##########################################################
 
-        view.getMapMenu().getSettingsPanel().minimizeButton.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().getMinimizeButton().setOnAction(e -> {
             // Set the menu panel to the minimized menu panel
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
             // Set the selectedPointMarker to null so no selected point is shown when the
@@ -377,12 +377,12 @@ public class Controller {
             model.setSelectedPointMarker(null);
         });
 
-        view.getMapMenu().getSettingsPanel().directionsButton.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().getDirectionsButton().setOnAction(e -> {
             // Set the menu panel to the directions menu panel
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getDirectionsPanel());
         });
 
-        view.getMapMenu().getSettingsPanel().saveMapButton.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().getSaveMapButton().setOnAction(e -> {
             // TODO: Is this even a function we have?
             // try {
             // model.save(model.filename);
@@ -391,25 +391,41 @@ public class Controller {
             // }
         });
 
-        view.getMapMenu().getSettingsPanel().loadAnotherOSMButton.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().getLoadAnotherOSMButton().setOnAction(e -> {
             // set the scene to chooseMapScene
             this.stage.setScene(view.chooseMapScene);
             this.stage.show();
         });
 
-        view.getMapMenu().getSettingsPanel().normalModeButton.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().getNormalModeButton().setOnAction(e -> {
             MapColor.getInstance().changeTheme("default");
             Digraph.setColor(1);
+
+            view.getMapMenu().getSettingsPanel().activateDarkMode(false);
+            view.getMapMenu().getMinimizedPanel().activateDarkMode(false);
+            view.getMapMenu().getPointOfInterestPanel().activateDarkMode(false);
+            view.getMapMenu().getSelectedPointPanel().activateDarkMode(false);
+            view.getMapMenu().getDirectionsPanel().activateDarkMode(false);
+            view.getZoomMenu().activateDarkMode(false);
+
             view.getMapScene().redraw();
         });
 
-        view.getMapMenu().getSettingsPanel().nightModeButton.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().getNightModeButton().setOnAction(e -> {
             MapColor.getInstance().changeTheme("dark");
             Digraph.setColor(1);
+
+            view.getMapMenu().getSettingsPanel().activateDarkMode(true);
+            view.getMapMenu().getMinimizedPanel().activateDarkMode(true);
+            view.getMapMenu().getPointOfInterestPanel().activateDarkMode(true);
+            view.getMapMenu().getSelectedPointPanel().activateDarkMode(true);
+            view.getMapMenu().getDirectionsPanel().activateDarkMode(true);
+            view.getZoomMenu().activateDarkMode(true);
+
             view.getMapScene().redraw();
         });
 
-        view.getMapMenu().getSettingsPanel().colorBlindModeButton.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().getColorBlindModeButton().setOnAction(e -> {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getColorblindnessModePanel());
             view.getMapScene().redraw();
         });
@@ -442,30 +458,30 @@ public class Controller {
             view.getMapScene().redraw();
         });
 
-        view.getMapMenu().getSettingsPanel().hideRoadsCheckbox.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().getHideRoadsCheckbox().setOnAction(e -> {
             model.isRoadsVisible = !model.isRoadsVisible;
             view.getMapScene().redraw();
         });
 
-        view.getMapMenu().getSettingsPanel().hideBuildingsCheckbox.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().getHideBuildingsCheckbox().setOnAction(e -> {
             model.isBuildingsVisible = !model.isBuildingsVisible;
             view.getMapScene().redraw();
         });
-        view.getMapMenu().getSettingsPanel().hideTerrainCheckbox.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().getHideTerrainCheckbox().setOnAction(e -> {
             model.isTerrainVisible = !model.isTerrainVisible;
             view.getMapScene().redraw();
         });
-        view.getMapMenu().getSettingsPanel().hideLandmarkCheckbox.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().getHideLandmarkCheckbox().setOnAction(e -> {
             model.isLandmarksVisible = !model.isLandmarksVisible;
             view.getMapScene().redraw();
         });
-        view.getMapMenu().getSettingsPanel().hideAddressesCheckbox.setOnAction(e -> {
+        view.getMapMenu().getSettingsPanel().getHideAddressesCheckbox().setOnAction(e -> {
             model.isAddressVisible = !model.isAddressVisible;
             view.getMapScene().redraw();
         });
-        view.getMapMenu().getSettingsPanel().zoomAdjustSlider.setOnMouseReleased(e -> {
+        view.getMapMenu().getSettingsPanel().getZoomAdjustSlider().setOnMouseReleased(e -> {
             view.getZoomMenu()
-                    .setZoomMultiplier((float) view.getMapMenu().getSettingsPanel().zoomAdjustSlider.getValue());
+                    .setZoomMultiplier((float) view.getMapMenu().getSettingsPanel().getZoomAdjustSlider().getValue());
         });
 
         // ##########################################################

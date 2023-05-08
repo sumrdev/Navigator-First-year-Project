@@ -47,7 +47,7 @@ public class ColorblindnessModePanel extends MenuPanel {
                 monochromacyButton);
         VBox colorBlindModesDisplay = new VBox(new MapLabel("Choose color blind mode:"), deuteranopiaButton,
                 tritanopiaButton, protanopiaButton, monochromacyButton);
-        colorBlindModesDisplay.getStylesheets().add("CSS/stylesheet.css");
+        colorBlindModesDisplay.getStylesheets().addAll("CSS/darkmodesheet.css", "CSS/stylesheet.css");
         colorBlindModesDisplay.setMinWidth(400);
         colorBlindModesDisplay.setAlignment(Pos.TOP_CENTER);
         colorBlindModesDisplay.setBackground(new Background(new BackgroundFill(Color.web("#efefef"), new CornerRadii(24), Insets.EMPTY)));

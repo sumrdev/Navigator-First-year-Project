@@ -111,7 +111,7 @@ public class DirectionsPanel extends MenuPanel {
         //Create guide view to hold directions
         guideList = FXCollections.observableArrayList();
         guideView = new ListView<>();
-        guideView.getStylesheets().add("CSS/stylesheet.css");
+        guideView.getStylesheets().addAll("CSS/darkmodesheet.css", "CSS/stylesheet.css");
         guideView.getStyleClass().add("file-list");
         guideView.setMaxWidth(400);
         guideView.setPrefHeight(1000);
@@ -153,5 +153,104 @@ public class DirectionsPanel extends MenuPanel {
     public void updateDistanceAndTime(float dist, int time) {
         distanceLabel.setText(dist + " km");
         timeLabel.setText(time + " min");
+    }
+
+     /**
+     * Changes CSS sheets of DirectionsPanel if parameter is set to true
+     * 
+     * @param set
+     */
+    public void activateDarkMode(boolean set) {
+        if (set) {
+            if (minimizeButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                minimizeButton.getStylesheets().remove("CSS/stylesheet.css");
+                minimizeButton.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+            if (settingsButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                settingsButton.getStylesheets().remove("CSS/stylesheet.css");
+                settingsButton.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+            if (directionsButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                directionsButton.getStylesheets().remove("CSS/stylesheet.css");
+                directionsButton.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+            if (swapButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                swapButton.getStylesheets().remove("CSS/stylesheet.css");
+                swapButton.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+            if (findRouteButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                findRouteButton.getStylesheets().remove("CSS/stylesheet.css");
+                findRouteButton.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+            if (startSearchButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                startSearchButton.getStylesheets().remove("CSS/stylesheet.css");
+                startSearchButton.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+            if (endSearchButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                endSearchButton.getStylesheets().remove("CSS/stylesheet.css");
+                endSearchButton.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+            if (carButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                carButton.getStylesheets().remove("CSS/stylesheet.css");
+                carButton.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+            if (walkButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                walkButton.getStylesheets().remove("CSS/stylesheet.css");
+                walkButton.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+            if (bikeButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                bikeButton.getStylesheets().remove("CSS/stylesheet.css");
+                bikeButton.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+            if (startAndEndLocation.getStylesheets().contains("CSS/stylesheet.css")) {
+                startAndEndLocation.getStylesheets().remove("CSS/stylesheet.css");
+                startAndEndLocation.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+        } else {
+            if (minimizeButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                minimizeButton.getStylesheets().remove("CSS/darkmodesheet.css");
+                minimizeButton.getStylesheets().add("CSS/stylesheet.css");
+            }
+            if (settingsButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                settingsButton.getStylesheets().remove("CSS/darkmodesheet.css");
+                settingsButton.getStylesheets().add("CSS/stylesheet.css");
+            }
+            if (directionsButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                directionsButton.getStylesheets().remove("CSS/darkmodesheet.css");
+                directionsButton.getStylesheets().add("CSS/stylesheet.css");
+            }
+            if (swapButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                swapButton.getStylesheets().remove("CSS/darkmodesheet.css");
+                swapButton.getStylesheets().add("CSS/stylesheet.css");
+            }
+            if (findRouteButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                findRouteButton.getStylesheets().remove("CSS/darkmodesheet.css");
+                findRouteButton.getStylesheets().add("CSS/stylesheet.css");
+            }
+            if (startSearchButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                startSearchButton.getStylesheets().remove("CSS/darkmodesheet.css");
+                startSearchButton.getStylesheets().add("CSS/stylesheet.css");
+            }
+            if (endSearchButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                endSearchButton.getStylesheets().remove("CSS/darkmodesheet.css");
+                endSearchButton.getStylesheets().add("CSS/stylesheet.css");
+            }
+            if (carButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                carButton.getStylesheets().remove("CSS/darkmodesheet.css");
+                carButton.getStylesheets().add("CSS/stylesheet.css");
+            }
+            if (walkButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                walkButton.getStylesheets().remove("CSS/darkmodesheet.css");
+                walkButton.getStylesheets().add("CSS/stylesheet.css");
+            }
+            if (bikeButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                bikeButton.getStylesheets().remove("CSS/darkmodesheet.css");
+                bikeButton.getStylesheets().add("CSS/stylesheet.css");
+            }
+            if (startAndEndLocation.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                startAndEndLocation.getStylesheets().remove("CSS/darkmodesheet.css");
+                startAndEndLocation.getStylesheets().add("CSS/stylesheet.css");
+            }
+        }
     }
 }

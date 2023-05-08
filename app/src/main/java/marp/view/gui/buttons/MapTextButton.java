@@ -6,7 +6,7 @@ public class MapTextButton extends Button {
     public MapTextButton(String name) {
         super(name);
 
-        getStylesheets().add("CSS/stylesheet.css");
+        getStylesheets().addAll("CSS/darkmodesheet.css", "CSS/stylesheet.css");
         getStyleClass().add("map-button");
     }
 }

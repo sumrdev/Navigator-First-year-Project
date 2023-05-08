@@ -5,7 +5,7 @@ import javafx.scene.control.Label;
 public class MapLabelSmall extends Label {
     public MapLabelSmall(String name) {
         super(name);
-        getStylesheets().add("CSS/stylesheet.css");
+        getStylesheets().addAll("CSS/darkmodesheet.css", "CSS/stylesheet.css");
         getStyleClass().add("map-label-small");
     }
 }

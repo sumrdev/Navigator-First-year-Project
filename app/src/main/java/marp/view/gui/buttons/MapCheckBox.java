@@ -6,7 +6,7 @@ public class MapCheckBox extends CheckBox {
     String name;
     public MapCheckBox(String name) {
         super(name);
-        getStylesheets().add("CSS/stylesheet.css");
+        getStylesheets().addAll("CSS/darkmodesheet.css", "CSS/stylesheet.css");
         getStyleClass().add("map-check-box");
     }
 }

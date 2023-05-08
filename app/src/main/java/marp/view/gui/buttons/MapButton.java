@@ -12,7 +12,7 @@ public class MapButton extends Button {
         iconView.setFitWidth(48);
         setGraphic(iconView);
 
-        getStylesheets().add("CSS/stylesheet.css");
+        getStylesheets().addAll("CSS/darkmodesheet.css", "CSS/stylesheet.css");
         if (!selected) {
             getStyleClass().add("map-button");
         } else {

@@ -17,7 +17,7 @@ public class MapToggleButton extends ToggleButton {
         iconView.setFitWidth(48);
         setGraphic(iconView);
 
-        getStylesheets().add("CSS/stylesheet.css");
+        getStylesheets().addAll("CSS/darkmodesheet.css", "CSS/stylesheet.css");
         getStyleClass().add("map-button");
 
     }

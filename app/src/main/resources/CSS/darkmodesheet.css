@@ -1,24 +1,24 @@
 .map-button {
-    -fx-background-color: D9D9D9;
+    -fx-background-color: #4e4e4e;
     -fx-border-width: 0px;
     -fx-background-radius: 24px;
     -fx-border-radius: 24px;
     -fx-padding: 0px;
     -fx-alignment: center;
     -fx-font-size: 14;
-    -fx-text-fill: #363636;
+    -fx-text-fill: #acacac;
     -fx-min-height: 48px;
 }
 .map-button .graphic {
     -fx-padding: 20px;
 }
 .map-button:hover {
-    -fx-background-color: darkgray;
+    -fx-background-color: rgb(20, 20, 20);
     -fx-text-fill: #363636;
     -fx-cursor: pointer
 }
 .map-button-pressed-down {
-    -fx-background-color: darkgray;
+    -fx-background-color: rgb(0, 0, 0);
     -fx-border-width: 0px;
     -fx-background-radius: 24px;
     -fx-border-radius: 24px;
@@ -26,10 +26,10 @@
     -fx-alignment: center;
     -fx-max-height: 48px;
     -fx-font-size: 14;
-    -fx-text-fill: #363636;
+    -fx-text-fill: #707070;
 }
 .map-button:selected {
-    -fx-background-color: darkgray;
+    -fx-background-color: rgb(23, 23, 23);
     -fx-border-width: 0px;
     -fx-background-radius: 24px;
     -fx-border-radius: 24px;
@@ -37,7 +37,7 @@
     -fx-alignment: center;
     -fx-max-height: 48px;
     -fx-font-size: 14;
-    -fx-text-fill: #363636;
+    -fx-text-fill: #848484;
 }
 .menu-button {
     -fx-background-color: darkgray;
@@ -66,7 +66,7 @@
     -fx-border-color: #D9D9D9; /* Set the border color when focused */
 }
 .map-vbox {
-    -fx-background-color: #efefef;
+    -fx-background-color: rgba(105, 105, 105, 0.737);
     -fx-background-radius: 24;
     -fx-padding: 20px;
     -fx-spacing: 20px;
@@ -74,26 +74,28 @@
 }
 .map-label {
     -fx-font-size: 18;
-    -fx-text-fill: #363636;
+    -fx-text-fill: #D9D9D9;
     -fx-font-weight: bold;
 }
 .map-label-small {
     -fx-font-size: 14;
-    -fx-text-fill: #363636;
+    -fx-text-fill: #D9D9D9;
     -fx-font-weight: bold;
 }
-
 .map-check-box .box {
-    -fx-background-color: #D9D9D9;
+    -fx-background-color: #828282;
+    -fx-border-color: #D9D9D9;
     -fx-border-width: 0px;
     -fx-background-radius: 50%;
     -fx-scale-x: 1.5;
     -fx-scale-y: 1.5;
 }
 .map-check-box:selected .mark {
-    -fx-background-color: #363636;
+    -fx-background-color: #232323;
 }
-
+.map-choice-box .label {
+    -fx-text-fill: white; 
+}
 .file-list {
     -fx-background-radius: 20px;
     -fx-padding: 10px;

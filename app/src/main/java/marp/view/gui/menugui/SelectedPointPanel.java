@@ -32,6 +32,7 @@ public class SelectedPointPanel  extends MenuPanel {
     public MapPoint mapPoint;
     public MapButton searchButton;
 
+    public VBox selectedPointInfo;
 
     public SelectedPointPanel(Model model) {
         super();
@@ -67,8 +68,8 @@ public class SelectedPointPanel  extends MenuPanel {
         saveAndDirectionsButtons.setAlignment(Pos.CENTER);
 
         //Create container for labels + buttons
-        VBox selectedPointInfo = new VBox(selectedPointName, selectedPointType, saveAndDirectionsButtons);
-        selectedPointInfo.getStylesheets().add("CSS/stylesheet.css");
+        selectedPointInfo = new VBox(selectedPointName, selectedPointType, saveAndDirectionsButtons);
+        selectedPointInfo.getStylesheets().addAll("CSS/darkmodesheet.css", "CSS/stylesheet.css");
         selectedPointInfo.getStyleClass().add("map-vbox");
         selectedPointInfo.setMaxHeight(500);
         selectedPointInfo.setMinWidth(400);
@@ -102,6 +103,24 @@ public class SelectedPointPanel  extends MenuPanel {
             saveLocationButton.setSelected(false);
         } else {
             saveLocationButton.setSelected(true);
+        }
+    }
+
+    /**
+     * Changes CSS sheets of SelectedPointPanel if parameter is set to true
+     * @param set of type boolean
+     */
+    public void activateDarkMode(boolean set){
+        if (set){
+            if (selectedPointInfo.getStylesheets().contains("CSS/stylesheet.css")) {
+                selectedPointInfo.getStylesheets().remove("CSS/stylesheet.css");
+                selectedPointInfo.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+        } else {
+            if (selectedPointInfo.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                selectedPointInfo.getStylesheets().remove("CSS/darkmodesheet.css");
+                selectedPointInfo.getStylesheets().add("CSS/stylesheet.css");
+            }
         }
     }
 }

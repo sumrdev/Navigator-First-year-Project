@@ -10,6 +10,7 @@ import marp.mapelements.Address;
 import marp.model.Model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,7 +58,7 @@ public class SearchBar extends TextField {
     public void addressSuggester(String newText) {
         popupList.clear();
         for (String address : model.getSuggestionTrie().getAddressSuggestions(newText, suggestionAmount)) {
-            createPopupElement(address, false);
+            createPopupElement(address, false, true);
         }
         createAddressExpander(newText);
 
@@ -78,7 +79,7 @@ public class SearchBar extends TextField {
         for (String houseNumber : model.getSuggestionTrie().getHouseNumberSuggestions(newText, suggestionAmount)) {
             String fullAddress = matcher.group("street") + " " + houseNumber + " " + matcher.group("postcode") + " "
                     + matcher.group("city");
-            createPopupElement(fullAddress, true);
+            createPopupElement(fullAddress, true, false);
             //System.out.println(matcher.group("street"));
         }
         createHouseExpander(newText);
@@ -89,15 +90,18 @@ public class SearchBar extends TextField {
 
     }
 
-    public void createPopupElement(String popupText, boolean hideOnClick) {
+    public void createPopupElement(String popupText, boolean hideOnClick, boolean reposition) {
         Label suggestion = new Label(popupText);
         CustomMenuItem popupItem = new CustomMenuItem(suggestion, hideOnClick);
         popupList.add(popupItem);
         popupItem.setOnAction(e -> {
             setText(popupText);
-            //positon the caret/text cursor at the end of the text
-            int length = this.getLength();
+            if (reposition){
+            Matcher matcher = PATTERN.matcher(popupText);
+            matcher.matches();
+            int length = matcher.group("street").length() + 1;
             this.positionCaret(length);
+            }
         });
     }
 

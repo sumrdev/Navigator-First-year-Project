@@ -3,6 +3,8 @@ package marp.mapelements;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import marp.mapelements.details.FontSize;
 import marp.mapelements.details.MapColor;
 import marp.mapelements.details.ShapeType;
 
@@ -140,14 +142,24 @@ public class SimpleShape extends Element {
     public float[] getBounds() {
         return this.boundingCoords;
     }
-    public void drawBounds(GraphicsContext gc) {
+    public void drawBounds(GraphicsContext gc, float zoom) {
+        gc.setFill(Color.PURPLE);
         gc.beginPath();
         gc.moveTo(boundingCoords[0], boundingCoords[1]);
-        gc.moveTo(boundingCoords[2], boundingCoords[1]);
-        gc.moveTo(boundingCoords[2], boundingCoords[3]);
-        gc.moveTo(boundingCoords[0], boundingCoords[3]);
+        gc.lineTo(boundingCoords[2], boundingCoords[1]);
+        gc.lineTo(boundingCoords[2], boundingCoords[3]);
+        gc.lineTo(boundingCoords[0], boundingCoords[3]);
         gc.closePath();
-        gc.setFill(Color.PURPLE);
         gc.fill();
+
+        // Draw text at each corner
+        gc.setStroke(Color.TRANSPARENT);
+        gc.setFont(Font.font("Helvetica Neue", zoom * FontSize.QUITE_SMALL.getSize()));
+        gc.setFill(Color.BLACK);
+        gc.fillText("(" + boundingCoords[0] + ", " + boundingCoords[1] + ")", boundingCoords[0], boundingCoords[1]);
+        gc.fillText("(" + boundingCoords[2] + ", " + boundingCoords[1] + ")", boundingCoords[2], boundingCoords[1]);
+        gc.fillText("(" + boundingCoords[2] + ", " + boundingCoords[3] + ")", boundingCoords[2], boundingCoords[3]);
+        gc.fillText("(" + boundingCoords[0] + ", " + boundingCoords[3] + ")", boundingCoords[0], boundingCoords[3]);
     }
+
 }

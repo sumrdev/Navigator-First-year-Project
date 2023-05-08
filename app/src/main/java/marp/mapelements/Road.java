@@ -197,7 +197,7 @@ public class Road extends Element{
         return boundingCoords;
     }
     @Override
-    public void drawBounds(GraphicsContext gc) {
+    public void drawBounds(GraphicsContext gc, float zoom) {
 
     }
 }

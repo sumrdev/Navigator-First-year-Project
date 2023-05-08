@@ -227,7 +227,7 @@ public class MapObjectInParsing implements Serializable{
                     case FOREST:
                     case CEMENT:
                     case COMMERCIAL_GROUND:
-                    case FARMLAND:
+                    // case FARMLAND:
                         mapObjects.getTerrainAreasList().add(new SimpleShape( this.unfinishedShapeType, coords.get(0), coords.get(1)));
                         break;
                     default:
@@ -255,8 +255,10 @@ public class MapObjectInParsing implements Serializable{
                     mapObjects.getMotorWaysList().add(road);
                     break;
                 case PRIMARY:
-                case TERTIARY:
                     mapObjects.getLargeRoadsList().add(road);
+                    break;
+                case TERTIARY:
+                    mapObjects.getMediumRoadsList().add(road);
                     break;
                 case RESIDENTIAL:
                 case PEDESTRIAN:
@@ -297,6 +299,11 @@ public class MapObjectInParsing implements Serializable{
     }
 
     public void finishRelation(){
+        if (this.completeAddressCount==4){
+            Address address = new Address(this.street, this.housenumber, this.postcode, this.city, unfinishedPoint.getX(), unfinishedPoint.getY());
+            mapObjects.getAddressList().add(address);
+            mapObjects.getTrie().insert(address);
+        }
         if (unfinishedRelationSimpleShapes.size() > 0) {
             switch (unfinishedShapeType) {
                 case BUILDING:
@@ -309,14 +316,14 @@ public class MapObjectInParsing implements Serializable{
                 case FOREST:
                 case CEMENT:
                 case COMMERCIAL_GROUND:
-                case FARMLAND:
+                // case FARMLAND:
                     mapObjects.getTerrainAreasList().add(new ComplexShape(this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
                     break;
                 default:
                     break;
             }
         }
-
+        cleanUpAddressVariables();
         unfinishedRelationSimpleShapes = new ArrayList<>();
         unfinishedShapeType = ShapeType.UNDEFINED;
         unfinishedPointType = PointType.UNDEFINED;
@@ -362,5 +369,12 @@ public class MapObjectInParsing implements Serializable{
 
     public ArrayList<SimpleShape> getCoastlineSegments() {
         return coastLineSegmentList;
+    }
+
+    public void deletePointHashMap(){
+        if(this.pointIDtoPoint!=null){
+            this.pointIDtoPoint = null;
+            System.gc();
+        }
     }
 }

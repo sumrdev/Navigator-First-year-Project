@@ -6,13 +6,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -112,9 +110,9 @@ public final class Model implements Serializable{
         System.out.println(inputStream);
         try (var bin = new ObjectInputStream(new BufferedInputStream(inputStream))) {
             System.gc();
-            Model m = (Model) bin.readObject();
+            instance = (Model) bin.readObject();
             System.out.println("Loaded binary in: " + (new Time(System.currentTimeMillis()).getTime() - time.getTime())/1000 + "s");
-            return m;
+            return getInstance();
         }
     }
 

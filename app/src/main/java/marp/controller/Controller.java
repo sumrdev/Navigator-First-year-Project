@@ -109,6 +109,18 @@ public class Controller {
                     // nearest selectable element.
                     Point2D point = view.getMapScene().screenCoordsToMapCoords(new Point2D(lastX, lastY));
                     MapPoint nearestPoint = model.getNearestPointForMapSelection(point);
+                    if (view.getMapMenu().getDirectionsPanel().endLocationField.isFocused()) {
+                        view.getMapMenu().getDirectionsPanel().endLocationField.setText(closestAddressToPointAsString(nearestPoint));
+                        setEndLocation(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress(), false);
+                        model.getMapObjects().clearRoute();
+                        view.getMapScene().redraw();
+                    } else if (view.getMapMenu().getDirectionsPanel().startLocationField.isFocused()) {
+                        view.getMapMenu().getDirectionsPanel().startLocationField.setText(closestAddressToPointAsString(nearestPoint));
+                        model.getMapObjects().clearRoute();
+                        view.getMapScene().redraw();
+                        setStartLocation(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress(), false);
+                    } else {
+                    model.setSelectedPoint(nearestPoint);
                     // focus on the point without panning
                     focusOnPoint(nearestPoint, false, false);
                     // set marker point on selected point.
@@ -117,7 +129,7 @@ public class Controller {
                     model.setSelectedPointMarker(new PointOfInterest("", PointType.SELECTED,
                             (float) (nearestPoint.getX() / 0.56), -nearestPoint.getY(), false));
                     view.getMapScene().redraw();
-
+                    }
                 }
             }
         });
@@ -258,23 +270,8 @@ public class Controller {
             model.getMapObjects().getDigraph().setWalking();
             System.out.println(model.transportMode);
         });
-        view.getMapMenu().getDirectionsPanel().findRouteButton.setOnAction(e -> {
-            if (view.getMapMenu().getDirectionsPanel().startLocationField.getAddress() != null
-                    && view.getMapMenu().getDirectionsPanel().endLocationField.getAddress() != null) {
-                RoadNode start = model.getMapObjects().getRoadNodeRTree()
-                        .getNearest(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress());
-                RoadNode end = model.getMapObjects().getRoadNodeRTree()
-                        .getNearest(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress());
-                setStartLocation(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress(), false);
-                setEndLocation(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress(), false);
-                List<String> directions = model.getMapObjects().getDigraph().aStar(end, start);
-                float distance = model.getMapObjects().getDigraph().getDistance();
-                int travelTime = model.getMapObjects().getDigraph().getTravelTime(model.getTransportMode());
-                view.getMapMenu().getDirectionsPanel().setGuideShow(true);
-                view.getMapMenu().getDirectionsPanel().receiveGuideList(directions);
-                view.getMapMenu().getDirectionsPanel().updateDistanceAndTime(distance, travelTime);
-                view.getMapScene().redraw();
-            }
+        view.getMapMenu().getDirectionsPanel().findRouteButton.setOnAction( e -> {
+            calculateRoute();
         });
 
         // ##########################################################
@@ -313,16 +310,17 @@ public class Controller {
             view.getMapMenu().getSelectedPointPanel().searchBar.clear();
         });
         view.getMapMenu().getSelectedPointPanel().directionsToSelectedPointButton.setOnAction(e -> {
-            // Not all selected points are addresses. We find the closest address and add it
-            // to the destination searchbar on the directions panel.
-            Address closestAddress = model.getMapObjects().getAddressTree().getNearest(
-                    new float[] { model.getSelectedPointMarker().getX(), model.getSelectedPointMarker().getY() });
-            // Add the address to the searchbar as text.
-            view.getMapMenu().getDirectionsPanel().endLocationField
-                    .setText(closestAddress.getStreet() + " " + closestAddress.getHouseNumber() + " "
-                            + closestAddress.getPostCode() + " " + closestAddress.getCity());
+            view.getMapMenu().getDirectionsPanel().endLocationField.setText(closestAddressToPointAsString(model.getSelectedPont()));
             // Change the menu panel to the directions panel
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getDirectionsPanel());
+            setEndLocation(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress(), false);
+            if (view.getMapMenu().getDirectionsPanel().startLocationField.getAddress() != null) {
+                calculateRoute();
+            } else {
+                model.getMapObjects().clearRoute();
+                view.getMapScene().redraw();
+            }
+            //IDIOT
         });
         view.getMapMenu().getSelectedPointPanel().saveLocationButton.setOnAction(e -> {
             // When pressing the save point button we first check the status of the button
@@ -513,6 +511,16 @@ public class Controller {
             view.setScene(view.getMapScene());
         });
     }
+
+    private String closestAddressToPointAsString(MapPoint selectedPont) {
+        // Not all selected points are addresses. We find the closest address and add it
+        // to the destination searchbar on the directions panel.
+        Address closestAddress = model.getMapObjects().getAddressTree().getNearest(
+                new float[] {(float) (selectedPont.getX()/0.56), -selectedPont.getY() });
+        // Add the address to the searchbar as text.
+        return closestAddress.getStreet() + " " + closestAddress.getHouseNumber() + " "
+                        + closestAddress.getPostCode() + " " + closestAddress.getCity();
+    }
     /*
      * FileChooser fileChooser = new FileChooser();
      * try {
@@ -558,7 +566,9 @@ public class Controller {
         }
         // Redraw the view
         view.getMapScene().redraw();
+        System.out.println("Test!!!!");
     }
+
 
     private void setEndLocation(Address address, boolean shouldPan) {
         if (shouldPan) {
@@ -621,7 +631,7 @@ public class Controller {
                 // point.
                 Point2D firstPoint = view.getMapScene().screenCoordsToMapCoords(
                         new Point2D(view.getCanvas().getWidth() / 2, view.getMapScene().getHeight() / 2));
-                panToPoint(mapPoint);
+               panToPoint(mapPoint);
             }
             if (shouldSetMarker) {
                 // Make a custom landmark to show the selected point
@@ -632,7 +642,6 @@ public class Controller {
             }
         }
     }
-
     public void panToPoint(MapPoint mapPoint) {
         // Find the middle screen coordinate and find the map coordinates for this
         // point.
@@ -677,6 +686,23 @@ public class Controller {
             errorMsg.setContentText("MARP was unable to start printing the scene. \nPlease try again later...");
 
             errorMsg.show();
+        }
+    }
+    private void calculateRoute() {
+        if (view.getMapMenu().getDirectionsPanel().startLocationField.getAddress() != null && view.getMapMenu().getDirectionsPanel().endLocationField.getAddress() != null) {
+            RoadNode start = model.getMapObjects().getRoadNodeRTree().getNearest(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress());
+            RoadNode end = model.getMapObjects().getRoadNodeRTree().getNearest(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress());
+            setStartLocation(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress(), false);
+            setEndLocation(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress(), false);
+            List<String> directions = model.getMapObjects().getDigraph().aStar(end, start, true);
+            float distance = model.getMapObjects().getDigraph().getDistance();
+            int travelTime = model.getMapObjects().getDigraph().getTravelTime(model.getTransportMode());
+            //model.graph.runaStarWithNodeIndex(Integer.parseInt(view.getMapMenu().getDirectionsPanel().startLocationField.getText()), Integer.parseInt(view.getMapMenu().getDirectionsPanel().endLocationField.getText()));
+            //view.getMapMenu().getDirectionsPanel().receiveGuideList(null);
+            view.getMapMenu().getDirectionsPanel().setGuideShow(true);
+            view.getMapMenu().getDirectionsPanel().receiveGuideList(directions);
+            view.getMapMenu().getDirectionsPanel().updateDistanceAndTime(distance, travelTime);
+            view.getMapScene().redraw();
         }
     }
 }

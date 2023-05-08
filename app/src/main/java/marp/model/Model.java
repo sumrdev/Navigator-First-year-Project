@@ -86,20 +86,25 @@ public class Model implements Serializable{
     }
 
     private static Model loadZIP(InputStream inputStream, String filename) throws IOException, XMLStreamException, FactoryConfigurationError {
+        Time time = new Time(System.currentTimeMillis());
         ZipInputStream input = new ZipInputStream(inputStream);
         input.getNextEntry();
         OSMParser osmParser = new OSMParser();
         MapObjects mapObjects = osmParser.parseOSM(input);
         input.close();
+        System.out.println("Loaded zip in: " + (new Time(System.currentTimeMillis()).getTime() - time.getTime())/1000 + "s");
         return new Model(mapObjects,filename);
     }
 
 
     private static Model loadBIN(InputStream inputStream) throws IOException, ClassNotFoundException {
+        Time time = new Time(System.currentTimeMillis());
         System.out.println(inputStream);
         try (var bin = new ObjectInputStream(new BufferedInputStream(inputStream))) {
             System.gc();
-            return (Model) bin.readObject();
+            Model m = (Model) bin.readObject();
+            System.out.println("Loaded binary in: " + (new Time(System.currentTimeMillis()).getTime() - time.getTime())/1000 + "s");
+            return m;
         }
     }
 

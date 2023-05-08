@@ -25,7 +25,7 @@ public class Road extends Element{
 
     private float[] boundingCoords = {Float.MAX_VALUE, Float.MAX_VALUE, -Float.MAX_VALUE, -Float.MAX_VALUE};
     
-    public Road(Long id, ArrayList<RoadNode> nodes, RoadType type, int speed, boolean oneway, String name) {
+    public Road(long id, ArrayList<RoadNode> nodes, RoadType type, int speed, boolean oneway, String name) {
         this.id = id;
         this.nodes = nodes;
         this.roadType = type;

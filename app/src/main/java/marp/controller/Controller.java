@@ -1,5 +1,6 @@
 package marp.controller;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -8,6 +9,7 @@ import java.util.*;
 import javafx.geometry.Point2D;
 import javafx.print.*;
 import javafx.scene.Cursor;
+import javafx.scene.control.ListView;
 import javafx.scene.image.*;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
@@ -95,24 +97,24 @@ public class Controller {
             if (mouseDragStartPositionX == (float) e.getX() && mouseDragStartPositionY == (float) e.getY()) {
                 // There are two cases: Either we are making a new POI or we are selecting a
                 // point.
-                Point2D point = view.getMapScene().screenCoordsToMapCoords(new Point2D(lastX, lastY));
                 if (isCreatingCustomPointOfInterest) {
                     view.getMapMenu().changeMenuPanel(view.getMapMenu().getPointOfInterestPanel());
                     toggleIsCreatingCustomPointOfInterest();
                 } else {
                     // convert the screen coords of the mouse click to map coords and find the
                     // nearest selectable element.
-                    model.setSelectedPoint(model.getNearestPointForMapSelection(point));
+                    Point2D point = view.getMapScene().screenCoordsToMapCoords(new Point2D(lastX, lastY));
+                    MapPoint nearestPoint = model.getNearestPointForMapSelection(point);
                     // focus on the point without panning
-                    focusOnPoint(model.getSelectedPont(), false, false);
-                    //set marker point on selected point.
-                    model.setSelectedPointMarker(new PointOfInterest("", PointType.SELECTED, (float) (model.getSelectedPont().getX()/0.56), -model.getSelectedPont().getY(), false));
-                    //set the start and end locations markers from navigation to null to avoid showing them in case the user selects a point while having active start and end locations.
-                    setStartLocation(null, false);
-                    setEndLocation(null, false);
-                    model.getMapObjects().clearRoute();
+                    focusOnPoint(nearestPoint, false, false);
+                    // set marker point on selected point.
+                    PointOfInterest pointMarker = new PointOfInterest("", PointType.SELECTED,
+                            (float) (nearestPoint.getX() / 0.56), -nearestPoint.getY(), false);
+                    model.setSelectedPointMarker(new PointOfInterest("", PointType.SELECTED,
+                            (float) (nearestPoint.getX() / 0.56), -nearestPoint.getY(), false));
+                    view.getMapScene().redraw();
+
                 }
-                view.getMapScene().redraw();
             }
         });
 
@@ -171,14 +173,7 @@ public class Controller {
         });
 
         view.getMapMenu().getMinimizedPanel().takeSnapshotButton.setOnAction(e -> {
-            PrinterJob job = PrinterJob.createPrinterJob();
-            job.getPrinter().createPageLayout(Paper.A4, PageOrientation.LANDSCAPE, Printer.MarginType.DEFAULT);
-            if (job != null) {
-                view.getCanvas().getTransforms().add(new Scale(0.2, 0.2));
-                job.printPage(view.getCanvas());
-                job.endJob();
-                view.getCanvas().getTransforms().add(new Scale(5, 5));
-            }
+            takeSnapShot();
         });
 
         // ##########################################################
@@ -272,6 +267,9 @@ public class Controller {
                 view.getMapMenu().getDirectionsPanel().updateDistanceAndTime(distance, travelTime);
                 view.getMapScene().redraw();
             }
+        });
+        view.getMapMenu().getDirectionsPanel().takeSnapshotButton.setOnAction(e -> {
+            takeSnapShot();
         });
 
         // ##########################################################
@@ -453,6 +451,10 @@ public class Controller {
             model.isAddressVisible = !model.isAddressVisible;
             view.getMapScene().redraw();
         });
+        view.getMapMenu().getSettingsPanel().zoomAdjustSlider.setOnMouseReleased(e ->{
+            System.out.print("zoom value: ");
+            System.out.println(view.getMapMenu().getSettingsPanel().zoomAdjustSlider.getValue());
+        });
 
         // ##########################################################
         // ############# Create point panel #########################
@@ -490,10 +492,10 @@ public class Controller {
      * new FileChooser.ExtensionFilter("OSM files", "*.osm"),
      * new FileChooser.ExtensionFilter("BIN files", "*.bin"),
      * new FileChooser.ExtensionFilter("All files", "*.*"));
-     *
+     * 
      * File selectedFile = fileChooser.showOpenDialog(stage);
      * if (selectedFile == null) {
-     *
+     * 
      * } else {
      * try {
      * view.getMapScene().resetAffine();
@@ -511,7 +513,7 @@ public class Controller {
      * e1.printStackTrace();
      * }
      * });
-     *
+     * 
      * }
      */
 
@@ -622,5 +624,16 @@ public class Controller {
 
         // Pan to the selected point
         view.getMapScene().pan(xDist, yDist);
+    }
+
+    private void takeSnapShot(){
+        PrinterJob job = PrinterJob.createPrinterJob();
+            job.getPrinter().createPageLayout(Paper.A4, PageOrientation.LANDSCAPE, Printer.MarginType.DEFAULT);
+            if (job != null) {
+                view.getCanvas().getTransforms().add(new Scale(0.2, 0.2));
+                job.printPage(view.getCanvas());
+                job.endJob();
+                view.getCanvas().getTransforms().add(new Scale(5, 5));
+            }
     }
 }

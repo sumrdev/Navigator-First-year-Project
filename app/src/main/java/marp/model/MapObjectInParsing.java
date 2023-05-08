@@ -29,7 +29,6 @@ public class MapObjectInParsing implements Serializable{
     private Point unfinishedPoint;
 
     public long unfinishedSimpleShapeID; 
-    private long unfinishedRelationID;
     private ArrayList<SimpleShape> coastLineSegmentList = new ArrayList<>();
 
     //private Road unfinishedRoad;
@@ -82,7 +81,6 @@ public class MapObjectInParsing implements Serializable{
     }
 
     public void initializeEmptyComplexShape(long id){
-        this.unfinishedRelationID = id;
     }
 
     public void setPointType(PointType pointType){
@@ -145,7 +143,7 @@ public class MapObjectInParsing implements Serializable{
 
     public void finishPoint() {
         if (unfinishedPointType==PointType.UNDEFINED && this.completeAddressCount==4){
-            Address address = new Address(this.street, this.housenumber, this.postcode, this.city, unfinishedPoint.getX(), unfinishedPoint.getY(), -1);
+            Address address = new Address(this.street, this.housenumber, this.postcode, this.city, unfinishedPoint.getX(), unfinishedPoint.getY());
             mapObjects.getAddressList().add(address);
             mapObjects.getTrie().insert(address);
         } else if(fontSize != FontSize.UNDEFINED){
@@ -171,6 +169,10 @@ public class MapObjectInParsing implements Serializable{
                     break;
                 }
         } else if (unfinishedPointType != PointType.UNDEFINED) {
+            //some points of interest only have a type and no name
+            if (this.name == null){
+                this.name = unfinishedPointType.typeName;
+            }
             PointOfInterest pointOfInterest = new PointOfInterest(this.name, this.unfinishedPointType, this.unfinishedPoint.getX(), this.unfinishedPoint.getY(), false);
             switch (unfinishedPointType) {
                 case BUS_STOP:
@@ -204,7 +206,7 @@ public class MapObjectInParsing implements Serializable{
             }
             if (this.completeAddressCount==4) {
                 Point2D shapeCenterCoords = findCenterOfShape(coords.get(0), coords.get(1));
-                Address address = new Address(street, housenumber, postcode, city, (float) shapeCenterCoords.getX(), (float) shapeCenterCoords.getY(), -1);
+                Address address = new Address(street, housenumber, postcode, city, (float) shapeCenterCoords.getX(), (float) shapeCenterCoords.getY());
                 mapObjects.getAddressList().add(address);
                 mapObjects.getTrie().insert(address);
             }
@@ -316,7 +318,6 @@ public class MapObjectInParsing implements Serializable{
         }
 
         unfinishedRelationSimpleShapes = new ArrayList<>();
-        unfinishedRelationID = 0;
         unfinishedShapeType = ShapeType.UNDEFINED;
         unfinishedPointType = PointType.UNDEFINED;
     }

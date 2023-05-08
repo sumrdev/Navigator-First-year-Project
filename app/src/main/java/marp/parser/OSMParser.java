@@ -136,6 +136,9 @@ public class OSMParser {
                                 case "building":
                                     mapObjectInParsing.setShapeType(ShapeType.BUILDING);
                                     break;
+                                case "railway":
+                                    mapObjectInParsing.setShapeType(ShapeType.UNDEFINED);
+                                    break;
                                 case "natural":
                                     switch (value) {
                                         case "wood":

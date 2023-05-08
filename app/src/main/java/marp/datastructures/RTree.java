@@ -76,12 +76,12 @@ public class RTree<T extends Element> implements Serializable {
             float[] bounds = high.boundingRect;
             if(bounds[0] < result[0]){
                 result[0] = bounds[0];
-            } else if(bounds[2] > result[2]) {
+            } if(bounds[2] > result[2]) {
                 result[2] = bounds[2];
             }
             if(bounds[1] < result[1]){
                 result[1] = bounds[1];
-            } else if(bounds[3] > result[3]){
+            } if(bounds[3] > result[3]){
                 result[3] = bounds[3];
             }
             return result;

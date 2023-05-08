@@ -35,7 +35,7 @@ public class View {
         StackPane.setAlignment(appName, Pos.TOP_CENTER);
         mapMenu = new MapMenu(model);
         canvas = new Canvas(1000, 700);
-        zoomMenu = new ZoomMenu(100);
+        zoomMenu = new ZoomMenu(1000);
         nearestRoadInfo = new NearestRoadInfo();
         // bind canvas width + height to screen size
         canvas.widthProperty().bind(primaryStage.widthProperty());

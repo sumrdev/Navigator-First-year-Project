@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Paths;
 
+import org.checkerframework.common.reflection.qual.GetClass;
+
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -17,8 +19,11 @@ public class App extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        String defaultFilename = "denmark-latest.bin";
+        String defaultFilename = "bornholm.osm";
         InputStream defaultFile = getClass().getResourceAsStream("/maps/"+defaultFilename);
+
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/logo.png")));
+
 
         Model model = Model.createModel(defaultFile, defaultFilename);
         View view = new View(primaryStage, model);

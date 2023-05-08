@@ -103,9 +103,11 @@ public class MapScene extends Scene{
     }
 
     private void calculateZoomMenuDistance() {
-        Bounds bounds = screenBoundsToMapBounds(canvas.getLayoutBounds());
-
-        double x = MathFunctions.distanceInMeters((float) (bounds.getMinX()/0.56), (float) bounds.getMinY(), (float) (bounds.getMaxX()/0.56), (float) bounds.getMinY());
+        Point2D a = screenCoordsToMapCoords(new Point2D(0, 0));    
+        Point2D b = screenCoordsToMapCoords(new Point2D(0, 0.15));
+        System.out.println(a);
+        System.out.println(b);
+        double x = MathFunctions.distanceInMeters((float) a.getX(),(float) a.getY(),(float) b.getX(),(float) b.getY())*6666;
         zoomMenu.setDistance(x);
     }
 

@@ -25,19 +25,20 @@ public enum RoadType {
     public float getRoadWidth() {
         return roadWidth;
     }
-
+    
     public float getOutlineWidth() {
         return outlineWidth;
     }
     public int getSpeed() {
         return speed;
     }
-
+    
     public boolean isDriveable() {
         return driveable;
     }
-
+    
     public boolean isWalkable() {
         return walkable;
     }
+
 }

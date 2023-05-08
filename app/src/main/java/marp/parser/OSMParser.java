@@ -122,6 +122,10 @@ public class OSMParser {
                                 case "oneway":
                                     mapObjectInParsing.setRoadOneWay(value.equals("yes"));
                                     break;
+                                case "junction":
+                                if(value.equals("roundabout")) {
+                                        mapObjectInParsing.setRoadRoundabout(true);
+                                    }
                                 case "maxspeed":
                                     try {
                                         int speed = Integer.parseInt(value);

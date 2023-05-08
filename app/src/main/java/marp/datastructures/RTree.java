@@ -1,6 +1,9 @@
 package marp.datastructures;
 
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import marp.mapelements.Element;
 import marp.mapelements.Point;
 
@@ -20,48 +23,66 @@ public class RTree<T extends Element> implements Serializable {
      * NullPointerException – if null is given as a parameter
      */
     public RTree(List<T> values){
-        maxElementsPerLeaf = 100;
+        maxElementsPerLeaf = 50;
         dimensions = 2;
         treeNode = new Node(values, 0);
     }
     protected class Node implements Serializable{
         int size;
-        //      protected Node[]
         protected int children;
         protected Node low;
         protected Node high;
         boolean hasChildren;
         int layer;
         //[0],[1] will be min, coords, (x,y respectively) and [2],[3] will be max coords
-        float[] boundingRect;
+        final float[] boundingRect;
         //values kan laves til en linked list da denne er samme hastighed at lave for each på
         //og er hurtigere hvis der skal laves quick select
         List<T> values;
         public Node(List<T> values, int layer) {
             children = 2;
             this.layer = layer;
-            boundingRect = getNodeBounds(values);
             size = values.size();
             if (values.size() > maxElementsPerLeaf){
                 splitNode(values);
+                boundingRect = getBoundingRectFromChildren();
             } else {
                 this.values = values;
+                boundingRect = getNodeBounds(values);
             }
         }
         protected float[] getNodeBounds(List<T> values){
-            float[] result = new float[]{Float.MAX_VALUE, Float.MAX_VALUE, -1000, -1000};
+            float[] result = new float[]{Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY};
             for(var element : values){
                 float[] bounds = element.getBounds();
                 if(bounds[0] < result[0]){
                     result[0] = bounds[0];
-                } else if(bounds[2] > result[2]) {
+                }
+                if(bounds[2] > result[2]) {
                     result[2] = bounds[2];
                 }
                 if(bounds[1] < result[1]){
                     result[1] = bounds[1];
-                } else if(bounds[3] > result[3]){
+                }
+                if(bounds[3] > result[3]){
                     result[3] = bounds[3];
                 }
+            }
+            return result;
+        }
+        //only works for RTrees with 2 children
+        protected float[] getBoundingRectFromChildren(){
+            float[] result = low.boundingRect;
+            float[] bounds = high.boundingRect;
+            if(bounds[0] < result[0]){
+                result[0] = bounds[0];
+            } else if(bounds[2] > result[2]) {
+                result[2] = bounds[2];
+            }
+            if(bounds[1] < result[1]){
+                result[1] = bounds[1];
+            } else if(bounds[3] > result[3]){
+                result[3] = bounds[3];
             }
             return result;
         }
@@ -106,6 +127,17 @@ public class RTree<T extends Element> implements Serializable {
             if(high.intersects(rangeCoords)){
                 high.getElementsInRange(rangeCoords,list);
             }
+        }
+        public void getElementsInRangeDebug(float[] rangeCoords, List<float[]> list){
+            if(hasChildren) {
+                if (low.intersects(rangeCoords)) {
+                    low.getElementsInRangeDebug(rangeCoords, list);
+                }
+                if (high.intersects(rangeCoords)) {
+                    high.getElementsInRangeDebug(rangeCoords, list);
+                }
+            }
+            list.add(boundingRect);
         }
         /*public T getClosest(float x, float y, T currentClosest){
             //still has a problem that the currentClosest element is null at the start at will throw an exception
@@ -241,14 +273,28 @@ public class RTree<T extends Element> implements Serializable {
     public int size(){
         return treeNode.size;
     }
-    public T getNearest(float[] ds){
+    public T getNearest(float[] bound){
         PriorityQueue<NodeDistance> pq = new PriorityQueue<>();
         pq.add(new NodeDistance(null, Float.MAX_VALUE));
-        treeNode.getNearest(ds, pq,1);
+        treeNode.getNearest(bound, pq,1);
         T result = pq.peek().element;
         return result;
     }
     public T getNearest(Point point){
         return getNearest(new float[]{point.getX(), point.getY()});
+    }
+
+    public void getElementsInRangeDebug(GraphicsContext gc, Point2D point){
+        float[] pointAsBound = new float[]{(float) point.getX(), (float) point.getY(), (float) point.getX(), (float) point.getY()};
+        List<float[]> treeNodeBounds = new ArrayList<>();
+        treeNode.getElementsInRangeDebug(pointAsBound, treeNodeBounds);
+        for (float[] boundingCoords : treeNodeBounds) {
+            System.out.println("bounds found: " + Arrays.toString(boundingCoords));
+            gc.setStroke(Color.PURPLE);
+            gc.strokeLine(boundingCoords[0], boundingCoords[1],boundingCoords[2], boundingCoords[1]);
+            gc.strokeLine(boundingCoords[2], boundingCoords[1],boundingCoords[2], boundingCoords[3]);
+            gc.strokeLine(boundingCoords[2], boundingCoords[3],boundingCoords[0], boundingCoords[3]);
+            gc.strokeLine(boundingCoords[0], boundingCoords[3],boundingCoords[0], boundingCoords[1]);
+        }
     }
 }

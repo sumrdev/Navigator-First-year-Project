@@ -97,6 +97,7 @@ public class ComplexShape extends Element {
 
     @Override
     public void draw(GraphicsContext gc, int levelOfDetail, double zoom){
+        //drawBounds(gc);
         gc.setFillRule(FillRule.EVEN_ODD);
         gc.setFill(MapColor.getInstance().colorMap.get(this.type.toString()));
         gc.beginPath();

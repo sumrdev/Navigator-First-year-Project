@@ -17,10 +17,6 @@ public class SimpleShape extends Element {
     protected float[] y;
     private String role;
     private float[] boundingCoords = {Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY};
-
-    protected SimpleShape(){
-    }
-
     public SimpleShape(ShapeType type, float[] x, float[] y){
         this.type = type;
         this.x = x;
@@ -127,6 +123,7 @@ public class SimpleShape extends Element {
 
     @Override
     public void draw(GraphicsContext gc, int levelOfDetail, double zoom) {
+        //drawBounds(gc);
         gc.setFill(MapColor.getInstance().colorMap.get(type.toString()));
         if(levelOfDetail>x.length) return;
         gc.beginPath();

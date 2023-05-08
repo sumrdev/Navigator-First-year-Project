@@ -13,6 +13,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.*;
+import javafx.scene.input.MouseButton;
+import javafx.scene.paint.Color;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -131,19 +133,24 @@ public class Controller {
                     view.getMapScene().redraw();
                     }
                 }
+            } else if(e.getButton() == MouseButton.SECONDARY) {
+                view.getMapScene().redraw();
+                view.getMapScene().drawUserMadeLine(new Point2D(mouseDragStartPositionX, mouseDragStartPositionY), new Point2D(e.getX(), e.getY()));
             }
         });
 
         view.getCanvas().setOnMouseDragged(e -> {
-            // When dragging the mouse we pan with the difference in mouse x and y of the
-            // mouse position.
-            float dx = (float) (e.getX() - lastX);
-            float dy = (float) (e.getY() - lastY);
-            view.getMapScene().pan(dx, dy);
-            view.getMapScene().redraw();
-            // Update last x and y
-            lastX = (float) e.getX();
-            lastY = (float) e.getY();
+            if(e.getButton() == MouseButton.PRIMARY) {
+                // When dragging the mouse we pan with the difference in mouse x and y of the
+                // mouse position.
+                float dx = (float) (e.getX() - lastX);
+                float dy = (float) (e.getY() - lastY);
+                view.getMapScene().pan(dx, dy);
+                view.getMapScene().redraw();
+                // Update last x and y
+                lastX = (float) e.getX();
+                lastY = (float) e.getY();
+            }
         });
 
         view.getCanvas().setOnScroll(e -> {

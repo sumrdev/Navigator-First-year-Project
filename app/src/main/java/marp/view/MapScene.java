@@ -222,6 +222,13 @@ public class MapScene extends Scene{
             model.getEndLocationMarker().draw(gc, (1 / Math.sqrt(trans.determinant())) * 30);
         }
     }
+    public void drawUserMadeLine(Point2D start, Point2D end){
+        start = screenCoordsToMapCoords(start);
+        end   = screenCoordsToMapCoords(end);
+        gc.setStroke(Color.PURPLE);
+        gc.strokeLine(start.getX(), start.getY(), end.getX(), end.getY());
+        System.out.println(MathFunctions.distanceInMeters((float)start.getX(), (float)start.getY(), (float)end.getX(), (float)end.getY()));
+    }
     private void drawCountryNames(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 300000 && zoomMenu.getZoomlevel() > 5000) {
             for (PlaceName placeName : model.getMapObjects().getQuiteLargeNameTree().getElementsInRange(bounds)) {

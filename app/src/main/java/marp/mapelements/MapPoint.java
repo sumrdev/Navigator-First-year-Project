@@ -10,5 +10,9 @@ public interface MapPoint {
     float getX();
 
     float getY();
+
+    boolean getFavouriteStatus();
+
+    void setFavouriteStatus(boolean isFavourite);
 }
 

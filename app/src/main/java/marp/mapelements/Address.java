@@ -17,6 +17,7 @@ public class Address extends Point implements MapPoint {
     String postCode;
     String city;
     PointType type = PointType.ADDRESS;
+    boolean isFavourite = false;
 
     public Address(String street, String houseNumber, String postCode, String city, float x, float y, long id){
         super(x,y);
@@ -71,5 +72,14 @@ public class Address extends Point implements MapPoint {
     @Override
     public String toString(){
         return getName();
+    }
+
+    @Override
+    public boolean getFavouriteStatus() {
+        return isFavourite;
+    }
+    @Override
+    public void setFavouriteStatus(boolean isFavourite) {
+        this.isFavourite = !this.isFavourite;
     }
 }

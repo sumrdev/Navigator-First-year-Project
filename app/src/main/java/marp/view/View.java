@@ -8,6 +8,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 import marp.model.Model;
+import marp.view.gui.NearestRoadInfo;
 import marp.view.gui.ZoomMenu;
 import marp.view.gui.menugui.MapMenu;
 
@@ -20,6 +21,7 @@ public class View {
     private final Canvas canvas;
     public ChooseMapScene chooseMapScene;
     public ListView<String> listView;
+    public NearestRoadInfo nearestRoadInfo;
 
     public View(Stage primaryStage, Model model) {
         this.primaryStage = primaryStage;
@@ -34,6 +36,7 @@ public class View {
         mapMenu = new MapMenu(model);
         canvas = new Canvas(1000, 700);
         zoomMenu = new ZoomMenu(100);
+        nearestRoadInfo = new NearestRoadInfo();
         // bind canvas width + height to screen size
         canvas.widthProperty().bind(primaryStage.widthProperty());
         canvas.heightProperty().bind(primaryStage.heightProperty());
@@ -61,11 +64,11 @@ public class View {
     }
 
     public void createNewMapScene() {
-        mapScene = new MapScene(this.model, mapMenu, zoomMenu, canvas);
+        mapScene = new MapScene(this.model, mapMenu, zoomMenu, nearestRoadInfo, canvas);
     }
 
     public void createNewMapScene(Model model) {
-        mapScene = new MapScene(model, mapMenu, zoomMenu, canvas);
+        mapScene = new MapScene(model, mapMenu, zoomMenu, nearestRoadInfo, canvas);
     }
 
     public Canvas getCanvas() {
@@ -78,5 +81,8 @@ public class View {
 
     public MapMenu getMapMenu() {
         return mapMenu;
+    }
+    public NearestRoadInfo getNearestRoadInfo() {
+        return nearestRoadInfo;
     }
 }

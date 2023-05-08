@@ -74,6 +74,7 @@ public class MapObjects implements Serializable{
     private final ArrayList<PointOfInterest> POIList = new ArrayList<>();
     private RTree<PointOfInterest> POITree;
     private final ArrayList<PointOfInterest> customPOIList = new ArrayList<>();
+    public final ArrayList<PointOfInterest> favouritesMarkerList = new ArrayList<>();
     public ArrayList<PointOfInterest> getTrainPOIList() {
         return trainPOIList;
     }
@@ -94,6 +95,9 @@ public class MapObjects implements Serializable{
     }
     public ArrayList<PointOfInterest> getCustomPOIList() {
         return customPOIList;
+    }
+    public ArrayList<PointOfInterest> getFavouritesMarkerList() {
+        return favouritesMarkerList;
     }
 
     //#####################################################

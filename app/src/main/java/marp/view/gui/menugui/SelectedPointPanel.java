@@ -7,7 +7,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
-import marp.datastructures.SimpleTrie;
 import marp.mapelements.Address;
 import marp.mapelements.MapPoint;
 import marp.model.Model;
@@ -36,6 +35,7 @@ public class SelectedPointPanel  extends MenuPanel {
 
     public SelectedPointPanel(Model model) {
         super();
+
 
         //create buttons
         directionsButton = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/directions.png"))));
@@ -97,5 +97,11 @@ public class SelectedPointPanel  extends MenuPanel {
         selectedPointType.setText(mapPoint.getType().typeName);
 
     }
-
+    public void setSavePointButtonMode(boolean isFavourite) {
+        if (!isFavourite) {
+            saveLocationButton.setSelected(false);
+        } else {
+            saveLocationButton.setSelected(true);
+        }
+    }
 }

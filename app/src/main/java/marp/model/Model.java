@@ -32,6 +32,7 @@ import marp.parser.OSMParser;
 
 public class Model implements Serializable{
     private MapObjects mapObjects;
+    private MapPoint selectedPont;
     private PointOfInterest selectedPointMarker;
     private PointOfInterest startLocationMarker;
     private PointOfInterest endLocationMarker;
@@ -167,7 +168,7 @@ public class Model implements Serializable{
         }
 
         //calculate distance to nearest custom point of interest, by iterating through the list of all of them. Inefficient but necessary, as they are not part of a tree.
-        
+
         for (PointOfInterest poi : mapObjects.getCustomPOIList()){
             double customPOIDistance = Math.sqrt(Math.pow(poi.getX() - point.getX(), 2) + Math.pow(poi.getY() - point.getY(), 2));
             if (customPOIDistance < currentDistance) {
@@ -178,6 +179,59 @@ public class Model implements Serializable{
         //We use a point of interest to represent the currently selected point. We update selected point to a new point with the coordinates of the selected point.
         selectedPointMarker = new PointOfInterest(selectedElement.getName(), selectedElement.getType(), selectedElement.getX()*0.56f, -selectedElement.getY(), false);
         return selectedPointMarker;
+    }
+    public String getNearestRoadNameForMapSelection(Point2D point) {
+        // We look for distance to mouse among roads and update the selected road if we find a shorter distance.
+        String selectedRoadName = null;
+        double currentDistance = Double.MAX_VALUE;
+
+        Road nearestSmallRoad = mapObjects.getSmallRoadsTree().getNearest(new float[]{(float) point.getX(), (float) point.getY()});
+        // calculate distance to nearest small road
+        if (nearestSmallRoad != null) {
+            for (RoadNode roadNode : nearestSmallRoad.getNodes()) {
+                double smallRoadDistance = Math.sqrt(Math.pow(roadNode.getX() - point.getX(), 2) + Math.pow(roadNode.getY() - point.getY(), 2));
+                if (smallRoadDistance < currentDistance) {
+                    currentDistance = smallRoadDistance;
+                    selectedRoadName = nearestSmallRoad.getName();
+                }
+            }
+        }
+        Road nearestLargeRoad = mapObjects.getLargeRoadsTree().getNearest(new float[]{(float) point.getX(), (float) point.getY()});
+        // calculate distance to nearest large road
+        if (nearestLargeRoad != null) {
+            for (RoadNode roadNode : nearestLargeRoad.getNodes()) {
+                double largeRoadDistance = Math.sqrt(Math.pow(roadNode.getX() - point.getX(), 2) + Math.pow(roadNode.getY() - point.getY(), 2));
+                if (largeRoadDistance < currentDistance) {
+                    currentDistance = largeRoadDistance;
+                    selectedRoadName = nearestLargeRoad.getName();
+                }
+            }
+        }
+        Road nearestMotorWay = mapObjects.getMotorWaysTree().getNearest(new float[]{(float) point.getX(), (float) point.getY()});
+        // calculate distance to nearest motorway
+        if (nearestMotorWay != null) {
+            for (RoadNode roadNode : nearestMotorWay.getNodes()) {
+                double motorWayDistance = Math.sqrt(Math.pow(roadNode.getX() - point.getX(), 2) + Math.pow(roadNode.getY() - point.getY(), 2));
+                if (motorWayDistance < currentDistance) {
+                    currentDistance = motorWayDistance;
+                    selectedRoadName = nearestMotorWay.getName();
+                }
+            }
+        }
+
+        Road nearestFootPath = mapObjects.getFootPathsTree().getNearest(new float[]{(float) point.getX(), (float) point.getY()});
+        // calculate distance to nearest footpath
+        if (nearestFootPath != null) {
+            for (RoadNode roadNode : nearestFootPath.getNodes()) {
+                double footPathDistance = Math.sqrt(Math.pow(roadNode.getX() - point.getX(), 2) + Math.pow(roadNode.getY() - point.getY(), 2));
+                if (footPathDistance < currentDistance) {
+                    currentDistance = footPathDistance;
+                    selectedRoadName = nearestFootPath.getName();
+                }
+            }
+        }
+
+        return selectedRoadName;
     }
     public void setSelectedPointMarker(PointOfInterest newSelectedPoint) {
         selectedPointMarker = newSelectedPoint;
@@ -202,6 +256,12 @@ public class Model implements Serializable{
 
     public int getTransportMode() {
         return transportMode;
+    }
+    public void setSelectedPoint(MapPoint mapPoint) {
+        selectedPont = mapPoint;
+    }
+    public MapPoint getSelectedPont() {
+        return selectedPont;
     }
 }
 

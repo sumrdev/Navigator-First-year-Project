@@ -1,6 +1,5 @@
 package marp.view.gui.menugui;
 
-import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import marp.datastructures.SimpleTrie;
 import marp.model.Model;
@@ -13,7 +12,7 @@ public class MapMenu extends HBox {
     private SettingsPanel settingsPanel;
     private SelectedPointPanel selectedPointPanel;
     private PointOfInterestPanel pointOfInterestPanel;
-    private Colorblindnessmode colorblindnessmode;
+    private ColorblindnessModePanel colorblindnessmode;
 
     public MapMenu(Model model) {
 
@@ -23,6 +22,7 @@ public class MapMenu extends HBox {
         settingsPanel = new SettingsPanel();
         selectedPointPanel = new SelectedPointPanel(model);
         pointOfInterestPanel = new PointOfInterestPanel();
+        colorblindnessmode = new ColorblindnessModePanel();
 
         //add the minimized menu as the initial menu panel
         this.getChildren().add(minimizedPanel);
@@ -50,7 +50,7 @@ public class MapMenu extends HBox {
     public PointOfInterestPanel getPointOfInterestPanel() {
         return pointOfInterestPanel;
     }
-    public Colorblindnessmode getColorblindnessmode() {
+    public ColorblindnessModePanel getColorblindnessModePanel() {
         return colorblindnessmode;
     }
 }

@@ -29,7 +29,6 @@ public class SettingsPanel extends MenuPanel {
     public MapCheckBox hideRoadsCheckbox;
     public MapCheckBox hideBuildingsCheckbox;
     public MapCheckBox hideTerrainCheckbox;
-    public MapButton takeSnapshotButton;
 
     // slider for zoom adjustment
     public Slider zoomAdjustSlider;
@@ -45,7 +44,6 @@ public class SettingsPanel extends MenuPanel {
         saveMapButton.setMinWidth(160);
         loadAnotherOSMButton = new MapTextButton("Load another OSM file");
         loadAnotherOSMButton.setMinWidth(160);
-        takeSnapshotButton = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/camera.png"))));
 
         //Create container for save and load buttons
 
@@ -87,7 +85,7 @@ public class SettingsPanel extends MenuPanel {
         settingsMenuButtons.setMinWidth(400);
 
         //Add the new UI elements to the menu
-        this.getChildren().addAll(settingsMenuButtons, minimizeButton, directionsButton, settingsButton, takeSnapshotButton);
+        this.getChildren().addAll(settingsMenuButtons, minimizeButton, directionsButton, settingsButton);
         this.setPadding(new Insets(20));
         this.setSpacing(10);
         this.setPickOnBounds(false);

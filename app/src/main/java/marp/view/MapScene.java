@@ -18,6 +18,7 @@ import marp.mapelements.details.MapColor;
 import marp.model.Model;
 import marp.utilities.MathFunctions;
 import marp.view.gui.MapLabel;
+import marp.view.gui.NearestRoadInfo;
 import marp.view.gui.ZoomMenu;
 import marp.view.gui.buttons.MapTextButton;
 import marp.view.gui.menugui.MapMenu;
@@ -29,13 +30,12 @@ public class MapScene extends Scene{
     private Model model;
     private ZoomMenu zoomMenu;
     private  MapMenu mapMenu;
-
     private Canvas canvas;
     public GraphicsContext gc;
     public Affine trans = new Affine();
 
 
-    public MapScene(Model model, MapMenu mapMenu, ZoomMenu zoomMenu, Canvas canvas) {
+    public MapScene(Model model, MapMenu mapMenu, ZoomMenu zoomMenu, NearestRoadInfo nearestRoadInfo, Canvas canvas) {
         super(new VBox());
         this.model = model;
         this.canvas = canvas;
@@ -43,7 +43,6 @@ public class MapScene extends Scene{
 
         this.mapMenu = mapMenu;
         this.zoomMenu = zoomMenu;
-
         StackPane stackedElements = new StackPane();
 
         canvas.widthProperty().addListener(observable -> redraw());
@@ -55,9 +54,10 @@ public class MapScene extends Scene{
         calculateZoomMenuDistance();
         redraw();
 
-        stackedElements.getChildren().addAll(canvas, mapMenu, zoomMenu);
+        stackedElements.getChildren().addAll(canvas, mapMenu, zoomMenu, nearestRoadInfo);
         StackPane.setAlignment(zoomMenu, Pos.BOTTOM_RIGHT);
         StackPane.setAlignment(mapMenu, Pos.TOP_LEFT);
+        StackPane.setAlignment(nearestRoadInfo, Pos.BOTTOM_LEFT);
 
         this.setRoot(stackedElements);
 
@@ -170,7 +170,10 @@ public class MapScene extends Scene{
     // draw custom landmarks
     private void drawCustomLandmarks() {
         for (PointOfInterest customPointOfInterest : model.getMapObjects().getCustomPOIList()) {
-            customPointOfInterest.draw(gc, (1 / Math.sqrt(trans.determinant())) * 20);
+            customPointOfInterest.draw(gc, (1 / Math.sqrt(trans.determinant())) * 30);
+        }
+        for (PointOfInterest favouritePointMarker : model.getMapObjects().getFavouritesMarkerList()) {
+            favouritePointMarker.draw(gc, (1 / Math.sqrt(trans.determinant())) * 30);
         }
     }
     private void drawBusLandmarks(Bounds bounds) {

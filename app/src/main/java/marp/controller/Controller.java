@@ -1,6 +1,5 @@
 package marp.controller;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -9,7 +8,6 @@ import java.util.*;
 import javafx.geometry.Point2D;
 import javafx.print.*;
 import javafx.scene.Cursor;
-import javafx.scene.control.ListView;
 import javafx.scene.image.*;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
@@ -80,6 +78,9 @@ public class Controller {
         // Clicking on the map updates the latest clicked coordinates. if
         // isCreatingCustomPointOfInterest is true, lastPressedX is set as well.
 
+        view.getCanvas().setOnMouseMoved(e -> {
+            view.getNearestRoadInfo().setRoadNameText(model.getNearestRoadNameForMapSelection(view.getMapScene().screenCoordsToMapCoords(new Point2D(e.getX(), e.getY()))));
+        });
         view.getCanvas().setOnMousePressed(e -> {
             lastX = (float) e.getX();
             lastY = (float) e.getY();
@@ -94,18 +95,18 @@ public class Controller {
             if (mouseDragStartPositionX == (float) e.getX() && mouseDragStartPositionY == (float) e.getY()) {
                 // There are two cases: Either we are making a new POI or we are selecting a
                 // point.
+                Point2D point = view.getMapScene().screenCoordsToMapCoords(new Point2D(lastX, lastY));
                 if (isCreatingCustomPointOfInterest) {
                     view.getMapMenu().changeMenuPanel(view.getMapMenu().getPointOfInterestPanel());
                     toggleIsCreatingCustomPointOfInterest();
                 } else {
                     // convert the screen coords of the mouse click to map coords and find the
                     // nearest selectable element.
-                    Point2D point = view.getMapScene().screenCoordsToMapCoords(new Point2D(lastX, lastY));
-                    MapPoint nearestPoint = model.getNearestPointForMapSelection(point);
+                    model.setSelectedPoint(model.getNearestPointForMapSelection(point));
                     // focus on the point without panning
-                    focusOnPoint(nearestPoint, false, false);
+                    focusOnPoint(model.getSelectedPont(), false, false);
                     //set marker point on selected point.
-                    model.setSelectedPointMarker(new PointOfInterest("", PointType.SELECTED, (float) (nearestPoint.getX()/0.56), -nearestPoint.getY(), false));
+                    model.setSelectedPointMarker(new PointOfInterest("", PointType.SELECTED, (float) (model.getSelectedPont().getX()/0.56), -model.getSelectedPont().getY(), false));
                     //set the start and end locations markers from navigation to null to avoid showing them in case the user selects a point while having active start and end locations.
                     setStartLocation(null, false);
                     setEndLocation(null, false);
@@ -261,7 +262,7 @@ public class Controller {
                 RoadNode end = model.getMapObjects().getRoadNodeRTree().getNearest(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress());
                 setStartLocation(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress(), false);
                 setEndLocation(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress(), false);
-                List<String> directions = model.getMapObjects().getDigraph().aStar(start, end, true);
+                List<String> directions = model.getMapObjects().getDigraph().aStar(end, start, true);
                 float distance = model.getMapObjects().getDigraph().getDistance();
                 int travelTime = model.getMapObjects().getDigraph().getTravelTime(model.getTransportMode());
                 //model.graph.runaStarWithNodeIndex(Integer.parseInt(view.getMapMenu().getDirectionsPanel().startLocationField.getText()), Integer.parseInt(view.getMapMenu().getDirectionsPanel().endLocationField.getText()));
@@ -321,17 +322,37 @@ public class Controller {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getDirectionsPanel());
         });
         view.getMapMenu().getSelectedPointPanel().saveLocationButton.setOnAction(e -> {
-            // When saving the selected point, we make a new point of interest with the type
-            // Favourite to mark the location of the saved point.
-            // TODO: Possitble to delete saved points.
-            model.getMapObjects().getCustomPOIList()
-                    .add(new PointOfInterest(view.getMapMenu().getPointOfInterestPanel().pointNameField.getText(),
-                            PointType.FAVOURITE,
-                            (float) (view.getMapMenu().getSelectedPointPanel().mapPoint.getX() / 0.56),
-                            -view.getMapMenu().getSelectedPointPanel().mapPoint.getY(), true));
-            view.getMapMenu().getPointOfInterestPanel().pointNameField.clear();
-            view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
-            view.getMapScene().redraw();
+            // When pressing the save point button we first check the status of the button to see if we need to save a point
+            // or delete a saved point.
+            if (model.getSelectedPont().getFavouriteStatus() == false) {
+                //first set the isFavourite variable in the selected point.
+                model.getSelectedPont().setFavouriteStatus(true);
+                System.out.println("SETTING THE STATUS OF THE POINT WITH TO TRUE! " + model.getSelectedPont().getName());
+            System.out.println("THE STATUS OF THE POINT IS NOW: " + model.getSelectedPont().getFavouriteStatus());
+                // When saving the selected point, we make a new point of interest with the type
+                // favourite to mark the location of the saved point.
+                model.getMapObjects().getFavouritesMarkerList()
+                        .add(new PointOfInterest(view.getMapMenu().getPointOfInterestPanel().pointNameField.getText(),
+                                PointType.FAVOURITE,
+                                (float) (view.getMapMenu().getSelectedPointPanel().mapPoint.getX() / 0.56),
+                                -view.getMapMenu().getSelectedPointPanel().mapPoint.getY(), true));
+                view.getMapMenu().getPointOfInterestPanel().pointNameField.clear();
+                view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
+                model.setSelectedPointMarker(null);
+                view.getMapScene().redraw();
+            } else {
+                //first set the isFavourite variable in the selected point.
+                    //view.getMapMenu().getSelectedPointPanel().mapPoint.setFavouriteStatus(false);
+                // We want to find the marker point with the same coordinates as the current point and delete it.
+                // We find the nearest point in the customPOIList and delete it.
+                //calculate distance to the nearest custom point of interest, by iterating through the list of all of them. Inefficient but necessary, as they are not part of a tree.
+                for (PointOfInterest poi : model.getMapObjects().getFavouritesMarkerList()){
+                    double customPOIDistance = Math.sqrt(Math.pow(poi.getX() - view.getMapMenu().getSelectedPointPanel().mapPoint.getX(), 2) + Math.pow(poi.getY() - view.getMapMenu().getSelectedPointPanel().mapPoint.getY(), 2));
+                    if (customPOIDistance == 0) {
+                        model.getMapObjects().getCustomPOIList().remove(poi);
+                    }
+                }
+            }
         });
 
         // ##########################################################
@@ -360,17 +381,6 @@ public class Controller {
             // }
         });
 
-        view.getMapMenu().getSettingsPanel().takeSnapshotButton.setOnAction(e -> {
-            PrinterJob job = PrinterJob.createPrinterJob();
-            job.getPrinter().createPageLayout(Paper.A4, PageOrientation.LANDSCAPE, Printer.MarginType.DEFAULT);
-            if (job != null) {
-                view.getCanvas().getTransforms().add(new Scale(0.2, 0.2));
-                job.printPage(view.getCanvas());
-                job.endJob();
-                view.getCanvas().getTransforms().add(new Scale(5, 5));
-            }
-        });
-
         view.getMapMenu().getSettingsPanel().loadAnotherOSMButton.setOnAction(e -> {
             // set the scene to chooseMapScene
             this.stage.setScene(view.chooseMapScene);
@@ -390,33 +400,33 @@ public class Controller {
         });
 
         view.getMapMenu().getSettingsPanel().colorBlindModeButton.setOnAction(e -> {
-            view.getMapMenu().changeMenuPanel(view.getMapMenu().getColorblindnessmode());
+            view.getMapMenu().changeMenuPanel(view.getMapMenu().getColorblindnessModePanel());
             view.getMapScene().redraw();
         });
 
-        view.getMapMenu().getColorblindnessmode().exitButton.setOnAction(e -> {
+        view.getMapMenu().getColorblindnessModePanel().exitButton.setOnAction(e -> {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getSettingsPanel());
         });
 
-        view.getMapMenu().getColorblindnessmode().deuteranopiaButton.setOnAction(e -> {
+        view.getMapMenu().getColorblindnessModePanel().deuteranopiaButton.setOnAction(e -> {
             MapColor.getInstance().changeTheme("deuteranopia");
             Digraph.setColor(1);
             view.getMapScene().redraw();
         });
 
-        view.getMapMenu().getColorblindnessmode().protanopiaButton.setOnAction(e -> {
+        view.getMapMenu().getColorblindnessModePanel().protanopiaButton.setOnAction(e -> {
             MapColor.getInstance().changeTheme("protanopia");
             Digraph.setColor(2);
             view.getMapScene().redraw();
         });
 
-        view.getMapMenu().getColorblindnessmode().tritanopiaButton.setOnAction(e -> {
+        view.getMapMenu().getColorblindnessModePanel().tritanopiaButton.setOnAction(e -> {
             MapColor.getInstance().changeTheme("tritanopia");
             Digraph.setColor(1);
             view.getMapScene().redraw();
         });
 
-        view.getMapMenu().getColorblindnessmode().monochromacyButton.setOnAction(e -> {
+        view.getMapMenu().getColorblindnessModePanel().monochromacyButton.setOnAction(e -> {
             MapColor.getInstance().changeTheme("monochromia");
             Digraph.setColor(3);
             view.getMapScene().redraw();
@@ -569,6 +579,8 @@ public class Controller {
             // Update the menu panel to the selected point menu
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getSelectedPointPanel());
             view.getMapMenu().getSelectedPointPanel().setMapPoint(mapPoint);
+            view.getMapMenu().getSelectedPointPanel().setSavePointButtonMode(mapPoint.getFavouriteStatus());
+            System.out.println("THE FAVOURITE STATUS OF THE POINT IS: " + mapPoint.getFavouriteStatus() + " the name of the point is " + mapPoint.getName());
 
             // We only pan if the point to focus on is found through a search bar. Not when
             // clicking on a point.
@@ -596,9 +608,6 @@ public class Controller {
         view.getMapScene().pan(10, 10);
         Point2D secondPoint = view.getMapScene().screenCoordsToMapCoords(
                 new Point2D(view.getMapScene().getWidth() / 2, view.getMapScene().getHeight() / 2));
-        // Pan once to the side and do the same again. In this way we find the relationship between the panning and the distance.
-        view.getMapScene().pan(10, 10);
-        Point2D secondPoint = view.getMapScene().screenCoordsToMapCoords(new Point2D(view.getMapScene().getWidth()/2, view.getMapScene().getHeight()/2));
 
         // Calculate the factors needed to convert between screen coordinates and map
         // coordinates

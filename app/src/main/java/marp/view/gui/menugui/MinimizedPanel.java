@@ -2,7 +2,7 @@ package marp.view.gui.menugui;
 
 import javafx.geometry.Insets;
 import javafx.scene.image.Image;
-import marp.datastructures.SimpleTrie;
+import marp.datastructures.Trie;
 import marp.model.Model;
 import marp.view.gui.SearchBar;
 import marp.view.gui.buttons.MapButton;

@@ -6,13 +6,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -25,12 +23,13 @@ import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
 import javafx.geometry.Point2D;
-import marp.datastructures.SimpleTrie;
+import marp.datastructures.Trie;
 import marp.mapelements.*;
 
 import marp.parser.OSMParser;
 
-public class Model implements Serializable{
+public final class Model implements Serializable{
+    private static Model instance;
     private MapObjects mapObjects;
     private MapPoint selectedPont;
     private PointOfInterest selectedPointMarker;
@@ -43,9 +42,18 @@ public class Model implements Serializable{
     public boolean isTerrainVisible = true;
     public boolean isBuildingsVisible = true;
 
-    private Model(MapObjects mapObjects, String filename) throws FileNotFoundException, IOException {
+    private Model(){
+    }
+    public static Model getInstance(){
+        if (instance == null){
+            instance = new Model();
+        }
+        return instance;
+    }
+    private Model setValues(MapObjects mapObjects, String filename) throws FileNotFoundException, IOException {
         this.mapObjects = mapObjects;
         save(filename);
+        return getInstance();
     }
     public static Model createModel(URL fileURL) throws URISyntaxException, XMLStreamException,
             FactoryConfigurationError, ClassNotFoundException, IOException {
@@ -77,9 +85,11 @@ public class Model implements Serializable{
                 return loadBIN(inputStream);
             case "zip":
                 return loadZIP(inputStream, filename);
+            case "bz2":
+                CompressorInputStream input = new CompressorStreamFactory().createCompressorInputStream(bis);
             case "osm":
                 MapObjects mapObjects = osmParser.parseOSM(inputStream);
-                return new Model(mapObjects, filename);
+                return getInstance().setValues(mapObjects, filename);
             default:
                 throw new IOException("Filetype not supported");
         }
@@ -93,7 +103,7 @@ public class Model implements Serializable{
         MapObjects mapObjects = osmParser.parseOSM(input);
         input.close();
         System.out.println("Loaded zip in: " + (new Time(System.currentTimeMillis()).getTime() - time.getTime())/1000 + "s");
-        return new Model(mapObjects,filename);
+        return getInstance().setValues(mapObjects, filename);
     }
 
 
@@ -102,9 +112,9 @@ public class Model implements Serializable{
         System.out.println(inputStream);
         try (var bin = new ObjectInputStream(new BufferedInputStream(inputStream))) {
             System.gc();
-            Model m = (Model) bin.readObject();
+            instance = (Model) bin.readObject();
             System.out.println("Loaded binary in: " + (new Time(System.currentTimeMillis()).getTime() - time.getTime())/1000 + "s");
-            return m;
+            return getInstance();
         }
     }
 
@@ -121,7 +131,7 @@ public class Model implements Serializable{
             }
         }).start();
     }
-    public SimpleTrie getSuggestionTrie() {
+    public Trie getSuggestionTrie() {
         //return suggestionTrie;
         //TODO: Fix
         return mapObjects.getTrie();

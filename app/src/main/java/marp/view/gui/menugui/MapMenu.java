@@ -1,13 +1,13 @@
 package marp.view.gui.menugui;
 
 import javafx.scene.layout.HBox;
-import marp.datastructures.SimpleTrie;
+import marp.datastructures.Trie;
 import marp.model.Model;
 
 public class MapMenu extends HBox {
 
     private MinimizedPanel minimizedPanel;
-    private SimpleTrie simpleTrie;
+    private Trie simpleTrie;
     private DirectionsPanel directionsPanel;
     private SettingsPanel settingsPanel;
     private SelectedPointPanel selectedPointPanel;

@@ -4,7 +4,7 @@ import com.google.common.base.MoreObjects;
 
 import marp.datastructures.Digraph;
 import marp.datastructures.RTree;
-import marp.datastructures.SimpleTrie;
+import marp.datastructures.Trie;
 import marp.mapelements.*;
 
 import java.io.Serializable;
@@ -267,8 +267,8 @@ public class MapObjects implements Serializable{
         digraph = new Digraph(roadsList, roadNodes);
     }
 
-    private SimpleTrie trie = new SimpleTrie();
-    public SimpleTrie getTrie(){
+    private Trie trie = new Trie();
+    public Trie getTrie(){
         return trie;
     }
 

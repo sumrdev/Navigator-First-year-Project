@@ -9,7 +9,9 @@ import java.util.*;
 import javafx.geometry.Point2D;
 import javafx.print.*;
 import javafx.scene.Cursor;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.*;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
@@ -57,7 +59,8 @@ public class Controller {
 
         this.view.listView.setOnMouseClicked(e -> {
             try {
-                URL fileURL = new URL(Paths.get("data/maps/" + this.view.listView.getSelectionModel().getSelectedItem()).toUri().toURL().toString());
+                URL fileURL = new URL(Paths.get("data/maps/" + this.view.listView.getSelectionModel().getSelectedItem())
+                        .toUri().toURL().toString());
                 Model newModel = Model.createModel(fileURL);
                 this.view.createNewMapScene(newModel);
                 this.view.setScene(this.view.getMapScene());
@@ -81,7 +84,8 @@ public class Controller {
         // isCreatingCustomPointOfInterest is true, lastPressedX is set as well.
 
         view.getCanvas().setOnMouseMoved(e -> {
-            view.getNearestRoadInfo().setRoadNameText(model.getNearestRoadNameForMapSelection(view.getMapScene().screenCoordsToMapCoords(new Point2D(e.getX(), e.getY()))));
+            view.getNearestRoadInfo().setRoadNameText(model.getNearestRoadNameForMapSelection(
+                    view.getMapScene().screenCoordsToMapCoords(new Point2D(e.getX(), e.getY()))));
         });
         view.getCanvas().setOnMousePressed(e -> {
             lastX = (float) e.getX();
@@ -253,14 +257,17 @@ public class Controller {
         });
         view.getMapMenu().getDirectionsPanel().carButton.setOnAction(e -> {
             model.transportMode = 0;
+            model.getMapObjects().getDigraph().setDriving();
             System.out.println(model.transportMode);
         });
         view.getMapMenu().getDirectionsPanel().walkButton.setOnAction(e -> {
             model.transportMode = 1;
+            model.getMapObjects().getDigraph().setWalking();
             System.out.println(model.transportMode);
         });
         view.getMapMenu().getDirectionsPanel().bikeButton.setOnAction(e -> {
             model.transportMode = 2;
+            model.getMapObjects().getDigraph().setWalking();
             System.out.println(model.transportMode);
         });
         view.getMapMenu().getDirectionsPanel().findRouteButton.setOnAction( e -> {
@@ -316,13 +323,15 @@ public class Controller {
             //IDIOT
         });
         view.getMapMenu().getSelectedPointPanel().saveLocationButton.setOnAction(e -> {
-            // When pressing the save point button we first check the status of the button to see if we need to save a point
+            // When pressing the save point button we first check the status of the button
+            // to see if we need to save a point
             // or delete a saved point.
             if (model.getSelectedPont().getFavouriteStatus() == false) {
-                //first set the isFavourite variable in the selected point.
+                // first set the isFavourite variable in the selected point.
                 model.getSelectedPont().setFavouriteStatus(true);
-                System.out.println("SETTING THE STATUS OF THE POINT WITH TO TRUE! " + model.getSelectedPont().getName());
-            System.out.println("THE STATUS OF THE POINT IS NOW: " + model.getSelectedPont().getFavouriteStatus());
+                System.out
+                        .println("SETTING THE STATUS OF THE POINT WITH TO TRUE! " + model.getSelectedPont().getName());
+                System.out.println("THE STATUS OF THE POINT IS NOW: " + model.getSelectedPont().getFavouriteStatus());
                 // When saving the selected point, we make a new point of interest with the type
                 // favourite to mark the location of the saved point.
                 model.getMapObjects().getFavouritesMarkerList()
@@ -335,13 +344,18 @@ public class Controller {
                 model.setSelectedPointMarker(null);
                 view.getMapScene().redraw();
             } else {
-                //first set the isFavourite variable in the selected point.
-                    //view.getMapMenu().getSelectedPointPanel().mapPoint.setFavouriteStatus(false);
-                // We want to find the marker point with the same coordinates as the current point and delete it.
+                // first set the isFavourite variable in the selected point.
+                // view.getMapMenu().getSelectedPointPanel().mapPoint.setFavouriteStatus(false);
+                // We want to find the marker point with the same coordinates as the current
+                // point and delete it.
                 // We find the nearest point in the customPOIList and delete it.
-                //calculate distance to the nearest custom point of interest, by iterating through the list of all of them. Inefficient but necessary, as they are not part of a tree.
-                for (PointOfInterest poi : model.getMapObjects().getFavouritesMarkerList()){
-                    double customPOIDistance = Math.sqrt(Math.pow(poi.getX() - view.getMapMenu().getSelectedPointPanel().mapPoint.getX(), 2) + Math.pow(poi.getY() - view.getMapMenu().getSelectedPointPanel().mapPoint.getY(), 2));
+                // calculate distance to the nearest custom point of interest, by iterating
+                // through the list of all of them. Inefficient but necessary, as they are not
+                // part of a tree.
+                for (PointOfInterest poi : model.getMapObjects().getFavouritesMarkerList()) {
+                    double customPOIDistance = Math.sqrt(
+                            Math.pow(poi.getX() - view.getMapMenu().getSelectedPointPanel().mapPoint.getX(), 2) + Math
+                                    .pow(poi.getY() - view.getMapMenu().getSelectedPointPanel().mapPoint.getY(), 2));
                     if (customPOIDistance == 0) {
                         model.getMapObjects().getCustomPOIList().remove(poi);
                     }
@@ -447,8 +461,9 @@ public class Controller {
             model.isAddressVisible = !model.isAddressVisible;
             view.getMapScene().redraw();
         });
-        view.getMapMenu().getSettingsPanel().zoomAdjustSlider.setOnMouseReleased(e ->{
-            view.getZoomMenu().setZoomMultiplier((float) view.getMapMenu().getSettingsPanel().zoomAdjustSlider.getValue());
+        view.getMapMenu().getSettingsPanel().zoomAdjustSlider.setOnMouseReleased(e -> {
+            view.getZoomMenu()
+                    .setZoomMultiplier((float) view.getMapMenu().getSettingsPanel().zoomAdjustSlider.getValue());
         });
 
         // ##########################################################
@@ -528,7 +543,8 @@ public class Controller {
         }
         // Make a custom landmark to show the selected point
         if (address != null) {
-            model.setStartLocationMarker(new PointOfInterest("", PointType.START_LOCATION, (float) (address.getX()), address.getY(), false));
+            model.setStartLocationMarker(
+                    new PointOfInterest("", PointType.START_LOCATION, (float) (address.getX()), address.getY(), false));
         } else {
             model.setStartLocationMarker(null);
         }
@@ -543,7 +559,8 @@ public class Controller {
         }
         // Make a custom landmark to show the selected point
         if (address != null) {
-            model.setEndLocationMarker(new PointOfInterest("", PointType.END_LOCATION, (float) (address.getX()), address.getY(), false));
+            model.setEndLocationMarker(
+                    new PointOfInterest("", PointType.END_LOCATION, (float) (address.getX()), address.getY(), false));
         } else {
             model.setEndLocationMarker(null);
         }
@@ -587,7 +604,8 @@ public class Controller {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getSelectedPointPanel());
             view.getMapMenu().getSelectedPointPanel().setMapPoint(mapPoint);
             view.getMapMenu().getSelectedPointPanel().setSavePointButtonMode(mapPoint.getFavouriteStatus());
-            System.out.println("THE FAVOURITE STATUS OF THE POINT IS: " + mapPoint.getFavouriteStatus() + " the name of the point is " + mapPoint.getName());
+            System.out.println("THE FAVOURITE STATUS OF THE POINT IS: " + mapPoint.getFavouriteStatus()
+                    + " the name of the point is " + mapPoint.getName());
 
             // We only pan if the point to focus on is found through a search bar. Not when
             // clicking on a point.
@@ -600,15 +618,18 @@ public class Controller {
             }
             if (shouldSetMarker) {
                 // Make a custom landmark to show the selected point
-                model.setSelectedPointMarker(new PointOfInterest("", PointType.SELECTED, (float) (mapPoint.getX()), mapPoint.getY(), false));
+                model.setSelectedPointMarker(
+                        new PointOfInterest("", PointType.SELECTED, (float) (mapPoint.getX()), mapPoint.getY(), false));
                 // Redraw the view
                 view.getMapScene().redraw();
             }
         }
     }
     public void panToPoint(MapPoint mapPoint) {
-        // Find the middle screen coordinate and find the map coordinates for this point.
-        Point2D firstPoint = view.getMapScene().screenCoordsToMapCoords(new Point2D(view.getCanvas().getWidth()/2, view.getMapScene().getHeight()/2));
+        // Find the middle screen coordinate and find the map coordinates for this
+        // point.
+        Point2D firstPoint = view.getMapScene().screenCoordsToMapCoords(
+                new Point2D(view.getCanvas().getWidth() / 2, view.getMapScene().getHeight() / 2));
 
         // Pan once to the side and do the same again. In this way we find the
         // relationship between the panning and the distance.
@@ -631,8 +652,9 @@ public class Controller {
         view.getMapScene().pan(xDist, yDist);
     }
 
-    private void takeSnapShot(){
-        PrinterJob job = PrinterJob.createPrinterJob();
+    private void takeSnapShot() {
+        try {
+            PrinterJob job = PrinterJob.createPrinterJob();
             job.getPrinter().createPageLayout(Paper.A4, PageOrientation.LANDSCAPE, Printer.MarginType.DEFAULT);
             if (job != null) {
                 view.getCanvas().getTransforms().add(new Scale(0.2, 0.2));
@@ -640,6 +662,14 @@ public class Controller {
                 job.endJob();
                 view.getCanvas().getTransforms().add(new Scale(5, 5));
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert errorMsg = new Alert(AlertType.ERROR);
+            errorMsg.setTitle("Unable to start printing!");
+            errorMsg.setContentText("MARP was unable to start printing the scene. \nPlease try again later...");
+
+            errorMsg.show();
+        }
     }
     private void calculateRoute() {
         if (view.getMapMenu().getDirectionsPanel().startLocationField.getAddress() != null && view.getMapMenu().getDirectionsPanel().endLocationField.getAddress() != null) {

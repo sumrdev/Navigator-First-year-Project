@@ -136,8 +136,8 @@ public class Digraph implements Serializable {
     }
 
     private float getWeight(Edge edge, boolean walking){
-        if(walking && !edge.isWalkable()) return Float.MAX_VALUE;
-        else if(!walking && !edge.isDriveable()) return Float.MAX_VALUE;
+        if(walking && !edge.isWalkable()) return Float.POSITIVE_INFINITY;
+        else if(!walking && !edge.isDriveable()) return Float.POSITIVE_INFINITY;
         else if(walking) return (float) MathFunctions.distanceInMeters(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(), nodes.get(edge.end).getY());
         else return (float) MathFunctions.distanceInMeters(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(), nodes.get(edge.end).getY())/roadsMap.get(edge.road).getSpeed();
     }
@@ -207,14 +207,14 @@ public class Digraph implements Serializable {
         float y1 = nodes.get(e1.start).getY();
         float x2 = nodes.get(e1.end).getX();
         float y2 = nodes.get(e1.end).getY();
-        float x3 = nodes.get(e2.end).getX();
-        float y3 = nodes.get(e2.end).getY();
-        float x4 = nodes.get(e2.start).getX();
-        float y4 = nodes.get(e2.start).getY();
+        float x3 = nodes.get(e2.start).getX();
+        float y3 = nodes.get(e2.start).getY();
+        float x4 = nodes.get(e2.end).getX();
+        float y4 = nodes.get(e2.end).getY();
 
         int angle = MathFunctions.getAngleBetweenTwoLines(x1, y1, x2, y2, x3, y3, x4, y4 );
-        if(angle > 0 && angle < 180) return 1;
-        else if(angle < 0 && angle > -180) return 2;
+        if(angle < 0 && angle > -180) return 1;
+        else if(angle > 0 && angle < 180) return 2;
         else if(angle == 180 || angle == -180) return 3;
         else return 0;
     }

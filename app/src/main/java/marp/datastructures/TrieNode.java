@@ -27,21 +27,12 @@ public class TrieNode implements Serializable {
         return isEnd;
     }
 
-    public TrieNode getNode(char character){
-        return branches.get(character);
-    }
-
     public void setNode(char character, TrieNode node){
         branches.put(character, node);
     }
 
-    public boolean containsKey(char character){
-        if (branches.containsKey(character)){
-            return true;
-        }
-        else {
-            return false;
-        }
+    public TrieNode getNode(char character){
+        return branches.get(character);
     }
 
     public void addHouseNumber(String houseNumber, Address address){
@@ -63,5 +54,14 @@ public class TrieNode implements Serializable {
 
     public Address getAddressObject(String house){
         return houseNumberToAddress.get(house);
+    }
+
+    public boolean containsKey(char character){
+        if (branches.containsKey(character)){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

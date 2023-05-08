@@ -7,7 +7,7 @@ import marp.utilities.MathFunctions;
 
 public class Edge implements Serializable{
     Long start, end, road;
-    boolean driveable, walkable, bikeable;
+    boolean driveable, walkable;
     public Edge(Long start, Long end, Long roadID, boolean driveable, boolean walkable) {
         this.start = start;
         this.end = end;

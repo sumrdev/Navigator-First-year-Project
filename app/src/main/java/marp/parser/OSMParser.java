@@ -26,14 +26,15 @@ import marp.mapelements.details.ShapeType;
 import marp.model.MapObjectInParsing;
 import marp.model.MapObjects;
 
-public class OSMParser{
-    public MapObjects parseOSM(InputStream inputStream) throws XMLStreamException, FactoryConfigurationError{
+public class OSMParser {
+    public MapObjects parseOSM(InputStream inputStream) throws XMLStreamException, FactoryConfigurationError {
         Time start = new Time(System.currentTimeMillis());
         Time result;
-        XMLStreamReader xmlsr = XMLInputFactory.newInstance().createXMLStreamReader(new BufferedInputStream(inputStream));
+        XMLStreamReader xmlsr = XMLInputFactory.newInstance()
+                .createXMLStreamReader(new BufferedInputStream(inputStream));
         MapObjects mapObjects = new MapObjects();
         MapObjectInParsing mapObjectInParsing = new MapObjectInParsing(mapObjects);
-        while(xmlsr.hasNext()){
+        while (xmlsr.hasNext()) {
             int xmltag = xmlsr.next();
             switch (xmltag) {
                 case XMLStreamConstants.START_ELEMENT:
@@ -57,7 +58,8 @@ public class OSMParser{
                             mapObjectInParsing.addPointToUnfinishedSimpleShape(mapObjectInParsing.getPointByID(nodeID));
                             break;
                         case "way":
-                            mapObjectInParsing.initializeEmptySimpleShape(Long.parseLong(xmlsr.getAttributeValue(null, "id")));
+                            mapObjectInParsing
+                                    .initializeEmptySimpleShape(Long.parseLong(xmlsr.getAttributeValue(null, "id")));
                             break;
                         case "member":
                             long memberID = Long.parseLong(xmlsr.getAttributeValue(null, "ref"));
@@ -71,132 +73,134 @@ public class OSMParser{
                             }
                             break;
                         case "relation":
-                            mapObjectInParsing.initializeEmptyComplexShape(Long.parseLong(xmlsr.getAttributeValue(null, "id")));
+                            mapObjectInParsing
+                                    .initializeEmptyComplexShape(Long.parseLong(xmlsr.getAttributeValue(null, "id")));
                             break;
                         case "tag":
-                        String key = xmlsr.getAttributeValue(null, "k");
-                        String value = xmlsr.getAttributeValue(null, "v");
-                        switch (key) {
-                            case "highway":
-                                switch (value) {
-                                    case "motorway":
-                                        mapObjectInParsing.setRoadType(RoadType.MOTORWAY);
-                                        break;
-                                    case "primary":
-                                    case "trunk":
-                                        mapObjectInParsing.setRoadType(RoadType.PRIMARY);
-                                        break;
-                                    case "secondary":
-                                    case "tertiary":
-                                    case "tertiary_link":
-                                        mapObjectInParsing.setRoadType(RoadType.TERTIARY);
-                                        break;
-                                    case "unclassified":
-                                    case "residential":
-                                        mapObjectInParsing.setRoadType(RoadType.RESIDENTIAL);
-                                        break;
-                                    case "pedestrian":
-                                        mapObjectInParsing.setRoadType(RoadType.PEDESTRIAN);
-                                        break;
-                                    case "footway":
-                                    case "steps":
-                                    case "escalator":
-                                        mapObjectInParsing.setRoadType(RoadType.DO_NOT_SHOW);
-                                        break;
-                                    case "path":
-                                    case "cycleway":
-                                    case "bridleway":
-                                        mapObjectInParsing.setRoadType(RoadType.PATH);
-                                        break;
-                                    default:
-                                        //in cases where the road hasn't been classified, set the type to residential to avoid overestimating size + speed
-                                        mapObjectInParsing.setRoadType(RoadType.RESIDENTIAL);
-                                        break;
+                            String key = xmlsr.getAttributeValue(null, "k");
+                            String value = xmlsr.getAttributeValue(null, "v");
+                            switch (key) {
+                                case "highway":
+                                    switch (value) {
+                                        case "motorway":
+                                            mapObjectInParsing.setRoadType(RoadType.MOTORWAY);
+                                            break;
+                                        case "primary":
+                                        case "trunk":
+                                            mapObjectInParsing.setRoadType(RoadType.PRIMARY);
+                                            break;
+                                        case "secondary":
+                                        case "tertiary":
+                                        case "tertiary_link":
+                                            mapObjectInParsing.setRoadType(RoadType.TERTIARY);
+                                            break;
+                                        case "unclassified":
+                                        case "residential":
+                                            mapObjectInParsing.setRoadType(RoadType.RESIDENTIAL);
+                                            break;
+                                        case "pedestrian":
+                                            mapObjectInParsing.setRoadType(RoadType.PEDESTRIAN);
+                                            break;
+                                        case "footway":
+                                        case "steps":
+                                        case "escalator":
+                                            mapObjectInParsing.setRoadType(RoadType.DO_NOT_SHOW);
+                                            break;
+                                        case "path":
+                                        case "cycleway":
+                                        case "bridleway":
+                                            mapObjectInParsing.setRoadType(RoadType.PATH);
+                                            break;
+                                        default:
+                                            // in cases where the road hasn't been classified, set the type to
+                                            // residential to avoid overestimating size + speed
+                                            mapObjectInParsing.setRoadType(RoadType.RESIDENTIAL);
+                                            break;
                                     }
                                     break;
-                            case "oneway":
-                                mapObjectInParsing.setRoadOneWay(value.equals("yes"));
-                                break;
-                            case "maxspeed":
-                                try {
-                                    int speed = Integer.parseInt(value);
-                                    mapObjectInParsing.setSpeed(speed);
-                                } catch (NumberFormatException e) {
-                                    // value could not be parsed to int, do nothing
-                                }
-                            case "building":
-                                mapObjectInParsing.setShapeType(ShapeType.BUILDING);
-                                break;
-                            case "natural":
-                                switch (value) {
-                                    case "wood":
-                                    case "forest":
-                                    case "scrub":
-                                    mapObjectInParsing.setShapeType(ShapeType.FOREST);
-                                        break;
-                                    case "grass":
-                                    case "meadow":
-                                    case "grassland":
-                                    case "moor":
-                                    case "wetland":
-                                    case "heath":
-                                        mapObjectInParsing.setShapeType(ShapeType.GRASS);
-                                        break;
-                                    case "water":
-                                    case "fountain":
-                                        mapObjectInParsing.setShapeType(ShapeType.WATER);
-                                        break;
-                                    case "coastline":
-                                        mapObjectInParsing.setShapeType(ShapeType.COASTLINE);
-                                        break;
-                                    default:
-                                        break;
-                            }
-                            break;
-                            case "water":
-                            case "harbour":
-                                mapObjectInParsing.setShapeType(ShapeType.WATER);
-                                break;
-                            case "landuse":
-                                switch (value) {
-                                    case "grass":
-                                    case "meadow":
-                                    case "garden":
-                                    case "playground":
-                                    case "recreation_ground":
-                                    case "cemetery":
-                                    case "wetland":
-                                    case "heath":
-                                        mapObjectInParsing.setShapeType(ShapeType.GRASS);
-                                        break;
-                                    case "forest":
-                                    case "shrub":
-                                        mapObjectInParsing.setShapeType(ShapeType.FOREST);
-                                        break;
-                                    case "basin":
-                                        mapObjectInParsing.setShapeType(ShapeType.WATER);
-                                        break;
-                                    case "construction":
-                                    case "industrial":
-                                    case "residential":
-                                    case "landfill":
-                                        mapObjectInParsing.setShapeType(ShapeType.CEMENT);
-                                        break;
-                                    case "commercial":
-                                    case "retail":
-                                        mapObjectInParsing.setShapeType(ShapeType.COMMERCIAL_GROUND);
-                                        break;
-                                    case "allotments":
-                                    case "farmland":
-                                    case "farmyard":
-                                    case "orchard":
-                                    case "vineyard":
-                                        mapObjectInParsing.setShapeType(ShapeType.FARMLAND);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                break;
+                                case "oneway":
+                                    mapObjectInParsing.setRoadOneWay(value.equals("yes"));
+                                    break;
+                                case "maxspeed":
+                                    try {
+                                        int speed = Integer.parseInt(value);
+                                        mapObjectInParsing.setSpeed(speed);
+                                    } catch (NumberFormatException e) {
+                                        // value could not be parsed to int, do nothing
+                                    }
+                                case "building":
+                                    mapObjectInParsing.setShapeType(ShapeType.BUILDING);
+                                    break;
+                                case "natural":
+                                    switch (value) {
+                                        case "wood":
+                                        case "forest":
+                                        case "scrub":
+                                            mapObjectInParsing.setShapeType(ShapeType.FOREST);
+                                            break;
+                                        case "grass":
+                                        case "meadow":
+                                        case "grassland":
+                                        case "moor":
+                                        case "wetland":
+                                        case "heath":
+                                            mapObjectInParsing.setShapeType(ShapeType.GRASS);
+                                            break;
+                                        case "water":
+                                        case "fountain":
+                                            mapObjectInParsing.setShapeType(ShapeType.WATER);
+                                            break;
+                                        case "coastline":
+                                            mapObjectInParsing.setShapeType(ShapeType.COASTLINE);
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    break;
+                                case "water":
+                                case "harbour":
+                                    mapObjectInParsing.setShapeType(ShapeType.WATER);
+                                    break;
+                                case "landuse":
+                                    switch (value) {
+                                        case "grass":
+                                        case "meadow":
+                                        case "garden":
+                                        case "playground":
+                                        case "recreation_ground":
+                                        case "cemetery":
+                                        case "wetland":
+                                        case "heath":
+                                            mapObjectInParsing.setShapeType(ShapeType.GRASS);
+                                            break;
+                                        case "forest":
+                                        case "shrub":
+                                            mapObjectInParsing.setShapeType(ShapeType.FOREST);
+                                            break;
+                                        case "basin":
+                                            mapObjectInParsing.setShapeType(ShapeType.WATER);
+                                            break;
+                                        case "construction":
+                                        case "industrial":
+                                        case "residential":
+                                        case "landfill":
+                                            mapObjectInParsing.setShapeType(ShapeType.CEMENT);
+                                            break;
+                                        case "commercial":
+                                        case "retail":
+                                            mapObjectInParsing.setShapeType(ShapeType.COMMERCIAL_GROUND);
+                                            break;
+                                        case "allotments":
+                                        case "farmland":
+                                        case "farmyard":
+                                        case "orchard":
+                                        case "vineyard":
+                                            mapObjectInParsing.setShapeType(ShapeType.FARMLAND);
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    break;
                                 case "addr:city":
                                     mapObjectInParsing.setCity(value);
                                     break;
@@ -293,7 +297,7 @@ public class OSMParser{
                                         default:
                                             break;
                                     }
-                                break;
+                                    break;
                             }
                         default:
                             break;
@@ -301,7 +305,7 @@ public class OSMParser{
                     break;
                 case XMLStreamConstants.END_ELEMENT:
                     String endTag = xmlsr.getLocalName();
-                    switch(endTag){
+                    switch (endTag) {
                         case "node":
                             mapObjectInParsing.finishPoint();
                             break;
@@ -309,6 +313,7 @@ public class OSMParser{
                             mapObjectInParsing.finishSimpleShape();
                             break;
                         case "relation":
+                            mapObjectInParsing.deletePointHashMap();
                             mapObjectInParsing.finishRelation();
                             break;
                     }
@@ -316,14 +321,26 @@ public class OSMParser{
             }
         }
         result = new Time(System.currentTimeMillis());
-        System.out.println("OSM Parsed in: " + (result.getTime() - start.getTime())/1000 + "s");
+        System.out.println("OSM Parsed in: " + (result.getTime() - start.getTime()) / 1000 + "s");
 
-        start = new Time(System.currentTimeMillis());
         mapObjects.coastLineAreasList = ComplexShape.orderAndFlipWays(mapObjectInParsing.getCoastlineSegments());
-        mapObjects.buildTrees();
-        mapObjects.buildDigraph(mapObjectInParsing.getRoadNodeIDtoRoadNode());
-        result = new Time(System.currentTimeMillis());
-        System.out.println("Trees and Digraph built in: " + (result.getTime() - start.getTime())/1000 + "s");
+        Thread trees = new Thread(() -> {
+            mapObjects.buildTrees();
+        });
+        Thread graph = new Thread(() -> {
+            mapObjects.buildDigraph(mapObjectInParsing.getRoadNodeIDtoRoadNode());
+        });
+
+        trees.start();
+        graph.start();
+
+        try {
+            trees.join();
+            graph.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         System.gc();
         return mapObjects;
     }

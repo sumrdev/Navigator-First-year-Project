@@ -20,10 +20,12 @@ public class Digraph implements Serializable {
     HashSet<RoadNode> closedSet;
     int averageSpeedCount;
     float averageSpeed;
+    boolean activeRoute;
 
     static int roadColor = 1;
 
     public Digraph(ArrayList<Road> roads, HashMap<Long, RoadNode> nodes) {
+        Time starTime = new Time(System.currentTimeMillis());
         this.nodes = nodes;
         this.roadsMap = new HashMap<>();
         this.roads = roads;
@@ -40,10 +42,8 @@ public class Digraph implements Serializable {
                                     road.isWalkable()));
             }
         }
-        connectedComponents = categorizeEdgesOnConnectedComponents();
-        ArrayList<RoadNode> roadNodesAsArray = new ArrayList<>(nodes.values());
-        aStar(roadNodesAsArray.get(0), roadNodesAsArray.get(0), true);
-        createTextDescriptionFromNavigation();
+        Time endTime = new Time(System.currentTimeMillis());
+        System.out.println("Created graph with : " + this.nodes.size() + " nodes in " + (endTime.getTime() - starTime.getTime())/1000 + " s");
     }
     public void setWalking(){
         notInCar = true;
@@ -222,6 +222,7 @@ public class Digraph implements Serializable {
         drawNavigation(gc);
     }
     public void drawNavigation(GraphicsContext gc){
+        if( this.navigation == null) return;
         gc.setStroke(Color.rgb(192, 48, 48));
         for (Edge edge : navigation) {
             gc.strokeLine(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(),

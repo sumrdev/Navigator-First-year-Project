@@ -8,6 +8,7 @@ import marp.datastructures.Trie;
 import marp.mapelements.*;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -237,24 +238,61 @@ public class MapObjects implements Serializable{
     }
 
     public void buildTrees() {
-        addressTree = new RTree<>(addressList);
-        trainPOITree = new RTree<>(trainPOIList);
-        busPOITree = new RTree<>(busPOIList);
-        POITree = new RTree<>(POIList);
-        quiteSmallPlaceNameTree = new RTree<>(quiteSmallPlaceNameList);
-        smallPlaceNameTree = new RTree<>(smallPlaceNameList);
-        mediumPlaceNameTree = new RTree<>(mediumPlaceNameList);
-        mediumLargePlaceNameTree = new RTree<>(mediumLargePlaceNameList);
-        largeNameTree = new RTree<>(largePlaceNameList);
-        quiteLargeNameTree = new RTree<>(quiteLargePlaceNameList);
-        buildingsTree = new RTree<>(buildingsList);
-        waterAreasTree = new RTree<>(waterAreasList);
-        terrainAreasTree = new RTree<>(terrainAreasList);
-        coastLineAreasTree = new RTree<>(coastLineAreasList);
-        motorWaysTree = new RTree<>(motorWaysList);
-        largeRoadsTree = new RTree<>(largeRoadsList);
-        smallRoadsTree = new RTree<>(smallRoadsList);
-        footPathsTree = new RTree<>(footpathList);
+        Time startTime = new Time(System.currentTimeMillis());
+        Thread address = new Thread(() -> {
+            addressTree = new RTree<>(addressList);
+        });
+
+        Thread poi = new Thread(() -> {
+            trainPOITree = new RTree<>(trainPOIList);
+            busPOITree = new RTree<>(busPOIList);
+            POITree = new RTree<>(POIList);
+        });
+
+        Thread placeNames = new Thread(() -> {
+            quiteSmallPlaceNameTree = new RTree<>(quiteSmallPlaceNameList);
+            smallPlaceNameTree = new RTree<>(smallPlaceNameList);
+            mediumPlaceNameTree = new RTree<>(mediumPlaceNameList);
+            mediumLargePlaceNameTree = new RTree<>(mediumLargePlaceNameList);
+            largeNameTree = new RTree<>(largePlaceNameList);
+            quiteLargeNameTree = new RTree<>(quiteLargePlaceNameList);
+        });
+        Thread roadsAndCoastline = new Thread(() -> {
+            coastLineAreasTree = new RTree<>(coastLineAreasList);
+            motorWaysTree = new RTree<>(motorWaysList);
+            largeRoadsTree = new RTree<>(largeRoadsList);
+            smallRoadsTree = new RTree<>(smallRoadsList);
+            footPathsTree = new RTree<>(footpathList);
+        });
+        Thread buildings = new Thread(() -> {
+            buildingsTree = new RTree<>(buildingsList);
+        });
+
+        Thread terrainAndWater = new Thread(() -> {
+            waterAreasTree = new RTree<>(waterAreasList);
+            terrainAreasTree = new RTree<>(terrainAreasList);
+        });
+
+        poi.start();
+        placeNames.start();
+        roadsAndCoastline.start();
+        buildings.start();
+        terrainAndWater.start();
+        address.start();
+
+        try {
+            poi.join();
+            placeNames.join();
+            roadsAndCoastline.join();
+            buildings.join();
+            terrainAndWater.join();
+            address.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Time endTime = new Time(System.currentTimeMillis());
+        System.out.println("Time to build trees: " + (endTime.getTime() - startTime.getTime()) + "ms");
     }
 
     public void buildDigraph(HashMap<Long, RoadNode> roadNodes){

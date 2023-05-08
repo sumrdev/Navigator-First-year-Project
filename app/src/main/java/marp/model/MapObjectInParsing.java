@@ -227,7 +227,7 @@ public class MapObjectInParsing implements Serializable{
                     case FOREST:
                     case CEMENT:
                     case COMMERCIAL_GROUND:
-                    case FARMLAND:
+                    // case FARMLAND:
                         mapObjects.getTerrainAreasList().add(new SimpleShape( this.unfinishedShapeType, coords.get(0), coords.get(1)));
                         break;
                     default:
@@ -314,7 +314,7 @@ public class MapObjectInParsing implements Serializable{
                 case FOREST:
                 case CEMENT:
                 case COMMERCIAL_GROUND:
-                case FARMLAND:
+                // case FARMLAND:
                     mapObjects.getTerrainAreasList().add(new ComplexShape(this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
                     break;
                 default:
@@ -367,5 +367,12 @@ public class MapObjectInParsing implements Serializable{
 
     public ArrayList<SimpleShape> getCoastlineSegments() {
         return coastLineSegmentList;
+    }
+
+    public void deletePointHashMap(){
+        if(this.pointIDtoPoint!=null){
+            this.pointIDtoPoint = null;
+            System.gc();
+        }
     }
 }

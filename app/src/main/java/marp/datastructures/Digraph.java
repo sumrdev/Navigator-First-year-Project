@@ -265,7 +265,6 @@ public class Digraph implements Serializable {
             }
             else if (transportationMethod == 1) {
                 travelTime = travelTime + ((getWeight(edge, true)/5000)*60);
-                System.out.println(getWeight(edge, true));
             } else if (transportationMethod == 2) {
                 travelTime = travelTime + ((getWeight(edge, true)/20000)*60);
             }

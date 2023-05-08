@@ -141,12 +141,12 @@ public class Controller {
         // ##########################################################
 
         view.getZoomMenu().zoomIn.setOnAction(e -> {
-            view.getMapScene().zoom(500, 350, 2 * view.getZoomMenu().getZoomMultiplier());
+            view.getMapScene().zoom(500, 350, 1.2 * view.getZoomMenu().getZoomMultiplier());
             view.getMapScene().redraw();
         });
 
         view.getZoomMenu().zoomOut.setOnAction(e -> {
-            view.getMapScene().zoom(500F, 350F, (float) (0.5 / view.getZoomMenu().getZoomMultiplier()));
+            view.getMapScene().zoom(500F, 350F, (float) (0.8 / view.getZoomMenu().getZoomMultiplier()));
             view.getMapScene().redraw();
         });
 
@@ -267,9 +267,6 @@ public class Controller {
                 view.getMapMenu().getDirectionsPanel().updateDistanceAndTime(distance, travelTime);
                 view.getMapScene().redraw();
             }
-        });
-        view.getMapMenu().getDirectionsPanel().takeSnapshotButton.setOnAction(e -> {
-            takeSnapShot();
         });
 
         // ##########################################################
@@ -452,8 +449,7 @@ public class Controller {
             view.getMapScene().redraw();
         });
         view.getMapMenu().getSettingsPanel().zoomAdjustSlider.setOnMouseReleased(e ->{
-            System.out.print("zoom value: ");
-            System.out.println(view.getMapMenu().getSettingsPanel().zoomAdjustSlider.getValue());
+            view.getZoomMenu().setZoomMultiplier((float) view.getMapMenu().getSettingsPanel().zoomAdjustSlider.getValue());
         });
 
         // ##########################################################

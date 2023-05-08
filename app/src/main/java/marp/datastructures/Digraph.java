@@ -136,8 +136,8 @@ public class Digraph implements Serializable {
     }
 
     private float getWeight(Edge edge, boolean walking){
-        if(walking && !edge.isWalkable()) return Float.MAX_VALUE;
-        else if(!walking && !edge.isDriveable()) return Float.MAX_VALUE;
+        if(walking && !edge.isWalkable()) return Float.POSITIVE_INFINITY;
+        else if(!walking && !edge.isDriveable()) return Float.POSITIVE_INFINITY;
         else if(walking) return (float) MathFunctions.distanceInMeters(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(), nodes.get(edge.end).getY());
         else return (float) MathFunctions.distanceInMeters(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(), nodes.get(edge.end).getY())/roadsMap.get(edge.road).getSpeed();
     }

@@ -241,14 +241,17 @@ public class Controller {
         });
         view.getMapMenu().getDirectionsPanel().carButton.setOnAction(e -> {
             model.transportMode = 0;
+            model.getMapObjects().getDigraph().setDriving();
             System.out.println(model.transportMode);
         });
         view.getMapMenu().getDirectionsPanel().walkButton.setOnAction(e -> {
             model.transportMode = 1;
+            model.getMapObjects().getDigraph().setWalking();
             System.out.println(model.transportMode);
         });
         view.getMapMenu().getDirectionsPanel().bikeButton.setOnAction(e -> {
             model.transportMode = 2;
+            model.getMapObjects().getDigraph().setWalking();
             System.out.println(model.transportMode);
         });
         view.getMapMenu().getDirectionsPanel().findRouteButton.setOnAction( e -> {
@@ -257,11 +260,9 @@ public class Controller {
                 RoadNode end = model.getMapObjects().getRoadNodeRTree().getNearest(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress());
                 setStartLocation(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress(), false);
                 setEndLocation(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress(), false);
-                List<String> directions = model.getMapObjects().getDigraph().aStar(end, start, true);
+                List<String> directions = model.getMapObjects().getDigraph().aStar(end, start);
                 float distance = model.getMapObjects().getDigraph().getDistance();
                 int travelTime = model.getMapObjects().getDigraph().getTravelTime(model.getTransportMode());
-                //model.graph.runaStarWithNodeIndex(Integer.parseInt(view.getMapMenu().getDirectionsPanel().startLocationField.getText()), Integer.parseInt(view.getMapMenu().getDirectionsPanel().endLocationField.getText()));
-                //view.getMapMenu().getDirectionsPanel().receiveGuideList(null);
                 view.getMapMenu().getDirectionsPanel().setGuideShow(true);
                 view.getMapMenu().getDirectionsPanel().receiveGuideList(directions);
                 view.getMapMenu().getDirectionsPanel().updateDistanceAndTime(distance, travelTime);

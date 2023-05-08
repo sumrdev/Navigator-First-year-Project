@@ -35,11 +35,11 @@ public class Digraph implements Serializable {
                 RoadNode node1 = road.getNode(i);
                 RoadNode node2 = road.getNode(i + 1);
                 node1.addEdge(
-                        new Edge(node1.getID(), node2.getID(), road.getID(), road.isDriveable(), road.isWalkable()));
+                        new Edge(node1.getID(), node2.getID(), road.getID(), road.isDriveable(), road.isWalkable(), road.isRoundabout()));
                 if (!road.isOneWay())
                     node2.addEdge(
                             new Edge(node2.getID(), node1.getID(), road.getID(), road.isDriveable(),
-                                    road.isWalkable()));
+                                    road.isWalkable(), road.isRoundabout()));
             }
         }
         Time endTime = new Time(System.currentTimeMillis());

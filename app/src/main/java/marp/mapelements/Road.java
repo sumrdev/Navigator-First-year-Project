@@ -7,12 +7,14 @@ import javafx.scene.text.Text;
 import marp.mapelements.details.MapColor;
 import marp.mapelements.details.RoadType;
 
+import java.nio.file.FileSystemNotFoundException;
 import java.util.ArrayList;
 
 public class Road extends Element{
     ArrayList<RoadNode> nodes;
 
     boolean oneway;
+    boolean roundabout;
 
     boolean driveable;
     boolean walkable;
@@ -25,13 +27,16 @@ public class Road extends Element{
 
     private float[] boundingCoords = {Float.MAX_VALUE, Float.MAX_VALUE, -Float.MAX_VALUE, -Float.MAX_VALUE};
     
-    public Road(long id, ArrayList<RoadNode> nodes, RoadType type, int speed, boolean oneway, String name) {
+    public Road(long id, ArrayList<RoadNode> nodes, RoadType type, int speed, boolean oneway, boolean roundabout, String name) {
         this.id = id;
         this.nodes = nodes;
         this.roadType = type;
         this.speed = speed;
         this.oneway = oneway;
+        this.roundabout = roundabout;
         this.name = name;
+
+        // if(this.roundabout) this.oneway = true;
 
         for (RoadNode roadNode : nodes) {
             if(roadNode.getX() < boundingCoords[0]){
@@ -96,6 +101,9 @@ public class Road extends Element{
         return this.oneway;
     }
 
+    public boolean isRoundabout(){
+        return this.roundabout;
+    }
 
     public boolean isDriveable(){
         return this.roadType.isDriveable();
@@ -113,6 +121,7 @@ public class Road extends Element{
 
         gc.setLineWidth((zoom * roadType.getRoadWidth()));
         gc.setStroke(MapColor.getInstance().colorMap.get(roadType.toString()));
+        if(this.oneway) gc.setStroke(Color.BLUE);
         draw(gc,1, zoom);
     }
 

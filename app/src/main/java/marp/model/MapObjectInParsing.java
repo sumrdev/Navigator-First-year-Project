@@ -24,7 +24,8 @@ public class MapObjectInParsing implements Serializable{
     private ShapeType unfinishedShapeType = ShapeType.UNDEFINED;
     private RoadType unfinishedRoadType = RoadType.UNDEFINED;
     private boolean isRoad;
-    private  boolean oneWay;
+    private boolean oneWay;
+    private boolean roundabout;
     private int speed;
     private Point unfinishedPoint;
 
@@ -107,6 +108,10 @@ public class MapObjectInParsing implements Serializable{
     public void setRoadOneWay(boolean oneway){
         oneway = true;
         //unfinishedRoad.setOneWay(oneway);
+    }
+
+    public void setRoadRoundabout(boolean roundabout){
+        this.roundabout = true;
     }
 
     public void setCity(String city){
@@ -248,7 +253,7 @@ public class MapObjectInParsing implements Serializable{
                 }
                 roadNodes.add(roadNodeIDtoRoadNode.get(point.getID()));
             }
-            Road road = new Road(this.unfinishedSimpleShapeID, roadNodes, this.unfinishedRoadType, this.speed, this.oneWay, this.name);
+            Road road = new Road(this.unfinishedSimpleShapeID, roadNodes, this.unfinishedRoadType, this.speed, this.oneWay, this.roundabout, this.name);
             mapObjects.getRoadsList().add(road);
             switch (unfinishedRoadType) {
                 case MOTORWAY:
@@ -278,6 +283,8 @@ public class MapObjectInParsing implements Serializable{
         unfinishedRoadType = RoadType.UNDEFINED;
         cleanUpAddressVariables();
     }
+
+    
 
     private void cleanUpAddressVariables(){
         this.city = null;

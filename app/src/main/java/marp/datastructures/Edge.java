@@ -6,19 +6,24 @@ import marp.mapelements.Road;
 import marp.utilities.MathFunctions;
 
 public class Edge implements Serializable{
-    Long start, end, road;
-    boolean driveable, walkable;
-    public Edge(Long start, Long end, Long roadID, boolean driveable, boolean walkable) {
+    long start, end, road;
+    boolean driveable, walkable, roundabout;
+    public Edge(long start, long end, long roadID, boolean driveable, boolean walkable, boolean roundabout) {
         this.start = start;
         this.end = end;
         this.road = roadID;
 
         this.driveable = driveable;
         this.walkable = walkable;
+        this.roundabout = roundabout;
     }
 
     public boolean isDriveable(){
         return this.driveable;
+    }
+
+    public boolean isRoundabout(){
+        return this.roundabout;
     }
 
     public boolean isWalkable(){

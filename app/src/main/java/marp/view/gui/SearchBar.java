@@ -61,8 +61,9 @@ public class SearchBar extends TextField {
         for (String address : model.getSuggestionTrie().getAddressSuggestions(newText, suggestionAmount)) {
             createAddressElement(address);
         }
-        createAddressExpander(newText);
-
+        if (popupList.size() > 0){
+            createAddressExpander(newText);
+        }
         //show only if the searchbar exists in a scene
         if (this.getScene() != null) {
             popup.show(this, Side.BOTTOM, 0, 0);
@@ -76,8 +77,9 @@ public class SearchBar extends TextField {
         for (String houseNumber : model.getSuggestionTrie().getHouseNumberSuggestions(newText, suggestionAmount)) {
             createHouseElement(newText, houseNumber);
         }
-        createHouseExpander(newText);
-
+        if (popupList.size() > 0){
+            createHouseExpander(newText);
+        }
         popup.show(this, Side.BOTTOM, 0, 0);
         popup.getItems().clear();
         popup.getItems().addAll(popupList);
@@ -88,7 +90,7 @@ public class SearchBar extends TextField {
         matcher = PATTERN.matcher(model.getSuggestionTrie().getFullAddress(popupText));
             // åbenbart nødvendigt at lave matcher.matches() også selvom det ikke bruges?
             matcher.matches();
-        String text = matcher.group("street") +"  "+ matcher.group("postcode") + " " + matcher.group("city");
+        String text = matcher.group("street") +" "+" "+ matcher.group("postcode") + " " + matcher.group("city");
         Label suggestion = new Label(popupText);
         CustomMenuItem popupItem = new CustomMenuItem(suggestion, false);
         popupList.add(popupItem);

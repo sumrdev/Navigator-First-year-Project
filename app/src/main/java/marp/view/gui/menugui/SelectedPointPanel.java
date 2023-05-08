@@ -33,6 +33,7 @@ public class SelectedPointPanel  extends MenuPanel {
     public MapButton searchButton;
 
     public VBox selectedPointInfo;
+    public VBox buttonContainer;
 
     public SelectedPointPanel(Model model) {
         super();
@@ -82,7 +83,7 @@ public class SelectedPointPanel  extends MenuPanel {
         searchBarAndInfo.setPickOnBounds(false);
 
         //Create container to allign search button and minimize button over each other
-        VBox buttonContainer = new VBox(searchButton, minimizeButton);
+        buttonContainer = new VBox(searchButton, minimizeButton);
         buttonContainer.setSpacing(20);
 
         //Add everything + generic navication buttons to menu panel
@@ -116,10 +117,66 @@ public class SelectedPointPanel  extends MenuPanel {
                 selectedPointInfo.getStylesheets().remove("CSS/stylesheet.css");
                 selectedPointInfo.getStylesheets().add("CSS/darkmodesheet.css");
             }
+            if (directionsToSelectedPointButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                directionsToSelectedPointButton.getStylesheets().remove("CSS/stylesheet.css");
+                directionsToSelectedPointButton.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+            if (buttonContainer.getStylesheets().contains("CSS/stylesheet.css")) {
+                buttonContainer.getStylesheets().remove("CSS/stylesheet.css");
+                buttonContainer.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+            if (directionsButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                directionsButton.getStylesheets().remove("CSS/stylesheet.css");
+                directionsButton.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+            if (settingsButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                settingsButton.getStylesheets().remove("CSS/stylesheet.css");
+                settingsButton.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+            if (minimizeButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                minimizeButton.getStylesheets().remove("CSS/stylesheet.css");
+                minimizeButton.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+            if (searchButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                searchButton.getStylesheets().remove("CSS/stylesheet.css");
+                searchButton.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+            if (saveLocationButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                saveLocationButton.getStylesheets().remove("CSS/stylesheet.css");
+                saveLocationButton.getStylesheets().add("CSS/darkmodesheet.css");
+            }
         } else {
             if (selectedPointInfo.getStylesheets().contains("CSS/darkmodesheet.css")) {
                 selectedPointInfo.getStylesheets().remove("CSS/darkmodesheet.css");
                 selectedPointInfo.getStylesheets().add("CSS/stylesheet.css");
+            }
+            if (directionsToSelectedPointButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                directionsToSelectedPointButton.getStylesheets().remove("CSS/darkmodesheet.css");
+                directionsToSelectedPointButton.getStylesheets().add("CSS/stylesheet.css");
+            }
+            if (buttonContainer.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                buttonContainer.getStylesheets().remove("CSS/darkmodesheet.css");
+                buttonContainer.getStylesheets().add("CSS/stylesheet.css");
+            }
+            if (directionsButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                directionsButton.getStylesheets().remove("CSS/darkmodesheet.css");
+                directionsButton.getStylesheets().add("CSS/stylesheet.css");
+            }
+            if (settingsButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                settingsButton.getStylesheets().remove("CSS/stylesheet.css");
+                settingsButton.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+            if (minimizeButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                minimizeButton.getStylesheets().remove("CSS/stylesheet.css");
+                minimizeButton.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+            if (searchButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                searchButton.getStylesheets().remove("CSS/stylesheet.css");
+                searchButton.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+            if (saveLocationButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                saveLocationButton.getStylesheets().remove("CSS/stylesheet.css");
+                saveLocationButton.getStylesheets().add("CSS/darkmodesheet.css");
             }
         }
     }

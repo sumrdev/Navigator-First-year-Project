@@ -127,7 +127,8 @@ public class DirectionsPanel extends MenuPanel {
         startAndEndLocation.setSpacing(20);
         startAndEndLocation.setAlignment(Pos.TOP_CENTER);
 
-
+        startAndEndLocation.getStylesheets().addAll("CSS/darkmodesheet.css", "CSS/stylesheet.css");
+        startAndEndLocation.getStyleClass().add("map-vbox");
 
         //Add generic menu navigation buttons
         this.getChildren().addAll(startAndEndLocation, minimizeButton, directionsButton, settingsButton);

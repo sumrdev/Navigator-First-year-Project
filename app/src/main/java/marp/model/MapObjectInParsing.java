@@ -297,6 +297,11 @@ public class MapObjectInParsing implements Serializable{
     }
 
     public void finishRelation(){
+        if (this.completeAddressCount==4){
+            Address address = new Address(this.street, this.housenumber, this.postcode, this.city, unfinishedPoint.getX(), unfinishedPoint.getY());
+            mapObjects.getAddressList().add(address);
+            mapObjects.getTrie().insert(address);
+        }
         if (unfinishedRelationSimpleShapes.size() > 0) {
             switch (unfinishedShapeType) {
                 case BUILDING:
@@ -316,7 +321,7 @@ public class MapObjectInParsing implements Serializable{
                     break;
             }
         }
-
+        cleanUpAddressVariables();
         unfinishedRelationSimpleShapes = new ArrayList<>();
         unfinishedShapeType = ShapeType.UNDEFINED;
         unfinishedPointType = PointType.UNDEFINED;

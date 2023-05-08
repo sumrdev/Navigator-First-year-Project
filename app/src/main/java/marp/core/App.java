@@ -16,7 +16,7 @@ public class App extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        String defaultFilename = "denmark-latest.osm";
+        String defaultFilename = "bornholm.osm";
         InputStream defaultFile = getClass().getResourceAsStream("/maps/"+defaultFilename);
         
         Model model = Model.createModel(defaultFile, defaultFilename);

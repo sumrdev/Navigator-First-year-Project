@@ -188,7 +188,7 @@ public class Digraph implements Serializable {
                             break;
                     }
                     if (roadsMap.get(edge.road).getName().length() > 13) {
-                        String direction = turnInformation + roadsMap.get(edge.road).getName() + " \n after " + distanceSinceLastRoad + " meters";
+                        String direction = turnInformation + roadsMap.get(edge.road).getName() + " \n      after " + distanceSinceLastRoad + " meters";
                         result.add(direction);
                     } else {
                         String direction = turnInformation + roadsMap.get(edge.road).getName() + " after " + distanceSinceLastRoad + " meters";
@@ -250,7 +250,9 @@ public class Digraph implements Serializable {
     }
 
     public void clearNavigation() {
-        navigation.clear();
+        if (navigation != null) {
+            navigation.clear();
+        }
     }
 
     public float getDistance() {

@@ -131,7 +131,7 @@ public class DirectionsPanel extends MenuPanel {
 
         //Add generic menu navigation buttons
         this.getChildren().addAll(startAndEndLocation, minimizeButton, directionsButton, settingsButton);
-        this.setPadding(new Insets(20, 20, 20, 20));
+        this.setPadding(new Insets(20, 20, 40, 20));
         this.setSpacing(10);
         this.setPickOnBounds(false);
     }

@@ -167,6 +167,7 @@ public class MapScene extends Scene{
         drawStartAndEndPoint();
 
     }
+
     private void drawCoastlines(int levelOfDetail, Bounds bounds) {
         for (Element coastline : model.getMapObjects().getCoastLinesAreaTree().getElementsInRange(bounds)) {
             coastline.draw(gc, levelOfDetail, 1);
@@ -290,10 +291,8 @@ public class MapScene extends Scene{
             }
         }
     }
-    private void drawNormalRoads(Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 250 && zoomMenu.getZoomlevel() > 50) {
     private void drawMediumRoads(Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 5000 && zoomMenu.getZoomlevel() > 50) {
+        if (zoomMenu.getZoomlevel() < 250 && zoomMenu.getZoomlevel() > 50) {
             if (model.isRoadsVisible) {
                 for (Road road : model.getMapObjects().getMediumRoadsTree().getElementsInRange(bounds)) {
                     road.drawOutline(gc, (1 / Math.sqrt(trans.determinant())));

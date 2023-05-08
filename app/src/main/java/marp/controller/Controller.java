@@ -550,6 +550,7 @@ public class Controller {
         }
         // Redraw the view
         view.getMapScene().redraw();
+        System.out.println("Test!!!!");
     }
 
 

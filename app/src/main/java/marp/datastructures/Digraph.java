@@ -213,8 +213,8 @@ public class Digraph implements Serializable {
         float y4 = nodes.get(e2.end).getY();
 
         int angle = MathFunctions.getAngleBetweenTwoLines(x1, y1, x2, y2, x3, y3, x4, y4 );
-        if(angle > 0 && angle < 180) return 1;
-        else if(angle < 0 && angle > -180) return 2;
+        if(angle < 0 && angle > -180) return 1;
+        else if(angle > 0 && angle < 180) return 2;
         else if(angle == 180 || angle == -180) return 3;
         else return 0;
     }

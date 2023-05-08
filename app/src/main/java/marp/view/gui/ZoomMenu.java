@@ -63,11 +63,6 @@ public class ZoomMenu extends VBox {
         }
     }
 
-    public void resetZoomLevel(){
-        this.zoomlevel = 100;
-        zoomLevelLabel.setText("Distance: " + String.format("%.2f", this.zoomlevel) + " m");
-    }
-
     public void changeDistanceLine(double newEndX){
         distanceLine.setEndX(newEndX);
     }

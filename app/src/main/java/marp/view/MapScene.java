@@ -82,9 +82,7 @@ public class MapScene extends Scene{
             trans.prependScale(factor, factor);
             pan(x, y);
 
-            if(factor < 100){
-                zoomMenu.updateZoomLevel(factor);
-            }
+            zoomMenu.updateZoomLevel(factor);
         }
     }
     public Point2D screenCoordsToMapCoords(Point2D point) {
@@ -111,10 +109,10 @@ public class MapScene extends Scene{
         zoomMenu.setDistance(x);
     }
 
-
     public void resetAffine() {
         trans = new Affine();
     }
+
     public void redraw() {
         gc.setTransform(new Affine());
         gc.setFill(MapColor.getInstance().colorMap.get("BACKGROUND"));

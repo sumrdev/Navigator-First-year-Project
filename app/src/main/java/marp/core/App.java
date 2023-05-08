@@ -5,6 +5,7 @@ import java.net.URL;
 import java.nio.file.Paths;
 
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import marp.controller.Controller;
 import marp.model.Model;
@@ -16,9 +17,9 @@ public class App extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        String defaultFilename = "bornholm.osm";
+        String defaultFilename = "denmark-latest.bin";
         InputStream defaultFile = getClass().getResourceAsStream("/maps/"+defaultFilename);
-        
+
         Model model = Model.createModel(defaultFile, defaultFilename);
         View view = new View(primaryStage, model);
         Controller controller = new Controller(view, model);

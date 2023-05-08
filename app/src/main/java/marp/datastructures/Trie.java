@@ -15,15 +15,6 @@ public class Trie implements Serializable{
         root = new TrieNode();
     }
 
-    public void moveThroughTree(String searchInput) {
-        currentNode = root;
-        searchInput = searchInput.toLowerCase();
-        for (int i = 0; i < searchInput.length(); i++) {
-            char currentChar = searchInput.charAt(i);
-            currentNode = currentNode.getNode(currentChar);
-        }
-    }
-
     // address is made lowercase to make searching easier for the user, ie.
     // writing "Svanevej" is read the same as "svanevej"
     public void insert(Address address) {
@@ -41,6 +32,18 @@ public class Trie implements Serializable{
         currentNode.setIsEndTrue();
         currentNode.setEndAddress(addressString);
         currentNode.addHouseNumber(address.getHouseNumber(), address);
+    }
+    public ArrayList<String> getHouseNumberSuggestions(String searchInput, int suggestionAmount) {
+        currentNode = root;
+        searchInput = searchInput.toLowerCase();
+        ArrayList<String> suggestionList = new ArrayList<>();
+        moveThroughTree(searchInput);
+
+        ArrayList<String> nodeNumbers = currentNode.getHouseNumbers();
+        for (int j = 0; j < suggestionAmount && j < nodeNumbers.size(); j++) {
+            suggestionList.add(nodeNumbers.get(j));
+        }
+        return suggestionList;
     }
 
     // exception handling?
@@ -112,23 +115,20 @@ public class Trie implements Serializable{
         moveThroughTree(searchInput);
         return currentNode.getEndAddress();
     }
-
-    public ArrayList<String> getHouseNumberSuggestions(String searchInput, int suggestionAmount) {
-        currentNode = root;
-        searchInput = searchInput.toLowerCase();
-        ArrayList<String> suggestionList = new ArrayList<>();
-        moveThroughTree(searchInput);
-
-        ArrayList<String> nodeNumbers = currentNode.getHouseNumbers();
-        for (int j = 0; j < suggestionAmount && j < nodeNumbers.size(); j++) {
-            suggestionList.add(nodeNumbers.get(j));
-        }
-        return suggestionList;
-    }
     
     public Address getAddressObject(String searchInput, String house){
         currentNode = root;
         moveThroughTree(searchInput);
         return currentNode.getAddressObject(house);
+    }
+
+    
+    public void moveThroughTree(String searchInput) {
+        currentNode = root;
+        searchInput = searchInput.toLowerCase();
+        for (int i = 0; i < searchInput.length(); i++) {
+            char currentChar = searchInput.charAt(i);
+            currentNode = currentNode.getNode(currentChar);
+        }
     }
 }

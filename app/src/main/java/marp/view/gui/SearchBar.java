@@ -24,6 +24,7 @@ public class SearchBar extends TextField {
 
     String REGEX = "^(?<street>[0-9]?[\\p{L} .']+([0-9]+[ .][\\p{L} .']+)?) +((?<house>[0-9]+[\\p{L} ]?)[,]? +)?((?<floor>([0-9]+|(kl)|(st))).? +(?<side>((tv)|(th)|(mf))),? +)?(?<postcode>[0-9]{4}) *( +(?<city>[\\p{L} ]+))?$";
     Pattern PATTERN = Pattern.compile(REGEX);
+    Matcher matcher;
 
     public SearchBar(Model model, int suggestionAmount) {
         super();
@@ -43,7 +44,7 @@ public class SearchBar extends TextField {
 
     }
 
-    public void setListener() {
+    private void setListener() {
         textProperty().addListener((obs, oldText, newText) -> {
             suggestionAmount = unchangingAmount;
             if (model.getSuggestionTrie().fullContainsSearch(newText)) {
@@ -55,10 +56,10 @@ public class SearchBar extends TextField {
         });
     }
 
-    public void addressSuggester(String newText) {
+    private void addressSuggester(String newText) {
         popupList.clear();
         for (String address : model.getSuggestionTrie().getAddressSuggestions(newText, suggestionAmount)) {
-            createPopupElement(address, false, true);
+            createAddressElement(address);
         }
         createAddressExpander(newText);
 
@@ -70,17 +71,10 @@ public class SearchBar extends TextField {
         popup.getItems().addAll(popupList);
     }
 
-    public void houseSuggester(String newText) {
-        Matcher matcher = PATTERN.matcher(model.getSuggestionTrie().getFullAddress(newText));
-        // åbenbart nødvendigt at lave matcher.matches() også selvom det ikke bruges?
-        matcher.matches();
-
+    private void houseSuggester(String newText) {
         popupList.clear();
         for (String houseNumber : model.getSuggestionTrie().getHouseNumberSuggestions(newText, suggestionAmount)) {
-            String fullAddress = matcher.group("street") + " " + houseNumber + " " + matcher.group("postcode") + " "
-                    + matcher.group("city");
-            createPopupElement(fullAddress, true, false);
-            //System.out.println(matcher.group("street"));
+            createHouseElement(newText, houseNumber);
         }
         createHouseExpander(newText);
 
@@ -90,22 +84,38 @@ public class SearchBar extends TextField {
 
     }
 
-    public void createPopupElement(String popupText, boolean hideOnClick, boolean reposition) {
+    private void createAddressElement(String popupText) {
+        matcher = PATTERN.matcher(model.getSuggestionTrie().getFullAddress(popupText));
+            // åbenbart nødvendigt at lave matcher.matches() også selvom det ikke bruges?
+            matcher.matches();
+        String text = matcher.group("street") +"  "+ matcher.group("postcode") + " " + matcher.group("city");
         Label suggestion = new Label(popupText);
-        CustomMenuItem popupItem = new CustomMenuItem(suggestion, hideOnClick);
+        CustomMenuItem popupItem = new CustomMenuItem(suggestion, false);
         popupList.add(popupItem);
         popupItem.setOnAction(e -> {
-            setText(popupText);
-            if (reposition){
-            Matcher matcher = PATTERN.matcher(popupText);
-            matcher.matches();
+            setText(text);
             int length = matcher.group("street").length() + 1;
             this.positionCaret(length);
-            }
+            
         });
     }
 
-    public void createAddressExpander(String newText) {
+    private void createHouseElement(String popupText, String houseNumber) {
+        matcher = PATTERN.matcher(model.getSuggestionTrie().getFullAddress(popupText));
+        // åbenbart nødvendigt at lave matcher.matches() også selvom det ikke bruges?
+        matcher.matches();
+        String textWithNumber = matcher.group("street") +" "+ houseNumber +" "+ matcher.group("postcode") + " " + matcher.group("city");
+        Label suggestion = new Label(textWithNumber);
+        CustomMenuItem popupItem = new CustomMenuItem(suggestion, true);
+        popupList.add(popupItem);
+        popupItem.setOnAction(e -> {
+            setText(textWithNumber);
+            int length = this.getText().length();
+            this.positionCaret(length);
+        });
+    }
+
+    private void createAddressExpander(String newText) {
         Label suggestion = new Label("More suggestions...");
         CustomMenuItem popupItem = new CustomMenuItem(suggestion, false);
         popupList.add(popupItem);
@@ -115,7 +125,7 @@ public class SearchBar extends TextField {
         });
     }
 
-    public void createHouseExpander(String newText) {
+    private void createHouseExpander(String newText) {
         Label suggestion = new Label("More suggestions...");
         CustomMenuItem popupItem = new CustomMenuItem(suggestion, false);
         popupList.add(popupItem);

@@ -28,10 +28,10 @@ public class Trie implements Serializable{
     // writing "Svanevej" is read the same as "svanevej"
         currentNode = root;
         String addressString = address.getStreet() + " " + address.getPostCode() + " " + address.getCity();
-        String lowercaseAddressString = addressString.toLowerCase();
+        String treatedAddressString = addressString.toLowerCase().replaceAll(" ", "");
 
-        for (int i = 0; i < lowercaseAddressString.length(); i++) {
-            char currentChar = lowercaseAddressString.charAt(i);
+        for (int i = 0; i < treatedAddressString.length(); i++) {
+            char currentChar = treatedAddressString.charAt(i);
             if (!currentNode.containsKey(currentChar)) {
                 currentNode.setNode(currentChar, new TrieNode());
             }
@@ -48,7 +48,7 @@ public class Trie implements Serializable{
  */
     public ArrayList<String> getHouseNumberSuggestions(String searchInput, int suggestionAmount) {
         currentNode = root;
-        searchInput = searchInput.toLowerCase();
+        searchInput = searchInput.toLowerCase().replaceAll(" ", "");
         ArrayList<String> suggestionList = new ArrayList<>();
         moveThroughTree(searchInput);
 
@@ -65,7 +65,7 @@ public class Trie implements Serializable{
  */
     public ArrayList<String> getAddressSuggestions(String searchInput, int suggestionAmount) {
         currentNode = root;
-        searchInput = searchInput.toLowerCase();
+        searchInput = searchInput.toLowerCase().replaceAll(" ", "");
         ArrayList<String> suggestionList = new ArrayList<>();
         if (containsSearch(searchInput)) {
             moveThroughTree(searchInput);
@@ -91,7 +91,8 @@ public class Trie implements Serializable{
 
     private boolean containsSearch(String searchInput) {
         currentNode = root;
-        searchInput = searchInput.toLowerCase();
+        searchInput = searchInput.toLowerCase().replaceAll(" ", "");
+
         for (int i = 0; i < searchInput.length(); i++) {
             char currentChar = searchInput.charAt(i);
             if (currentNode.containsKey(currentChar)) {
@@ -111,7 +112,7 @@ public class Trie implements Serializable{
  */
     public boolean fullContainsSearch(String searchInput) {
         currentNode = root;
-        searchInput = searchInput.toLowerCase();
+        searchInput = searchInput.toLowerCase().replaceAll(" ", "");
         for (int i = 0; i < searchInput.length(); i++) {
             char currentChar = searchInput.charAt(i);
             if (currentNode.containsKey(currentChar)) {
@@ -153,7 +154,7 @@ public class Trie implements Serializable{
     
     private void moveThroughTree(String searchInput) {
         currentNode = root;
-        searchInput = searchInput.toLowerCase();
+        searchInput = searchInput.toLowerCase().replaceAll(" ", "");
         for (int i = 0; i < searchInput.length(); i++) {
             char currentChar = searchInput.charAt(i);
             currentNode = currentNode.getNode(currentChar);

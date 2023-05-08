@@ -5,7 +5,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import marp.datastructures.SimpleTrie;
+import marp.datastructures.Trie;
 import marp.mapelements.Address;
 import marp.model.Model;
 

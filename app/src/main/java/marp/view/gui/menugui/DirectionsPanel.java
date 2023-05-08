@@ -9,7 +9,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import marp.datastructures.SimpleTrie;
+import marp.datastructures.Trie;
 import marp.model.Model;
 import marp.view.gui.MapLabel;
 import marp.view.gui.MapLabelSmall;

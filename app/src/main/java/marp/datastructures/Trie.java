@@ -7,11 +7,11 @@ import java.util.Set;
 
 import marp.mapelements.Address;
 
-public class SimpleTrie implements Serializable{
+public class Trie implements Serializable{
     public TrieNode root;
     public TrieNode currentNode;
 
-    public SimpleTrie() {
+    public Trie() {
         root = new TrieNode();
     }
 

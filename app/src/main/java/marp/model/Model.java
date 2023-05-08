@@ -25,7 +25,7 @@ import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
 import javafx.geometry.Point2D;
-import marp.datastructures.SimpleTrie;
+import marp.datastructures.Trie;
 import marp.mapelements.*;
 
 import marp.parser.OSMParser;
@@ -121,7 +121,7 @@ public class Model implements Serializable{
             }
         }).start();
     }
-    public SimpleTrie getSuggestionTrie() {
+    public Trie getSuggestionTrie() {
         //return suggestionTrie;
         //TODO: Fix
         return mapObjects.getTrie();

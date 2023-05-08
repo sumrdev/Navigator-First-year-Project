@@ -11,6 +11,14 @@ public class RTree<T extends Element> implements Serializable {
     private Node treeNode;
     private final int dimensions;
     private final int maxElementsPerLeaf;
+
+    /**
+     * Constructs an RTree containing the elements of the specified list
+     * Params:
+     * values – the list of elements
+     * Throws:
+     * NullPointerException – if null is given as a parameter
+     */
     public RTree(List<T> values){
         maxElementsPerLeaf = 100;
         dimensions = 2;

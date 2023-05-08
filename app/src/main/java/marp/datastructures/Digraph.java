@@ -172,23 +172,28 @@ public class Digraph implements Serializable {
                     String turnInformation;
                     switch (getTurnInformation(navigation.get(i - 1), navigation.get(i))) {
                         case 0:
-                            turnInformation = "Continue straight onto ";
+                            turnInformation = "↑ Continue straight onto ";
                             break;
                         case 1:
-                            turnInformation = "Turn right on ";
+                            turnInformation = "→ Turn right on ";
                             break;
                         case 2:
-                            turnInformation = "Turn left on ";
+                            turnInformation = "← Turn left on ";
                             break;
                         case 3:
-                            turnInformation = "Turn around on ";
+                            turnInformation = "↓ Turn around on ";
                             break;
                         default:
-                            turnInformation = "Continue straight onto ";
+                            turnInformation = "↑ Continue straight onto ";
                             break;
                     }
-                    String direction = turnInformation + roadsMap.get(edge.road).getName() + " after " + distanceSinceLastRoad + " meters";
-                    result.add(direction);
+                    if (roadsMap.get(edge.road).getName().length() > 13) {
+                        String direction = turnInformation + roadsMap.get(edge.road).getName() + " \n after " + distanceSinceLastRoad + " meters";
+                        result.add(direction);
+                    } else {
+                        String direction = turnInformation + roadsMap.get(edge.road).getName() + " after " + distanceSinceLastRoad + " meters";
+                        result.add(direction);
+                    }
                 } else {
                     String direction = "Start on " + roadsMap.get(edge.road).getName();
                     result.add(direction);

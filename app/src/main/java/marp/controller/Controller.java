@@ -109,16 +109,16 @@ public class Controller {
                     // nearest selectable element.
                     Point2D point = view.getMapScene().screenCoordsToMapCoords(new Point2D(lastX, lastY));
                     MapPoint nearestPoint = model.getNearestPointForMapSelection(point);
-                    if (view.getMapMenu().getDirectionsPanel().startLocationField.isFocused()) {
-                        view.getMapMenu().getDirectionsPanel().startLocationField.setText(closestAddressToPointAsString(nearestPoint));
-                        model.getMapObjects().clearRoute();
-                        view.getMapScene().redraw();
-                        setStartLocation(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress(), false);
-                    } else if (view.getMapMenu().getDirectionsPanel().endLocationField.isFocused()) {
+                    if (view.getMapMenu().getDirectionsPanel().endLocationField.isFocused()) {
                         view.getMapMenu().getDirectionsPanel().endLocationField.setText(closestAddressToPointAsString(nearestPoint));
                         setEndLocation(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress(), false);
                         model.getMapObjects().clearRoute();
                         view.getMapScene().redraw();
+                    } else if (view.getMapMenu().getDirectionsPanel().startLocationField.isFocused()) {
+                        view.getMapMenu().getDirectionsPanel().startLocationField.setText(closestAddressToPointAsString(nearestPoint));
+                        model.getMapObjects().clearRoute();
+                        view.getMapScene().redraw();
+                        setStartLocation(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress(), false);
                     } else {
                     model.setSelectedPoint(nearestPoint);
                     // focus on the point without panning

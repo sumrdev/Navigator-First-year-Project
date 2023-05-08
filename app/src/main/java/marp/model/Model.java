@@ -85,8 +85,6 @@ public final class Model implements Serializable{
                 return loadBIN(inputStream);
             case "zip":
                 return loadZIP(inputStream, filename);
-            case "bz2":
-                CompressorInputStream input = new CompressorStreamFactory().createCompressorInputStream(bis);
             case "osm":
                 MapObjects mapObjects = osmParser.parseOSM(inputStream);
                 return getInstance().setValues(mapObjects, filename);

@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -17,10 +18,13 @@ import marp.mapelements.details.MapColor;
 import marp.mapelements.details.ShapeType;
 import marp.model.Model;
 import marp.utilities.MathFunctions;
+import marp.view.gui.MapLabel;
 import marp.view.gui.NearestRoadInfo;
 import marp.view.gui.ZoomMenu;
 import marp.view.gui.buttons.MapTextButton;
 import marp.view.gui.menugui.MapMenu;
+
+import javax.crypto.spec.PSource;
 
 public class MapScene extends Scene{
     public MapTextButton loadButton;
@@ -162,8 +166,6 @@ public class MapScene extends Scene{
         drawSelectedPoint();
         drawStartAndEndPoint();
 
-        System.out.println(" X coords: " + bounds.getMinX() + " " + bounds.getMaxX() + " " + bounds.getMinY() + " " + bounds.getMaxY());
-
     }
     private void drawCoastlines(int levelOfDetail, Bounds bounds) {
         for (Element coastline : model.getMapObjects().getCoastLinesAreaTree().getElementsInRange(bounds)) {
@@ -180,7 +182,7 @@ public class MapScene extends Scene{
         }
     }
     private void drawBusLandmarks(Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 300) {
+        if (zoomMenu.getZoomlevel() < 75) {
             if (model.isLandmarksVisible) {
                 for (PointOfInterest pointOfInterest : model.getMapObjects().getBusPOITree().getElementsInRange(bounds)) {
                     pointOfInterest.draw(gc, (1 / Math.sqrt(trans.determinant())) * 20);
@@ -189,7 +191,7 @@ public class MapScene extends Scene{
         }
     }
     private void drawTrainLandmarks(Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 1000) {
+        if (zoomMenu.getZoomlevel() < 100) {
             if (model.isLandmarksVisible) {
                 for (PointOfInterest pointOfInterest : model.getMapObjects().getTrainPOITree().getElementsInRange(bounds)) {
                     pointOfInterest.draw(gc, (1 / Math.sqrt(trans.determinant())) * 20);
@@ -227,21 +229,21 @@ public class MapScene extends Scene{
         }
     }
     private void drawCityNames(Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 30000 && zoomMenu.getZoomlevel() > 150) {
+        if (zoomMenu.getZoomlevel() < 2000 && zoomMenu.getZoomlevel() > 150) {
             for (PlaceName placeName : model.getMapObjects().getLargeNameTree().getElementsInRange(bounds)) {
                 placeName.draw(gc, (float) (1 / Math.sqrt(trans.determinant())));
             }
         }
     }
     private void drawTownNames(Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 15000 && zoomMenu.getZoomlevel() > 150) {
+        if (zoomMenu.getZoomlevel() < 750 && zoomMenu.getZoomlevel() > 150) {
             for (PlaceName placeName : model.getMapObjects().getMediumLargePlaceNameTree().getElementsInRange(bounds)) {
                 placeName.draw(gc, (float) (1 / Math.sqrt(trans.determinant())));
             }
         }
     }
     private void drawPlaceNames(Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 10000 && zoomMenu.getZoomlevel() > 150) {
+        if (zoomMenu.getZoomlevel() < 500 && zoomMenu.getZoomlevel() > 150) {
             for (PlaceName placeName : model.getMapObjects().getMediumPlaceNameTree().getElementsInRange(bounds)) {
                 placeName.draw(gc, (float) (1 / Math.sqrt(trans.determinant())));
             }
@@ -264,18 +266,6 @@ public class MapScene extends Scene{
             }
         }
     }
-    private void drawLargeRoads(Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 10000 && zoomMenu.getZoomlevel() > 50) {
-            if (model.isRoadsVisible) {
-                for (Road road : model.getMapObjects().getLargeRoadsTree().getElementsInRange(bounds)) {
-                    road.drawOutline(gc, (1 / Math.sqrt(trans.determinant())));
-                }
-                for (Road road : model.getMapObjects().getLargeRoadsTree().getElementsInRange(bounds)) {
-                    road.draw(gc, (1 / Math.sqrt(trans.determinant())));
-                }
-            }
-        }
-    }
     private void drawMotorways(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 15000 && zoomMenu.getZoomlevel() > 50) {
             if (model.isRoadsVisible) {
@@ -288,6 +278,20 @@ public class MapScene extends Scene{
             }
         }
     }
+    private void drawLargeRoads(Bounds bounds) {
+        if (zoomMenu.getZoomlevel() < 1000 && zoomMenu.getZoomlevel() > 50) {
+            if (model.isRoadsVisible) {
+                for (Road road : model.getMapObjects().getLargeRoadsTree().getElementsInRange(bounds)) {
+                    road.drawOutline(gc, (1 / Math.sqrt(trans.determinant())));
+                }
+                for (Road road : model.getMapObjects().getLargeRoadsTree().getElementsInRange(bounds)) {
+                    road.draw(gc, (1 / Math.sqrt(trans.determinant())));
+                }
+            }
+        }
+    }
+    private void drawNormalRoads(Bounds bounds) {
+        if (zoomMenu.getZoomlevel() < 250 && zoomMenu.getZoomlevel() > 50) {
     private void drawMediumRoads(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 5000 && zoomMenu.getZoomlevel() > 50) {
             if (model.isRoadsVisible) {
@@ -389,7 +393,7 @@ public class MapScene extends Scene{
         }
     }
     private void drawTerrain (int levelOfDetail, Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 3000) {
+        if (zoomMenu.getZoomlevel() < 750) {
             if (model.isTerrainVisible) {
                 for (Element terrainElement : model.getMapObjects().getTerrainAreasTree().getElementsInRange(bounds)) {
                     terrainElement.draw(gc, levelOfDetail, 1);

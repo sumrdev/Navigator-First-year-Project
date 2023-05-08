@@ -8,19 +8,25 @@ import java.util.HashSet;
 import java.util.Set;
 
 import marp.mapelements.Address;
-
+/**
+ * Constructor for TrieNode
+ * @param isEnd marks whether this TrieNode is at the end of a branch (ie. a leaf)
+ * @param branches is a HashMap mapping chars to TrieNodes and makes up the structure of the Trie
+ * @param houseNumberToAddress is a HashMap mapping String keys to Address objects
+ * @param endAddress is a String of the full address contained in the Trie, not including the housenumber
+ */
 public class TrieNode implements Serializable {
-    public boolean isEnd;
-    public HashMap<Character, TrieNode> branches;
-    public HashMap<String, Address> houseNumberToAddress = new HashMap<>();
-    public String endAddress;
+    private boolean isEnd;
+    private HashMap<Character, TrieNode> branches;
+    private HashMap<String, Address> houseNumberToAddress = new HashMap<>();
+    private String endAddress;
 
     public TrieNode(){
         branches = new HashMap<>();
     }
 
-    public void setIsEndTrue(){
-        isEnd = true;
+    public void setIsEnd(boolean bool){
+        isEnd = bool;
     }
 
     public boolean getIsEnd(){
@@ -54,6 +60,10 @@ public class TrieNode implements Serializable {
 
     public Address getAddressObject(String house){
         return houseNumberToAddress.get(house);
+    }
+
+    public HashMap<Character, TrieNode> getBranches(){
+        return branches;
     }
 
     public boolean containsKey(char character){

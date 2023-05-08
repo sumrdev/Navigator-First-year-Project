@@ -103,11 +103,9 @@ public class MapScene extends Scene{
     }
 
     private void calculateZoomMenuDistance() {
-        Point2D a = screenCoordsToMapCoords(new Point2D(0, 0));    
-        Point2D b = screenCoordsToMapCoords(new Point2D(0, 0.15));
-        System.out.println(a);
-        System.out.println(b);
-        double x = MathFunctions.distanceInMeters((float) a.getX(),(float) a.getY(),(float) b.getX(),(float) b.getY())*6666;
+        Point2D a = screenCoordsToMapCoords(new Point2D(100, 150));
+        Point2D b = screenCoordsToMapCoords(new Point2D(200, 150));
+        double x = MathFunctions.distanceInMeters((float) a.getX(),(float) a.getY(),(float) b.getX(),(float) b.getY());
         zoomMenu.setDistance(x);
     }
 
@@ -227,7 +225,7 @@ public class MapScene extends Scene{
         end   = screenCoordsToMapCoords(end);
         gc.setStroke(Color.PURPLE);
         gc.strokeLine(start.getX(), start.getY(), end.getX(), end.getY());
-        System.out.println(MathFunctions.distanceInMeters((float)start.getX(), (float)start.getY(), (float)end.getX(), (float)end.getY()));
+        System.out.println("distance of userMadeLine: " + MathFunctions.distanceInMeters((float)start.getX(), (float)start.getY(), (float)end.getX(), (float)end.getY()));
     }
     private void drawCountryNames(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 300000 && zoomMenu.getZoomlevel() > 5000) {

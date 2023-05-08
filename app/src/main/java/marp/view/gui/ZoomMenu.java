@@ -55,25 +55,22 @@ public class ZoomMenu extends VBox {
 
     public void updateZoomLevel(double newZoomValue){
         this.zoomlevel /= newZoomValue;
+        updateZoomLevelLabel();
+    }
 
+    public void setDistance(double dist){
+        this.zoomlevel = dist;
+        updateZoomLevelLabel();
+    }
+    public void updateZoomLevelLabel(){
         if (this.zoomlevel > 1000) {
             zoomLevelLabel.setText("Distance: " + (String.format("%.2f", this.zoomlevel / 1000) + " km"));
         } else {
             zoomLevelLabel.setText("Distance: " + String.format("%.2f", this.zoomlevel) + " m");
         }
     }
-
     public void changeDistanceLine(double newEndX){
         distanceLine.setEndX(newEndX);
-    }
-
-    public void setDistance(double dist){
-        if(dist > 1000) {
-            dist /= 10;
-        }
-
-        this.zoomlevel = dist;
-        zoomLevelLabel.setText("Distance: " + String.format("%.2f", dist) + " m");
     }
     public float getZoomMultiplier() {
         return zoomMultiplier;

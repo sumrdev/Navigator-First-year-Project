@@ -42,7 +42,7 @@ public class Point extends Element {
         return new float[]{ x, y, x, y};
     }
     @Override
-    public void drawBounds(GraphicsContext gc) {
+    public void drawBounds(GraphicsContext gc, float zoom) {
         ;
     }
 }

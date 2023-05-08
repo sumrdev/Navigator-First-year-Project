@@ -255,8 +255,10 @@ public class MapObjectInParsing implements Serializable{
                     mapObjects.getMotorWaysList().add(road);
                     break;
                 case PRIMARY:
-                case TERTIARY:
                     mapObjects.getLargeRoadsList().add(road);
+                    break;
+                case TERTIARY:
+                    mapObjects.getMediumRoadsList().add(road);
                     break;
                 case RESIDENTIAL:
                 case PEDESTRIAN:
@@ -306,10 +308,10 @@ public class MapObjectInParsing implements Serializable{
                     mapObjects.getWaterAreasList().add(new ComplexShape( this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
                     break;
                 case GRASS:
-                case FOREST:
                 case CEMENT:
                 case COMMERCIAL_GROUND:
                 case FARMLAND:
+                case FOREST:
                     mapObjects.getTerrainAreasList().add(new ComplexShape(this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
                     break;
                 default:

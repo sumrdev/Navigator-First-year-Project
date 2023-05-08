@@ -101,6 +101,7 @@ public class OSMParser{
                                     case "footway":
                                     case "steps":
                                     case "escalator":
+                                    case "proposed":
                                         mapObjectInParsing.setRoadType(RoadType.DO_NOT_SHOW);
                                         break;
                                     case "path":

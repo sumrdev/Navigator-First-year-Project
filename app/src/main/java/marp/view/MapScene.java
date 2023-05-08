@@ -6,7 +6,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -15,15 +14,13 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 import marp.mapelements.*;
 import marp.mapelements.details.MapColor;
+import marp.mapelements.details.ShapeType;
 import marp.model.Model;
 import marp.utilities.MathFunctions;
-import marp.view.gui.MapLabel;
 import marp.view.gui.NearestRoadInfo;
 import marp.view.gui.ZoomMenu;
 import marp.view.gui.buttons.MapTextButton;
 import marp.view.gui.menugui.MapMenu;
-
-import javax.crypto.spec.PSource;
 
 public class MapScene extends Scene{
     public MapTextButton loadButton;
@@ -138,10 +135,12 @@ public class MapScene extends Scene{
         //Draw all elements in correct order
         drawCoastlines(levelOfDetails, bounds);
         drawWaterAreas(levelOfDetails, bounds);
+        //drawBounds(bounds);
         drawTerrain(levelOfDetails, bounds);
         drawBuildings(levelOfDetails, bounds);
         drawPaths(bounds);
-        drawNormalRoads(bounds);
+        drawSmallRoads(bounds);
+        drawMediumRoads(bounds);
         drawLargeRoads(bounds);
         drawMotorways(bounds);
         drawRoadsClose(bounds);
@@ -149,17 +148,21 @@ public class MapScene extends Scene{
         drawAddress(bounds);
         drawMotorwayNames(bounds);
         drawLargeRoadNames(bounds);
-        drawNormalRoadNames(bounds);
+        drawMediumRoadNames(bounds);
+        drawSmallRoadNames(bounds);
         drawCountryNames(bounds);
         drawCityNames(bounds);
         drawTownNames(bounds);
         drawPlaceNames(bounds);
+        drawSmallPlaceNames(bounds);
         drawLandmarks(bounds);
         drawBusLandmarks(bounds);
         drawTrainLandmarks(bounds);
         drawCustomLandmarks();
         drawSelectedPoint();
         drawStartAndEndPoint();
+
+        System.out.println(" X coords: " + bounds.getMinX() + " " + bounds.getMaxX() + " " + bounds.getMinY() + " " + bounds.getMaxY());
 
     }
     private void drawCoastlines(int levelOfDetail, Bounds bounds) {
@@ -244,6 +247,13 @@ public class MapScene extends Scene{
             }
         }
     }
+    private void drawSmallPlaceNames(Bounds bounds) {
+        if (zoomMenu.getZoomlevel() < 2500 && zoomMenu.getZoomlevel() > 150) {
+            for (PlaceName placeName : model.getMapObjects().getSmallPlaceNameTree().getElementsInRange(bounds)) {
+                placeName.draw(gc, (float) (1 / Math.sqrt(trans.determinant())));
+            }
+        }
+    }
     private void drawAddress(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 20 ) {
             if (model.isAddressVisible) {
@@ -278,7 +288,19 @@ public class MapScene extends Scene{
             }
         }
     }
-    private void drawNormalRoads(Bounds bounds) {
+    private void drawMediumRoads(Bounds bounds) {
+        if (zoomMenu.getZoomlevel() < 5000 && zoomMenu.getZoomlevel() > 50) {
+            if (model.isRoadsVisible) {
+                for (Road road : model.getMapObjects().getMediumRoadsTree().getElementsInRange(bounds)) {
+                    road.drawOutline(gc, (1 / Math.sqrt(trans.determinant())));
+                }
+                for (Road road : model.getMapObjects().getMediumRoadsTree().getElementsInRange(bounds)) {
+                    road.draw(gc, (1 / Math.sqrt(trans.determinant())));
+                }
+            }
+        }
+    }
+    private void drawSmallRoads(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 800 && zoomMenu.getZoomlevel() > 50) {
             if (model.isRoadsVisible) {
                 for (Road road : model.getMapObjects().getSmallRoadsTree().getElementsInRange(bounds)) {
@@ -296,6 +318,9 @@ public class MapScene extends Scene{
                 for (Road road : model.getMapObjects().getSmallRoadsTree().getElementsInRange(bounds)) {
                     road.drawCloseOutline(gc);
                 }
+                for (Road road : model.getMapObjects().getMediumRoadsTree().getElementsInRange(bounds)) {
+                    road.drawCloseOutline(gc);
+                }
                 for (Road road : model.getMapObjects().getLargeRoadsTree().getElementsInRange(bounds)) {
                     road.drawCloseOutline(gc);
                 }
@@ -303,6 +328,9 @@ public class MapScene extends Scene{
                     road.drawCloseOutline(gc);
                 }
                 for (Road road : model.getMapObjects().getSmallRoadsTree().getElementsInRange(bounds)) {
+                    road.drawClose(gc);
+                }
+                for (Road road : model.getMapObjects().getMediumRoadsTree().getElementsInRange(bounds)) {
                     road.drawClose(gc);
                 }
                 for (Road road : model.getMapObjects().getLargeRoadsTree().getElementsInRange(bounds)) {
@@ -314,10 +342,19 @@ public class MapScene extends Scene{
             }
         }
     }
-    private void drawNormalRoadNames(Bounds bounds) {
+    private void drawSmallRoadNames(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 35) {
             if (model.isRoadsVisible) {
                 for (Road road : model.getMapObjects().getSmallRoadsTree().getElementsInRange(bounds)) {
+                    road.drawName(gc, (1 / Math.sqrt(trans.determinant())));
+                }
+            }
+        }
+    }
+    private void drawMediumRoadNames(Bounds bounds) {
+        if (zoomMenu.getZoomlevel() < 50) {
+            if (model.isRoadsVisible) {
+                for (Road road : model.getMapObjects().getMediumRoadsTree().getElementsInRange(bounds)) {
                     road.drawName(gc, (1 / Math.sqrt(trans.determinant())));
                 }
             }
@@ -379,6 +416,11 @@ public class MapScene extends Scene{
     private void drawRoute() {
         if ( model.getMapObjects().getDigraph() != null) {
             model.getMapObjects().getDigraph().draw(gc);
+        }
+    }
+    private void drawBounds(Bounds bounds) {
+        for (Element element : model.getMapObjects().getCoastLinesAreaTree().getElementsInRange(bounds)) {
+            element.drawBounds(gc, (float) (1 / Math.sqrt(trans.determinant())));
         }
     }
 }

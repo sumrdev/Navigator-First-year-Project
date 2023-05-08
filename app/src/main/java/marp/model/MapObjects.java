@@ -189,6 +189,8 @@ public class MapObjects implements Serializable{
     private RTree<Road> motorWaysTree;
     private final ArrayList<Road> largeRoadsList = new ArrayList<>();
     private RTree<Road> largeRoadsTree;
+    private final ArrayList<Road> mediumRoadsList = new ArrayList<>();
+    private RTree<Road> mediumRoadsTree;
     private final ArrayList<Road> smallRoadsList = new ArrayList<>();
     private RTree<Road> smallRoadsTree;
     private final ArrayList<Road> footpathList = new ArrayList<>();
@@ -200,6 +202,7 @@ public class MapObjects implements Serializable{
     public RTree<Road> getLargeRoadsTree() {
         return largeRoadsTree;
     }
+    public RTree<Road> getMediumRoadsTree() { return mediumRoadsTree; }
     public RTree<Road> getSmallRoadsTree() {
         return smallRoadsTree;
     }
@@ -215,6 +218,7 @@ public class MapObjects implements Serializable{
     public ArrayList<Road> getLargeRoadsList() {
         return largeRoadsList;
     }
+    public ArrayList<Road> getMediumRoadsList() { return mediumRoadsList; }
     public ArrayList<Road> getSmallRoadsList() {
         return smallRoadsList;
     }
@@ -253,6 +257,7 @@ public class MapObjects implements Serializable{
         coastLineAreasTree = new RTree<>(coastLineAreasList);
         motorWaysTree = new RTree<>(motorWaysList);
         largeRoadsTree = new RTree<>(largeRoadsList);
+        mediumRoadsTree = new RTree<>(mediumRoadsList);
         smallRoadsTree = new RTree<>(smallRoadsList);
         footPathsTree = new RTree<>(footpathList);
     }

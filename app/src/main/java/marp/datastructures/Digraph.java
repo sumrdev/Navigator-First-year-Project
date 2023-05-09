@@ -19,9 +19,8 @@ public class Digraph implements Serializable {
     ArrayList<Edge> navigation;
     HashSet<RoadNode> closedSet;
     int averageSpeedCount;
-    float averageSpeed;
+    float averageSpeed = 70;
     boolean activeRoute;
-
     static int roadColor = 1;
 
     public Digraph(ArrayList<Road> roads, HashMap<Long, RoadNode> nodes) {
@@ -82,13 +81,12 @@ public class Digraph implements Serializable {
         return edges;
     }
 
-    public void setAverageSpeed(int speed) {
-        float temp = averageSpeed * averageSpeedCount;
-        temp += speed * 10;
-        this.averageSpeedCount++;
-        this.averageSpeed = temp / averageSpeedCount;
-        this.averageSpeed = 70;
-    }
+    // public void setAverageSpeed(int speed) {
+    //     float temp = averageSpeed * averageSpeedCount;
+    //     temp += speed * 10;
+    //     this.averageSpeedCount++;
+    //     this.averageSpeed = temp / averageSpeedCount;
+    // }
 
     public List<String> aStar(RoadNode start, RoadNode end) {
         return aStar(start, end, notInCar);
@@ -125,7 +123,6 @@ public class Digraph implements Serializable {
             closedSet.add(current);
             for (Edge edge : current.getEdges()) {
                 if (!closedSet.contains(nodes.get(edge.end))) {
-                    setAverageSpeed(roadsMap.get(edge.road).getSpeed());
                     float tentativeGScore = gScore.get(current) + getWeight(edge, walking);
                     if (gScore.get(nodes.get(edge.end)) != null && tentativeGScore >= gScore.get(nodes.get(edge.end)))
                         continue;
@@ -188,7 +185,7 @@ public class Digraph implements Serializable {
         for (int i = 0; i < navigation.size(); i++) {
             Edge edge = navigation.get(i);
             if (!previousRoad.equals(roadsMap.get(edge.road).getName())) {
-                if (!previousRoad.equals("")) {
+                if (!previousRoad.equals("") || roadsMap.get(edge.road).isRoundabout()) {
                     String turnInformation;
                     switch (getTurnInformation(navigation.get(i - 1), navigation.get(i))) {
                         case 0:
@@ -202,6 +199,26 @@ public class Digraph implements Serializable {
                             break;
                         case 3:
                             turnInformation = "↓ Turn around on ";
+                            break;
+                        case 5:
+                            int k = i;
+                            int turns = 0;
+                            while(k < navigation.size() && navigation.get(k).isRoundabout()){
+                                k++;
+                                if(nodes.get(navigation.get(k).end).getEdges().size() > 1){
+                                    turns++;
+                                }
+                            }
+                            if(turns == 1){
+                                turnInformation = "↻ Take the first exit on ";
+                            }else if(turns == 2){
+                                turnInformation = "↻ Take the second exit on ";
+                            }else if(turns == 3){
+                                turnInformation = "↻ Take the third exit on ";
+                            }else{
+                                turnInformation = "↻ Take the " + turns + "th exit on ";
+                            }
+                            i = k-1;
                             break;
                         default:
                             turnInformation = "↑ Continue straight onto ";
@@ -230,6 +247,7 @@ public class Digraph implements Serializable {
     }
 
     public int getTurnInformation(Edge e1, Edge e2) {
+        if(!e1.isRoundabout() && e2.isRoundabout()) return 5;
         float x1 = nodes.get(e1.start).getX();
         float y1 = nodes.get(e1.start).getY();
         float x2 = nodes.get(e1.end).getX();

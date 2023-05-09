@@ -14,7 +14,6 @@ import java.util.*;
 public class RTree<T extends Element> implements Serializable {
     private Node treeNode;
     private final int dimensions;
-    private final int maxElementsPerLeaf;
 
     /**
      * Constructs an RTree containing the elements of the specified list
@@ -24,52 +23,44 @@ public class RTree<T extends Element> implements Serializable {
      * NullPointerException – if null is given as a parameter
      */
     public RTree(List<T> values){
-        maxElementsPerLeaf = 50;
         dimensions = 2;
-        treeNode = new Node(values, 0);
+        if(values.size() != 0) {
+            treeNode = new Node(values, 0);
+        }
+    }
+    public int size(){
+        return treeNode != null ? treeNode.getSize() : 0;
+    }
+    public int treeDepth(){
+        return treeNode != null ? treeNode.getLeafDepth(): 0;
     }
     protected class Node implements Serializable{
         int size;
         protected int children;
         protected Node low;
         protected Node high;
-        boolean hasChildren;
         int layer;
         //[0],[1] will be min, coords, (x,y respectively) and [2],[3] will be max coords
-        final float[] boundingRect;
+        float[] boundingRect;
         //values kan laves til en linked list da denne er samme hastighed at lave for each på
         //og er hurtigere hvis der skal laves quick select
-        List<T> values;
+        T value;
         public Node(List<T> values, int layer) {
             children = 2;
             this.layer = layer;
-            size = values.size();
-            if (values.size() > maxElementsPerLeaf){
+            if (values.size() > 1){
                 splitNode(values);
                 boundingRect = getBoundingRectFromChildren();
+                if(high == null)
+                    size = low.getSize();
+                else if(low == null)
+                    size = high.getSize();
+                else size = high.getSize() + low.getSize();
             } else {
-                this.values = values;
-                boundingRect = getNodeBounds(values);
+                this.value = values.get(0);
+                boundingRect = value.getBounds();
+                size = 1;
             }
-        }
-        protected float[] getNodeBounds(List<T> values){
-            float[] result = new float[]{Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY};
-            for(var element : values){
-                float[] bounds = element.getBounds();
-                if(bounds[0] < result[0]){
-                    result[0] = bounds[0];
-                }
-                if(bounds[2] > result[2]) {
-                    result[2] = bounds[2];
-                }
-                if(bounds[1] < result[1]){
-                    result[1] = bounds[1];
-                }
-                if(bounds[3] > result[3]){
-                    result[3] = bounds[3];
-                }
-            }
-            return result;
         }
         //only works for RTrees with 2 children
         protected float[] getBoundingRectFromChildren(){
@@ -92,12 +83,13 @@ public class RTree<T extends Element> implements Serializable {
             List<T>[] lists = splitList(values);
             low = new Node(lists[0], layer + 1);
             high = new Node(lists[1], layer + 1);
-            hasChildren = true;
         }
         protected List<T>[] splitList(List<T> values){
             List<T>[] result = new List[children];
             for(int i=0; i<children ;i++){
                 result[i] = new ArrayList<>(values.subList(values.size()*i/children,values.size()*(i+1)/children));
+                if (result[i].size() < 1)
+                    System.out.println("WTF!!");;
             }
             return result;
         }
@@ -114,46 +106,34 @@ public class RTree<T extends Element> implements Serializable {
             });
         }
         public void getElementsInRange(float[] rangeCoords, List<T> list){
-            if(!hasChildren){
-                for(T element: values){
-                    if(intersects(rangeCoords, element.getBounds())) {
-                        list.add(element);
-                    }
-                }
-                return;
+            if(low != null && low.intersects(rangeCoords)) {
+                low.getElementsInRange(rangeCoords, list);
             }
-            if(low.intersects(rangeCoords)){
-                low.getElementsInRange(rangeCoords,list);
-            }
-            if(high.intersects(rangeCoords)){
+            if(high != null && high.intersects(rangeCoords)){
                 high.getElementsInRange(rangeCoords,list);
+            } else if(low == null && intersects(rangeCoords, value.getBounds())){
+                list.add(value);
             }
         }
         public void getElementsInRangeDebug(float[] rangeCoords, List<float[]> list){
-            if(hasChildren) {
-                if (low.intersects(rangeCoords)) {
-                    low.getElementsInRangeDebug(rangeCoords, list);
-                }
-                if (high.intersects(rangeCoords)) {
-                    high.getElementsInRangeDebug(rangeCoords, list);
-                }
+            if (low != null && low.intersects(rangeCoords)) {
+                low.getElementsInRangeDebug(rangeCoords, list);
+            }
+            if (high != null && high.intersects(rangeCoords)) {
+                high.getElementsInRangeDebug(rangeCoords, list);
             }
             list.add(boundingRect);
         }
         public void getNearest(float[] point, PriorityQueue<NodeDistance> pq){
-            if(!hasChildren){
-                for(T element: values) {
-                    float distance = distance(point[0], point[1], element);
-                    if(distance < pq.peek().distance) {
-                        pq.offer(new NodeDistance(element, distance));
-                    }
-                }
-            }else {
-                if(low.distance(point) < pq.peek().distance){
-                    low.getNearest(point, pq);
-                }
-                if(high.distance(point) < pq.peek().distance){
-                    high.getNearest(point, pq);
+            if(low != null && low.distance(point) < pq.peek().distance){
+                low.getNearest(point, pq);
+            }
+            if(high != null && high.distance(point) < pq.peek().distance) {
+                high.getNearest(point, pq);
+            } else if(low == null) {
+                float distance = distance(point[0], point[1], value);
+                if (distance < pq.peek().distance) {
+                    pq.offer(new NodeDistance(value, distance));
                 }
             }
         }
@@ -193,6 +173,20 @@ public class RTree<T extends Element> implements Serializable {
         protected float distance(float[] point){
             return distance(point[0], point[1]);
         }
+        public int getSize(){
+            return size;
+        }
+        public int getLeafDepth(){
+            int lowDepth =0;
+            int highDepth = 0;
+            if(low != null)
+                lowDepth = low.getLeafDepth();
+            if(high!= null)
+                highDepth = high.getLeafDepth();
+            else if(low == null)
+                return layer;
+            return Math.max(lowDepth,highDepth);
+        }
     }
     public class NodeDistance implements Comparable<NodeDistance>{
         T element;
@@ -217,16 +211,17 @@ public class RTree<T extends Element> implements Serializable {
     }
     public List<T> getElementsInRange(float[] coords){
         List<T> result = new ArrayList<>();
-        treeNode.getElementsInRange(coords, result);
+        if(treeNode != null) {
+            treeNode.getElementsInRange(coords, result);
+        }
         return result;
-    }
-    public int size(){
-        return treeNode.size;
     }
     public T getNearest(float[] bound){
         PriorityQueue<NodeDistance> pq = new PriorityQueue<>();
         pq.add(new NodeDistance(null, Float.POSITIVE_INFINITY));
-        treeNode.getNearest(bound, pq);
+        if(treeNode != null) {
+            treeNode.getNearest(bound, pq);
+        }
         T result = pq.peek().element;
         return result;
     }
@@ -237,7 +232,9 @@ public class RTree<T extends Element> implements Serializable {
     public void getElementsInRangeDebug(GraphicsContext gc, Point2D point){
         float[] pointAsBound = new float[]{(float) point.getX(), (float) point.getY(), (float) point.getX(), (float) point.getY()};
         List<float[]> treeNodeBounds = new ArrayList<>();
-        treeNode.getElementsInRangeDebug(pointAsBound, treeNodeBounds);
+        if(treeNode != null) {
+            treeNode.getElementsInRangeDebug(pointAsBound, treeNodeBounds);
+        }
         for (float[] boundingCoords : treeNodeBounds) {
             System.out.println("bounds found: " + Arrays.toString(boundingCoords));
             gc.setStroke(Color.PURPLE);

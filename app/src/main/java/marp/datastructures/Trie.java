@@ -44,31 +44,31 @@ public class Trie implements Serializable{
 /**
  * @param searchInput the String used to navigate through the Trie
  * @param suggestionAmount the maximum amount of housenumber String suggestions needed, ie. the maximum size of the list returned
- * @return A list of possible String housenumbers for the given input
+ * @return A list of possible String housenumbers for the given input, empty if there are none
  */
     public ArrayList<String> getHouseNumberSuggestions(String searchInput, int suggestionAmount) {
         currentNode = root;
         searchInput = searchInput.toLowerCase().replaceAll(" ", "");
         ArrayList<String> suggestionList = new ArrayList<>();
-        moveThroughTree(searchInput);
+        if (moveThroughTree(searchInput)) {
+            ArrayList<String> nodeNumbers = currentNode.getHouseNumbers();
 
-        ArrayList<String> nodeNumbers = currentNode.getHouseNumbers();
-        for (int j = 0; j < suggestionAmount && j < nodeNumbers.size(); j++) {
-            suggestionList.add(nodeNumbers.get(j));
+            for (int j = 0; j < suggestionAmount && j < nodeNumbers.size(); j++) {
+                suggestionList.add(nodeNumbers.get(j));
+            }            return suggestionList;
         }
         return suggestionList;
     }
 /**
  *  @param searchInput the String used to navigate through the Trie
  * @param suggestionAmount the maximum amount of address String suggestions needed, ie. the maximum size of the list returned
- * @return a list of possible String addresses for the given input
+ * @return a list of possible String addresses for the given input, empty if there are none
  */
     public ArrayList<String> getAddressSuggestions(String searchInput, int suggestionAmount) {
         currentNode = root;
         searchInput = searchInput.toLowerCase().replaceAll(" ", "");
         ArrayList<String> suggestionList = new ArrayList<>();
-        if (containsSearch(searchInput)) {
-            moveThroughTree(searchInput);
+        if (moveThroughTree(searchInput)) {
             suggestionFinder(suggestionList, currentNode, suggestionAmount);
             return suggestionList;
         }
@@ -89,7 +89,7 @@ public class Trie implements Serializable{
         }
     }
 
-    private boolean containsSearch(String searchInput) {
+    public boolean containsSearch(String searchInput) {
         currentNode = root;
         searchInput = searchInput.toLowerCase().replaceAll(" ", "");
 
@@ -131,14 +131,18 @@ public class Trie implements Serializable{
         }
     }
 /**
- * Method for getting a String address with proper capitalisation
+ * Method for getting a String address with proper capitalisation and spacing
  * @param searchInput the String address used to navigate through the Trie
  * @return a String address as it should be displayed to a user
  */
     public String getFullAddress(String searchInput) {
         currentNode = root;
-        moveThroughTree(searchInput);
-        return currentNode.getEndAddress();
+        if (moveThroughTree(searchInput) && currentNode.getIsEnd()){
+            return currentNode.getEndAddress();
+        }
+        else {
+            return null;
+        }
     }
 /**
  * @param searchInput the String address used to navigate through the Trie
@@ -147,17 +151,27 @@ public class Trie implements Serializable{
  */
     public Address getAddressObject(String searchInput, String house){
         currentNode = root;
-        moveThroughTree(searchInput);
-        return currentNode.getAddressObject(house);
+        if (moveThroughTree(searchInput) && currentNode.getIsEnd()){
+            return currentNode.getAddressObject(house);
+        }
+        else {
+            return null;
+        }
     }
 
     
-    private void moveThroughTree(String searchInput) {
+    private boolean moveThroughTree(String searchInput) {
         currentNode = root;
         searchInput = searchInput.toLowerCase().replaceAll(" ", "");
         for (int i = 0; i < searchInput.length(); i++) {
             char currentChar = searchInput.charAt(i);
-            currentNode = currentNode.getNode(currentChar);
+            if (currentNode.containsKey(currentChar)) {
+                currentNode = currentNode.getNode(currentChar);
+            } else {
+                currentNode = root;
+                return false;
+            }
         }
+        return true;
     }
 }

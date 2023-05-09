@@ -108,8 +108,6 @@ public class TrieTest {
         trie.insert(firstAddressAsItShouldBe);
         trie.insert(secondAddressAsItShouldBe);
 
-
-
         Address gottenAddress = trie.getAddressObject("Street 9999 City", "1");
         Assertions.assertEquals("Street", gottenAddress.getStreet() );
         Assertions.assertEquals("9999", gottenAddress.getPostCode() );
@@ -126,8 +124,49 @@ public class TrieTest {
         Assertions.assertEquals(1, gottenAddress.getX() );
         Assertions.assertEquals(2, gottenAddress.getY() );
 
-        Assertions.assertEquals(null, trie.getAddressObject("Street 1111 CityWow", "1"));
+        Assertions.assertEquals(null, trie.getAddressObject("Street 9999 CityWow", "1"));
         Assertions.assertEquals(null, trie.getAddressObject("Street 1111 City", "1"));
+        Assertions.assertEquals(null, trie.getAddressObject("Street 9999 Ci", "1"));
         Assertions.assertEquals(null, trie.getAddressObject("Street 9999 City", "3"));
+    }
+    @Test
+    public void getAddressSuggestionsTest(){
+        trie.insert(new Address("Street", "1", "9999", "City", 1, 1));
+        trie.insert(new Address("Street", "1", "9999", "CityContinued", 1, 1));
+
+        Assertions.assertEquals(1, trie.getAddressSuggestions("Street 9999 Ci", 1).size());
+        Assertions.assertEquals(1, trie.getAddressSuggestions("Street 9999 City", 1).size());
+        Assertions.assertEquals(2, trie.getAddressSuggestions("Street 9999 Ci", 2).size());
+        Assertions.assertEquals(2, trie.getAddressSuggestions("Street 9999 City", 2).size());
+        Assertions.assertEquals(2, trie.getAddressSuggestions("Street 9999 Ci", 5).size());
+        Assertions.assertEquals(2, trie.getAddressSuggestions("Street 9999 City", 5).size());
+
+        Assertions.assertEquals(0, trie.getAddressSuggestions("Street 9999 CityWow", 1).size());
+        Assertions.assertEquals(0, trie.getAddressSuggestions("Street 1111 City", 1).size());
+        Assertions.assertEquals(0, trie.getAddressSuggestions("Street 9999 City", 0).size());
+        Assertions.assertEquals(0, trie.getAddressSuggestions("Street 9999 Ci", 0).size());
+
+
+    }
+    @Test
+    public void getHouseNumberSuggestions(){
+        trie.insert(new Address("Street", "1", "9999", "City", 1, 1));
+        trie.insert(new Address("Street", "2", "9999", "City", 1, 1));
+        
+        Assertions.assertEquals(1, trie.getHouseNumberSuggestions("Street 9999 City", 1).size());
+        Assertions.assertEquals(2, trie.getHouseNumberSuggestions("Street 9999 City", 2).size());
+        Assertions.assertEquals(2, trie.getHouseNumberSuggestions("Street 9999 City", 5).size());
+
+
+
+        Assertions.assertEquals(0, trie.getHouseNumberSuggestions("Street 9999 CityWow", 1).size());
+        Assertions.assertEquals(0, trie.getHouseNumberSuggestions("Street 1111 City", 1).size());
+        Assertions.assertEquals(0, trie.getHouseNumberSuggestions("Street 9999 Ci", 1).size());
+
+        Assertions.assertEquals(0, trie.getHouseNumberSuggestions("Street 9999 City", 0).size());
+        Assertions.assertEquals(0, trie.getHouseNumberSuggestions("Street 9999 CityWow", 0).size());
+        Assertions.assertEquals(0, trie.getHouseNumberSuggestions("Street 1111 City", 0).size());
+        Assertions.assertEquals(0, trie.getHouseNumberSuggestions("Street 9999 Ci", 0).size());
+
     }
 }

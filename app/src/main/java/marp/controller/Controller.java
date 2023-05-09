@@ -55,28 +55,6 @@ public class Controller {
         setFileChooser();
         this.stage = view.getPrimaryStage();
         createChooseMapSceneButtons();
-
-        try {
-            this.view.listView.getItems().addAll(fileList);
-        } catch (Exception e) {
-            // TODO: handle exception
-            System.out.println("Error getting items from List View: ");
-            e.printStackTrace();
-        }
-
-        this.view.listView.setOnMouseClicked(e -> {
-            try {
-                URL fileURL = new URL(Paths.get("data/maps/" + this.view.listView.getSelectionModel().getSelectedItem())
-                        .toUri().toURL().toString());
-                Model.createModel(fileURL);
-                this.view.creatMenusForMapScene();
-                this.view.setScene(this.view.getMapScene());
-                createMapSceneButtons();
-            } catch (Exception e1) {
-                System.out.println(e1.getMessage());
-            }
-
-        });
     }
 
     private void setFileChooser() {
@@ -515,18 +493,40 @@ public class Controller {
     // ##########################################################
 
     public void createChooseMapSceneButtons() {
-        view.chooseMapScene.loadButton.setOnAction(e -> {
+        view.chooseMapScene.loadDefaultBinaryButton.setOnAction(e -> {
             try {
-                Model.createModel(getClass().getResource("/maps/"+Model.getDefaultMap()));
+                Model.updateModel(getClass().getResource("/maps/"+Model.getDefaultMap()));
             } catch (ClassNotFoundException | URISyntaxException | XMLStreamException | FactoryConfigurationError
                     | IOException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
-            view.creatMenusForMapScene();
-            view.createNewMapScene();
+            view.creatMenusForMapScene(Model.getInstance());
+            view.createNewMapScene(Model.getInstance());
             createMapSceneButtons();
             view.setScene(view.getMapScene());
+        });
+
+        try {
+            this.view.listView.getItems().addAll(fileList);
+        } catch (Exception e) {
+            System.out.println("Error getting items from List View: ");
+            e.printStackTrace();
+        }
+
+        view.listView.setOnMouseClicked(e -> {
+            try {
+                URL fileURL = new URL(Paths.get("data/maps/" + view.listView.getSelectionModel().getSelectedItem())
+                        .toUri().toURL().toString());
+                Model.updateModel(fileURL);
+                view.creatMenusForMapScene(Model.getInstance());
+                view.createNewMapScene(Model.getInstance());
+                createMapSceneButtons();
+                view.setScene(view.getMapScene());
+            } catch (Exception e1) {
+                System.out.println(e1.getMessage());
+            }
+
         });
 
         view.chooseMapScene.chooseOwnFileButton.setOnAction(e -> {
@@ -539,9 +539,10 @@ public class Controller {
                         new FileChooser.ExtensionFilter("All files", "*.*"));
                 File selectedFile = fileChooser.showOpenDialog(view.primaryStage);
                 if (selectedFile != null) {
-                    Model.createModel(selectedFile.toURI().toURL());
-                    view.creatMenusForMapScene();
-                    view.createNewMapScene();
+                    Model.updateModel(selectedFile.toURI().toURL());
+                    System.out.println(selectedFile.toURI().toURL().toString());
+                    view.creatMenusForMapScene(Model.getInstance());
+                    view.createNewMapScene(Model.getInstance());
                     createMapSceneButtons();
                     view.setScene(view.getMapScene());
                 }

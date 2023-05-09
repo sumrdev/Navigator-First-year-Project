@@ -22,6 +22,8 @@ import java.util.zip.ZipInputStream;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
+import com.google.common.cache.Cache;
+
 import javafx.geometry.Point2D;
 import marp.datastructures.Trie;
 import marp.mapelements.*;
@@ -60,7 +62,7 @@ public final class Model implements Serializable{
         save(filename);
         return getInstance();
     }
-    public static Model createModel(URL fileURL) throws URISyntaxException, XMLStreamException,
+    public static Model updateModel(URL fileURL) throws URISyntaxException, XMLStreamException,
             FactoryConfigurationError, ClassNotFoundException, IOException {
                 File file = Paths.get(fileURL.toURI()).toFile();
         return findLoadType(new FileInputStream(file), file.getName());
@@ -71,7 +73,7 @@ public final class Model implements Serializable{
         return findLoadType(inputStream, filename);
     }
 
-    public static Model createModel(File file) throws URISyntaxException, XMLStreamException,
+    public static Model updateModel(File file) throws URISyntaxException, XMLStreamException,
             FactoryConfigurationError, ClassNotFoundException, IOException {
         return findLoadType(new FileInputStream(file), file.getName());
     }
@@ -92,6 +94,7 @@ public final class Model implements Serializable{
                 return loadZIP(inputStream, filename);
             case "osm":
                 MapObjects mapObjects = osmParser.parseOSM(inputStream);
+                System.gc();
                 return getInstance().setValues(mapObjects, filename);
             default:
                 throw new IOException("Filetype not supported");
@@ -105,6 +108,7 @@ public final class Model implements Serializable{
         OSMParser osmParser = new OSMParser();
         MapObjects mapObjects = osmParser.parseOSM(input);
         input.close();
+        System.gc();
         System.out.println("Loaded zip in: " + (new Time(System.currentTimeMillis()).getTime() - time.getTime())/1000 + "s");
         return getInstance().setValues(mapObjects, filename);
     }
@@ -115,9 +119,14 @@ public final class Model implements Serializable{
         System.out.println(inputStream);
         try (var bin = new ObjectInputStream(new BufferedInputStream(inputStream))) {
             System.gc();
-            instance = (Model) bin.readObject();
+            Model model = (Model) bin.readObject();
+            MapObjects mapObjects = model.getMapObjects();
             System.out.println("Loaded binary in: " + (new Time(System.currentTimeMillis()).getTime() - time.getTime())/1000 + "s");
-            return getInstance();
+            System.gc();
+            return getInstance().setValues(mapObjects, "bin");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

@@ -88,10 +88,6 @@ public class Digraph implements Serializable {
     //     this.averageSpeed = temp / averageSpeedCount;
     // }
 
-    public List<String> aStar(RoadNode start, RoadNode end) {
-        return aStar(start, end, notInCar);
-    }
-
     public List<String> aStar(RoadNode start, RoadNode end, boolean walking) {
         Time startTime = new Time(System.currentTimeMillis());
         averageSpeedCount = 0;
@@ -136,9 +132,10 @@ public class Digraph implements Serializable {
             }
         }
         String info = "No path found";
-        System.out.println(info);
-
-        return new ArrayList<>();
+        navigation = new ArrayList<>();
+        List<String> result = new ArrayList<>();
+        result.add(info);
+        return result;
     }
 
     private float getWeight(Edge edge, boolean walking) {

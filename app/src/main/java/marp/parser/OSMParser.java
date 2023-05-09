@@ -138,6 +138,17 @@ public class OSMParser {
                                 case "building":
                                     mapObjectInParsing.setShapeType(ShapeType.BUILDING);
                                     break;
+                                case "railway":
+                                    switch (value) {
+                                        case "rail":
+                                        case "subway":
+                                            mapObjectInParsing.setShapeType(ShapeType.RAILWAY);
+                                            break;
+                                    }
+                                    break;
+                                case "tunnel":
+                                    mapObjectInParsing.setIsTunnel(value.equals("yes"));
+                                    break;
                                 case "natural":
                                     switch (value) {
                                         case "wood":
@@ -167,6 +178,9 @@ public class OSMParser {
                                 case "water":
                                 case "harbour":
                                     mapObjectInParsing.setShapeType(ShapeType.WATER);
+                                    break;
+                                case "waterway":
+                                    mapObjectInParsing.setShapeType(ShapeType.WATERWAY);
                                     break;
                                 case "landuse":
                                     switch (value) {

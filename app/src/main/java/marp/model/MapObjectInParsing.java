@@ -27,6 +27,7 @@ public class MapObjectInParsing implements Serializable{
     private boolean isOneWay;
     private boolean roundabout;
     private int speed;
+    private boolean isTunnel = false;
     private Point unfinishedPoint;
 
     public long unfinishedSimpleShapeID; 
@@ -234,6 +235,17 @@ public class MapObjectInParsing implements Serializable{
                     // case FARMLAND:
                         mapObjects.getTerrainAreasList().add(new SimpleShape( this.unfinishedShapeType, coords.get(0), coords.get(1)));
                         break;
+                    case WATERWAY:
+                        mapObjects.getWaterwayList().add(new SimpleShape( this.unfinishedShapeType, coords.get(0), coords.get(1)));
+                        break;
+                    case RAILWAY:
+                        if (!isTunnel) {
+                            mapObjects.getRailwayList().add(new SimpleShape(this.unfinishedShapeType, coords.get(0), coords.get(1)));
+                            System.out.println("Not tunneeeeeeel!?");
+                        } else {
+                            System.out.println("TUNNEL!?");
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -281,6 +293,7 @@ public class MapObjectInParsing implements Serializable{
         roundabout = false;
         isOneWay = false;
         speed = -1;
+        isTunnel = false;
         unfinishedRoadType = RoadType.UNDEFINED;
         cleanUpAddressVariables();
     }
@@ -384,5 +397,9 @@ public class MapObjectInParsing implements Serializable{
             this.pointIDtoPoint = null;
             System.gc();
         }
+    }
+
+    public void setIsTunnel(boolean tunnel) {
+        this.isTunnel = tunnel;
     }
 }

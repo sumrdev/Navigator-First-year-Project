@@ -139,6 +139,7 @@ public class MapScene extends Scene{
         drawWaterAreas(levelOfDetails, bounds);
         //drawBounds(bounds);
         drawTerrain(levelOfDetails, bounds);
+        drawWaterway(bounds);
         drawBuildings(levelOfDetails, bounds);
         drawPaths(bounds);
         drawSmallRoads(bounds);
@@ -146,6 +147,7 @@ public class MapScene extends Scene{
         drawLargeRoads(bounds);
         drawMotorways(bounds);
         drawRoadsClose(bounds);
+        drawRailway(bounds);
         drawRoute();
         drawAddress(bounds);
         drawMotorwayNames(bounds);
@@ -163,7 +165,6 @@ public class MapScene extends Scene{
         drawCustomLandmarks();
         drawSelectedPoint();
         drawStartAndEndPoint();
-
     }
 
     private void drawCoastlines(int levelOfDetail, Bounds bounds) {
@@ -417,6 +418,24 @@ public class MapScene extends Scene{
             if (model.isBuildingsVisible) {
                 for (Element elementBuilding : model.getMapObjects().getBuildingsTree().getElementsInRange(bounds)) {
                     elementBuilding.draw(gc, levelOfDetail, 1);
+                }
+            }
+        }
+    }
+    private void drawRailway(Bounds bounds) {
+        if (zoomMenu.getZoomlevel() < 1000) {
+            if (model.isRoadsVisible) {
+                for (SimpleShape railway : model.getMapObjects().getRailwayTree().getElementsInRange(bounds)) {
+                    railway.drawLine(gc, (1 / Math.sqrt(trans.determinant())));
+                }
+            }
+        }
+    }
+    private void drawWaterway(Bounds bounds) {
+        if (zoomMenu.getZoomlevel() < 1000) {
+            if (model.isRoadsVisible) {
+                for (SimpleShape waterway : model.getMapObjects().getWaterwayTree().getElementsInRange(bounds)) {
+                    waterway.drawLine(gc, (1 / Math.sqrt(trans.determinant())));
                 }
             }
         }

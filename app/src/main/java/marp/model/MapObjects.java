@@ -230,15 +230,33 @@ public class MapObjects implements Serializable{
     //######## Coastline lists and trees ##################
     //#####################################################
     public ArrayList<SimpleShape> coastLineAreasList = new ArrayList<>();
-    public ArrayList<SimpleShape> getCoastLineAreasList() {
-        return coastLineAreasList;
-    }
     private RTree<SimpleShape> coastLineAreasTree;
     public RTree<SimpleShape> getCoastLinesAreaTree() {
         return coastLineAreasTree;
     }
     public RTree<RoadNode> getRoadNodeRTree(){
         return roadNodeRTree;
+    }
+
+    //#####################################################
+    //######## Waterways and railways lists and trees #####
+    //#####################################################
+
+    private final ArrayList<SimpleShape> railwayList = new ArrayList<>();
+    private final ArrayList<SimpleShape> waterwayList = new ArrayList<>();
+    private RTree<SimpleShape> railwayTree = new RTree<>(railwayList);
+    private RTree<SimpleShape> waterwayTree = new RTree<>(waterwayList);
+    public ArrayList<SimpleShape> getRailwayList() {
+        return railwayList;
+    }
+    public ArrayList<SimpleShape> getWaterwayList() {
+        return waterwayList;
+    }
+    public RTree<SimpleShape> getRailwayTree() {
+        return railwayTree;
+    }
+    public RTree<SimpleShape> getWaterwayTree() {
+        return waterwayTree;
     }
 
     public void buildTrees() {
@@ -276,6 +294,8 @@ public class MapObjects implements Serializable{
         Thread terrainAndWater = new Thread(() -> {
             waterAreasTree = new RTree<>(waterAreasList);
             terrainAreasTree = new RTree<>(terrainAreasList);
+            waterwayTree = new RTree<>(waterwayList);
+            railwayTree = new RTree<>(railwayList);
         });
 
         poi.start();

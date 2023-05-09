@@ -24,6 +24,8 @@ public class MapColor {
         defaultColorMap.put("CEMENT", Color.rgb(233, 233, 233,1));
         defaultColorMap.put("FARMLAND", Color.rgb(204, 227, 175,1));
         defaultColorMap.put("COMMERCIAL_GROUND", Color.LIGHTYELLOW);
+        defaultColorMap.put("WATERWAY", Color.rgb(176, 211, 232,1));
+        defaultColorMap.put("RAILWAY", Color.rgb(190, 190, 190,1));
         defaultColorMap.put("SECONDARY", Color.WHITE);
         defaultColorMap.put("SECONDARY_OUTLINE", Color.LIGHTGRAY);
         defaultColorMap.put("MOTORWAY", Color.YELLOW);

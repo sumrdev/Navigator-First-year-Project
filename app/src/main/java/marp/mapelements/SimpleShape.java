@@ -134,6 +134,16 @@ public class SimpleShape extends Element {
         gc.closePath();
         gc.fill();
     }
+    public void drawLine(GraphicsContext gc, double zoom) {
+        gc.setStroke(MapColor.getInstance().colorMap.get(type.toString()));
+        gc.setLineWidth(1*zoom);
+        gc.beginPath();
+        gc.moveTo(x[0], y[0]);
+        for (int i = 1; i < x.length; i++) {
+            gc.lineTo(x[i], y[i]);
+        }
+        gc.stroke();
+    }
 
     @Override
     public float[] getBounds() {

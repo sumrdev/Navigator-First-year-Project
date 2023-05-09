@@ -19,9 +19,8 @@ public class Digraph implements Serializable {
     ArrayList<Edge> navigation;
     HashSet<RoadNode> closedSet;
     int averageSpeedCount;
-    float averageSpeed;
+    float averageSpeed = 70;
     boolean activeRoute;
-
     static int roadColor = 1;
 
     public Digraph(ArrayList<Road> roads, HashMap<Long, RoadNode> nodes) {
@@ -34,21 +33,26 @@ public class Digraph implements Serializable {
             for (int i = 0; i < road.getNodeSize() - 1; i++) {
                 RoadNode node1 = road.getNode(i);
                 RoadNode node2 = road.getNode(i + 1);
-                node1.addEdge(
-                        new Edge(node1.getID(), node2.getID(), road.getID(), road.isDriveable(), road.isWalkable(), road.isRoundabout()));
-                if (!road.isOneWay())
+                if(!road.isOneWay()){
+                    node1.addEdge(
+                        new Edge(node1.getID(), node2.getID(), road.getID(), road.isDriveable(), road.isWalkable(),
+                                road.isRoundabout()));
+                }
                     node2.addEdge(
-                            new Edge(node2.getID(), node1.getID(), road.getID(), road.isDriveable(),
-                                    road.isWalkable(), road.isRoundabout()));
+                        new Edge(node2.getID(), node1.getID(), road.getID(), road.isDriveable(),
+                                road.isWalkable(), road.isRoundabout()));
             }
         }
         Time endTime = new Time(System.currentTimeMillis());
-        System.out.println("Created graph with : " + this.nodes.size() + " nodes in " + (endTime.getTime() - starTime.getTime())/1000 + " s");
+        System.out.println("Created graph with : " + this.nodes.size() + " nodes in "
+                + (endTime.getTime() - starTime.getTime()) / 1000 + " s");
     }
-    public void setWalking(){
+
+    public void setWalking() {
         notInCar = true;
     }
-    public void setDriving(){
+
+    public void setDriving() {
         notInCar = false;
     }
 
@@ -77,17 +81,18 @@ public class Digraph implements Serializable {
         return edges;
     }
 
-    public void setAverageSpeed(int speed) {
-        float temp = averageSpeed * averageSpeedCount;
-        temp += speed * 10;
-        this.averageSpeedCount++;
-        this.averageSpeed = temp / averageSpeedCount;
-        this.averageSpeed = 70;
-    }
-    public List<String> aStar(RoadNode start, RoadNode end){
+    // public void setAverageSpeed(int speed) {
+    //     float temp = averageSpeed * averageSpeedCount;
+    //     temp += speed * 10;
+    //     this.averageSpeedCount++;
+    //     this.averageSpeed = temp / averageSpeedCount;
+    // }
+
+    public List<String> aStar(RoadNode start, RoadNode end) {
         return aStar(start, end, notInCar);
     }
-    public List<String> aStar(RoadNode start, RoadNode end, boolean walking){
+
+    public List<String> aStar(RoadNode start, RoadNode end, boolean walking) {
         Time startTime = new Time(System.currentTimeMillis());
         averageSpeedCount = 0;
         averageSpeed = 0;
@@ -102,21 +107,22 @@ public class Digraph implements Serializable {
             }
         });
         gScore.put(start, 0f);
-        fScore.put(start, gScore.get(start) + (float) MathFunctions.distanceInMeters(start.getX(), start.getY(), end.getX(), end.getY()));
+        fScore.put(start, gScore.get(start)
+                + (float) MathFunctions.distanceInMeters(start.getX(), start.getY(), end.getX(), end.getY()));
 
         openSetQueue.add(start);
         while (!openSetQueue.isEmpty()) {
             RoadNode current = openSetQueue.poll();
             if (current.getID() == end.getID()) {
-                reconstructPath(cameFrom, current);
+                reconstructPath(cameFrom, end);
                 Time endTime = new Time(System.currentTimeMillis());
-                System.out.println("Ran astar with : " + this.nodes.size() + " nodes in " + (endTime.getTime() - startTime.getTime())/1000 + " s");
+                System.out.println("Ran astar with : " + this.nodes.size() + " nodes in "
+                        + (endTime.getTime() - startTime.getTime()) / 1000 + " s");
                 return createTextDescriptionFromNavigation();
             }
             closedSet.add(current);
             for (Edge edge : current.getEdges()) {
                 if (!closedSet.contains(nodes.get(edge.end))) {
-                    setAverageSpeed(roadsMap.get(edge.road).getSpeed());
                     float tentativeGScore = gScore.get(current) + getWeight(edge, walking);
                     if (gScore.get(nodes.get(edge.end)) != null && tentativeGScore >= gScore.get(nodes.get(edge.end)))
                         continue;
@@ -135,28 +141,39 @@ public class Digraph implements Serializable {
         return new ArrayList<>();
     }
 
-    private float getWeight(Edge edge, boolean walking){
-        if(walking && !edge.isWalkable()) return Float.POSITIVE_INFINITY;
-        else if(!walking && !edge.isDriveable()) return Float.POSITIVE_INFINITY;
-        else if(walking) return (float) MathFunctions.distanceInMeters(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(), nodes.get(edge.end).getY());
-        else return (float) MathFunctions.distanceInMeters(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(), nodes.get(edge.end).getY())/roadsMap.get(edge.road).getSpeed();
+    private float getWeight(Edge edge, boolean walking) {
+        if (walking && !edge.isWalkable())
+            return Float.POSITIVE_INFINITY;
+        else if (!walking && !edge.isDriveable())
+            return Float.POSITIVE_INFINITY;
+        else if (walking)
+            return (float) MathFunctions.distanceInMeters(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(),
+                    nodes.get(edge.end).getX(), nodes.get(edge.end).getY());
+        else
+            return (float) (MathFunctions.distanceInMeters(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(),
+                    nodes.get(edge.end).getX(), nodes.get(edge.end).getY()) / (roadsMap.get(edge.road).getSpeed()*1000))*60;
     }
 
-    private float getHScore(RoadNode start, RoadNode end, boolean walking){
-        if(walking) return (float) MathFunctions.distanceInMeters(start.getX(), start.getY(), end.getX(), end.getY());
-        else return (float) MathFunctions.distanceInMeters(start.getX(), start.getY(), end.getX(), end.getY())/averageSpeed;
+    private float getHScore(RoadNode start, RoadNode end, boolean walking) {
+        if (walking)
+            return (float) MathFunctions.distanceInMeters(start.getX(), start.getY(), end.getX(), end.getY());
+        else
+            return (float) MathFunctions.distanceInMeters(start.getX(), start.getY(), end.getX(), end.getY())
+                    / averageSpeed;
     }
 
     private void reconstructPath(HashMap<RoadNode, RoadNode> cameFrom, RoadNode current) {
         navigation = new ArrayList<>();
+
         while (cameFrom.containsKey(current)) {
+            RoadNode previous = current;
+            current = cameFrom.get(current);
             for (Edge edge : current.getEdges()) {
-                if (edge.end == cameFrom.get(current).getID()) {
+                if (edge.end == previous.getID()) {
                     navigation.add(edge);
                     break;
                 }
             }
-            current = cameFrom.get(current);
         }
     }
 
@@ -168,7 +185,7 @@ public class Digraph implements Serializable {
         for (int i = 0; i < navigation.size(); i++) {
             Edge edge = navigation.get(i);
             if (!previousRoad.equals(roadsMap.get(edge.road).getName())) {
-                if (!previousRoad.equals("")) {
+                if (!previousRoad.equals("") || roadsMap.get(edge.road).isRoundabout()) {
                     String turnInformation;
                     switch (getTurnInformation(navigation.get(i - 1), navigation.get(i))) {
                         case 0:
@@ -183,15 +200,37 @@ public class Digraph implements Serializable {
                         case 3:
                             turnInformation = "↓ Turn around on ";
                             break;
+                        case 5:
+                            int k = i;
+                            int turns = 0;
+                            while(k < navigation.size() && navigation.get(k).isRoundabout()){
+                                k++;
+                                if(nodes.get(navigation.get(k).end).getEdges().size() > 1){
+                                    turns++;
+                                }
+                            }
+                            if(turns == 1){
+                                turnInformation = "↻ Take the first exit on ";
+                            }else if(turns == 2){
+                                turnInformation = "↻ Take the second exit on ";
+                            }else if(turns == 3){
+                                turnInformation = "↻ Take the third exit on ";
+                            }else{
+                                turnInformation = "↻ Take the " + turns + "th exit on ";
+                            }
+                            i = k-1;
+                            break;
                         default:
                             turnInformation = "↑ Continue straight onto ";
                             break;
                     }
                     if (roadsMap.get(edge.road).getName().length() > 13) {
-                        String direction = turnInformation + roadsMap.get(edge.road).getName() + " \n      after " + distanceSinceLastRoad + " meters";
+                        String direction = turnInformation + roadsMap.get(edge.road).getName() + " \n      after "
+                                + distanceSinceLastRoad + " meters";
                         result.add(direction);
                     } else {
-                        String direction = turnInformation + roadsMap.get(edge.road).getName() + " after " + distanceSinceLastRoad + " meters";
+                        String direction = turnInformation + roadsMap.get(edge.road).getName() + " after "
+                                + distanceSinceLastRoad + " meters";
                         result.add(direction);
                     }
                 } else {
@@ -208,6 +247,7 @@ public class Digraph implements Serializable {
     }
 
     public int getTurnInformation(Edge e1, Edge e2) {
+        if(!e1.isRoundabout() && e2.isRoundabout()) return 5;
         float x1 = nodes.get(e1.start).getX();
         float y1 = nodes.get(e1.start).getY();
         float x2 = nodes.get(e1.end).getX();
@@ -217,24 +257,32 @@ public class Digraph implements Serializable {
         float x4 = nodes.get(e2.end).getX();
         float y4 = nodes.get(e2.end).getY();
 
-        int angle = MathFunctions.getAngleBetweenTwoLines(x1, y1, x2, y2, x3, y3, x4, y4 );
-        if(angle < 0 && angle > -180) return 1;
-        else if(angle > 0 && angle < 180) return 2;
-        else if(angle == 180 || angle == -180) return 3;
-        else return 0;
+        int angle = MathFunctions.getAngleBetweenTwoLines(x1, y1, x2, y2, x3, y3, x4, y4);
+        if (angle < 0 && angle > -180)
+            return 1;
+        else if (angle > 0 && angle < 180)
+            return 2;
+        else if (angle == 180 || angle == -180)
+            return 3;
+        else
+            return 0;
     }
+
     public void draw(GraphicsContext gc) {
         drawNavigation(gc);
     }
-    public void drawNavigation(GraphicsContext gc){
-        if( this.navigation == null) return;
+
+    public void drawNavigation(GraphicsContext gc) {
+        if (this.navigation == null)
+            return;
         gc.setStroke(Color.rgb(192, 48, 48));
         for (Edge edge : navigation) {
             gc.strokeLine(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(),
                     nodes.get(edge.end).getY());
         }
     }
-    public void drawConnectedComponents(GraphicsContext gc){
+
+    public void drawConnectedComponents(GraphicsContext gc) {
         for (ArrayList<Edge> arrayList : connectedComponents) {
             gc.setStroke(
                     Color.rgb((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255)));
@@ -258,9 +306,10 @@ public class Digraph implements Serializable {
     public float getDistance() {
         float distance = 0;
         for (Edge edge : navigation) {
-            distance = (float) (distance + MathFunctions.distanceInMeters((float) (nodes.get(edge.start).getX()), nodes.get(edge.start).getY(), (float) (nodes.get(edge.end).getX()), nodes.get(edge.end).getY()));
+            distance = (float) (distance + MathFunctions.distanceInMeters((float) (nodes.get(edge.start).getX()),
+                    nodes.get(edge.start).getY(), (float) (nodes.get(edge.end).getX()), nodes.get(edge.end).getY()));
         }
-        return Math.round((distance/1000.0));
+        return Math.round((distance / 1000.0));
     }
 
     public int getTravelTime(int transportationMethod) {
@@ -270,11 +319,10 @@ public class Digraph implements Serializable {
                 if (getWeight(edge, false) < Float.MAX_VALUE) {
                     travelTime = travelTime + (getWeight(edge, false));
                 }
-            }
-            else if (transportationMethod == 1) {
-                travelTime = travelTime + ((getWeight(edge, true)/5000)*60);
+            } else if (transportationMethod == 1) {
+                travelTime = travelTime + ((getWeight(edge, true) / 5000) * 60);
             } else if (transportationMethod == 2) {
-                travelTime = travelTime + ((getWeight(edge, true)/20000)*60);
+                travelTime = travelTime + ((getWeight(edge, true) / 20000) * 60);
             }
         }
         return (int) travelTime;

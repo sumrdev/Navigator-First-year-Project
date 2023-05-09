@@ -46,7 +46,7 @@ public final class Model implements Serializable{
     }
 
     public static String getDefaultMap(){
-        return "denmark-latest.osm";
+        return "bornholm.osm";
     }
 
     public static Model getInstance(){

@@ -1,12 +1,18 @@
 package marp.view.gui.menugui;
 
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import marp.datastructures.Trie;
@@ -111,6 +117,18 @@ public class DirectionsPanel extends MenuPanel {
         //Create guide view to hold directions
         guideList = FXCollections.observableArrayList();
         guideView = new ListView<>();
+
+        final Clipboard clipboard = Clipboard.getSystemClipboard();
+        final ClipboardContent content = new ClipboardContent();
+        
+        guideView.setOnMouseClicked((e) ->{
+            if(e.getClickCount() == 2){
+                String selected = guideView.getSelectionModel().getSelectedItem();
+                content.putString(selected);
+                clipboard.setContent(content);
+            }
+        });
+
         guideView.getStylesheets().addAll("CSS/darkmodesheet.css", "CSS/stylesheet.css");
         guideView.getStyleClass().add("file-list");
         guideView.setMaxWidth(400);

@@ -17,47 +17,82 @@ import javafx.scene.layout.VBox;
 
 public class ColorblindnessModePanel extends MenuPanel {
 
-    public MapToggleButton deuteranopiaButton;
-    public MapToggleButton protanopiaButton;
-    public MapToggleButton tritanopiaButton;
-    public MapToggleButton monochromacyButton;
-    public MapButton exitButton;
-    private int buttonsMinWidth = 20;
+	private MapToggleButton normalButton;
+	public MapToggleButton deuteranopiaButton;
+	public MapToggleButton protanopiaButton;
+	public MapToggleButton tritanopiaButton;
+	public MapToggleButton monochromacyButton;
+	public MapButton exitButton;
+	private int buttonsMinWidth = 150;
+	private VBox colorBlindModesDisplay;
 
-    public ColorblindnessModePanel() {
-        super();
-        exitButton = new MapButton(
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/menu.png"))));
+	public MapToggleButton getNormalButton() {
+		return normalButton;
+	}
 
-        deuteranopiaButton = new MapToggleButton("Deuteranopia");
-        deuteranopiaButton.setMinWidth(buttonsMinWidth);
-        deuteranopiaButton.setMinWidth(150);
-        tritanopiaButton = new MapToggleButton("Tritanopia");
-        tritanopiaButton.setMinWidth(buttonsMinWidth);
-        tritanopiaButton.setMinWidth(150);
-        protanopiaButton = new MapToggleButton("Protanopia");
-        protanopiaButton.setMinWidth(buttonsMinWidth);
-        protanopiaButton.setMinWidth(150);
-        monochromacyButton = new MapToggleButton("Monochromacy");
-        monochromacyButton.setMinWidth(buttonsMinWidth);
-        monochromacyButton.setMinWidth(150);
+	public ColorblindnessModePanel() {
+		super();
+		exitButton = new MapButton(
+				new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/menu.png"))));
 
-        ToggleGroup colorBlindnessModeToggleGroup = new ToggleGroup();
-        colorBlindnessModeToggleGroup.getToggles().addAll(deuteranopiaButton, tritanopiaButton, protanopiaButton,
-                monochromacyButton);
-        VBox colorBlindModesDisplay = new VBox(new MapLabel("Choose color blind mode:"), deuteranopiaButton,
-                tritanopiaButton, protanopiaButton, monochromacyButton);
-        colorBlindModesDisplay.getStylesheets().addAll("CSS/darkmodesheet.css", "CSS/stylesheet.css");
-        colorBlindModesDisplay.setMinWidth(400);
-        colorBlindModesDisplay.setAlignment(Pos.TOP_CENTER);
-        colorBlindModesDisplay.setBackground(new Background(new BackgroundFill(Color.web("#efefef"), new CornerRadii(24), Insets.EMPTY)));
-        colorBlindModesDisplay.setPadding(new Insets(20));
-        colorBlindModesDisplay.setSpacing(20);
-        colorBlindModesDisplay.setAlignment(Pos.TOP_CENTER);
+		normalButton = new MapToggleButton("None");
+		normalButton.setMinWidth(buttonsMinWidth);
+		deuteranopiaButton = new MapToggleButton("Deuteranopia");
+		deuteranopiaButton.setMinWidth(buttonsMinWidth);
+		tritanopiaButton = new MapToggleButton("Tritanopia");
+		tritanopiaButton.setMinWidth(buttonsMinWidth);
+		protanopiaButton = new MapToggleButton("Protanopia");
+		protanopiaButton.setMinWidth(buttonsMinWidth);
+		monochromacyButton = new MapToggleButton("Monochromacy");
+		monochromacyButton.setMinWidth(buttonsMinWidth);
 
-        this.getChildren().addAll(colorBlindModesDisplay, exitButton);
-        this.setPadding(new Insets(20));
-        this.setSpacing(10);
-        this.setPickOnBounds(false);
-    }
+		ToggleGroup colorBlindnessModeToggleGroup = new ToggleGroup();
+		colorBlindnessModeToggleGroup.getToggles().addAll(normalButton, deuteranopiaButton, tritanopiaButton,
+				protanopiaButton,
+				monochromacyButton);
+		colorBlindModesDisplay = new VBox(new MapLabel("Choose color blind mode:"), normalButton,
+				deuteranopiaButton,
+				tritanopiaButton, protanopiaButton, monochromacyButton);
+		colorBlindModesDisplay.getStylesheets().addAll("CSS/darkmodesheet.css", "CSS/stylesheet.css");
+		colorBlindModesDisplay.setMinWidth(400);
+		colorBlindModesDisplay.setMaxHeight(400);
+		colorBlindModesDisplay.setAlignment(Pos.TOP_CENTER);
+		
+		colorBlindModesDisplay.setPadding(new Insets(20));
+		colorBlindModesDisplay.setSpacing(20);
+		colorBlindModesDisplay.setAlignment(Pos.TOP_CENTER);
+		colorBlindModesDisplay.getStyleClass().add("map-vbox");
+
+		this.getChildren().addAll(colorBlindModesDisplay, exitButton);
+		this.setPadding(new Insets(20));
+		this.setSpacing(10);
+		this.setPickOnBounds(false);
+	}
+
+	/**
+	 * Changes CSS sheets of ColorblindnessModePanel if parameter is set to true
+	 * 
+	 * @param set
+	 */
+	public void activateDarkMode(boolean set) {
+		if (set) {
+			if (colorBlindModesDisplay.getStylesheets().contains("CSS/stylesheet.css")) {
+                colorBlindModesDisplay.getStylesheets().remove("CSS/stylesheet.css");
+                colorBlindModesDisplay.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+			if (exitButton.getStylesheets().contains("CSS/stylesheet.css")) {
+                exitButton.getStylesheets().remove("CSS/stylesheet.css");
+                exitButton.getStylesheets().add("CSS/darkmodesheet.css");
+            }
+		} else {
+			if (colorBlindModesDisplay.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                colorBlindModesDisplay.getStylesheets().remove("CSS/darkmodesheet.css");
+                colorBlindModesDisplay.getStylesheets().add("CSS/stylesheet.css");
+            }
+			if (exitButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                exitButton.getStylesheets().remove("CSS/darkmodesheet.css");
+                exitButton.getStylesheets().add("CSS/stylesheet.css");
+            }
+		}
+	}
 }

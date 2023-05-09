@@ -46,8 +46,9 @@ public final class Model implements Serializable{
     }
 
     public static String getDefaultMap(){
-        return "bornholm.osm";
+        return "denmark-latest.osm";
     }
+
     public static Model getInstance(){
         if (instance == null){
             instance = new Model();

@@ -12,6 +12,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import marp.model.Model;
 import marp.view.gui.MapLabel;
@@ -19,6 +20,7 @@ import marp.view.gui.buttons.MapTextButton;
 
 public class ChooseMapScene extends Scene{
     public MapTextButton loadButton;
+    public MapTextButton chooseOwnFileButton;
     private Model model;
     ListView<String> filelist;
 
@@ -72,11 +74,17 @@ public class ChooseMapScene extends Scene{
         });
 
         // Load button
-        this.loadButton = new MapTextButton("Load a new .osm file...");
+        this.loadButton = new MapTextButton("Load default binary file");
+        this.chooseOwnFileButton = new MapTextButton("Choose your own OSM file");
+        this.chooseOwnFileButton.setMinWidth(200);
+        HBox buttonContainer = new HBox(this.loadButton, this.chooseOwnFileButton);
+        buttonContainer.setSpacing(50);
+        buttonContainer.setAlignment(Pos.CENTER);
         loadButton.setMinWidth(200);
 
+
         // add all elements to a VBox
-        VBox sceneContents = new VBox(header, filelist, loadButton);
+        VBox sceneContents = new VBox(header, filelist, buttonContainer);
         sceneContents.setSpacing(50);
         sceneContents.setAlignment(Pos.CENTER);
         sceneContents.setStyle("-fx-background-color:  linear-gradient(from 0%  0% to 100% 100%, #6c9ed1, #ececec, #6d9fd2);");

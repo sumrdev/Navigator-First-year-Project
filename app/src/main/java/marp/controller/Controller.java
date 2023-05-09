@@ -526,7 +526,31 @@ public class Controller {
             createMapSceneButtons();
             view.setScene(view.getMapScene());
         });
+
+        view.chooseMapScene.chooseOwnFileButton.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            try {
+                fileChooser.getExtensionFilters().addAll(
+                        new FileChooser.ExtensionFilter("OSM files", "*.osm"),
+                        new FileChooser.ExtensionFilter("BIN files", "*.bin"),
+                        new FileChooser.ExtensionFilter("ZIP files", "*.zip"),
+                        new FileChooser.ExtensionFilter("All files", "*.*"));
+                File selectedFile = fileChooser.showOpenDialog(view.primaryStage);
+                if (selectedFile != null) {
+                    Model.createModel(selectedFile.toURI().toURL());
+                    view.creatMenusForMapScene();
+                    view.createNewMapScene();
+                    createMapSceneButtons();
+                    view.setScene(view.getMapScene());
+                }
+            } catch (ClassNotFoundException | URISyntaxException | XMLStreamException | FactoryConfigurationError
+                    | IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        });
     }
+
 
     private String closestAddressToPointAsString(MapPoint selectedPont) {
         // Not all selected points are addresses. We find the closest address and add it

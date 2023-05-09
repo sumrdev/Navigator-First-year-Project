@@ -21,7 +21,6 @@ public class Digraph implements Serializable {
     int averageSpeedCount;
     float averageSpeed = 70;
     boolean activeRoute;
-
     static int roadColor = 1;
 
     public Digraph(ArrayList<Road> roads, HashMap<Long, RoadNode> nodes) {

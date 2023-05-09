@@ -188,7 +188,7 @@ public class Digraph implements Serializable {
         for (int i = 0; i < navigation.size(); i++) {
             Edge edge = navigation.get(i);
             if (!previousRoad.equals(roadsMap.get(edge.road).getName())) {
-                if (!previousRoad.equals("")) {
+                if (!previousRoad.equals("") || roadsMap.get(edge.road).isRoundabout()) {
                     String turnInformation;
                     switch (getTurnInformation(navigation.get(i - 1), navigation.get(i))) {
                         case 0:
@@ -202,6 +202,26 @@ public class Digraph implements Serializable {
                             break;
                         case 3:
                             turnInformation = "↓ Turn around on ";
+                            break;
+                        case 5:
+                            int k = i;
+                            int turns = 0;
+                            while(k < navigation.size() && navigation.get(k).isRoundabout()){
+                                k++;
+                                if(nodes.get(navigation.get(k).end).getEdges().size() > 1){
+                                    turns++;
+                                }
+                            }
+                            if(turns == 1){
+                                turnInformation = "↻ Take the first exit on ";
+                            }else if(turns == 2){
+                                turnInformation = "↻ Take the second exit on ";
+                            }else if(turns == 3){
+                                turnInformation = "↻ Take the third exit on ";
+                            }else{
+                                turnInformation = "↻ Take the " + turns + "th exit on ";
+                            }
+                            i = k-1;
                             break;
                         default:
                             turnInformation = "↑ Continue straight onto ";
@@ -230,6 +250,7 @@ public class Digraph implements Serializable {
     }
 
     public int getTurnInformation(Edge e1, Edge e2) {
+        if(!e1.isRoundabout() && e2.isRoundabout()) return 5;
         float x1 = nodes.get(e1.start).getX();
         float y1 = nodes.get(e1.start).getY();
         float x2 = nodes.get(e1.end).getX();

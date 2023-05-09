@@ -162,21 +162,21 @@ public class SelectedPointPanel  extends MenuPanel {
                 directionsButton.getStylesheets().remove("CSS/darkmodesheet.css");
                 directionsButton.getStylesheets().add("CSS/stylesheet.css");
             }
-            if (settingsButton.getStylesheets().contains("CSS/stylesheet.css")) {
-                settingsButton.getStylesheets().remove("CSS/stylesheet.css");
-                settingsButton.getStylesheets().add("CSS/darkmodesheet.css");
+            if (settingsButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                settingsButton.getStylesheets().remove("CSS/darkmodesheet.css");
+                settingsButton.getStylesheets().add("CSS/stylesheet.css");
             }
-            if (minimizeButton.getStylesheets().contains("CSS/stylesheet.css")) {
-                minimizeButton.getStylesheets().remove("CSS/stylesheet.css");
-                minimizeButton.getStylesheets().add("CSS/darkmodesheet.css");
+            if (minimizeButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                minimizeButton.getStylesheets().remove("CSS/darkmodesheet.css");
+                minimizeButton.getStylesheets().add("CSS/stylesheet.css");
             }
-            if (searchButton.getStylesheets().contains("CSS/stylesheet.css")) {
-                searchButton.getStylesheets().remove("CSS/stylesheet.css");
-                searchButton.getStylesheets().add("CSS/darkmodesheet.css");
+            if (searchButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                searchButton.getStylesheets().remove("CSS/darkmodesheet.css");
+                searchButton.getStylesheets().add("CSS/stylesheet.css");
             }
-            if (saveLocationButton.getStylesheets().contains("CSS/stylesheet.css")) {
-                saveLocationButton.getStylesheets().remove("CSS/stylesheet.css");
-                saveLocationButton.getStylesheets().add("CSS/darkmodesheet.css");
+            if (saveLocationButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
+                saveLocationButton.getStylesheets().remove("CSS/darkmodesheet.css");
+                saveLocationButton.getStylesheets().add("CSS/stylesheet.css");
             }
         }
     }

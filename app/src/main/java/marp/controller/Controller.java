@@ -407,6 +407,7 @@ public class Controller {
             view.getMapMenu().getPointOfInterestPanel().activateDarkMode(false);
             view.getMapMenu().getSelectedPointPanel().activateDarkMode(false);
             view.getMapMenu().getDirectionsPanel().activateDarkMode(false);
+            view.getMapMenu().getColorblindnessModePanel().activateDarkMode(false);
             view.getZoomMenu().activateDarkMode(false);
 
             view.getMapScene().redraw();
@@ -421,6 +422,7 @@ public class Controller {
             view.getMapMenu().getPointOfInterestPanel().activateDarkMode(true);
             view.getMapMenu().getSelectedPointPanel().activateDarkMode(true);
             view.getMapMenu().getDirectionsPanel().activateDarkMode(true);
+            view.getMapMenu().getColorblindnessModePanel().activateDarkMode(true);
             view.getZoomMenu().activateDarkMode(true);
 
             view.getMapScene().redraw();
@@ -428,6 +430,12 @@ public class Controller {
 
         view.getMapMenu().getSettingsPanel().getColorBlindModeButton().setOnAction(e -> {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getColorblindnessModePanel());
+            view.getMapScene().redraw();
+        });
+
+        view.getMapMenu().getColorblindnessModePanel().getNormalButton().setOnAction(e->{
+            MapColor.getInstance().changeTheme("default");
+            Digraph.setColor(1);
             view.getMapScene().redraw();
         });
 

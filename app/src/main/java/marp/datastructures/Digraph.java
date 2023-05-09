@@ -19,7 +19,7 @@ public class Digraph implements Serializable {
     ArrayList<Edge> navigation;
     HashSet<RoadNode> closedSet;
     int averageSpeedCount;
-    float averageSpeed;
+    float averageSpeed = 70;
     boolean activeRoute;
 
     static int roadColor = 1;
@@ -82,13 +82,12 @@ public class Digraph implements Serializable {
         return edges;
     }
 
-    public void setAverageSpeed(int speed) {
-        float temp = averageSpeed * averageSpeedCount;
-        temp += speed * 10;
-        this.averageSpeedCount++;
-        this.averageSpeed = temp / averageSpeedCount;
-        this.averageSpeed = 70;
-    }
+    // public void setAverageSpeed(int speed) {
+    //     float temp = averageSpeed * averageSpeedCount;
+    //     temp += speed * 10;
+    //     this.averageSpeedCount++;
+    //     this.averageSpeed = temp / averageSpeedCount;
+    // }
 
     public List<String> aStar(RoadNode start, RoadNode end) {
         return aStar(start, end, notInCar);
@@ -125,7 +124,6 @@ public class Digraph implements Serializable {
             closedSet.add(current);
             for (Edge edge : current.getEdges()) {
                 if (!closedSet.contains(nodes.get(edge.end))) {
-                    setAverageSpeed(roadsMap.get(edge.road).getSpeed());
                     float tentativeGScore = gScore.get(current) + getWeight(edge, walking);
                     if (gScore.get(nodes.get(edge.end)) != null && tentativeGScore >= gScore.get(nodes.get(edge.end)))
                         continue;

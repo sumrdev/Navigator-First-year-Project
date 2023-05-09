@@ -36,7 +36,7 @@ public class Road extends Element{
         this.roundabout = roundabout;
         this.name = name;
 
-        // if(this.roundabout) this.oneway = true;
+        if(this.roundabout) this.oneway = true;
 
         for (RoadNode roadNode : nodes) {
             if(roadNode.getX() < boundingCoords[0]){

@@ -392,15 +392,6 @@ public class Controller {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getDirectionsPanel());
         });
 
-        view.getMapMenu().getSettingsPanel().getSaveMapButton().setOnAction(e -> {
-            // TODO: Is this even a function we have?
-            // try {
-            // model.save(model.filename);
-            // } catch (IOException ex) {
-            // throw new RuntimeException(ex);
-            // }
-        });
-
         view.getMapMenu().getSettingsPanel().getLoadAnotherOSMButton().setOnAction(e -> {
             // set the scene to chooseMapScene
             this.stage.setScene(view.chooseMapScene);
@@ -503,7 +494,7 @@ public class Controller {
 
             model.getMapObjects().getCustomPOIList()
                     .add(new PointOfInterest(view.getMapMenu().getPointOfInterestPanel().pointNameField.getText(),
-                            PointType.FAVOURITE, (float) (customPointCoords.getX()), (float) customPointCoords.getY(),
+                            PointType.CUSTOM, (float) (customPointCoords.getX()), (float) customPointCoords.getY(),
                             false));
             view.getMapMenu().getPointOfInterestPanel().pointNameField.clear();
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());

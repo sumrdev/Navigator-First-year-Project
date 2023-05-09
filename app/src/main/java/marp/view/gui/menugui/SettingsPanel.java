@@ -18,7 +18,6 @@ import java.util.Objects;
 public class SettingsPanel extends MenuPanel {
 
     private MapTextButton loadAnotherOSMButton;
-    private MapTextButton saveMapButton;
     private MapButton directionsButton;
     private MapButton minimizeButton;
     private MapButton settingsButton;
@@ -42,13 +41,6 @@ public class SettingsPanel extends MenuPanel {
         return loadAnotherOSMButton;
     }
 
-    /**
-     * 
-     * @return MapTextButton saveMapButton
-     */
-    public MapTextButton getSaveMapButton() {
-        return saveMapButton;
-    }
 
     /**
      * 
@@ -166,25 +158,18 @@ public class SettingsPanel extends MenuPanel {
         // labels
         dontShow = new MapLabelSmall("Don't show:");
         adjustZoomText = new MapLabel("Adjust zoom buttons strength");
-        saveOrLoadtext = new MapLabel("Save or load map");
+        saveOrLoadtext = new MapLabel("Load map");
         mapDisplaySettinsgText = new MapLabel("Map display settings");
 
         // create buttons
         directionsButton = new MapButton(
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/directions.png"))));
         minimizeButton = new MapButton(
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/menu.png"))));
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/cross.png"))));
         settingsButton = new MapButton(
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/settings.png"))), true);
-        saveMapButton = new MapTextButton("Save map");
-        saveMapButton.setMinWidth(160);
-        loadAnotherOSMButton = new MapTextButton("Load another OSM file");
+        loadAnotherOSMButton = new MapTextButton("Open new map");
         loadAnotherOSMButton.setMinWidth(160);
-
-        // Create container for save and load buttons
-
-        HBox saveAndLoadButtons = new HBox(saveMapButton, loadAnotherOSMButton);
-        saveAndLoadButtons.setSpacing(20);
 
         // Create the top row of buttons for map modes as toggle buttons to allow only
         // one selected mode at a time
@@ -216,7 +201,7 @@ public class SettingsPanel extends MenuPanel {
         hideMapItemsCheckboxesAndZoomSettings.setPadding(new Insets(20));
 
         // Add all buttons to one VBox
-        settingsMenuButtons = new VBox(saveOrLoadtext, saveAndLoadButtons,
+        settingsMenuButtons = new VBox(saveOrLoadtext, loadAnotherOSMButton,
                 mapDisplaySettinsgText, mapDisplayButtons, hideMapItemsCheckboxesAndZoomSettings);
         settingsMenuButtons.getStylesheets().addAll("CSS/darkmodesheet.css", "CSS/stylesheet.css");
         settingsMenuButtons.getStyleClass().addAll("map-vbox");
@@ -261,11 +246,6 @@ public class SettingsPanel extends MenuPanel {
                 settingsButton.getStylesheets().add("CSS/darkmodesheet.css");
             }
 
-            if (saveMapButton.getStylesheets().contains("CSS/stylesheet.css")) {
-                saveMapButton.getStylesheets().remove("CSS/stylesheet.css");
-                saveMapButton.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-
             if (dontShow.getStylesheets().contains("CSS/stylesheet.css")) {
                 dontShow.getStylesheets().remove("CSS/stylesheet.css");
                 dontShow.getStylesheets().add("CSS/darkmodesheet.css");
@@ -290,8 +270,6 @@ public class SettingsPanel extends MenuPanel {
                 mapDisplaySettinsgText.getStylesheets().remove("CSS/stylesheet.css");
                 mapDisplaySettinsgText.getStylesheets().add("CSS/darkmodesheet.css");
             }
-            
-
 
             if (hideAddressesCheckbox.getStylesheets().contains("CSS/stylesheet.css")) {
                 hideAddressesCheckbox.getStylesheets().remove("CSS/stylesheet.css");
@@ -334,10 +312,6 @@ public class SettingsPanel extends MenuPanel {
             if (settingsButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
                 settingsButton.getStylesheets().remove("CSS/darkmodesheet.css");
                 settingsButton.getStylesheets().add("CSS/stylesheet.css");
-            }
-            if (saveMapButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                saveMapButton.getStylesheets().remove("CSS/darkmodesheet.css");
-                saveMapButton.getStylesheets().add("CSS/stylesheet.css");
             }
             if (loadAnotherOSMButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
                 loadAnotherOSMButton.getStylesheets().remove("CSS/darkmodesheet.css");

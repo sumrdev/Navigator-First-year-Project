@@ -271,17 +271,14 @@ public class Controller {
         view.getMapMenu().getDirectionsPanel().carButton.setOnAction(e -> {
             model.transportMode = 0;
             model.getMapObjects().getDigraph().setDriving();
-            System.out.println(model.transportMode);
         });
         view.getMapMenu().getDirectionsPanel().walkButton.setOnAction(e -> {
             model.transportMode = 1;
             model.getMapObjects().getDigraph().setWalking();
-            System.out.println(model.transportMode);
         });
         view.getMapMenu().getDirectionsPanel().bikeButton.setOnAction(e -> {
             model.transportMode = 2;
             model.getMapObjects().getDigraph().setWalking();
-            System.out.println(model.transportMode);
         });
         view.getMapMenu().getDirectionsPanel().findRouteButton.setOnAction( e -> {
             calculateRoute();
@@ -338,12 +335,9 @@ public class Controller {
             // When pressing the save point button we first check the status of the button
             // to see if we need to save a point
             // or delete a saved point.
-            if (model.getSelectedPont().getFavouriteStatus() == false) {
+            if (!model.getSelectedPont().getFavouriteStatus()) {
                 // first set the isFavourite variable in the selected point.
                 model.getSelectedPont().setFavouriteStatus(true);
-                System.out
-                        .println("SETTING THE STATUS OF THE POINT WITH TO TRUE! " + model.getSelectedPont().getName());
-                System.out.println("THE STATUS OF THE POINT IS NOW: " + model.getSelectedPont().getFavouriteStatus());
                 // When saving the selected point, we make a new point of interest with the type
                 // favourite to mark the location of the saved point.
                 model.getMapObjects().getFavouritesMarkerList()
@@ -614,7 +608,6 @@ public class Controller {
         }
         // Redraw the view
         view.getMapScene().redraw();
-        System.out.println("Test!!!!");
     }
 
 
@@ -669,9 +662,6 @@ public class Controller {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getSelectedPointPanel());
             view.getMapMenu().getSelectedPointPanel().setMapPoint(mapPoint);
             view.getMapMenu().getSelectedPointPanel().setSavePointButtonMode(mapPoint.getFavouriteStatus());
-            System.out.println("THE FAVOURITE STATUS OF THE POINT IS: " + mapPoint.getFavouriteStatus()
-                    + " the name of the point is " + mapPoint.getName());
-
             // We only pan if the point to focus on is found through a search bar. Not when
             // clicking on a point.
             if (shouldPan) {

@@ -103,8 +103,12 @@ public class TrieTest {
     }
     @Test 
     public void getAddressObjectTest(){
-        Address FirstAddressAsItShouldBe = new Address("Street", "1", "9999", "City", 1, 2);
-        Address SecondAddressAsItShouldBe = new Address("Street", "2", "9999", "City", 1, 2);
+        Address firstAddressAsItShouldBe = new Address("Street", "1", "9999", "City", 1, 2);
+        Address secondAddressAsItShouldBe = new Address("Street", "2", "9999", "City", 1, 2);
+        trie.insert(firstAddressAsItShouldBe);
+        trie.insert(secondAddressAsItShouldBe);
+
+
 
         Address gottenAddress = trie.getAddressObject("Street 9999 City", "1");
         Assertions.assertEquals("Street", gottenAddress.getStreet() );

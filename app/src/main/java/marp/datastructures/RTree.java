@@ -88,8 +88,6 @@ public class RTree<T extends Element> implements Serializable {
             List<T>[] result = new List[children];
             for(int i=0; i<children ;i++){
                 result[i] = new ArrayList<>(values.subList(values.size()*i/children,values.size()*(i+1)/children));
-                if (result[i].size() < 1)
-                    System.out.println("WTF!!");;
             }
             return result;
         }

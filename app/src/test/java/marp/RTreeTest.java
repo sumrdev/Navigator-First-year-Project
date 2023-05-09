@@ -1,20 +1,16 @@
 package marp;
 
-import com.sun.source.tree.AssertTree;
-import javafx.geometry.Point2D;
 import marp.datastructures.RTree;
 import marp.mapelements.Element;
+import marp.mapelements.Point;
 import marp.mapelements.SimpleShape;
-import marp.model.Model;
 
 import marp.utilities.MathFunctions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class RTreeTest {
     List<Element> data;
@@ -47,12 +43,22 @@ public class RTreeTest {
     public void buildingRTreeFromListTest(){
         RTree<Element> rTree = new RTree<>(data);
         //how to check if rTree is build correct...?
+        Assertions.assertTrue(false);
     }
     @Test
     public void getNearestToPointTest(){
+        //is only used for points therefore we only test for points
+        //it doesn't work for more complex shapes because if more than one
+        //bound contains the point it is "random" witch is chosen
+        data = new ArrayList<>();
+        Random random = new Random();
+        for(int i = 0; i<10_000; i++){
+            float x = random.nextFloat();
+            float y = random.nextFloat();
+            data.add(new Point(0, x, y));
+        }
         //probably a fail bc of order
         RTree<Element> rTree = new RTree<>(data);
-        Random random = new Random();
         float[] point = new float[]{random.nextFloat(), random.nextFloat()};
         Element lowest = data.get(0);
         for(Element element: data){
@@ -84,6 +90,17 @@ public class RTreeTest {
     }
     @Test
     public void getElementsInRangeTest(){
-        float[] range = new float[4];
+        Random r = new Random();
+        float[] range = new float[]{r.nextFloat(), r.nextFloat(), r.nextFloat(), r.nextFloat()};
+        RTree<Element> rTree = new RTree<>(data);
+        Set<Element> rTreeResult = new HashSet<>(rTree.getElementsInRange(range));
+        Set<Element> testResult = new HashSet<>();
+        for(Element element: data){
+            float[] bounds = element.getBounds();
+            if (range[0] <= bounds[2] && bounds[0] <= range[2] && range[1] <= bounds[3] && bounds[1] <= range[3]){
+                testResult.add(element);
+            }
+        }
+        Assertions.assertEquals(rTreeResult, testResult);
     }
 }

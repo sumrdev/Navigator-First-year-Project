@@ -266,6 +266,7 @@ public class MapObjectInParsing implements Serializable{
                     break;
                 case RESIDENTIAL:
                 case PEDESTRIAN:
+                case SERVICE:
                     mapObjects.getSmallRoadsList().add(road);
                     break;
                 case PATH:

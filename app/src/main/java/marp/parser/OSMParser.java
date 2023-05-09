@@ -112,6 +112,9 @@ public class OSMParser {
                                         case "bridleway":
                                             mapObjectInParsing.setRoadType(RoadType.PATH);
                                             break;
+                                        case "service":
+                                            mapObjectInParsing.setRoadType(RoadType.SERVICE);
+                                            break;
                                         default:
                                             // in cases where the road hasn't been classified, set the type to
                                             // residential to avoid overestimating size + speed

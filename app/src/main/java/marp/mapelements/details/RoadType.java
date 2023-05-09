@@ -5,6 +5,7 @@ public enum RoadType {
     PRIMARY(5, 6, 80, true, true),
     TERTIARY(3, 4, 80, true, true),
     RESIDENTIAL(2, 3, 50, true, true),
+    SERVICE(1, 2, 5, true, true),
     PEDESTRIAN(2, 3, 10, true, false),
     PATH(0.7f, 0, 10, true, false),
     DO_NOT_SHOW(0, 0, 0, false, false),

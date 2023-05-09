@@ -121,7 +121,6 @@ public class Road extends Element{
 
         gc.setLineWidth((zoom * roadType.getRoadWidth()));
         gc.setStroke(MapColor.getInstance().colorMap.get(roadType.toString()));
-        if(this.oneway) gc.setStroke(Color.BLUE);
         draw(gc,1, zoom);
     }
 

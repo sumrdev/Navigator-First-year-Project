@@ -11,13 +11,6 @@ public class MathFunctions {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         return (float)(earthRadius * c);
     }
-    public static float distanceBetweenTwoPoints(float x1, float y1, float x2, float y2){
-        x1 /=0.56;
-        x2 /=0.56;
-        float distance = (float)Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
-        return distance;
-    }
-
     public static int getAngleBetweenTwoLines(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4){
         float angle1 = (float) Math.atan2(y1 - y2, x1 - x2);
         float angle2 = (float) Math.atan2(y3 - y4, x3 - x4);

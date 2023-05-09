@@ -10,19 +10,19 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RTreeTest {
+    List<Element> data;
     Model model;
     @BeforeEach
-    public void getData()throws Exception{
-        String defaultSubDir = "data/maps/";
-        String defaultFilename = "bornholm.osm";
-        File defaultFile = Paths.get(defaultSubDir, defaultFilename).toFile();
-        model = Model.createModel(defaultFile);
+    public void createData(){
+        data = new ArrayList<>();
     }
     @Test
-    public void fillBuildingsRTree(){
-        RTree<Element> buildingRTree = new RTree<>(model.getMapObjects().getBuildingsList());
+    public void buildingRTreeFromList(){
+        RTree<Element> buildingRTree = new RTree<>(data);
     }
     @Test
     public void searchPoint(){

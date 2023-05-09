@@ -6,6 +6,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import marp.mapelements.Element;
 import marp.mapelements.Point;
+import marp.utilities.MathFunctions;
 
 import java.io.Serializable;
 import java.util.*;
@@ -139,25 +140,7 @@ public class RTree<T extends Element> implements Serializable {
             }
             list.add(boundingRect);
         }
-        /*public T getClosest(float x, float y, T currentClosest){
-            //still has a problem that the currentClosest element is null at the start at will throw an exception
-            if(hasChildren){
-                if(low.distance(x,y) < distance(x,y,currentClosest)){
-                    currentClosest = low.getClosest(x,y,currentClosest);
-                }
-                if(high.distance(x,y) < distance(x,y,currentClosest)){
-                    currentClosest = high.getClosest(x,y,currentClosest);
-                }
-            }else {
-                for(T element: values) {
-                    if(distance(x,y,element) < distance(x,y,currentClosest)){
-                        currentClosest = element;
-                    }
-                }
-            }
-            return currentClosest;
-        }*/
-        public void getNearest(float[] point, PriorityQueue<NodeDistance> pq, int count){
+        public void getNearest(float[] point, PriorityQueue<NodeDistance> pq){
             if(!hasChildren){
                 for(T element: values) {
                     float distance = distance(point[0], point[1], element);
@@ -167,55 +150,20 @@ public class RTree<T extends Element> implements Serializable {
                 }
             }else {
                 if(low.distance(point) < pq.peek().distance){
-                    low.getNearest(point, pq, count);
+                    low.getNearest(point, pq);
                 }
                 if(high.distance(point) < pq.peek().distance){
-                    high.getNearest(point, pq, count);
+                    high.getNearest(point, pq);
                 }
-                /*
-                float[] lowDistances = low.distances(point);
-                float[] highDistances = high.distances(point);
-                if (lowDistances[0] < highDistances[0]) {
-                    if (pq.size() < count || lowDistances[0] < pq.peek().distance) {
-                        low.getNearest(point, pq, count);
-                    }
-                    if (pq.size() < count || highDistances[0] < pq.peek().distance) {
-                        high.getNearest(point, pq, count);
-                    }
-                } else {
-                    if (pq.size() < count || highDistances[0] < pq.peek().distance) {
-                        high.getNearest(point, pq, count);
-                    }
-                    if (pq.size() < count || lowDistances[0] < pq.peek().distance) {
-                        low.getNearest(point, pq, count);
-                    }
-                }*/
             }
-        }
-        private float[] distances(float[] point){
-            float[] result = new float[2];
-            result[0] = distance(point);
-            if (hasChildren) {
-                result[1] = Math.min(low.distances(point)[0], high.distances(point)[0]);
-            } else {
-                result[1] = result[0];
-            }
-            return result;
-        }
-        protected boolean intersects(float[] rangeCoords){
-            return intersects(boundingRect, rangeCoords);
-            //return boundingRect[0] <= rangeCoords[2] && rangeCoords[0] <= boundingRect[2] && boundingRect[1] <= rangeCoords[3] && rangeCoords[1] <= boundingRect[3];
         }
         protected boolean intersects(float[] rect1, float[] rect2){
             return rect1[0] <= rect2[2] && rect2[0] <= rect1[2] && rect1[1] <= rect2[3] && rect2[1] <= rect1[3];
         }
-        public float distance(float x1, float y1, float x2, float y2) {
-            return (float) Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
+        protected boolean intersects(float[] rangeCoords){
+            return intersects(boundingRect, rangeCoords);
         }
-        public float distance(float x, float y, T element){
-            return distance(x, y, element.getBounds());
-        }
-        public float distance(float x, float y, float[] bounds){
+        protected float distance(float x, float y, float[] bounds){
             float elementX;
             float elementY;
             //find closest x element to the current element
@@ -234,15 +182,17 @@ public class RTree<T extends Element> implements Serializable {
             }else{
                 elementY = y;
             }
-            return distance(x,y,elementX,elementY);
+            return MathFunctions.distanceInMeters(x, y, elementX, elementY);
         }
-        public float distance(float x1, float y1){
+        protected float distance(float x, float y, T element){
+            return distance(x, y, element.getBounds());
+        }
+        protected float distance(float x1, float y1){
             return distance(x1,y1,boundingRect);
         }
-        public float distance(float[] point){
+        protected float distance(float[] point){
             return distance(point[0], point[1]);
         }
-        //could maybe add the coords as values int the node to not get them from the value everytime
     }
     public class NodeDistance implements Comparable<NodeDistance>{
         T element;
@@ -275,8 +225,8 @@ public class RTree<T extends Element> implements Serializable {
     }
     public T getNearest(float[] bound){
         PriorityQueue<NodeDistance> pq = new PriorityQueue<>();
-        pq.add(new NodeDistance(null, Float.MAX_VALUE));
-        treeNode.getNearest(bound, pq,1);
+        pq.add(new NodeDistance(null, Float.POSITIVE_INFINITY));
+        treeNode.getNearest(bound, pq);
         T result = pq.peek().element;
         return result;
     }

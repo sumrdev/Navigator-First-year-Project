@@ -208,8 +208,6 @@ public class SettingsPanel extends MenuPanel {
         settingsMenuButtons.setMaxHeight(400);
         settingsMenuButtons.setMinWidth(400);
 
-        System.out.println("settingsMenuButtons stylesheets: " + settingsMenuButtons.getStylesheets());
-
         // Add the new UI elements to the menu
         this.getChildren().addAll(settingsMenuButtons, minimizeButton, directionsButton, settingsButton);
         this.setPadding(new Insets(20));

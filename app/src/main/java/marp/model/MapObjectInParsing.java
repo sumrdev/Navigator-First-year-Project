@@ -46,23 +46,6 @@ public class MapObjectInParsing implements Serializable{
         this.mapObjects = mapObjects;
     }
 
-    //public ArrayList<ComplexShape> getComplexShapes() {
-    //    return complexShapes;
-    //}
-
-    //public ArrayList<SimpleShape> getSimpleShapes() {
-    //    return SimpleShapes;
-    //}
-
-    //public void addComplexShape(ComplexShape element){
-    //    complexShapes.add(element);
-    //}
-
-    //public void addSimpleShape(SimpleShape element){
-    //    SimpleShapes.add(element);
-    //    SimpleShapeIDToSimpleShape.put(element.getID(), element);
-    //}
-
     public void addPointToHashMap(Point point){
         unfinishedPoint = point;
         pointIDtoPoint.put(point.getID(), point);
@@ -112,6 +95,14 @@ public class MapObjectInParsing implements Serializable{
         this.roundabout = true;
     }
 
+    public HashMap<Long, RoadNode> getRoadNodeIDtoRoadNode() {
+        return roadNodeIDtoRoadNode;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
     public void setCity(String city){
         this.completeAddressCount++;
         this.city = city;
@@ -125,10 +116,6 @@ public class MapObjectInParsing implements Serializable{
     public void setHouseNumber(String housenumber){
         this.completeAddressCount++;
         this.housenumber = housenumber;
-    }
-
-    public HashMap<Long, RoadNode> getRoadNodeIDtoRoadNode() {
-        return roadNodeIDtoRoadNode;
     }
 
     public void setStreet(String street){
@@ -285,16 +272,6 @@ public class MapObjectInParsing implements Serializable{
         cleanUpAddressVariables();
     }
 
-    
-
-    private void cleanUpAddressVariables(){
-        this.city = null;
-        this.postcode = null;
-        this.housenumber = null;
-        this.street = null;
-        this.completeAddressCount = 0;
-    }
-
     public SimpleShape getSimpleShapeByID(long id){
         return this.SimpleShapeIDToSimpleShape.get(id);
     }
@@ -371,10 +348,6 @@ public class MapObjectInParsing implements Serializable{
         return new Point2D(sumX/xCoords.length, sumY/yCoords.length);
     }
 
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
     public ArrayList<SimpleShape> getCoastlineSegments() {
         return coastLineSegmentList;
     }
@@ -384,5 +357,13 @@ public class MapObjectInParsing implements Serializable{
             this.pointIDtoPoint = null;
             System.gc();
         }
+    }
+
+    private void cleanUpAddressVariables(){
+        this.city = null;
+        this.postcode = null;
+        this.housenumber = null;
+        this.street = null;
+        this.completeAddressCount = 0;
     }
 }

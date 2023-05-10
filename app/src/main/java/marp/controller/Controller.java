@@ -202,6 +202,10 @@ public class Controller {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getSettingsPanel());
         });
 
+        view.getMapMenu().getDirectionsPanel().takesnapshoButton.setOnAction(e -> {
+            takeSnapShot();
+        });
+
         view.getMapMenu().getDirectionsPanel().swapButton.setOnAction(e -> {
             // First get the start location field text and save it as temp text,
             // then set ge start location field text to the text from the end location
@@ -357,6 +361,10 @@ public class Controller {
             model.setSelectedPointMarker(null);
         });
 
+        view.getMapMenu().getSettingsPanel().getTakeSnapShotButton().setOnAction(e -> {
+            takeSnapShot();
+        });
+
         view.getMapMenu().getSettingsPanel().getDirectionsButton().setOnAction(e -> {
             // Set the menu panel to the directions menu panel
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getDirectionsPanel());
@@ -405,6 +413,15 @@ public class Controller {
 
         view.getMapMenu().getColorblindnessModePanel().getNormalButton().setOnAction(e->{
             MapColor.getInstance().changeTheme("default");
+
+            view.getMapMenu().getSettingsPanel().activateDarkMode(false);
+            view.getMapMenu().getMinimizedPanel().activateDarkMode(false);
+            view.getMapMenu().getPointOfInterestPanel().activateDarkMode(false);
+            view.getMapMenu().getSelectedPointPanel().activateDarkMode(false);
+            view.getMapMenu().getDirectionsPanel().activateDarkMode(false);
+            view.getMapMenu().getColorblindnessModePanel().activateDarkMode(false);
+            view.getZoomMenu().activateDarkMode(false);
+
             Digraph.setColor(1);
             view.getMapScene().redraw();
         });
@@ -414,24 +431,60 @@ public class Controller {
         });
 
         view.getMapMenu().getColorblindnessModePanel().deuteranopiaButton.setOnAction(e -> {
+
+            view.getMapMenu().getSettingsPanel().activateDarkMode(false);
+            view.getMapMenu().getMinimizedPanel().activateDarkMode(false);
+            view.getMapMenu().getPointOfInterestPanel().activateDarkMode(false);
+            view.getMapMenu().getSelectedPointPanel().activateDarkMode(false);
+            view.getMapMenu().getDirectionsPanel().activateDarkMode(false);
+            view.getMapMenu().getColorblindnessModePanel().activateDarkMode(false);
+            view.getZoomMenu().activateDarkMode(false);
+
             MapColor.getInstance().changeTheme("deuteranopia");
             Digraph.setColor(1);
             view.getMapScene().redraw();
         });
 
         view.getMapMenu().getColorblindnessModePanel().protanopiaButton.setOnAction(e -> {
+
+            view.getMapMenu().getSettingsPanel().activateDarkMode(false);
+            view.getMapMenu().getMinimizedPanel().activateDarkMode(false);
+            view.getMapMenu().getPointOfInterestPanel().activateDarkMode(false);
+            view.getMapMenu().getSelectedPointPanel().activateDarkMode(false);
+            view.getMapMenu().getDirectionsPanel().activateDarkMode(false);
+            view.getMapMenu().getColorblindnessModePanel().activateDarkMode(false);
+            view.getZoomMenu().activateDarkMode(false);
+
             MapColor.getInstance().changeTheme("protanopia");
             Digraph.setColor(2);
             view.getMapScene().redraw();
         });
 
         view.getMapMenu().getColorblindnessModePanel().tritanopiaButton.setOnAction(e -> {
+
+            view.getMapMenu().getSettingsPanel().activateDarkMode(false);
+            view.getMapMenu().getMinimizedPanel().activateDarkMode(false);
+            view.getMapMenu().getPointOfInterestPanel().activateDarkMode(false);
+            view.getMapMenu().getSelectedPointPanel().activateDarkMode(false);
+            view.getMapMenu().getDirectionsPanel().activateDarkMode(false);
+            view.getMapMenu().getColorblindnessModePanel().activateDarkMode(false);
+            view.getZoomMenu().activateDarkMode(false);
+
             MapColor.getInstance().changeTheme("tritanopia");
             Digraph.setColor(1);
             view.getMapScene().redraw();
         });
 
         view.getMapMenu().getColorblindnessModePanel().monochromacyButton.setOnAction(e -> {
+
+            view.getMapMenu().getSettingsPanel().activateDarkMode(false);
+            view.getMapMenu().getMinimizedPanel().activateDarkMode(false);
+            view.getMapMenu().getPointOfInterestPanel().activateDarkMode(false);
+            view.getMapMenu().getSelectedPointPanel().activateDarkMode(false);
+            view.getMapMenu().getDirectionsPanel().activateDarkMode(false);
+            view.getMapMenu().getColorblindnessModePanel().activateDarkMode(false);
+            view.getZoomMenu().activateDarkMode(false);
+
             MapColor.getInstance().changeTheme("monochromia");
             Digraph.setColor(3);
             view.getMapScene().redraw();
@@ -483,7 +536,9 @@ public class Controller {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
         });
 
-        
+        view.getMapMenu().getPointOfInterestPanel().getTakeSnapShotButton().setOnAction(e -> {
+            takeSnapShot();
+        });
     }
     
     // ##########################################################
@@ -706,6 +761,10 @@ public class Controller {
         view.getMapScene().pan(xDist, yDist);
     }
 
+    /**
+     * 
+     * Creates a printable pdf which can be saved
+     */
     private void takeSnapShot() {
         try {
             PrinterJob job = PrinterJob.createPrinterJob();

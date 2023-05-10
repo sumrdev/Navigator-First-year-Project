@@ -22,8 +22,6 @@ import java.util.zip.ZipInputStream;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
-import com.google.common.cache.Cache;
-
 import javafx.geometry.Point2D;
 import marp.datastructures.Trie;
 import marp.mapelements.*;

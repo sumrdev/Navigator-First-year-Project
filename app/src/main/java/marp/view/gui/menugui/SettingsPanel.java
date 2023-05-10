@@ -21,6 +21,8 @@ public class SettingsPanel extends MenuPanel {
     private MapButton directionsButton;
     private MapButton minimizeButton;
     private MapButton settingsButton;
+    private MapButton takeSnapShotButton;
+    
     private MapToggleButton normalModeButton;
     private MapToggleButton nightModeButton;
     private MapToggleButton colorBlindModeButton;
@@ -40,7 +42,7 @@ public class SettingsPanel extends MenuPanel {
     public MapTextButton getLoadAnotherOSMButton() {
         return loadAnotherOSMButton;
     }
-
+    
     /**
      * 
      * @return MapButton directionsButton
@@ -48,7 +50,7 @@ public class SettingsPanel extends MenuPanel {
     public MapButton getDirectionsButton() {
         return directionsButton;
     }
-
+    
     /**
      * 
      * @return MapButton minimizeButton
@@ -56,7 +58,7 @@ public class SettingsPanel extends MenuPanel {
     public MapButton getMinimizeButton() {
         return minimizeButton;
     }
-
+    
     /**
      * 
      * @return MapButton settingsButton
@@ -72,7 +74,7 @@ public class SettingsPanel extends MenuPanel {
     public MapToggleButton getNormalModeButton() {
         return normalModeButton;
     }
-
+    
     /**
      * 
      * @return MapToggleButton nightModeButton
@@ -80,7 +82,7 @@ public class SettingsPanel extends MenuPanel {
     public MapToggleButton getNightModeButton() {
         return nightModeButton;
     }
-
+    
     /**
      * 
      * @return MapToggleButton colorBlindModeButton
@@ -88,7 +90,7 @@ public class SettingsPanel extends MenuPanel {
     public MapToggleButton getColorBlindModeButton() {
         return colorBlindModeButton;
     }
-
+    
     /**
      * 
      * @return MapCheckBox hideAddressesCheckbox
@@ -96,7 +98,7 @@ public class SettingsPanel extends MenuPanel {
     public MapCheckBox getHideAddressesCheckbox() {
         return hideAddressesCheckbox;
     }
-
+    
     /**
      * 
      * @return MapCheckBox hideLandmarkCheckbox
@@ -104,7 +106,7 @@ public class SettingsPanel extends MenuPanel {
     public MapCheckBox getHideLandmarkCheckbox() {
         return hideLandmarkCheckbox;
     }
-
+    
     /**
      * 
      * @return MapCheckBox hideRoadsCheckbox
@@ -112,7 +114,7 @@ public class SettingsPanel extends MenuPanel {
     public MapCheckBox getHideRoadsCheckbox() {
         return hideRoadsCheckbox;
     }
-
+    
     /**
      * 
      * @return MapCheckBox hideBuildingsCheckbox
@@ -128,7 +130,7 @@ public class SettingsPanel extends MenuPanel {
     public MapCheckBox getHideTerrainCheckbox() {
         return hideTerrainCheckbox;
     }
-
+    
     /**
      * 
      * @return VBox settingsMenuButtons
@@ -136,7 +138,7 @@ public class SettingsPanel extends MenuPanel {
     public VBox getSettingsMenuButtons() {
         return settingsMenuButtons;
     }
-
+    
     /**
      * 
      * @return Slider zoomAdjustSlider
@@ -145,15 +147,23 @@ public class SettingsPanel extends MenuPanel {
         return zoomAdjustSlider;
     }
 
+    /**
+     * 
+     * @return MapButton takeSnapShotButton
+     */
+    public MapButton getTakeSnapShotButton() {
+        return takeSnapShotButton;
+    }
+    
     // labels
     private MapLabelSmall dontShow;
     private MapLabel adjustZoomText;
     private MapLabel saveOrLoadtext;
     private MapLabel mapDisplaySettinsgText;
-
+    
     public SettingsPanel() {
         super();
-
+        
         // labels
         dontShow = new MapLabelSmall("Don't show:");
         adjustZoomText = new MapLabel("Adjust zoom buttons strength");
@@ -162,13 +172,14 @@ public class SettingsPanel extends MenuPanel {
 
         // create buttons
         directionsButton = new MapButton(
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/directions.png"))));
-        minimizeButton = new MapButton(
+            new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/directions.png"))));
+            minimizeButton = new MapButton(
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/cross.png"))));
-        settingsButton = new MapButton(
+                settingsButton = new MapButton(
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/settings.png"))), true);
         loadAnotherOSMButton = new MapTextButton("Open new map");
         loadAnotherOSMButton.setMinWidth(160);
+        takeSnapShotButton = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/camera.png"))));
 
         // Create the top row of buttons for map modes as toggle buttons to allow only
         // one selected mode at a time
@@ -209,7 +220,7 @@ public class SettingsPanel extends MenuPanel {
         settingsMenuButtons.setMinWidth(400);
 
         // Add the new UI elements to the menu
-        this.getChildren().addAll(settingsMenuButtons, minimizeButton, directionsButton, settingsButton);
+        this.getChildren().addAll(settingsMenuButtons, minimizeButton, directionsButton, settingsButton, takeSnapShotButton);
         this.setPadding(new Insets(20));
         this.setSpacing(10);
         this.setPickOnBounds(false);
@@ -239,6 +250,8 @@ public class SettingsPanel extends MenuPanel {
         directionsButton.activateDarkMode(activate);
 
         settingsButton.activateDarkMode(activate);
+
+        takeSnapShotButton.activateDarkMode(activate);
 
         dontShow.activateDarkMode(activate);
 

@@ -35,11 +35,9 @@ public class OSMParser {
         MapObjects mapObjects = new MapObjects();
         MapObjectInParsing mapObjectInParsing = new MapObjectInParsing(mapObjects);
         while (xmlsr.hasNext()) {
-            int xmltag = xmlsr.next();
-            switch (xmltag) {
+            switch (xmlsr.next()) {
                 case XMLStreamConstants.START_ELEMENT:
-                    String startTag = xmlsr.getLocalName();
-                    switch (startTag) {
+                    switch (xmlsr.getLocalName()) {
                         case "bounds":
                             mapObjects.setMinX(Float.parseFloat(xmlsr.getAttributeValue(null, "minlon")));
                             mapObjects.setMinY(Float.parseFloat(xmlsr.getAttributeValue(null, "minlat")));
@@ -314,8 +312,7 @@ public class OSMParser {
                     }
                     break;
                 case XMLStreamConstants.END_ELEMENT:
-                    String endTag = xmlsr.getLocalName();
-                    switch (endTag) {
+                    switch (xmlsr.getLocalName()) {
                         case "node":
                             mapObjectInParsing.finishPoint();
                             break;

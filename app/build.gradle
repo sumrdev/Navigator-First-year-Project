@@ -52,7 +52,7 @@ dependencies {
 application {
     // Define the main class for the application.
     mainClass = 'marp.core.Start'
-    applicationDefaultJvmArgs = ["-Xmx12192m"]
+    applicationDefaultJvmArgs = ["-Xmx8192m"]
 }
 
 mainClassName = 'marp.core.Start'

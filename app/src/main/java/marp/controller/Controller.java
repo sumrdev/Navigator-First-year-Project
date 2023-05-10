@@ -63,7 +63,7 @@ public class Controller {
                 new FileChooser.ExtensionFilter("All files", "*.*"));
     }
 
-    private void createMapSceneButtons() {
+    private void createMapSceneButtons(Model model) {
         // Clicking on the map updates the latest clicked coordinates. if
         // isCreatingCustomPointOfInterest is true, lastPressedX is set as well.
 
@@ -556,7 +556,7 @@ public class Controller {
             }
             view.creatMenusForMapScene(Model.getInstance());
             view.createNewMapScene(Model.getInstance());
-            createMapSceneButtons();
+            createMapSceneButtons(Model.getInstance());
             view.setScene(view.getMapScene());
         });
 
@@ -574,7 +574,7 @@ public class Controller {
                 Model.updateModel(fileURL);
                 view.creatMenusForMapScene(Model.getInstance());
                 view.createNewMapScene(Model.getInstance());
-                createMapSceneButtons();
+                createMapSceneButtons(Model.getInstance());
                 view.setScene(view.getMapScene());
             } catch (Exception e1) {
                 System.out.println(e1.getMessage());
@@ -596,7 +596,7 @@ public class Controller {
                     System.out.println(selectedFile.toURI().toURL().toString());
                     view.creatMenusForMapScene(Model.getInstance());
                     view.createNewMapScene(Model.getInstance());
-                    createMapSceneButtons();
+                    createMapSceneButtons(Model.getInstance());
                     view.setScene(view.getMapScene());
                 }
             } catch (ClassNotFoundException | URISyntaxException | XMLStreamException | FactoryConfigurationError
@@ -617,37 +617,6 @@ public class Controller {
         return closestAddress.getStreet() + " " + closestAddress.getHouseNumber() + " "
                         + closestAddress.getPostCode() + " " + closestAddress.getCity();
     }
-    /*
-     * FileChooser fileChooser = new FileChooser();
-     * try {
-     * fileChooser.getExtensionFilters().addAll(
-     * new FileChooser.ExtensionFilter("OSM files", "*.osm"),
-     * new FileChooser.ExtensionFilter("BIN files", "*.bin"),
-     * new FileChooser.ExtensionFilter("All files", "*.*"));
-     * 
-     * File selectedFile = fileChooser.showOpenDialog(stage);
-     * if (selectedFile == null) {
-     * 
-     * } else {
-     * try {
-     * view.getMapScene().resetAffine();
-     * this.model = Model.createModel(selectedFile);
-     * view.model = this.model;
-     * view.createNewMapScene();
-     * view.setScene(view.getMapScene());
-     * } catch (javax.xml.parsers.FactoryConfigurationError e2) {
-     * e2.printStackTrace();
-     * }
-     * }
-     * } catch (Exception e1) {
-     * // TODO: handle exception
-     * System.out.println("Error getting items from listview: ");
-     * e1.printStackTrace();
-     * }
-     * });
-     * 
-     * }
-     */
 
     private void setStartLocation(Address address, boolean shouldPan) {
         if (shouldPan) {

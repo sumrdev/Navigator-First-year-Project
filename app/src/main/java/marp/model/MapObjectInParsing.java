@@ -74,17 +74,9 @@ public class MapObjectInParsing implements Serializable{
         this.unfinishedShapeType = shapeType;
     }
 
-    //public void convertSimpleShapeToRoad(){
-    //TODO: WHAT IS HAPPENING HERE...?
-    //    unfinishedRoad = new Road(unfinishedRoad);
-    //    this.isRoad = true;
-    //}
-
     public void setRoadType(RoadType type){
         unfinishedRoadType = type;
         isRoad = true;
-        //convertSimpleShapeToRoad();
-        //unfinishedRoad.setRoadType(type);
     }
 
     public void setRoadOneWay(boolean oneway){
@@ -284,6 +276,7 @@ public class MapObjectInParsing implements Serializable{
     }
 
     public void finishRelation(){
+        deletePointHashMap();
         if (this.completeAddressCount==4){
             Address address = new Address(this.street, this.housenumber, this.postcode, this.city, unfinishedPoint.getX(), unfinishedPoint.getY());
             mapObjects.getAddressList().add(address);

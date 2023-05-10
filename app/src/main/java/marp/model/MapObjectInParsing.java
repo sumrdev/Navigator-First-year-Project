@@ -3,6 +3,7 @@ package marp.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import javafx.geometry.Point2D;
 import marp.mapelements.*;
@@ -138,6 +139,9 @@ public class MapObjectInParsing implements Serializable {
             mapObjects.getAddressList().add(address);
             mapObjects.getTrie().insert(address);
         } else if (fontSize != FontSize.UNDEFINED) {
+            if (Objects.equals(this.name, "Frederiksstaden")) {
+                System.out.println("Frederiksstaden. The shape type is: " + unfinishedShapeType.toString());
+            }
             PlaceName placeName = new PlaceName(this.name, this.fontSize, this.unfinishedPoint.getX(), this.unfinishedPoint.getY());
             switch (fontSize) {
                 case QUITE_SMALL:
@@ -181,6 +185,7 @@ public class MapObjectInParsing implements Serializable {
         cleanUpAddressVariables();
         this.unfinishedPoint = null;
         this.unfinishedPointType = PointType.UNDEFINED;
+        this.unfinishedShapeType = ShapeType.UNDEFINED;
         this.fontSize = FontSize.UNDEFINED;
         this.name = null;
     }
@@ -227,9 +232,6 @@ public class MapObjectInParsing implements Serializable {
                     case RAILWAY:
                         if (!isTunnel) {
                             mapObjects.getRailwayList().add(new SimpleShape(this.unfinishedShapeType, coords.get(0), coords.get(1)));
-                            System.out.println("Not tunneeeeeeel!?");
-                        } else {
-                            System.out.println("TUNNEL!?");
                         }
                         break;
                     default:
@@ -252,6 +254,7 @@ public class MapObjectInParsing implements Serializable {
             }
             Road road = new Road(this.unfinishedSimpleShapeID, roadNodes, this.unfinishedRoadType, this.speed, this.isOneWay, this.roundabout, this.name);
             mapObjects.getRoadsList().add(road);
+            SimpleShapeIDToSimpleShape.put(this.unfinishedSimpleShapeID, new SimpleShape(this.unfinishedShapeType, roadNodes));
             switch (unfinishedRoadType) {
                 case MOTORWAY:
                     mapObjects.getMotorWaysList().add(road);
@@ -297,11 +300,11 @@ public class MapObjectInParsing implements Serializable {
     }
 
     public void finishRelation() {
-        if (this.completeAddressCount == 4) {
-            Address address = new Address(this.street, this.housenumber, this.postcode, this.city, unfinishedPoint.getX(), unfinishedPoint.getY());
-            mapObjects.getAddressList().add(address);
-            mapObjects.getTrie().insert(address);
-        }
+        //if (this.completeAddressCount == 4) {
+        //    Address address = new Address(this.street, this.housenumber, this.postcode, this.city, unfinishedPoint.getX(), unfinishedPoint.getY());
+        //    mapObjects.getAddressList().add(address);
+        //    mapObjects.getTrie().insert(address);
+        //}
         if (unfinishedRelationSimpleShapes.size() > 0) {
             switch (unfinishedShapeType) {
                 case BUILDING:
@@ -314,7 +317,7 @@ public class MapObjectInParsing implements Serializable {
                 case FOREST:
                 case CEMENT:
                 case COMMERCIAL_GROUND:
-                    // case FARMLAND:
+                    System.out.println("TEST!? THE TYPE IS CEMENT! ");
                     mapObjects.getTerrainAreasList().add(new ComplexShape(this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
                     break;
                 default:

@@ -208,6 +208,7 @@ public class OSMParser {
                                         case "industrial":
                                         case "residential":
                                         case "landfill":
+                                        case "railway":
                                             mapObjectInParsing.setShapeType(ShapeType.CEMENT);
                                             break;
                                         case "commercial":
@@ -223,6 +224,14 @@ public class OSMParser {
                                             break;
                                         default:
                                             break;
+                                    }
+                                    break;
+                                case "leisure":
+                                    switch (value) {
+                                        case "garden":
+                                        case "park":
+                                        mapObjectInParsing.setShapeType(ShapeType.GRASS);
+                                        break;
                                     }
                                     break;
                                 case "addr:city":
@@ -300,10 +309,8 @@ public class OSMParser {
                                             mapObjectInParsing.setFontSize(FontSize.QUITE_LARGE);
                                         case "region":
                                         case "sea":
-                                            mapObjectInParsing.setFontSize(FontSize.LARGE);
-                                            break;
                                         case "city":
-                                            mapObjectInParsing.setFontSize(FontSize.MEDIUM_LARGE);
+                                            mapObjectInParsing.setFontSize(FontSize.LARGE);
                                             break;
                                         case "town":
                                         case "borough":

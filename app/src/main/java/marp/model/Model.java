@@ -22,8 +22,6 @@ import java.util.zip.ZipInputStream;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
-import com.google.common.cache.Cache;
-
 import javafx.geometry.Point2D;
 import marp.datastructures.Trie;
 import marp.mapelements.*;
@@ -37,6 +35,7 @@ public final class Model implements Serializable{
     private PointOfInterest selectedPointMarker;
     private PointOfInterest startLocationMarker;
     private PointOfInterest endLocationMarker;
+    private boolean navigationIsVisible;
     public int transportMode = 0;
     public boolean isRoadsVisible = true;
     public boolean isLandmarksVisible = true;
@@ -207,6 +206,15 @@ public final class Model implements Serializable{
         selectedPointMarker = new PointOfInterest(selectedElement.getName(), selectedElement.getType(), selectedElement.getX()*0.56f, -selectedElement.getY(), false);
         return selectedPointMarker;
     }
+    public PointOfInterest getFavouritePointForSelection(Point2D point) {
+        for (PointOfInterest poi : mapObjects.getFavouritesMarkerList()){
+            double favouritePOIDistance = Math.sqrt(Math.pow(poi.getX() - (float) point.getX(), 2) + Math.pow(poi.getY() - (float) point.getY(), 2));
+            if (favouritePOIDistance == 0) {
+                return poi;
+            }
+        }
+        return null;
+    }
     public String getNearestRoadNameForMapSelection(Point2D point) {
         // We look for distance to mouse among roads and update the selected road if we find a shorter distance.
         String selectedRoadName = null;
@@ -287,8 +295,14 @@ public final class Model implements Serializable{
     public void setSelectedPoint(MapPoint mapPoint) {
         selectedPont = mapPoint;
     }
-    public MapPoint getSelectedPont() {
+    public MapPoint getSelectedPoint() {
         return selectedPont;
+    }
+    public void setNavigationVisibility(boolean showNavigation) {
+        this.navigationIsVisible = showNavigation;
+    }
+    public boolean getNavigationVisibility() {
+        return navigationIsVisible;
     }
 }
 

@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import marp.mapelements.Address;
 import marp.mapelements.MapPoint;
+import marp.mapelements.details.PointType;
 import marp.model.Model;
 import marp.view.gui.MapLabel;
 import marp.view.gui.MapLabelSmall;
@@ -105,12 +106,8 @@ public class SelectedPointPanel extends MenuPanel {
 
     }
 
-    public void setSavePointButtonMode(boolean isFavourite) {
-        if (!isFavourite) {
-            saveLocationButton.setSelected(false);
-        } else {
-            saveLocationButton.setSelected(true);
-        }
+    public void setSavePointButtonMode(PointType pointType) {
+        saveLocationButton.setSelected(pointType == PointType.FAVOURITE);
     }
 
     /**

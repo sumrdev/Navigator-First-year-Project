@@ -29,8 +29,7 @@ public class ElementColor {
         defaultColors.put("residential_outline", Color.web("#ffe2de"));
         defaultColors.put("pedestrian", Color.web("#33a351"));
         defaultColors.put("footpath", Color.web("#2ea14d"));
-        defaultColors.put("path", Color.web("#2ea14d"));
-
+;
         darkColors.put("water", Color.web("#000000"));
         darkColors.put("building", Color.web("#1e1e1e"));
         darkColors.put("grass", Color.web("#105a5b"));

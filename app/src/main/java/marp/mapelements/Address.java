@@ -71,13 +71,4 @@ public class Address extends Point implements MapPoint {
     public String toString(){
         return getName();
     }
-
-    @Override
-    public boolean getFavouriteStatus() {
-        return isFavourite;
-    }
-    @Override
-    public void setFavouriteStatus(boolean isFavourite) {
-        this.isFavourite = !this.isFavourite;
-    }
 }

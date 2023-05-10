@@ -221,7 +221,7 @@ public class Digraph implements Serializable {
                             turnInformation = "↑ Continue straight onto ";
                             break;
                     }
-                    if (roadsMap.get(edge.road).getName().length() > 13) {
+                    if (roadsMap.get(edge.road).getName().length() > 11) {
                         String direction = turnInformation + roadsMap.get(edge.road).getName() + " \n      after "
                                 + distanceSinceLastRoad + " meters";
                         result.add(direction);

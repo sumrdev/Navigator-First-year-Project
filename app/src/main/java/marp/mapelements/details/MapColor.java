@@ -23,7 +23,7 @@ public class MapColor {
         defaultColorMap.put("FOREST", Color.rgb(145, 189, 159,1));
         defaultColorMap.put("CEMENT", Color.rgb(233, 233, 233,1));
         defaultColorMap.put("FARMLAND", Color.rgb(204, 227, 175,1));
-        defaultColorMap.put("COMMERCIAL_GROUND", Color.LIGHTYELLOW);
+        defaultColorMap.put("COMMERCIAL_GROUND", Color.rgb(225, 224, 212,1));
         defaultColorMap.put("WATERWAY", Color.rgb(176, 211, 232,1));
         defaultColorMap.put("RAILWAY", Color.rgb(190, 190, 190,1));
         defaultColorMap.put("SECONDARY", Color.WHITE);
@@ -169,6 +169,7 @@ public class MapColor {
         colorMap = defaultColorMap;
     }
 
+
     public void changeTheme(String theme) {
         switch (theme) {
             case "default":
@@ -194,6 +195,20 @@ public class MapColor {
                 break;
         }
     }
+    public void updateCoastlineColorFromZoom(double zoomLevel) {
+        if (zoomLevel < 300) {
+            defaultColorMap.put("COASTLINE", Color.rgb(255, 255, 255, 1));
+        } else if (zoomLevel > 900) {
+            defaultColorMap.put("COASTLINE", Color.rgb(206, 234, 214, 1));
+        } else {
+            double t = (zoomLevel - 900) / -600.0; // calculate the interpolation factor
+            int r = (int) (t * 255 + (1 - t) * 206);
+            int g = (int) (t * 255 + (1 - t) * 234);
+            int b = (int) (t * 255 + (1 - t) * 214);
+            defaultColorMap.put("COASTLINE", Color.rgb(r, g, b, 1));
+        }
+    }
+
 
     public static MapColor getInstance() {
         return instance;

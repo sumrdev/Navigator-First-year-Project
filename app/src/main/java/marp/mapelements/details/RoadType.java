@@ -1,8 +1,8 @@
 package marp.mapelements.details;
 
 public enum RoadType {
-    MOTORWAY(6, 7, 130, false, true),
-    PRIMARY(5, 6, 80, true, true),
+    MOTORWAY(4, 5, 130, false, true),
+    PRIMARY(3.5f, 4.5f, 80, true, true),
     TERTIARY(3, 4, 80, true, true),
     RESIDENTIAL(2, 3, 50, true, true),
     SERVICE(1, 2, 5, true, true),

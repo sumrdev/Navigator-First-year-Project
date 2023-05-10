@@ -47,13 +47,6 @@ public class PointOfInterest extends Point implements MapPoint {
     public float getY() {
         return y;
     }
-    @Override
-    public boolean getFavouriteStatus() {
-        return isFavourite;
-    }
-    @Override
-    public void setFavouriteStatus(boolean isFavourite) {
-        this.isFavourite = isFavourite;
-    }
+
 }
 

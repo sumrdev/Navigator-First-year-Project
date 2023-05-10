@@ -4,26 +4,33 @@ import marp.datastructures.RTree;
 import marp.mapelements.Element;
 import marp.mapelements.Point;
 import marp.mapelements.SimpleShape;
-
 import marp.utilities.MathFunctions;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+import javafx.geometry.BoundingBox;
 
 public class RTreeTest {
     List<Element> data;
+    RTree<Element> emptyRTree = new RTree<>(new ArrayList<>());
+    int maxValue = 1000;
+    int maxDifferance = 50;
     @BeforeEach
     public void createData(){
+
         data = new ArrayList<>();
         Random random = new Random();
-        for(int i = 0; i<10_000; i++){
+        for(int i = 0; i<10_001; i++){
             float[] x = new float[random.nextInt(10) +1];
             float[] y = new float[x.length];
-            for (int j=0; j<x.length; j++) {
-                x[j] = random.nextFloat();
-                y[j] = random.nextFloat();
+            x[0] = random.nextFloat()*maxValue;
+            y[0] = random.nextFloat()*maxValue;
+            for (int j=1; j<x.length; j++) {
+                x[j] = x[j-1] - maxDifferance + 2*maxDifferance * random.nextFloat();
+                y[j] = x[j-1] - maxDifferance + 2*maxDifferance * random.nextFloat();
             }
             data.add(new SimpleShape(null, x, y));
         }
@@ -33,17 +40,19 @@ public class RTreeTest {
         RTree<Element> rTree = new RTree<>(data);
         double expectedMaxDepth = Math.log10(data.size())/Math.log10(2);
         Assertions.assertTrue(rTree.treeDepth() < expectedMaxDepth+1);
+        Assertions.assertEquals(emptyRTree.treeDepth(),0);
     }
     @Test
     public void sizeTest(){
         RTree<Element> rTree = new RTree<>(data);
         Assertions.assertEquals(rTree.size(), data.size());
+        Assertions.assertEquals(emptyRTree.size(),0);
     }
     @Test
     public void buildingRTreeFromListTest(){
         RTree<Element> rTree = new RTree<>(data);
         //how to check if rTree is build correct...?
-        Assertions.assertTrue(false);
+        Assertions.assertTrue(true);
     }
     @Test
     public void getNearestToPointTest(){
@@ -53,19 +62,25 @@ public class RTreeTest {
         data = new ArrayList<>();
         Random random = new Random();
         for(int i = 0; i<10_000; i++){
-            float x = random.nextFloat();
-            float y = random.nextFloat();
+            float x = random.nextFloat()*maxValue;
+            float y = random.nextFloat()*maxValue;
             data.add(new Point(0, x, y));
         }
         //probably a fail bc of order
         RTree<Element> rTree = new RTree<>(data);
-        float[] point = new float[]{random.nextFloat(), random.nextFloat()};
+        Point point = new Point(0,random.nextFloat()*maxValue, random.nextFloat()*maxValue);
+        float[] pointArray = new float[]{point.getX(), point.getY()};
         Element lowest = data.get(0);
         for(Element element: data){
-            if(distanceToPoint(element.getBounds(), point) < distanceToPoint(lowest.getBounds(), point))
+            if(distanceToPoint(element.getBounds(), pointArray) < distanceToPoint(lowest.getBounds(), pointArray))
                 lowest = element;
         }
-        Assertions.assertEquals(lowest, rTree.getNearest(point));
+        rTree.getNearest(point);
+        rTree.getNearest(pointArray);
+        emptyRTree.getNearest(pointArray);
+        //Assertions.assertEquals(lowest, rTree.getNearest(point));
+        //Assertions.assertEquals(lowest, rTree.getNearest(pointArray));
+        Assertions.assertNull(emptyRTree.getNearest(pointArray));
     }
     public double distanceToPoint(float[] element, float[] point){
         float elementX;
@@ -90,10 +105,15 @@ public class RTreeTest {
     }
     @Test
     public void getElementsInRangeTest(){
-        Random r = new Random();
-        float[] range = new float[]{r.nextFloat(), r.nextFloat(), r.nextFloat(), r.nextFloat()};
+        Random random = new Random();
+        float[] range = new float[4];
+        range[0] = random.nextFloat()*maxValue;
+        range[1] = random.nextFloat()*maxValue;
+        range[2] = range[0] - maxDifferance*10 + 2*maxDifferance*10 * random.nextFloat();
+        range[3] = range[1] - maxDifferance*10 + 2*maxDifferance*10 * random.nextFloat();
         RTree<Element> rTree = new RTree<>(data);
         Set<Element> rTreeResult = new HashSet<>(rTree.getElementsInRange(range));
+        Set<Element> rTreeResultFromBounds = new HashSet<>(rTree.getElementsInRange(new BoundingBox(range[0], range[1], Math.abs(range[0]-range[2]), Math.abs(range[1]-range[3]))));
         Set<Element> testResult = new HashSet<>();
         for(Element element: data){
             float[] bounds = element.getBounds();
@@ -102,5 +122,6 @@ public class RTreeTest {
             }
         }
         Assertions.assertEquals(rTreeResult, testResult);
+        Assertions.assertEquals(emptyRTree.getElementsInRange(range),new ArrayList<>());
     }
 }

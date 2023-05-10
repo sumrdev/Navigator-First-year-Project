@@ -51,11 +51,7 @@ public class RTree<T extends Element> implements Serializable {
             if (values.size() > 1){
                 splitNode(values);
                 boundingRect = getBoundingRectFromChildren();
-                if(high == null)
-                    size = low.getSize();
-                else if(low == null)
-                    size = high.getSize();
-                else size = high.getSize() + low.getSize();
+                size = high.getSize() + low.getSize();
             } else {
                 this.value = values.get(0);
                 boundingRect = value.getBounds();
@@ -122,17 +118,14 @@ public class RTree<T extends Element> implements Serializable {
             }
             list.add(boundingRect);
         }
-        public void getNearest(float[] point, PriorityQueue<NodeDistance> pq){
-            if(low != null && low.distance(point) < pq.peek().distance){
-                low.getNearest(point, pq);
+        public void getNearest(float[] point, NodeDistance lowest){
+            if(low != null && low.distance(point) < lowest.distance){
+                low.getNearest(point, lowest);
             }
-            if(high != null && high.distance(point) < pq.peek().distance) {
-                high.getNearest(point, pq);
+            if(high != null && high.distance(point) < lowest.distance) {
+                high.getNearest(point, lowest);
             } else if(low == null) {
-                float distance = distance(point[0], point[1], value);
-                if (distance < pq.peek().distance) {
-                    pq.offer(new NodeDistance(value, distance));
-                }
+                lowest.update(value, distance(point[0], point[1], value));
             }
         }
         protected boolean intersects(float[] rect1, float[] rect2){
@@ -186,17 +179,18 @@ public class RTree<T extends Element> implements Serializable {
             return Math.max(lowDepth,highDepth);
         }
     }
-    public class NodeDistance implements Comparable<NodeDistance>{
+    public class NodeDistance{
         T element;
         float distance;
-        public NodeDistance(T element, float distance) {
+        private NodeDistance(T element, float distance) {
             this.element = element;
             this.distance = distance;
         }
-        public int compareTo(NodeDistance o2){
-            return (this.distance < o2.distance) ? -1:
-                    (this.distance > o2.distance) ? 1:
-                            0;
+        public void update(T element, float distance){
+            if(distance < this.distance){
+                this.element = element;
+                this.distance = distance;
+            }
         }
     }
     public List<T> getElementsInRange(Bounds box){
@@ -215,12 +209,11 @@ public class RTree<T extends Element> implements Serializable {
         return result;
     }
     public T getNearest(float[] bound){
-        PriorityQueue<NodeDistance> pq = new PriorityQueue<>();
-        pq.add(new NodeDistance(null, Float.POSITIVE_INFINITY));
+        NodeDistance lowest = new NodeDistance(null, Float.POSITIVE_INFINITY);
         if(treeNode != null) {
-            treeNode.getNearest(bound, pq);
+            treeNode.getNearest(bound, lowest);
         }
-        T result = pq.peek().element;
+        T result = lowest.element;
         return result;
     }
     public T getNearest(Point point){

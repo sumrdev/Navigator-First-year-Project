@@ -2,10 +2,6 @@ package marp.datastructures;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
 import marp.mapelements.Address;
 
 public class Trie implements Serializable{

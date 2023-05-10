@@ -1,9 +1,7 @@
 package marp.mapelements;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import marp.mapelements.details.MapColor;
 import marp.mapelements.details.PointType;
 
 public class Address extends Point implements MapPoint {

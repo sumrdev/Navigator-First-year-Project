@@ -21,4 +21,24 @@ public class MapToggleButton extends ToggleButton {
         getStyleClass().add("map-button");
 
     }
+
+    /**
+     * Changes CSS sheets of this MapToggleButton if parameter is set to true
+     * 
+     * @param activate (if activated then darkmode will be set)
+     */
+    public void activateDarkMode(boolean activate) {
+        if (activate) {
+            if (getStylesheets().contains("CSS/stylesheet.css")) {
+                getStylesheets().remove("CSS/stylesheet.css");
+                getStylesheets().add("CSS/darkmodesheet.css");
+            }
+
+        } else {
+            if (getStylesheets().contains("CSS/darkmodesheet.css")) {
+                getStylesheets().remove("CSS/darkmodesheet.css");
+                getStylesheets().add("CSS/stylesheet.css");
+            }
+        }
+    }
 }

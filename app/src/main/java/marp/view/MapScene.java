@@ -6,7 +6,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -15,22 +14,17 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 import marp.mapelements.*;
 import marp.mapelements.details.MapColor;
-import marp.mapelements.details.ShapeType;
 import marp.model.Model;
 import marp.utilities.MathFunctions;
-import marp.view.gui.MapLabel;
 import marp.view.gui.NearestRoadInfo;
 import marp.view.gui.ZoomMenu;
 import marp.view.gui.buttons.MapTextButton;
 import marp.view.gui.menugui.MapMenu;
 
-import javax.crypto.spec.PSource;
-
 public class MapScene extends Scene{
     public MapTextButton loadButton;
     private Model model;
     private ZoomMenu zoomMenu;
-    private  MapMenu mapMenu;
     private Canvas canvas;
     public GraphicsContext gc;
     public Affine trans = new Affine();
@@ -42,7 +36,6 @@ public class MapScene extends Scene{
         this.canvas = canvas;
         gc = canvas.getGraphicsContext2D();
 
-        this.mapMenu = mapMenu;
         this.zoomMenu = zoomMenu;
         StackPane stackedElements = new StackPane();
 

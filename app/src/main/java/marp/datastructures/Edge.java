@@ -2,9 +2,6 @@ package marp.datastructures;
 
 import java.io.Serializable;
 
-import marp.mapelements.Road;
-import marp.utilities.MathFunctions;
-
 public class Edge implements Serializable{
     long start, end, road;
     boolean driveable, walkable, roundabout;

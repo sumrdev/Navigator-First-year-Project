@@ -53,37 +53,25 @@ public class PointOfInterestPanel extends MenuPanel {
     }
 
     /**
-     * Changes CSS sheets of PointOfInterestPanel if parameter is set to true
+     * Changes CSS sheets if parameter is set to true
      * 
-     * @param set
+     * @param activate
      */
-    public void activateDarkMode(boolean set) {
-        if (set) {
+    public void activateDarkMode(boolean activate) {
+        if (activate) {
             if (newPointMenu.getStylesheets().contains("CSS/stylesheet.css")) {
                 newPointMenu.getStylesheets().remove("CSS/stylesheet.css");
                 newPointMenu.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-            if (createPointButton.getStylesheets().contains("CSS/stylesheet.css")) {
-                createPointButton.getStylesheets().remove("CSS/stylesheet.css");
-                createPointButton.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-            if (cancelButton.getStylesheets().contains("CSS/stylesheet.css")) {
-                cancelButton.getStylesheets().remove("CSS/stylesheet.css");
-                cancelButton.getStylesheets().add("CSS/darkmodesheet.css");
             }
         } else {
             if (newPointMenu.getStylesheets().contains("CSS/darkmodesheet.css")) {
                 newPointMenu.getStylesheets().remove("CSS/darkmodesheet.css");
                 newPointMenu.getStylesheets().add("CSS/stylesheet.css");
             }
-            if (createPointButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                createPointButton.getStylesheets().remove("CSS/darkmodesheet.css");
-                createPointButton.getStylesheets().add("CSS/stylesheet.css");
-            }
-            if (cancelButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                cancelButton.getStylesheets().remove("CSS/darkmodesheet.css");
-                cancelButton.getStylesheets().add("CSS/stylesheet.css");
-            }
         }
+
+        createPointButton.activateDarkMode(activate);
+        cancelButton.activateDarkMode(activate);
+
     }
 }

@@ -7,7 +7,6 @@ import javafx.scene.text.Text;
 import marp.mapelements.details.MapColor;
 import marp.mapelements.details.RoadType;
 
-import java.nio.file.FileSystemNotFoundException;
 import java.util.ArrayList;
 
 public class Road extends Element{

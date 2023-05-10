@@ -1,7 +1,5 @@
 package marp.model;
 
-import com.google.common.base.MoreObjects;
-
 import marp.datastructures.Digraph;
 import marp.datastructures.RTree;
 import marp.datastructures.Trie;
@@ -10,7 +8,6 @@ import marp.mapelements.*;
 import java.io.Serializable;
 import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 public class MapObjects implements Serializable{

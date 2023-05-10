@@ -1,9 +1,5 @@
 package marp.mapelements.details;
 
-import javafx.scene.image.Image;
-
-import java.util.Objects;
-
 public enum ShapeType {
     BUILDING,
     GRASS,

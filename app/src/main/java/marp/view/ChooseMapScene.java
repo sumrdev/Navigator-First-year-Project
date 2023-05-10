@@ -19,7 +19,7 @@ import marp.view.gui.MapLabel;
 import marp.view.gui.buttons.MapTextButton;
 
 public class ChooseMapScene extends Scene{
-    public MapTextButton loadButton;
+    public MapTextButton loadDefaultBinaryButton;
     public MapTextButton chooseOwnFileButton;
     private Model model;
     ListView<String> filelist;
@@ -55,13 +55,12 @@ public class ChooseMapScene extends Scene{
             } else {
                 event.setDropCompleted(false);
             }
-            event.consume();
             try {
-                String dragBoardUrl = dragBoard.getUrl().replaceAll("file\\:", "");
+                String dragBoardUrl = dragBoard.getUrl();
                 File file = new File(dragBoardUrl);
                 URL fileToURL = file.toURI().toURL();
-                this.model = Model.createModel(fileToURL);
-                view.creatMenusForMapScene();
+                Model.updateModel(fileToURL);
+                view.creatMenusForMapScene(Model.getInstance());
                 view.setScene(view.getMapScene());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -74,13 +73,13 @@ public class ChooseMapScene extends Scene{
         });
 
         // Load button
-        this.loadButton = new MapTextButton("Load default binary file");
+        this.loadDefaultBinaryButton = new MapTextButton("Load default binary file");
         this.chooseOwnFileButton = new MapTextButton("Choose your own OSM file");
         this.chooseOwnFileButton.setMinWidth(200);
-        HBox buttonContainer = new HBox(this.loadButton, this.chooseOwnFileButton);
+        HBox buttonContainer = new HBox(this.loadDefaultBinaryButton, this.chooseOwnFileButton);
         buttonContainer.setSpacing(50);
         buttonContainer.setAlignment(Pos.CENTER);
-        loadButton.setMinWidth(200);
+        loadDefaultBinaryButton.setMinWidth(200);
 
 
         // add all elements to a VBox

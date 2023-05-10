@@ -1,7 +1,5 @@
 package marp.model;
 
-import com.google.common.base.MoreObjects;
-
 import marp.datastructures.Digraph;
 import marp.datastructures.RTree;
 import marp.datastructures.Trie;
@@ -10,7 +8,6 @@ import marp.mapelements.*;
 import java.io.Serializable;
 import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 public class MapObjects implements Serializable{
@@ -230,6 +227,9 @@ public class MapObjects implements Serializable{
     //######## Coastline lists and trees ##################
     //#####################################################
     public ArrayList<SimpleShape> coastLineAreasList = new ArrayList<>();
+    public ArrayList<SimpleShape> getCoastLineAreasList() {
+        return coastLineAreasList;
+    }
     private RTree<SimpleShape> coastLineAreasTree;
     public RTree<SimpleShape> getCoastLinesAreaTree() {
         return coastLineAreasTree;
@@ -260,42 +260,59 @@ public class MapObjects implements Serializable{
     }
 
     public void buildTrees() {
-        Time startTime = new Time(System.currentTimeMillis());
         Thread address = new Thread(() -> {
+            Time startTime = new Time(System.currentTimeMillis());
             addressTree = new RTree<>(addressList);
+            Time endTime = new Time(System.currentTimeMillis());
+            System.out.println("Time to build address tree: " + (endTime.getTime() - startTime.getTime()) + "ms");
         });
 
         Thread poi = new Thread(() -> {
+            Time startTime = new Time(System.currentTimeMillis());
             trainPOITree = new RTree<>(trainPOIList);
             busPOITree = new RTree<>(busPOIList);
             POITree = new RTree<>(POIList);
+            Time endTime = new Time(System.currentTimeMillis());
+            System.out.println("Time to build POI trees: " + (endTime.getTime() - startTime.getTime()) + "ms");
         });
 
         Thread placeNames = new Thread(() -> {
+            Time startTime = new Time(System.currentTimeMillis());
             quiteSmallPlaceNameTree = new RTree<>(quiteSmallPlaceNameList);
             smallPlaceNameTree = new RTree<>(smallPlaceNameList);
             mediumPlaceNameTree = new RTree<>(mediumPlaceNameList);
             mediumLargePlaceNameTree = new RTree<>(mediumLargePlaceNameList);
             largeNameTree = new RTree<>(largePlaceNameList);
             quiteLargeNameTree = new RTree<>(quiteLargePlaceNameList);
+            Time endTime = new Time(System.currentTimeMillis());
+            System.out.println("Time to build place name trees: " + (endTime.getTime() - startTime.getTime()) + "ms");
         });
         Thread roadsAndCoastline = new Thread(() -> {
+            Time startTime = new Time(System.currentTimeMillis());
             coastLineAreasTree = new RTree<>(coastLineAreasList);
             motorWaysTree = new RTree<>(motorWaysList);
             largeRoadsTree = new RTree<>(largeRoadsList);
             mediumRoadsTree = new RTree<>(mediumRoadsList);
             smallRoadsTree = new RTree<>(smallRoadsList);
             footPathsTree = new RTree<>(footpathList);
+            Time endTime = new Time(System.currentTimeMillis());
+            System.out.println("Time to build roads and coastline trees: " + (endTime.getTime() - startTime.getTime()) + "ms");
         });
         Thread buildings = new Thread(() -> {
+            Time startTime = new Time(System.currentTimeMillis());
             buildingsTree = new RTree<>(buildingsList);
+            Time endTime = new Time(System.currentTimeMillis());
+            System.out.println("Time to build buildings tree: " + (endTime.getTime() - startTime.getTime()) + "ms");
         });
 
         Thread terrainAndWater = new Thread(() -> {
+            Time startTime = new Time(System.currentTimeMillis());
             waterAreasTree = new RTree<>(waterAreasList);
             terrainAreasTree = new RTree<>(terrainAreasList);
             waterwayTree = new RTree<>(waterwayList);
             railwayTree = new RTree<>(railwayList);
+            Time endTime = new Time(System.currentTimeMillis());
+            System.out.println("Time to build terrain and water trees: " + (endTime.getTime() - startTime.getTime()) + "ms");
         });
 
         poi.start();
@@ -315,9 +332,6 @@ public class MapObjects implements Serializable{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        Time endTime = new Time(System.currentTimeMillis());
-        System.out.println("Time to build trees: " + (endTime.getTime() - startTime.getTime()) + "ms");
     }
 
     public void buildDigraph(HashMap<Long, RoadNode> roadNodes){

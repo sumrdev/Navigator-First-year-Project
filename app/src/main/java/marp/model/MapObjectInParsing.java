@@ -2,7 +2,6 @@ package marp.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import javafx.geometry.Point2D;
@@ -12,7 +11,7 @@ import marp.mapelements.details.PointType;
 import marp.mapelements.details.RoadType;
 import marp.mapelements.details.ShapeType;
 
-public class MapObjectInParsing implements Serializable{
+public class MapObjectInParsing implements Serializable {
 
     private HashMap<Long, Point> pointIDtoPoint = new HashMap<>();
     private HashMap<Long, RoadNode> roadNodeIDtoRoadNode = new HashMap<>();
@@ -30,7 +29,7 @@ public class MapObjectInParsing implements Serializable{
     private boolean isTunnel = false;
     private Point unfinishedPoint;
 
-    public long unfinishedSimpleShapeID; 
+    public long unfinishedSimpleShapeID;
     private ArrayList<SimpleShape> coastLineSegmentList = new ArrayList<>();
 
     //private Road unfinishedRoad;
@@ -44,52 +43,35 @@ public class MapObjectInParsing implements Serializable{
     private ArrayList<SimpleShape> unfinishedRelationSimpleShapes = new ArrayList<>();
     private MapObjects mapObjects;
 
-    public MapObjectInParsing(MapObjects mapObjects){
+    public MapObjectInParsing(MapObjects mapObjects) {
         this.mapObjects = mapObjects;
     }
 
-    //public ArrayList<ComplexShape> getComplexShapes() {
-    //    return complexShapes;
-    //}
-
-    //public ArrayList<SimpleShape> getSimpleShapes() {
-    //    return SimpleShapes;
-    //}
-
-    //public void addComplexShape(ComplexShape element){
-    //    complexShapes.add(element);
-    //}
-
-    //public void addSimpleShape(SimpleShape element){
-    //    SimpleShapes.add(element);
-    //    SimpleShapeIDToSimpleShape.put(element.getID(), element);
-    //}
-
-    public void addPointToHashMap(Point point){
+    public void addPointToHashMap(Point point) {
         unfinishedPoint = point;
         pointIDtoPoint.put(point.getID(), point);
     }
 
-    public Point getPointByID(long id){
+    public Point getPointByID(long id) {
         return this.pointIDtoPoint.get(id);
     }
 
-    public void addPointToUnfinishedSimpleShape(Point element){
+    public void addPointToUnfinishedSimpleShape(Point element) {
         this.unfinishedSimpleShapePoints.add(element);
     }
 
-    public void initializeEmptySimpleShape(long id){
+    public void initializeEmptySimpleShape(long id) {
         this.unfinishedSimpleShapeID = id;
     }
 
-    public void initializeEmptyComplexShape(long id){
+    public void initializeEmptyComplexShape(long id) {
     }
 
-    public void setPointType(PointType pointType){
+    public void setPointType(PointType pointType) {
         this.unfinishedPointType = pointType;
     }
 
-    public void setShapeType(ShapeType shapeType){
+    public void setShapeType(ShapeType shapeType) {
         this.unfinishedShapeType = shapeType;
     }
 
@@ -99,59 +81,63 @@ public class MapObjectInParsing implements Serializable{
     //    this.isRoad = true;
     //}
 
-    public void setRoadType(RoadType type){
+    public void setRoadType(RoadType type) {
         unfinishedRoadType = type;
         isRoad = true;
         //convertSimpleShapeToRoad();
         //unfinishedRoad.setRoadType(type);
     }
 
-    public void setRoadOneWay(boolean oneway){
+    public void setRoadOneWay(boolean oneway) {
         isOneWay = oneway;
     }
 
-    public void setRoadRoundabout(boolean roundabout){
+    public void setRoadRoundabout(boolean roundabout) {
         this.roundabout = true;
-    }
-
-    public void setCity(String city){
-        this.completeAddressCount++;
-        this.city = city;
-    }
-
-    public void setPostcode(String postcode){
-        this.completeAddressCount++;
-        this.postcode = postcode;
-    }
-
-    public void setHouseNumber(String housenumber){
-        this.completeAddressCount++;
-        this.housenumber = housenumber;
     }
 
     public HashMap<Long, RoadNode> getRoadNodeIDtoRoadNode() {
         return roadNodeIDtoRoadNode;
     }
 
-    public void setStreet(String street){
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public void setCity(String city) {
+        this.completeAddressCount++;
+        this.city = city;
+    }
+
+    public void setPostcode(String postcode) {
+        this.completeAddressCount++;
+        this.postcode = postcode;
+    }
+
+    public void setHouseNumber(String housenumber) {
+        this.completeAddressCount++;
+        this.housenumber = housenumber;
+    }
+
+    public void setStreet(String street) {
         this.completeAddressCount++;
         this.street = street;
     }
 
     public void setName(String value) {
         this.name = value;
-	}
+    }
 
     public void setFontSize(FontSize value) {
         this.fontSize = value;
     }
 
     public void finishPoint() {
-        if (unfinishedPointType==PointType.UNDEFINED && this.completeAddressCount==4){
+        if (unfinishedPointType == PointType.UNDEFINED && this.completeAddressCount == 4) {
             Address address = new Address(this.street, this.housenumber, this.postcode, this.city, unfinishedPoint.getX(), unfinishedPoint.getY());
             mapObjects.getAddressList().add(address);
             mapObjects.getTrie().insert(address);
-        } else if(fontSize != FontSize.UNDEFINED){
+        } else if (fontSize != FontSize.UNDEFINED) {
             PlaceName placeName = new PlaceName(this.name, this.fontSize, this.unfinishedPoint.getX(), this.unfinishedPoint.getY());
             switch (fontSize) {
                 case QUITE_SMALL:
@@ -172,10 +158,10 @@ public class MapObjectInParsing implements Serializable{
                 case QUITE_LARGE:
                     mapObjects.getQuiteLargePlaceNamesList().add(placeName);
                     break;
-                }
+            }
         } else if (unfinishedPointType != PointType.UNDEFINED) {
             //some points of interest only have a type and no name
-            if (this.name == null){
+            if (this.name == null) {
                 this.name = unfinishedPointType.typeName;
             }
             PointOfInterest pointOfInterest = new PointOfInterest(this.name, this.unfinishedPointType, this.unfinishedPoint.getX(), this.unfinishedPoint.getY(), false);
@@ -199,44 +185,44 @@ public class MapObjectInParsing implements Serializable{
         this.name = null;
     }
 
-    public void finishSimpleShape(){
-        if(!isRoad){
+    public void finishSimpleShape() {
+        if (!isRoad) {
             ArrayList<float[]> coords = convertPointArrToUseableFloatArr();
-            if(this.unfinishedPointType!=PointType.UNDEFINED){
+            if (this.unfinishedPointType != PointType.UNDEFINED) {
                 // Some shapes have information that we would like to show as points. To accomplish this, we make a new
                 // point of interest in the middle of the shape corresponding to the type, if the shape has a point type value.
                 Point2D shapeCenterCoords = findCenterOfShape(coords.get(0), coords.get(1));
                 PointOfInterest pointOfInterest = new PointOfInterest(this.name, this.unfinishedPointType, (float) shapeCenterCoords.getX(), (float) shapeCenterCoords.getY(), false);
                 mapObjects.getPOIList().add(pointOfInterest);
             }
-            if (this.completeAddressCount==4) {
+            if (this.completeAddressCount == 4) {
                 Point2D shapeCenterCoords = findCenterOfShape(coords.get(0), coords.get(1));
                 Address address = new Address(street, housenumber, postcode, city, (float) shapeCenterCoords.getX(), (float) shapeCenterCoords.getY());
                 mapObjects.getAddressList().add(address);
                 mapObjects.getTrie().insert(address);
             }
-            if(this.unfinishedShapeType==ShapeType.UNDEFINED){
-                this.SimpleShapeIDToSimpleShape.put(this.unfinishedSimpleShapeID, new SimpleShape(this.unfinishedShapeType, coords.get(0),coords.get(1)));
-            }else {
+            if (this.unfinishedShapeType == ShapeType.UNDEFINED) {
+                this.SimpleShapeIDToSimpleShape.put(this.unfinishedSimpleShapeID, new SimpleShape(this.unfinishedShapeType, coords.get(0), coords.get(1)));
+            } else {
                 switch (this.unfinishedShapeType) {
                     case COASTLINE:
                         coastLineSegmentList.add(new SimpleShape(this.unfinishedShapeType, coords.get(0), coords.get(1)));
                         break;
                     case BUILDING:
-                        mapObjects.getBuildingsList().add(new SimpleShape( this.unfinishedShapeType, coords.get(0), coords.get(1)));
+                        mapObjects.getBuildingsList().add(new SimpleShape(this.unfinishedShapeType, coords.get(0), coords.get(1)));
                         break;
                     case WATER:
-                        mapObjects.getWaterAreasList().add(new SimpleShape( this.unfinishedShapeType, coords.get(0), coords.get(1)));
+                        mapObjects.getWaterAreasList().add(new SimpleShape(this.unfinishedShapeType, coords.get(0), coords.get(1)));
                         break;
                     case GRASS:
                     case FOREST:
                     case CEMENT:
                     case COMMERCIAL_GROUND:
-                    // case FARMLAND:
-                        mapObjects.getTerrainAreasList().add(new SimpleShape( this.unfinishedShapeType, coords.get(0), coords.get(1)));
+                        // case FARMLAND:
+                        mapObjects.getTerrainAreasList().add(new SimpleShape(this.unfinishedShapeType, coords.get(0), coords.get(1)));
                         break;
                     case WATERWAY:
-                        mapObjects.getWaterwayList().add(new SimpleShape( this.unfinishedShapeType, coords.get(0), coords.get(1)));
+                        mapObjects.getWaterwayList().add(new SimpleShape(this.unfinishedShapeType, coords.get(0), coords.get(1)));
                         break;
                     case RAILWAY:
                         if (!isTunnel) {
@@ -257,9 +243,9 @@ public class MapObjectInParsing implements Serializable{
                     speed = unfinishedRoadType.getSpeed();
                 }
             }
-            ArrayList<RoadNode> roadNodes = new ArrayList<>(); 
-            for(Point point: this.unfinishedSimpleShapePoints){
-                if(!roadNodeIDtoRoadNode.containsKey(point.getID())){
+            ArrayList<RoadNode> roadNodes = new ArrayList<>();
+            for (Point point : this.unfinishedSimpleShapePoints) {
+                if (!roadNodeIDtoRoadNode.containsKey(point.getID())) {
                     roadNodeIDtoRoadNode.put(point.getID(), new RoadNode(point));
                 }
                 roadNodes.add(roadNodeIDtoRoadNode.get(point.getID()));
@@ -299,29 +285,19 @@ public class MapObjectInParsing implements Serializable{
         cleanUpAddressVariables();
     }
 
-    
-
-    private void cleanUpAddressVariables(){
-        this.city = null;
-        this.postcode = null;
-        this.housenumber = null;
-        this.street = null;
-        this.completeAddressCount = 0;
-    }
-
-    public SimpleShape getSimpleShapeByID(long id){
+    public SimpleShape getSimpleShapeByID(long id) {
         return this.SimpleShapeIDToSimpleShape.get(id);
     }
 
-    public void handleSimpleShape(long id, String role){
+    public void handleSimpleShape(long id, String role) {
         SimpleShape element = this.SimpleShapeIDToSimpleShape.get(id);
-        if(element==null) return;
+        if (element == null) return;
         element.setRole(role);
         unfinishedRelationSimpleShapes.add(element);
     }
 
-    public void finishRelation(){
-        if (this.completeAddressCount==4){
+    public void finishRelation() {
+        if (this.completeAddressCount == 4) {
             Address address = new Address(this.street, this.housenumber, this.postcode, this.city, unfinishedPoint.getX(), unfinishedPoint.getY());
             mapObjects.getAddressList().add(address);
             mapObjects.getTrie().insert(address);
@@ -329,16 +305,16 @@ public class MapObjectInParsing implements Serializable{
         if (unfinishedRelationSimpleShapes.size() > 0) {
             switch (unfinishedShapeType) {
                 case BUILDING:
-                    mapObjects.getBuildingsList().add(new ComplexShape( this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
+                    mapObjects.getBuildingsList().add(new ComplexShape(this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
                     break;
                 case WATER:
-                    mapObjects.getWaterAreasList().add(new ComplexShape( this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
+                    mapObjects.getWaterAreasList().add(new ComplexShape(this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
                     break;
                 case GRASS:
                 case FOREST:
                 case CEMENT:
                 case COMMERCIAL_GROUND:
-                // case FARMLAND:
+                    // case FARMLAND:
                     mapObjects.getTerrainAreasList().add(new ComplexShape(this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
                     break;
                 default:
@@ -355,7 +331,7 @@ public class MapObjectInParsing implements Serializable{
         ArrayList<Float> x = new ArrayList<>();
         ArrayList<Float> y = new ArrayList<>();
         ArrayList<float[]> result = new ArrayList<>();
-        
+
         for (Point point : unfinishedSimpleShapePoints) {
             x.add(point.getX());
             y.add(point.getY());
@@ -372,6 +348,7 @@ public class MapObjectInParsing implements Serializable{
         }
         return result;
     }
+
     private Point2D findCenterOfShape(float[] xCoords, float[] yCoords) {
         // to find the middle we take the average x and y coordinate.
         float sumX = 0;
@@ -382,25 +359,30 @@ public class MapObjectInParsing implements Serializable{
         for (float y : yCoords) {
             sumY += y;
         }
-        return new Point2D(sumX/xCoords.length, sumY/yCoords.length);
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
+        return new Point2D(sumX / xCoords.length, sumY / yCoords.length);
     }
 
     public ArrayList<SimpleShape> getCoastlineSegments() {
         return coastLineSegmentList;
     }
 
-    public void deletePointHashMap(){
-        if(this.pointIDtoPoint!=null){
+    public void setIsTunnel(boolean tunnel) {
+        this.isTunnel = tunnel;
+    }
+
+    public void deletePointHashMap() {
+        if (this.pointIDtoPoint != null) {
             this.pointIDtoPoint = null;
             System.gc();
         }
     }
 
-    public void setIsTunnel(boolean tunnel) {
-        this.isTunnel = tunnel;
+    private void cleanUpAddressVariables() {
+        this.city = null;
+        this.postcode = null;
+        this.housenumber = null;
+        this.street = null;
+        this.completeAddressCount = 0;
     }
 }
+

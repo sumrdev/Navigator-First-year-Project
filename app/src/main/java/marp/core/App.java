@@ -1,10 +1,6 @@
 package marp.core;
 import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Paths;
-
-import org.checkerframework.common.reflection.qual.GetClass;
 
 import javafx.application.Application;
 import javafx.scene.image.Image;

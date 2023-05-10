@@ -41,7 +41,6 @@ public class SettingsPanel extends MenuPanel {
         return loadAnotherOSMButton;
     }
 
-
     /**
      * 
      * @return MapButton directionsButton
@@ -209,8 +208,6 @@ public class SettingsPanel extends MenuPanel {
         settingsMenuButtons.setMaxHeight(400);
         settingsMenuButtons.setMinWidth(400);
 
-        System.out.println("settingsMenuButtons stylesheets: " + settingsMenuButtons.getStylesheets());
-
         // Add the new UI elements to the menu
         this.getChildren().addAll(settingsMenuButtons, minimizeButton, directionsButton, settingsButton);
         this.setPadding(new Insets(20));
@@ -220,147 +217,48 @@ public class SettingsPanel extends MenuPanel {
     }
 
     /**
-     * Changes CSS sheets of SettingsPanel if parameter is set to true
+     * Changes CSS sheets if parameter is set to true
      * 
-     * @param set of type boolean
+     * @param activate (if activated then darkmode will be set)
      */
-    public void activateDarkMode(boolean set) {
-        if (set) {
+    public void activateDarkMode(boolean activate) {
+        if (activate) {
             if (settingsMenuButtons.getStylesheets().contains("CSS/stylesheet.css")) {
                 settingsMenuButtons.getStylesheets().remove("CSS/stylesheet.css");
                 settingsMenuButtons.getStylesheets().add("CSS/darkmodesheet.css");
             }
-
-            if (minimizeButton.getStylesheets().contains("CSS/stylesheet.css")) {
-                minimizeButton.getStylesheets().remove("CSS/stylesheet.css");
-                minimizeButton.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-
-            if (directionsButton.getStylesheets().contains("CSS/stylesheet.css")) {
-                directionsButton.getStylesheets().remove("CSS/stylesheet.css");
-                directionsButton.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-
-            if (settingsButton.getStylesheets().contains("CSS/stylesheet.css")) {
-                settingsButton.getStylesheets().remove("CSS/stylesheet.css");
-                settingsButton.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-
-            if (dontShow.getStylesheets().contains("CSS/stylesheet.css")) {
-                dontShow.getStylesheets().remove("CSS/stylesheet.css");
-                dontShow.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-
-            if (adjustZoomText.getStylesheets().contains("CSS/stylesheet.css")) {
-                adjustZoomText.getStylesheets().remove("CSS/stylesheet.css");
-                adjustZoomText.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-
-            if (saveOrLoadtext.getStylesheets().contains("CSS/stylesheet.css")) {
-                saveOrLoadtext.getStylesheets().remove("CSS/stylesheet.css");
-                saveOrLoadtext.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-
-            if (loadAnotherOSMButton.getStylesheets().contains("CSS/stylesheet.css")) {
-                loadAnotherOSMButton.getStylesheets().remove("CSS/stylesheet.css");
-                loadAnotherOSMButton.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-
-            if (mapDisplaySettinsgText.getStylesheets().contains("CSS/stylesheet.css")) {
-                mapDisplaySettinsgText.getStylesheets().remove("CSS/stylesheet.css");
-                mapDisplaySettinsgText.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-
-            if (hideAddressesCheckbox.getStylesheets().contains("CSS/stylesheet.css")) {
-                hideAddressesCheckbox.getStylesheets().remove("CSS/stylesheet.css");
-                hideAddressesCheckbox.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-
-            if (hideLandmarkCheckbox.getStylesheets().contains("CSS/stylesheet.css")) {
-                hideLandmarkCheckbox.getStylesheets().remove("CSS/stylesheet.css");
-                hideLandmarkCheckbox.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-
-            if (hideRoadsCheckbox.getStylesheets().contains("CSS/stylesheet.css")) {
-                hideRoadsCheckbox.getStylesheets().remove("CSS/stylesheet.css");
-                hideRoadsCheckbox.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-
-            if (hideBuildingsCheckbox.getStylesheets().contains("CSS/stylesheet.css")) {
-                hideBuildingsCheckbox.getStylesheets().remove("CSS/stylesheet.css");
-                hideBuildingsCheckbox.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-
-            if (hideTerrainCheckbox.getStylesheets().contains("CSS/stylesheet.css")) {
-                hideTerrainCheckbox.getStylesheets().remove("CSS/stylesheet.css");
-                hideTerrainCheckbox.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-
         } else {
             if (settingsMenuButtons.getStylesheets().contains("CSS/darkmodesheet.css")) {
                 settingsMenuButtons.getStylesheets().remove("CSS/darkmodesheet.css");
                 settingsMenuButtons.getStylesheets().add("CSS/stylesheet.css");
             }
-            if (minimizeButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                minimizeButton.getStylesheets().remove("CSS/darkmodesheet.css");
-                minimizeButton.getStylesheets().add("CSS/stylesheet.css");
-            }
-            if (directionsButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                directionsButton.getStylesheets().remove("CSS/darkmodesheet.css");
-                directionsButton.getStylesheets().add("CSS/stylesheet.css");
-            }
-            if (settingsButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                settingsButton.getStylesheets().remove("CSS/darkmodesheet.css");
-                settingsButton.getStylesheets().add("CSS/stylesheet.css");
-            }
-            if (loadAnotherOSMButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                loadAnotherOSMButton.getStylesheets().remove("CSS/darkmodesheet.css");
-                loadAnotherOSMButton.getStylesheets().add("CSS/stylesheet.css");
-            }
-            if (dontShow.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                dontShow.getStylesheets().remove("CSS/darkmodesheet.css");
-                dontShow.getStylesheets().add("CSS/stylesheet.css");
-            }
-            if (adjustZoomText.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                adjustZoomText.getStylesheets().remove("CSS/darkmodesheet.css");
-                adjustZoomText.getStylesheets().add("CSS/stylesheet.css");
-            }
-            if (saveOrLoadtext.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                saveOrLoadtext.getStylesheets().remove("CSS/darkmodesheet.css");
-                saveOrLoadtext.getStylesheets().add("CSS/stylesheet.css");
-            }
-            if (mapDisplaySettinsgText.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                mapDisplaySettinsgText.getStylesheets().remove("CSS/darkmodesheet.css");
-                mapDisplaySettinsgText.getStylesheets().add("CSS/stylesheet.css");
-            }
-
-
-
-            if (hideAddressesCheckbox.getStylesheets().contains("CSS/stylesheet.css")) {
-                hideAddressesCheckbox.getStylesheets().remove("CSS/stylesheet.css");
-                hideAddressesCheckbox.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-
-            if (hideLandmarkCheckbox.getStylesheets().contains("CSS/stylesheet.css")) {
-                hideLandmarkCheckbox.getStylesheets().remove("CSS/stylesheet.css");
-                hideLandmarkCheckbox.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-
-            if (hideRoadsCheckbox.getStylesheets().contains("CSS/stylesheet.css")) {
-                hideRoadsCheckbox.getStylesheets().remove("CSS/stylesheet.css");
-                hideRoadsCheckbox.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-
-            if (hideBuildingsCheckbox.getStylesheets().contains("CSS/stylesheet.css")) {
-                hideBuildingsCheckbox.getStylesheets().remove("CSS/stylesheet.css");
-                hideBuildingsCheckbox.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-
-            if (hideTerrainCheckbox.getStylesheets().contains("CSS/stylesheet.css")) {
-                hideTerrainCheckbox.getStylesheets().remove("CSS/stylesheet.css");
-                hideTerrainCheckbox.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-
         }
+
+        minimizeButton.activateDarkMode(activate);
+
+        directionsButton.activateDarkMode(activate);
+
+        settingsButton.activateDarkMode(activate);
+
+        dontShow.activateDarkMode(activate);
+
+        adjustZoomText.activateDarkMode(activate);
+
+        saveOrLoadtext.activateDarkMode(activate);
+
+        loadAnotherOSMButton.activateDarkMode(activate);
+
+        mapDisplaySettinsgText.activateDarkMode(activate);
+
+        hideAddressesCheckbox.activateDarkMode(activate);
+
+        hideLandmarkCheckbox.activateDarkMode(activate);
+
+        hideRoadsCheckbox.activateDarkMode(activate);
+
+        hideBuildingsCheckbox.activateDarkMode(activate);
+
+        hideTerrainCheckbox.activateDarkMode(activate);
+
     }
 }

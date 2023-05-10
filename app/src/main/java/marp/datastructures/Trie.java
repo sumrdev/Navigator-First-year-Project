@@ -2,10 +2,6 @@ package marp.datastructures;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
 import marp.mapelements.Address;
 
 public class Trie implements Serializable{
@@ -50,7 +46,7 @@ public class Trie implements Serializable{
         currentNode = root;
         searchInput = searchInput.toLowerCase().replaceAll(" ", "");
         ArrayList<String> suggestionList = new ArrayList<>();
-        if (moveThroughTree(searchInput)) {
+        if (moveThroughTree(searchInput) && currentNode.getIsEnd()) {
             ArrayList<String> nodeNumbers = currentNode.getHouseNumbers();
 
             for (int j = 0; j < suggestionAmount && j < nodeNumbers.size(); j++) {
@@ -78,7 +74,8 @@ public class Trie implements Serializable{
     // recursive method for use in getAddressSuggestions()
     // rækkefølge? hvad hvis searchinput er en ende/addresse
     private void suggestionFinder(ArrayList<String> suggestionList, TrieNode currentNode, int suggestionAmount) {
-        if (currentNode.getIsEnd()) {
+        //the additional list size check is necessary for an extreme edge case, but is otherwise not used
+        if (currentNode.getIsEnd() && suggestionList.size() < suggestionAmount) {
             suggestionList.add(currentNode.getEndAddress());
         }
         if (currentNode.getBranches().isEmpty() || suggestionList.size() >= suggestionAmount) {

@@ -8,9 +8,6 @@ import marp.mapelements.details.FontSize;
 import marp.mapelements.details.MapColor;
 import marp.mapelements.details.ShapeType;
 
-import java.util.Arrays;
-import java.util.Objects;
-
 public class SimpleShape extends Element {
     private ShapeType type;
     protected float[] x;

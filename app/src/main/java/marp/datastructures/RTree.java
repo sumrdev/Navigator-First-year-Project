@@ -2,10 +2,9 @@ package marp.datastructures;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import marp.mapelements.Element;
 import marp.mapelements.Point;
+import marp.utilities.MathFunctions;
 
 import java.io.Serializable;
 import java.util.*;
@@ -13,7 +12,6 @@ import java.util.*;
 public class RTree<T extends Element> implements Serializable {
     private Node treeNode;
     private final int dimensions;
-    private final int maxElementsPerLeaf;
 
     /**
      * Constructs an RTree containing the elements of the specified list
@@ -23,54 +21,57 @@ public class RTree<T extends Element> implements Serializable {
      * NullPointerException – if null is given as a parameter
      */
     public RTree(List<T> values){
-        maxElementsPerLeaf = 50;
         dimensions = 2;
-        treeNode = new Node(values, 0);
+        if(values.size() != 0) {
+            treeNode = new Node(values, 0);
+        }
+    }
+
+    /**
+     *
+     * @return the number of elements in the tree
+     */
+    public int size(){
+        return treeNode != null ? treeNode.getSize() : 0;
+    }
+    public int treeDepth(){
+        return treeNode != null ? treeNode.getLeafDepth(): 0;
     }
     protected class Node implements Serializable{
         int size;
         protected int children;
         protected Node low;
         protected Node high;
-        boolean hasChildren;
         int layer;
-        //[0],[1] will be min, coords, (x,y respectively) and [2],[3] will be max coords
-        final float[] boundingRect;
-        //values kan laves til en linked list da denne er samme hastighed at lave for each på
-        //og er hurtigere hvis der skal laves quick select
-        List<T> values;
+        /**
+         * a float array of length 4 in the order {x_min,y_min, x_max, y_max}
+         */
+        float[] boundingRect;
+        T value;
+
+        /**
+         *
+         * @param values a list of elements that the Node should contain, either in further nodes or as its value
+         * @param layer the layer this is from the root Node
+         */
         public Node(List<T> values, int layer) {
             children = 2;
             this.layer = layer;
-            size = values.size();
-            if (values.size() > maxElementsPerLeaf){
+            if (values.size() > 1){
                 splitNode(values);
                 boundingRect = getBoundingRectFromChildren();
+                size = high.getSize() + low.getSize();
             } else {
-                this.values = values;
-                boundingRect = getNodeBounds(values);
+                this.value = values.get(0);
+                boundingRect = value.getBounds();
+                size = 1;
             }
         }
-        protected float[] getNodeBounds(List<T> values){
-            float[] result = new float[]{Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY};
-            for(var element : values){
-                float[] bounds = element.getBounds();
-                if(bounds[0] < result[0]){
-                    result[0] = bounds[0];
-                }
-                if(bounds[2] > result[2]) {
-                    result[2] = bounds[2];
-                }
-                if(bounds[1] < result[1]){
-                    result[1] = bounds[1];
-                }
-                if(bounds[3] > result[3]){
-                    result[3] = bounds[3];
-                }
-            }
-            return result;
-        }
-        //only works for RTrees with 2 children
+
+        /**
+         *
+         * @return the widest bounding rect that can be made from its two children
+         */
         protected float[] getBoundingRectFromChildren(){
             float[] result = low.boundingRect;
             float[] bounds = high.boundingRect;
@@ -86,13 +87,23 @@ public class RTree<T extends Element> implements Serializable {
             }
             return result;
         }
+
+        /**
+         * Creates child nodes for the node that called this
+         * @param values the list of values that should be split between the two child nodes
+         */
         protected void splitNode(List<T> values){
             sortList(values);
             List<T>[] lists = splitList(values);
             low = new Node(lists[0], layer + 1);
             high = new Node(lists[1], layer + 1);
-            hasChildren = true;
         }
+
+        /**
+         *
+         * @param values the lists that should be split
+         * @return the new lists, slit in the correct dimension given by the layer value, that should be used to create new child Nodes
+         */
         protected List<T>[] splitList(List<T> values){
             List<T>[] result = new List[children];
             for(int i=0; i<children ;i++){
@@ -100,6 +111,11 @@ public class RTree<T extends Element> implements Serializable {
             }
             return result;
         }
+
+        /**
+         * sorts a given list in a way that it can be split evenly
+         * @param values the values that should be sorted
+         */
         protected void sortList(List<T> values){
             values.sort(new Comparator<T>() {
                 //compares the min values of the elements, the idea is just to split it evenly
@@ -112,110 +128,79 @@ public class RTree<T extends Element> implements Serializable {
                 }
             });
         }
+
+        /**
+         * Adds all elements within the rangeCoords to a given list
+         * @param rangeCoords the coordinates that all elements should be given from, as a float array of length 4 in the order {x_min,y_min, x_max, y_max}
+         * @param list the list that the elements should be added to
+         */
         public void getElementsInRange(float[] rangeCoords, List<T> list){
-            if(!hasChildren){
-                for(T element: values){
-                    if(intersects(rangeCoords, element.getBounds())) {
-                        list.add(element);
-                    }
-                }
-                return;
+            if(low != null && low.intersects(rangeCoords)) {
+                low.getElementsInRange(rangeCoords, list);
             }
-            if(low.intersects(rangeCoords)){
-                low.getElementsInRange(rangeCoords,list);
-            }
-            if(high.intersects(rangeCoords)){
+            if(high != null && high.intersects(rangeCoords)){
                 high.getElementsInRange(rangeCoords,list);
+            } else if(low == null && intersects(rangeCoords, value.getBounds())){
+                list.add(value);
             }
         }
+
+        /**
+         * Adds all node bounds within the rangeCoords to a given list
+         * @param rangeCoords the coordinates that all node bounds should be given from
+         * @param list the list that the node bounds should be added to
+         */
         public void getElementsInRangeDebug(float[] rangeCoords, List<float[]> list){
-            if(hasChildren) {
-                if (low.intersects(rangeCoords)) {
-                    low.getElementsInRangeDebug(rangeCoords, list);
-                }
-                if (high.intersects(rangeCoords)) {
-                    high.getElementsInRangeDebug(rangeCoords, list);
-                }
+            if (low != null && low.intersects(rangeCoords)) {
+                low.getElementsInRangeDebug(rangeCoords, list);
+            }
+            if (high != null && high.intersects(rangeCoords)) {
+                high.getElementsInRangeDebug(rangeCoords, list);
             }
             list.add(boundingRect);
         }
-        /*public T getClosest(float x, float y, T currentClosest){
-            //still has a problem that the currentClosest element is null at the start at will throw an exception
-            if(hasChildren){
-                if(low.distance(x,y) < distance(x,y,currentClosest)){
-                    currentClosest = low.getClosest(x,y,currentClosest);
-                }
-                if(high.distance(x,y) < distance(x,y,currentClosest)){
-                    currentClosest = high.getClosest(x,y,currentClosest);
-                }
-            }else {
-                for(T element: values) {
-                    if(distance(x,y,element) < distance(x,y,currentClosest)){
-                        currentClosest = element;
-                    }
-                }
+
+        /**
+         * Modifies the parameter "lowest" so that it contains the lowest element in the tree
+         * @param point the point, given as a float array of length 2 in the order {x,y}
+         * @param lowest an object containing the element with the lowest distance to the point seen so far
+         */
+        public void getNearest(float[] point, NodeDistance lowest){
+            if(low != null && low.distance(point) < lowest.distance){
+                low.getNearest(point, lowest);
             }
-            return currentClosest;
-        }*/
-        public void getNearest(float[] point, PriorityQueue<NodeDistance> pq, int count){
-            if(!hasChildren){
-                for(T element: values) {
-                    float distance = distance(point[0], point[1], element);
-                    if(distance < pq.peek().distance) {
-                        pq.offer(new NodeDistance(element, distance));
-                    }
-                }
-            }else {
-                if(low.distance(point) < pq.peek().distance){
-                    low.getNearest(point, pq, count);
-                }
-                if(high.distance(point) < pq.peek().distance){
-                    high.getNearest(point, pq, count);
-                }
-                /*
-                float[] lowDistances = low.distances(point);
-                float[] highDistances = high.distances(point);
-                if (lowDistances[0] < highDistances[0]) {
-                    if (pq.size() < count || lowDistances[0] < pq.peek().distance) {
-                        low.getNearest(point, pq, count);
-                    }
-                    if (pq.size() < count || highDistances[0] < pq.peek().distance) {
-                        high.getNearest(point, pq, count);
-                    }
-                } else {
-                    if (pq.size() < count || highDistances[0] < pq.peek().distance) {
-                        high.getNearest(point, pq, count);
-                    }
-                    if (pq.size() < count || lowDistances[0] < pq.peek().distance) {
-                        low.getNearest(point, pq, count);
-                    }
-                }*/
+            if(high != null && high.distance(point) < lowest.distance) {
+                high.getNearest(point, lowest);
+            } else if(low == null) {
+                lowest.update(value, distance(point[0], point[1], value));
             }
         }
-        private float[] distances(float[] point){
-            float[] result = new float[2];
-            result[0] = distance(point);
-            if (hasChildren) {
-                result[1] = Math.min(low.distances(point)[0], high.distances(point)[0]);
-            } else {
-                result[1] = result[0];
-            }
-            return result;
-        }
-        protected boolean intersects(float[] rangeCoords){
-            return intersects(boundingRect, rangeCoords);
-            //return boundingRect[0] <= rangeCoords[2] && rangeCoords[0] <= boundingRect[2] && boundingRect[1] <= rangeCoords[3] && rangeCoords[1] <= boundingRect[3];
-        }
+
+        /**
+         *
+         * @param rect1 a float array of length 4 in the order {x_min,y_min, x_max, y_max}
+         * @param rect2 a float array of length 4 in the order {x_min,y_min, x_max, y_max}
+         * @return {@code true} if the two rectangles intersects
+         */
         protected boolean intersects(float[] rect1, float[] rect2){
             return rect1[0] <= rect2[2] && rect2[0] <= rect1[2] && rect1[1] <= rect2[3] && rect2[1] <= rect1[3];
         }
-        public float distance(float x1, float y1, float x2, float y2) {
-            return (float) Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
+
+        /**
+         *
+         * @param  rangeCoords the range, given as a float array of length 4 in the order {x_min,y_min, x_max, y_max}
+         * @return {@code true} if there's an intersection between the rangeCoords and the boundingRect of this node
+         */
+        protected boolean intersects(float[] rangeCoords){
+            return intersects(boundingRect, rangeCoords);
         }
-        public float distance(float x, float y, T element){
-            return distance(x, y, element.getBounds());
-        }
-        public float distance(float x, float y, float[] bounds){
+        /**
+         * @param  x the x value of the point
+         * @param  y the y value of the point
+         * @param  bounds the bounding rect given as a float array of length 4 in the order {x_min,y_min, x_max, y_max}
+         * @return the distance from the bounding rect to the point
+         */
+        protected float distance(float x, float y, float[] bounds){
             float elementX;
             float elementY;
             //find closest x element to the current element
@@ -234,29 +219,81 @@ public class RTree<T extends Element> implements Serializable {
             }else{
                 elementY = y;
             }
-            return distance(x,y,elementX,elementY);
+            return MathFunctions.distanceInMeters(x, y, elementX, elementY);
         }
-        public float distance(float x1, float y1){
+        /**
+         * @param  x the x value of the point
+         * @param  y the y value of the point
+         * @param  element the element that should be found the distance to
+         * @return the distance of the elements bounding rect to the point
+         */
+        protected float distance(float x, float y, T element){
+            return distance(x, y, element.getBounds());
+        }
+        /**
+         *
+         * @param  x1 the x value of the point
+         * @param  y1 the y value of the point
+         * @return the distance from this node bounding rect to the point
+         */
+        protected float distance(float x1, float y1){
             return distance(x1,y1,boundingRect);
         }
-        public float distance(float[] point){
+
+        /**
+         *
+         * @param  point the point, given as a float array of length 2 in the order {x,y}
+         * @return the distance from this to the point
+         */
+        protected float distance(float[] point){
             return distance(point[0], point[1]);
         }
-        //could maybe add the coords as values int the node to not get them from the value everytime
+
+        /**
+         *
+         * @return the size of the tree Node
+         */
+        public int getSize(){
+            return size;
+        }
+
+        /**
+         *
+         * @return the highest layer value of any tree Node
+         */
+        public int getLeafDepth(){
+            int lowDepth =0;
+            int highDepth = 0;
+            if(low != null)
+                lowDepth = low.getLeafDepth();
+            if(high!= null)
+                highDepth = high.getLeafDepth();
+            else if(low == null)
+                return layer;
+            return Math.max(lowDepth,highDepth);
+        }
     }
-    public class NodeDistance implements Comparable<NodeDistance>{
+
+    private class NodeDistance{
         T element;
         float distance;
-        public NodeDistance(T element, float distance) {
+        private NodeDistance(T element, float distance) {
             this.element = element;
             this.distance = distance;
         }
-        public int compareTo(NodeDistance o2){
-            return (this.distance < o2.distance) ? -1:
-                    (this.distance > o2.distance) ? 1:
-                            0;
+        public void update(T element, float distance){
+            if(distance < this.distance){
+                this.element = element;
+                this.distance = distance;
+            }
         }
     }
+    /**
+     *
+     * @param box the coordinates that all elements should be given from given as a javaFX Bounds
+     * @return a list containing the elements that has a bounding box that intersects with the range given
+     * @see javafx.geometry.Bounds
+     */
     public List<T> getElementsInRange(Bounds box){
         float[] coords = new float[4];
         coords[0] = (float) box.getMinX();
@@ -265,36 +302,56 @@ public class RTree<T extends Element> implements Serializable {
         coords[3] = (float) box.getMaxY();
         return getElementsInRange(coords);
     }
-    public List<T> getElementsInRange(float[] coords){
+
+    /**
+     *
+     * @param range the coordinates that all elements should be given from as a float array of length 4 in the order {x_min,y_min, x_max, y_max}
+     * @return a list containing the elements that has a bounding box that intersects with the range given
+     */
+    public List<T> getElementsInRange(float[] range){
         List<T> result = new ArrayList<>();
-        treeNode.getElementsInRange(coords, result);
+        if(treeNode != null) {
+            treeNode.getElementsInRange(range, result);
+        }
         return result;
     }
-    public int size(){
-        return treeNode.size;
-    }
-    public T getNearest(float[] bound){
-        PriorityQueue<NodeDistance> pq = new PriorityQueue<>();
-        pq.add(new NodeDistance(null, Float.MAX_VALUE));
-        treeNode.getNearest(bound, pq,1);
-        T result = pq.peek().element;
+
+    /**
+     *
+     * @param  point the point, given as a float array of length 2 in the order {x,y}
+     * @return The element with the lowest distance to the point
+     */
+    public T getNearest(float[] point){
+        NodeDistance lowest = new NodeDistance(null, Float.POSITIVE_INFINITY);
+        if(treeNode != null) {
+            treeNode.getNearest(point, lowest);
+        }
+        T result = lowest.element;
         return result;
     }
+
+    /**
+     *
+     * @param point the point, given as a Point of the type made for the map of denmark project
+     * @return The element with the lowest distance to the point
+     * @see marp.mapelements.Point
+     */
     public T getNearest(Point point){
         return getNearest(new float[]{point.getX(), point.getY()});
     }
 
-    public void getElementsInRangeDebug(GraphicsContext gc, Point2D point){
+    /**
+     *
+     * @param point the point, given as a javaFX Point2D, that should be used to get the node bounds that enclose the given point
+     * @return a list of float arrays witch are the boundaries of the tree nodes that intersects the point
+     * @see javafx.geometry.Point2D
+     */
+    public List<float[]> getElementsInRangeDebug(Point2D point){
         float[] pointAsBound = new float[]{(float) point.getX(), (float) point.getY(), (float) point.getX(), (float) point.getY()};
         List<float[]> treeNodeBounds = new ArrayList<>();
-        treeNode.getElementsInRangeDebug(pointAsBound, treeNodeBounds);
-        for (float[] boundingCoords : treeNodeBounds) {
-            System.out.println("bounds found: " + Arrays.toString(boundingCoords));
-            gc.setStroke(Color.PURPLE);
-            gc.strokeLine(boundingCoords[0], boundingCoords[1],boundingCoords[2], boundingCoords[1]);
-            gc.strokeLine(boundingCoords[2], boundingCoords[1],boundingCoords[2], boundingCoords[3]);
-            gc.strokeLine(boundingCoords[2], boundingCoords[3],boundingCoords[0], boundingCoords[3]);
-            gc.strokeLine(boundingCoords[0], boundingCoords[3],boundingCoords[0], boundingCoords[1]);
+        if(treeNode != null) {
+            treeNode.getElementsInRangeDebug(pointAsBound, treeNodeBounds);
         }
+        return treeNodeBounds;
     }
 }

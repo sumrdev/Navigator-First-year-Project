@@ -7,7 +7,6 @@ import javafx.scene.text.Text;
 import marp.mapelements.details.MapColor;
 import marp.mapelements.details.RoadType;
 
-import java.nio.file.FileSystemNotFoundException;
 import java.util.ArrayList;
 
 public class Road extends Element{
@@ -25,7 +24,7 @@ public class Road extends Element{
 
     String name;
 
-    private float[] boundingCoords = {Float.MAX_VALUE, Float.MAX_VALUE, -Float.MAX_VALUE, -Float.MAX_VALUE};
+    private float[] boundingCoords = {Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY};
     
     public Road(long id, ArrayList<RoadNode> nodes, RoadType type, int speed, boolean oneway, boolean roundabout, String name) {
         this.id = id;

@@ -4,10 +4,8 @@ package marp.datastructures;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
 import marp.mapelements.Address;
+
 /**
  * Constructor for TrieNode
  * @param isEnd marks whether this TrieNode is at the end of a branch (ie. a leaf)

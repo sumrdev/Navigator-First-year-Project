@@ -1,10 +1,6 @@
 package marp.view.gui.menugui;
 
 import javafx.geometry.Pos;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
 import marp.view.gui.MapLabel;
 import marp.view.gui.buttons.MapButton;
 import marp.view.gui.buttons.MapToggleButton;
@@ -70,29 +66,24 @@ public class ColorblindnessModePanel extends MenuPanel {
 	}
 
 	/**
-	 * Changes CSS sheets of ColorblindnessModePanel if parameter is set to true
+	 * Changes CSS sheets if parameter is set to true
 	 * 
-	 * @param set
+	 * @param activate
 	 */
-	public void activateDarkMode(boolean set) {
-		if (set) {
+	public void activateDarkMode(boolean activate) {
+		if (activate) {
 			if (colorBlindModesDisplay.getStylesheets().contains("CSS/stylesheet.css")) {
                 colorBlindModesDisplay.getStylesheets().remove("CSS/stylesheet.css");
                 colorBlindModesDisplay.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-			if (exitButton.getStylesheets().contains("CSS/stylesheet.css")) {
-                exitButton.getStylesheets().remove("CSS/stylesheet.css");
-                exitButton.getStylesheets().add("CSS/darkmodesheet.css");
             }
 		} else {
 			if (colorBlindModesDisplay.getStylesheets().contains("CSS/darkmodesheet.css")) {
                 colorBlindModesDisplay.getStylesheets().remove("CSS/darkmodesheet.css");
                 colorBlindModesDisplay.getStylesheets().add("CSS/stylesheet.css");
             }
-			if (exitButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                exitButton.getStylesheets().remove("CSS/darkmodesheet.css");
-                exitButton.getStylesheets().add("CSS/stylesheet.css");
-            }
 		}
+
+		exitButton.activateDarkMode(activate);
+
 	}
 }

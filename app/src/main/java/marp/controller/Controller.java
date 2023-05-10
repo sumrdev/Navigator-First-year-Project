@@ -15,11 +15,9 @@ import javafx.geometry.Point2D;
 import javafx.print.*;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.*;
 import javafx.scene.input.MouseButton;
-import javafx.scene.paint.Color;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -55,28 +53,6 @@ public class Controller {
         setFileChooser();
         this.stage = view.getPrimaryStage();
         createChooseMapSceneButtons();
-
-        try {
-            this.view.listView.getItems().addAll(fileList);
-        } catch (Exception e) {
-            // TODO: handle exception
-            System.out.println("Error getting items from List View: ");
-            e.printStackTrace();
-        }
-
-        this.view.listView.setOnMouseClicked(e -> {
-            try {
-                URL fileURL = new URL(Paths.get("data/maps/" + this.view.listView.getSelectionModel().getSelectedItem())
-                        .toUri().toURL().toString());
-                Model.createModel(fileURL);
-                this.view.creatMenusForMapScene();
-                this.view.setScene(this.view.getMapScene());
-                createMapSceneButtons();
-            } catch (Exception e1) {
-                System.out.println(e1.getMessage());
-            }
-
-        });
     }
 
     private void setFileChooser() {
@@ -271,17 +247,14 @@ public class Controller {
         view.getMapMenu().getDirectionsPanel().carButton.setOnAction(e -> {
             model.transportMode = 0;
             model.getMapObjects().getDigraph().setDriving();
-            System.out.println(model.transportMode);
         });
         view.getMapMenu().getDirectionsPanel().walkButton.setOnAction(e -> {
             model.transportMode = 1;
             model.getMapObjects().getDigraph().setWalking();
-            System.out.println(model.transportMode);
         });
         view.getMapMenu().getDirectionsPanel().bikeButton.setOnAction(e -> {
             model.transportMode = 2;
             model.getMapObjects().getDigraph().setWalking();
-            System.out.println(model.transportMode);
         });
         view.getMapMenu().getDirectionsPanel().findRouteButton.setOnAction( e -> {
             calculateRoute();
@@ -338,12 +311,9 @@ public class Controller {
             // When pressing the save point button we first check the status of the button
             // to see if we need to save a point
             // or delete a saved point.
-            if (model.getSelectedPont().getFavouriteStatus() == false) {
+            if (!model.getSelectedPont().getFavouriteStatus()) {
                 // first set the isFavourite variable in the selected point.
                 model.getSelectedPont().setFavouriteStatus(true);
-                System.out
-                        .println("SETTING THE STATUS OF THE POINT WITH TO TRUE! " + model.getSelectedPont().getName());
-                System.out.println("THE STATUS OF THE POINT IS NOW: " + model.getSelectedPont().getFavouriteStatus());
                 // When saving the selected point, we make a new point of interest with the type
                 // favourite to mark the location of the saved point.
                 model.getMapObjects().getFavouritesMarkerList()
@@ -521,18 +491,40 @@ public class Controller {
     // ##########################################################
 
     public void createChooseMapSceneButtons() {
-        view.chooseMapScene.loadButton.setOnAction(e -> {
+        view.chooseMapScene.loadDefaultBinaryButton.setOnAction(e -> {
             try {
-                Model.createModel(getClass().getResource("/maps/"+Model.getDefaultMap()));
+                Model.updateModel(getClass().getResource("/maps/"+Model.getDefaultMap()));
             } catch (ClassNotFoundException | URISyntaxException | XMLStreamException | FactoryConfigurationError
                     | IOException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
-            view.creatMenusForMapScene();
-            view.createNewMapScene();
+            view.creatMenusForMapScene(Model.getInstance());
+            view.createNewMapScene(Model.getInstance());
             createMapSceneButtons();
             view.setScene(view.getMapScene());
+        });
+
+        try {
+            this.view.listView.getItems().addAll(fileList);
+        } catch (Exception e) {
+            System.out.println("Error getting items from List View: ");
+            e.printStackTrace();
+        }
+
+        view.listView.setOnMouseClicked(e -> {
+            try {
+                URL fileURL = new URL(Paths.get("data/maps/" + view.listView.getSelectionModel().getSelectedItem())
+                        .toUri().toURL().toString());
+                Model.updateModel(fileURL);
+                view.creatMenusForMapScene(Model.getInstance());
+                view.createNewMapScene(Model.getInstance());
+                createMapSceneButtons();
+                view.setScene(view.getMapScene());
+            } catch (Exception e1) {
+                System.out.println(e1.getMessage());
+            }
+
         });
 
         view.chooseMapScene.chooseOwnFileButton.setOnAction(e -> {
@@ -545,9 +537,10 @@ public class Controller {
                         new FileChooser.ExtensionFilter("All files", "*.*"));
                 File selectedFile = fileChooser.showOpenDialog(view.primaryStage);
                 if (selectedFile != null) {
-                    Model.createModel(selectedFile.toURI().toURL());
-                    view.creatMenusForMapScene();
-                    view.createNewMapScene();
+                    Model.updateModel(selectedFile.toURI().toURL());
+                    System.out.println(selectedFile.toURI().toURL().toString());
+                    view.creatMenusForMapScene(Model.getInstance());
+                    view.createNewMapScene(Model.getInstance());
                     createMapSceneButtons();
                     view.setScene(view.getMapScene());
                 }
@@ -614,7 +607,6 @@ public class Controller {
         }
         // Redraw the view
         view.getMapScene().redraw();
-        System.out.println("Test!!!!");
     }
 
 
@@ -669,9 +661,6 @@ public class Controller {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getSelectedPointPanel());
             view.getMapMenu().getSelectedPointPanel().setMapPoint(mapPoint);
             view.getMapMenu().getSelectedPointPanel().setSavePointButtonMode(mapPoint.getFavouriteStatus());
-            System.out.println("THE FAVOURITE STATUS OF THE POINT IS: " + mapPoint.getFavouriteStatus()
-                    + " the name of the point is " + mapPoint.getName());
-
             // We only pan if the point to focus on is found through a search bar. Not when
             // clicking on a point.
             if (shouldPan) {

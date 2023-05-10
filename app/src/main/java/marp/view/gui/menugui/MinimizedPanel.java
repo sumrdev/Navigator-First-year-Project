@@ -2,7 +2,6 @@ package marp.view.gui.menugui;
 
 import javafx.geometry.Insets;
 import javafx.scene.image.Image;
-import marp.datastructures.Trie;
 import marp.model.Model;
 import marp.view.gui.SearchBar;
 import marp.view.gui.buttons.MapButton;
@@ -46,71 +45,33 @@ public class MinimizedPanel extends MenuPanel {
     }
 
     /**
-     * Changes CSS sheets of MinimizedPanel if parameter is set to true
+     * Changes CSS sheets if parameter is set to true
      * 
-     * @param set
+     * @param activate
      */
-    public void activateDarkMode(boolean set) {
-        if (set) {
+    public void activateDarkMode(boolean activate) {
+        if (activate) {
             if (searchBar.getStylesheets().contains("CSS/stylesheet.css")) {
                 searchBar.getStylesheets().remove("CSS/stylesheet.css");
                 searchBar.getStylesheets().add("CSS/darkmodesheet.css");
             }
-            if (directionsButton.getStylesheets().contains("CSS/stylesheet.css")) {
-                directionsButton.getStylesheets().remove("CSS/stylesheet.css");
-                directionsButton.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-            if (settingsButton.getStylesheets().contains("CSS/stylesheet.css")) {
-                settingsButton.getStylesheets().remove("CSS/stylesheet.css");
-                settingsButton.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-            if (takeSnapshotButton.getStylesheets().contains("CSS/stylesheet.css")) {
-                takeSnapshotButton.getStylesheets().remove("CSS/stylesheet.css");
-                takeSnapshotButton.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-            if (minimizeButton.getStylesheets().contains("CSS/stylesheet.css")) {
-                minimizeButton.getStylesheets().remove("CSS/stylesheet.css");
-                minimizeButton.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-            if (searchButton.getStylesheets().contains("CSS/stylesheet.css")) {
-                searchButton.getStylesheets().remove("CSS/stylesheet.css");
-                searchButton.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-            if (pointOfInterestButton.getStylesheets().contains("CSS/stylesheet.css")) {
-                pointOfInterestButton.getStylesheets().remove("CSS/stylesheet.css");
-                pointOfInterestButton.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-
         } else {
             if (searchBar.getStylesheets().contains("CSS/darkmodesheet.css")) {
                 searchBar.getStylesheets().remove("CSS/darkmodesheet.css");
                 searchBar.getStylesheets().add("CSS/stylesheet.css");
             }
-            if (directionsButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                directionsButton.getStylesheets().remove("CSS/darkmodesheet.css");
-                directionsButton.getStylesheets().add("CSS/stylesheet.css");
-            }
-            if (settingsButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                settingsButton.getStylesheets().remove("CSS/darkmodesheet.css");
-                settingsButton.getStylesheets().add("CSS/stylesheet.css");
-            }
-            if (takeSnapshotButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                takeSnapshotButton.getStylesheets().remove("CSS/darkmodesheet.css");
-                takeSnapshotButton.getStylesheets().add("CSS/stylesheet.css");
-            }
-            if (minimizeButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                minimizeButton.getStylesheets().remove("CSS/darkmodesheet.css");
-                minimizeButton.getStylesheets().add("CSS/stylesheet.css");
-            }
-            if (searchButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                searchButton.getStylesheets().remove("CSS/darkmodesheet.css");
-                searchButton.getStylesheets().add("CSS/stylesheet.css");
-            }
-            if (pointOfInterestButton.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                pointOfInterestButton.getStylesheets().remove("CSS/darkmodesheet.css");
-                pointOfInterestButton.getStylesheets().add("CSS/stylesheet.css");
-            }
         }
 
+        directionsButton.activateDarkMode(activate);
+
+        settingsButton.activateDarkMode(activate);
+
+        minimizeButton.activateDarkMode(activate);
+
+        searchButton.activateDarkMode(activate);
+
+        pointOfInterestButton.activateDarkMode(activate);
+
+        takeSnapshotButton.activateDarkMode(activate);
     }
 }

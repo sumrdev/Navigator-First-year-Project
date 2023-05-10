@@ -70,7 +70,7 @@ jar {
 }
 
 test {
-  jvmArgs "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap"
+  //jvmArgs "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap"
 }
 
 tasks.named('test') {

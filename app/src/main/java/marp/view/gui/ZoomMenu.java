@@ -5,7 +5,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Control;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
-import marp.view.gui.MapLabelSmall;
 import marp.view.gui.buttons.MapTextButton;
 
 public class ZoomMenu extends VBox {
@@ -80,29 +79,15 @@ public class ZoomMenu extends VBox {
     }
 
      /**
-     * Changes CSS sheets of ZoomMenu if parameter is set to true
+     * Changes CSS sheets if parameter is set to true
      * 
-     * @param set
+     * @param activate
      */
-    public void activateDarkMode(boolean set) {
-        if (set) {
-            if (zoomIn.getStylesheets().contains("CSS/stylesheet.css")) {
-                zoomIn.getStylesheets().remove("CSS/stylesheet.css");
-                zoomIn.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-            if (zoomOut.getStylesheets().contains("CSS/stylesheet.css")) {
-                zoomOut.getStylesheets().remove("CSS/stylesheet.css");
-                zoomOut.getStylesheets().add("CSS/darkmodesheet.css");
-            }
-        } else {
-            if (zoomIn.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                zoomIn.getStylesheets().remove("CSS/darkmodesheet.css");
-                zoomIn.getStylesheets().add("CSS/stylesheet.css");
-            }
-            if (zoomOut.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                zoomOut.getStylesheets().remove("CSS/darkmodesheet.css");
-                zoomOut.getStylesheets().add("CSS/stylesheet.css");
-            }
-        }
+    public void activateDarkMode(boolean activate) {
+
+        zoomIn.activateDarkMode(activate);
+
+        zoomOut.activateDarkMode(activate);
+
     }
 }

@@ -1,7 +1,5 @@
 package marp.mapelements;
 
-import java.io.Serializable;
-
 import javafx.scene.canvas.GraphicsContext;
 
 public class Point extends Element {

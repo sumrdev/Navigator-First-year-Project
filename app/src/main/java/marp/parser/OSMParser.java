@@ -348,7 +348,10 @@ public class OSMParser {
 
         mapObjects.coastLineAreasList = ComplexShape.orderAndFlipWays(mapObjectInParsing.getCoastlineSegments());
         Thread trees = new Thread(() -> {
+            Time startTrees = new Time(System.currentTimeMillis());
             mapObjects.buildTrees();
+            Time resultTrees = new Time(System.currentTimeMillis());
+            System.out.println("All trees built in: " + (resultTrees.getTime() - startTrees.getTime()) / 1000 + "s");
         });
         Thread graph = new Thread(() -> {
             mapObjects.buildDigraph(mapObjectInParsing.getRoadNodeIDtoRoadNode());
@@ -365,6 +368,7 @@ public class OSMParser {
         }
 
         System.gc();
+        System.out.println("done");
         return mapObjects;
     }
 }

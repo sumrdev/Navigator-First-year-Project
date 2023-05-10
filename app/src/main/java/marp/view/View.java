@@ -41,12 +41,12 @@ public class View {
         primaryStage.show();
     }
 
-    public void creatMenusForMapScene(){
+    public void creatMenusForMapScene(Model model){
         this.mapMenu = new MapMenu(model);
         this.canvas = new Canvas(1000, 700);
         this.zoomMenu = new ZoomMenu(1000);
-        nearestRoadInfo = new NearestRoadInfo();
-        createNewMapScene();
+        this.nearestRoadInfo = new NearestRoadInfo();
+        createNewMapScene(model);
         
         canvas.widthProperty().bind(primaryStage.widthProperty());
         canvas.heightProperty().bind(primaryStage.heightProperty());
@@ -68,8 +68,8 @@ public class View {
         return chooseMapScene;
     }
 
-    public void createNewMapScene() {
-        mapScene = new MapScene(this.model, mapMenu, zoomMenu, nearestRoadInfo, canvas);
+    public void createNewMapScene(Model model) {
+        mapScene = new MapScene(model, mapMenu, zoomMenu, nearestRoadInfo, canvas);
     }
 
     public Canvas getCanvas() {

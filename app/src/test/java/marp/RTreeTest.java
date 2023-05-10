@@ -43,17 +43,12 @@ public class RTreeTest {
         Assertions.assertEquals(emptyRTree.treeDepth(),0);
     }
     @Test
-    public void sizeTest(){
+    public void sizeTest() {
         RTree<Element> rTree = new RTree<>(data);
         Assertions.assertEquals(rTree.size(), data.size());
-        Assertions.assertEquals(emptyRTree.size(),0);
+        Assertions.assertEquals(emptyRTree.size(), 0);
     }
-    @Test
-    public void buildingRTreeFromListTest(){
-        RTree<Element> rTree = new RTree<>(data);
-        //how to check if rTree is build correct...?
-        Assertions.assertTrue(true);
-    }
+
     @Test
     public void getNearestToPointTest(){
         //is only used for points therefore we only test for points
@@ -77,7 +72,6 @@ public class RTreeTest {
         }
         rTree.getNearest(point);
         rTree.getNearest(pointArray);
-        emptyRTree.getNearest(pointArray);
         //Assertions.assertEquals(lowest, rTree.getNearest(point));
         //Assertions.assertEquals(lowest, rTree.getNearest(pointArray));
         Assertions.assertNull(emptyRTree.getNearest(pointArray));

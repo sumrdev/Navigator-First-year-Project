@@ -63,7 +63,7 @@ public class Controller {
                 new FileChooser.ExtensionFilter("All files", "*.*"));
     }
 
-    private void createMapSceneButtons() {
+    private void createMapSceneButtons(Model model) {
         // Clicking on the map updates the latest clicked coordinates. if
         // isCreatingCustomPointOfInterest is true, lastPressedX is set as well.
 
@@ -216,6 +216,10 @@ public class Controller {
             view.getMapScene().redraw();
         });
 
+        view.getMapMenu().getDirectionsPanel().takesnapshoButton.setOnAction(e -> {
+            takeSnapShot();
+        });
+
         view.getMapMenu().getDirectionsPanel().swapButton.setOnAction(e -> {
             // First get the start location field text and save it as temp text,
             // then set ge start location field text to the text from the end location
@@ -363,6 +367,10 @@ public class Controller {
             model.setSelectedPointMarker(null);
         });
 
+        view.getMapMenu().getSettingsPanel().getTakeSnapShotButton().setOnAction(e -> {
+            takeSnapShot();
+        });
+
         view.getMapMenu().getSettingsPanel().getDirectionsButton().setOnAction(e -> {
             // Set the menu panel to the directions menu panel
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getDirectionsPanel());
@@ -414,6 +422,15 @@ public class Controller {
 
         view.getMapMenu().getColorblindnessModePanel().getNormalButton().setOnAction(e->{
             MapColor.getInstance().changeTheme("default");
+
+            view.getMapMenu().getSettingsPanel().activateDarkMode(false);
+            view.getMapMenu().getMinimizedPanel().activateDarkMode(false);
+            view.getMapMenu().getPointOfInterestPanel().activateDarkMode(false);
+            view.getMapMenu().getSelectedPointPanel().activateDarkMode(false);
+            view.getMapMenu().getDirectionsPanel().activateDarkMode(false);
+            view.getMapMenu().getColorblindnessModePanel().activateDarkMode(false);
+            view.getZoomMenu().activateDarkMode(false);
+
             Digraph.setColor(1);
             view.getMapScene().redraw();
         });
@@ -423,24 +440,60 @@ public class Controller {
         });
 
         view.getMapMenu().getColorblindnessModePanel().deuteranopiaButton.setOnAction(e -> {
+
+            view.getMapMenu().getSettingsPanel().activateDarkMode(false);
+            view.getMapMenu().getMinimizedPanel().activateDarkMode(false);
+            view.getMapMenu().getPointOfInterestPanel().activateDarkMode(false);
+            view.getMapMenu().getSelectedPointPanel().activateDarkMode(false);
+            view.getMapMenu().getDirectionsPanel().activateDarkMode(false);
+            view.getMapMenu().getColorblindnessModePanel().activateDarkMode(false);
+            view.getZoomMenu().activateDarkMode(false);
+
             MapColor.getInstance().changeTheme("deuteranopia");
             Digraph.setColor(1);
             view.getMapScene().redraw();
         });
 
         view.getMapMenu().getColorblindnessModePanel().protanopiaButton.setOnAction(e -> {
+
+            view.getMapMenu().getSettingsPanel().activateDarkMode(false);
+            view.getMapMenu().getMinimizedPanel().activateDarkMode(false);
+            view.getMapMenu().getPointOfInterestPanel().activateDarkMode(false);
+            view.getMapMenu().getSelectedPointPanel().activateDarkMode(false);
+            view.getMapMenu().getDirectionsPanel().activateDarkMode(false);
+            view.getMapMenu().getColorblindnessModePanel().activateDarkMode(false);
+            view.getZoomMenu().activateDarkMode(false);
+
             MapColor.getInstance().changeTheme("protanopia");
             Digraph.setColor(2);
             view.getMapScene().redraw();
         });
 
         view.getMapMenu().getColorblindnessModePanel().tritanopiaButton.setOnAction(e -> {
+
+            view.getMapMenu().getSettingsPanel().activateDarkMode(false);
+            view.getMapMenu().getMinimizedPanel().activateDarkMode(false);
+            view.getMapMenu().getPointOfInterestPanel().activateDarkMode(false);
+            view.getMapMenu().getSelectedPointPanel().activateDarkMode(false);
+            view.getMapMenu().getDirectionsPanel().activateDarkMode(false);
+            view.getMapMenu().getColorblindnessModePanel().activateDarkMode(false);
+            view.getZoomMenu().activateDarkMode(false);
+
             MapColor.getInstance().changeTheme("tritanopia");
             Digraph.setColor(1);
             view.getMapScene().redraw();
         });
 
         view.getMapMenu().getColorblindnessModePanel().monochromacyButton.setOnAction(e -> {
+
+            view.getMapMenu().getSettingsPanel().activateDarkMode(false);
+            view.getMapMenu().getMinimizedPanel().activateDarkMode(false);
+            view.getMapMenu().getPointOfInterestPanel().activateDarkMode(false);
+            view.getMapMenu().getSelectedPointPanel().activateDarkMode(false);
+            view.getMapMenu().getDirectionsPanel().activateDarkMode(false);
+            view.getMapMenu().getColorblindnessModePanel().activateDarkMode(false);
+            view.getZoomMenu().activateDarkMode(false);
+
             MapColor.getInstance().changeTheme("monochromia");
             Digraph.setColor(3);
             view.getMapScene().redraw();
@@ -492,7 +545,9 @@ public class Controller {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
         });
 
-        
+        view.getMapMenu().getPointOfInterestPanel().getTakeSnapShotButton().setOnAction(e -> {
+            takeSnapShot();
+        });
     }
     
     // ##########################################################
@@ -510,7 +565,7 @@ public class Controller {
             }
             view.creatMenusForMapScene(Model.getInstance());
             view.createNewMapScene(Model.getInstance());
-            createMapSceneButtons();
+            createMapSceneButtons(Model.getInstance());
             view.setScene(view.getMapScene());
         });
 
@@ -528,7 +583,7 @@ public class Controller {
                 Model.updateModel(fileURL);
                 view.creatMenusForMapScene(Model.getInstance());
                 view.createNewMapScene(Model.getInstance());
-                createMapSceneButtons();
+                createMapSceneButtons(Model.getInstance());
                 view.setScene(view.getMapScene());
             } catch (Exception e1) {
                 System.out.println(e1.getMessage());
@@ -550,7 +605,7 @@ public class Controller {
                     System.out.println(selectedFile.toURI().toURL().toString());
                     view.creatMenusForMapScene(Model.getInstance());
                     view.createNewMapScene(Model.getInstance());
-                    createMapSceneButtons();
+                    createMapSceneButtons(Model.getInstance());
                     view.setScene(view.getMapScene());
                 }
             } catch (ClassNotFoundException | URISyntaxException | XMLStreamException | FactoryConfigurationError
@@ -571,37 +626,6 @@ public class Controller {
         return closestAddress.getStreet() + " " + closestAddress.getHouseNumber() + " "
                         + closestAddress.getPostCode() + " " + closestAddress.getCity();
     }
-    /*
-     * FileChooser fileChooser = new FileChooser();
-     * try {
-     * fileChooser.getExtensionFilters().addAll(
-     * new FileChooser.ExtensionFilter("OSM files", "*.osm"),
-     * new FileChooser.ExtensionFilter("BIN files", "*.bin"),
-     * new FileChooser.ExtensionFilter("All files", "*.*"));
-     * 
-     * File selectedFile = fileChooser.showOpenDialog(stage);
-     * if (selectedFile == null) {
-     * 
-     * } else {
-     * try {
-     * view.getMapScene().resetAffine();
-     * this.model = Model.createModel(selectedFile);
-     * view.model = this.model;
-     * view.createNewMapScene();
-     * view.setScene(view.getMapScene());
-     * } catch (javax.xml.parsers.FactoryConfigurationError e2) {
-     * e2.printStackTrace();
-     * }
-     * }
-     * } catch (Exception e1) {
-     * // TODO: handle exception
-     * System.out.println("Error getting items from listview: ");
-     * e1.printStackTrace();
-     * }
-     * });
-     * 
-     * }
-     */
 
     private void setStartLocation(Address address, boolean shouldPan) {
         if (shouldPan) {
@@ -715,6 +739,10 @@ public class Controller {
         view.getMapScene().pan(xDist, yDist);
     }
 
+    /**
+     * 
+     * Creates a printable pdf which can be saved
+     */
     private void takeSnapShot() {
         try {
             PrinterJob job = PrinterJob.createPrinterJob();

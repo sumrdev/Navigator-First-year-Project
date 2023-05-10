@@ -16,6 +16,11 @@ public class PointOfInterestPanel extends MenuPanel {
 
     public MapTextButton createPointButton;
     public MapButton cancelButton;
+    private MapButton takeSnapShotButton;
+
+    public MapButton getTakeSnapShotButton() {
+        return takeSnapShotButton;
+    }
 
     public VBox newPointMenu;
 
@@ -45,6 +50,9 @@ public class PointOfInterestPanel extends MenuPanel {
         cancelButton = new MapButton(
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/cross.png"))));
 
+        takeSnapShotButton = new MapButton(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/camera.png"))));
+
         // Add buttons and search bars to the panel
         this.getChildren().addAll(newPointMenu, cancelButton);
         this.setPadding(new Insets(20, 20, 20, 20));
@@ -72,6 +80,7 @@ public class PointOfInterestPanel extends MenuPanel {
 
         createPointButton.activateDarkMode(activate);
         cancelButton.activateDarkMode(activate);
+        takeSnapShotButton.activateDarkMode(activate);
 
     }
 }

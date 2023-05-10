@@ -27,6 +27,7 @@ public class DirectionsPanel extends MenuPanel {
     public SearchBar endLocationField;
     public MapButton minimizeButton;
     public MapButton settingsButton;
+    public MapButton takesnapshoButton;
     public MapButton directionsButton;
     public MapButton swapButton;
     public MapTextButton findRouteButton;
@@ -52,6 +53,7 @@ public class DirectionsPanel extends MenuPanel {
         minimizeButton = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/cross.png"))));
         settingsButton = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/settings.png"))));
         directionsButton = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/directions.png"))), true);
+        takesnapshoButton = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/camera.png"))));
         startSearchButton = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/search.png"))));
         endSearchButton = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/search.png"))));
         swapButton = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/swap.png"))));
@@ -143,7 +145,7 @@ public class DirectionsPanel extends MenuPanel {
         startAndEndLocation.getStyleClass().add("map-vbox");
 
         //Add generic menu navigation buttons
-        this.getChildren().addAll(startAndEndLocation, minimizeButton, directionsButton, settingsButton);
+        this.getChildren().addAll(startAndEndLocation, minimizeButton, directionsButton, settingsButton, takesnapshoButton);
         this.setPadding(new Insets(20, 20, 40, 20));
         this.setSpacing(10);
         this.setPickOnBounds(false);
@@ -189,6 +191,8 @@ public class DirectionsPanel extends MenuPanel {
         minimizeButton.activateDarkMode(activate);
 
         settingsButton.activateDarkMode(activate);
+
+        takesnapshoButton.activateDarkMode(activate);
 
         directionsButton.activateDarkMode(activate);
 

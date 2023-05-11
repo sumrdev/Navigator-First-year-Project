@@ -23,7 +23,7 @@ public class DigraphTest {
     void setUp() throws ClassNotFoundException, URISyntaxException, XMLStreamException, FactoryConfigurationError, IOException {
         //url https://overpass-api.de/api/map?bbox=11.6115,55.1367,11.9638,55.2675
         InputStream in = getClass().getResourceAsStream("/maps/4_roundabouts.osm");
-        this.model = Model.createModel(in, "4_roundabouts.osm");
+        this.model = Model.updateModel(in, "4_roundabouts.osm");
 
     }
 

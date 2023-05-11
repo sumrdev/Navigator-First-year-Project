@@ -7,23 +7,25 @@ import marp.datastructures.Edge;
 
 public class RoadNode extends Point implements Serializable {
     ArrayList<Edge> edges;
+
     public RoadNode(Point node) {
-        super(node.getX(),node.getY());
+        super(node.getX(), node.getY());
         this.id = node.getID();
-        this.edges = new ArrayList<Edge>();        
+        this.edges = new ArrayList<Edge>();
     }
-    public ArrayList<Edge> getEdges(boolean walking){
+
+    public ArrayList<Edge> getEdges(boolean walking) {
         ArrayList<Edge> edges = new ArrayList<Edge>();
-        if(walking){
-            for (Edge edge : this.edges){
-                if(edge.isWalkable()){
+        if (walking) {
+            for (Edge edge : this.edges) {
+                if (edge.isWalkable()) {
                     edges.add(edge);
                 }
             }
             return edges;
         } else {
-            for (Edge edge : this.edges){
-                if(edge.isDriveable()){
+            for (Edge edge : this.edges) {
+                if (edge.isDriveable()) {
                     edges.add(edge);
                 }
             }
@@ -31,15 +33,16 @@ public class RoadNode extends Point implements Serializable {
         }
     }
 
-    public ArrayList<Edge> getEdges(){
+    public ArrayList<Edge> getEdges() {
         return this.edges;
     }
-    
-    public void addEdge(Edge edge){
+
+    public void addEdge(Edge edge) {
         this.edges.add(edge);
     }
+
     @Override
-    public String toString(){
+    public String toString() {
         return "[" + x + "," + y + "]";
     }
 }

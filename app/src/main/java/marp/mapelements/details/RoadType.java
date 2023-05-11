@@ -41,5 +41,4 @@ public enum RoadType {
     public boolean isWalkable() {
         return walkable;
     }
-
 }

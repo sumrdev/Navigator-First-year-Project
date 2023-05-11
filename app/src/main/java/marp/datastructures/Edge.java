@@ -26,5 +26,4 @@ public class Edge implements Serializable{
     public boolean isWalkable(){
         return this.walkable;
     }
-
 }

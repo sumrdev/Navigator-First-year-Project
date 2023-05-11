@@ -72,7 +72,6 @@ public class Trie implements Serializable{
     }
 
     // recursive method for use in getAddressSuggestions()
-    // rækkefølge? hvad hvis searchinput er en ende/addresse
     private void suggestionFinder(ArrayList<String> suggestionList, TrieNode currentNode, int suggestionAmount) {
         //the additional list size check is necessary for an extreme edge case, but is otherwise not used
         if (currentNode.getIsEnd() && suggestionList.size() < suggestionAmount) {
@@ -143,7 +142,7 @@ public class Trie implements Serializable{
     }
 /**
  * @param searchInput the String address used to navigate through the Trie
- * @param house the String housenumber for the 
+ * @param house the String housenumber for the desired address
  * @return an Address object
  */
     public Address getAddressObject(String searchInput, String house){

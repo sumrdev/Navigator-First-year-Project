@@ -88,6 +88,10 @@ public class Digraph implements Serializable {
     //     this.averageSpeed = temp / averageSpeedCount;
     // }
 
+    public List<String> aStar(long start, long end, boolean walking) {
+        return aStar(nodes.get(start), nodes.get(end), walking);
+    }
+
     public List<String> aStar(RoadNode start, RoadNode end, boolean walking) {
         Time startTime = new Time(System.currentTimeMillis());
         averageSpeedCount = 0;
@@ -117,7 +121,7 @@ public class Digraph implements Serializable {
                 return createTextDescriptionFromNavigation();
             }
             closedSet.add(current);
-            for (Edge edge : current.getEdges()) {
+            for (Edge edge : current.getEdges(walking)) {
                 if (!closedSet.contains(nodes.get(edge.end))) {
                     float tentativeGScore = gScore.get(current) + getWeight(edge, walking);
                     if (gScore.get(nodes.get(edge.end)) != null && tentativeGScore >= gScore.get(nodes.get(edge.end)))

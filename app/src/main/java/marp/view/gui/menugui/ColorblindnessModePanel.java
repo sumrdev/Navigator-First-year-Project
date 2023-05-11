@@ -42,7 +42,7 @@ public class ColorblindnessModePanel extends MenuPanel {
 		tritanopiaButton.setMinWidth(buttonsMinWidth);
 		protanopiaButton = new MapToggleButton("Protanopia");
 		protanopiaButton.setMinWidth(buttonsMinWidth);
-		monochromacyButton = new MapToggleButton("Monochromacy");
+		monochromacyButton = new MapToggleButton("Monochromia");
 		monochromacyButton.setMinWidth(buttonsMinWidth);
 
 		ToggleGroup colorBlindnessModeToggleGroup = new ToggleGroup();

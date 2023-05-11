@@ -762,7 +762,7 @@ public class Controller {
         } catch (Exception e) {
             e.printStackTrace();
             Alert errorMsg = new Alert(AlertType.ERROR);
-            errorMsg.setTitle("Unable to start printing!");
+            errorMsg.setTitle("Unable to print!");
             errorMsg.setContentText("MARP was unable to start printing the scene. \nPlease try again later...");
 
             errorMsg.show();

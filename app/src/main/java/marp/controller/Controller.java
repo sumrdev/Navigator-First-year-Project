@@ -169,28 +169,28 @@ public class Controller {
         // ############# Minimized panel buttons ####################
         // ##########################################################
 
-        view.getMapMenu().getMinimizedPanel().directionsButton.setOnAction(e -> {
+        view.getMapMenu().getMinimizedPanel().getDirectionsButton().setOnAction(e -> {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getDirectionsPanel());
-            // Update navigation visibility so navigation elements are shown when the navigation menu is shown.
+            // Update navigation visibility so nsavigation elements are shown when the navigation menu is shown.
             model.setNavigationVisibility(true);
             view.getMapScene().redraw();
         });
-        view.getMapMenu().getMinimizedPanel().settingsButton.setOnAction(e -> {
+        view.getMapMenu().getMinimizedPanel().getSettingsButton().setOnAction(e -> {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getSettingsPanel());
         });
-        view.getMapMenu().getMinimizedPanel().searchBar.setOnAction(e -> {
-            focusOnPoint(view.getMapMenu().getMinimizedPanel().searchBar.getAddress(), true, true);
-            view.getMapMenu().getMinimizedPanel().searchBar.clear();
+        view.getMapMenu().getMinimizedPanel().getSearchBar().setOnAction(e -> {
+            focusOnPoint(view.getMapMenu().getMinimizedPanel().getSearchBar().getAddress(), true, true);
+            view.getMapMenu().getMinimizedPanel().getSearchBar().clear();
         });
-        view.getMapMenu().getMinimizedPanel().searchButton.setOnAction(e -> {
-            focusOnPoint(view.getMapMenu().getMinimizedPanel().searchBar.getAddress(), true, true);
-            view.getMapMenu().getMinimizedPanel().searchBar.clear();
+        view.getMapMenu().getMinimizedPanel().getSearchButton().setOnAction(e -> {
+            focusOnPoint(view.getMapMenu().getMinimizedPanel().getSearchBar().getAddress(), true, true);
+            view.getMapMenu().getMinimizedPanel().getSearchBar().clear();
         });
-        view.getMapMenu().getMinimizedPanel().pointOfInterestButton.setOnAction(e -> {
+        view.getMapMenu().getMinimizedPanel().getPointOfInterestButton().setOnAction(e -> {
             toggleIsCreatingCustomPointOfInterest();
         });
 
-        view.getMapMenu().getMinimizedPanel().takeSnapshotButton.setOnAction(e -> {
+        view.getMapMenu().getMinimizedPanel().getTakeSnapshotButton().setOnAction(e -> {
             takeSnapShot();
         });
 
@@ -237,7 +237,7 @@ public class Controller {
         view.getMapMenu().getDirectionsPanel().getStartLocationField().setOnAction(e -> {
             if (view.getMapMenu().getDirectionsPanel().getStartLocationField().getAddress() != null) {
                 setStartLocation(view.getMapMenu().getDirectionsPanel().getStartLocationField().getAddress(), true);
-                view.getMapMenu().getMinimizedPanel().searchBar.clear();
+                view.getMapMenu().getMinimizedPanel().getSearchBar().clear();
                 model.getMapObjects().clearRoute();
                 view.getMapScene().redraw();
             }
@@ -245,7 +245,7 @@ public class Controller {
         view.getMapMenu().getDirectionsPanel().getStartSearchButton().setOnAction(e -> {
             if (view.getMapMenu().getDirectionsPanel().getStartLocationField().getAddress() != null) {
                 setStartLocation(view.getMapMenu().getDirectionsPanel().getStartLocationField().getAddress(), true);
-                view.getMapMenu().getMinimizedPanel().searchBar.clear();
+                view.getMapMenu().getMinimizedPanel().getSearchBar().clear();
                 model.getMapObjects().clearRoute();
                 view.getMapScene().redraw();
             }
@@ -253,7 +253,7 @@ public class Controller {
         view.getMapMenu().getDirectionsPanel().getEndLocationField().setOnAction(e -> {
             if (view.getMapMenu().getDirectionsPanel().getEndLocationField().getAddress() != null) {
                 setEndLocation(view.getMapMenu().getDirectionsPanel().getEndLocationField().getAddress(), true);
-                view.getMapMenu().getMinimizedPanel().searchBar.clear();
+                view.getMapMenu().getMinimizedPanel().getSearchBar().clear();
                 model.getMapObjects().clearRoute();
                 view.getMapScene().redraw();
             }
@@ -261,7 +261,7 @@ public class Controller {
         view.getMapMenu().getDirectionsPanel().getEndSearchButton().setOnAction(e -> {
             if (view.getMapMenu().getDirectionsPanel().getEndLocationField().getAddress() != null) {
                 setEndLocation(view.getMapMenu().getDirectionsPanel().getEndLocationField().getAddress(), true);
-                view.getMapMenu().getMinimizedPanel().searchBar.clear();
+                view.getMapMenu().getMinimizedPanel().getSearchBar().clear();
                 model.getMapObjects().clearRoute();
                 view.getMapScene().redraw();
             }
@@ -670,7 +670,7 @@ public class Controller {
             ImageView imageView = new ImageView(newPointIcon);
             imageView.setFitHeight(48);
             imageView.setFitWidth(48);
-            view.getMapMenu().getMinimizedPanel().pointOfInterestButton.setGraphic(imageView);
+            view.getMapMenu().getMinimizedPanel().getPointOfInterestButton().setGraphic(imageView);
         } else {
             isCreatingCustomPointOfInterest = true;
             // set the cursor to the crosshair cursor.
@@ -682,7 +682,7 @@ public class Controller {
             ImageView imageView = new ImageView(cancelIcon);
             imageView.setFitHeight(48);
             imageView.setFitWidth(48);
-            view.getMapMenu().getMinimizedPanel().pointOfInterestButton.setGraphic(imageView);
+            view.getMapMenu().getMinimizedPanel().getPointOfInterestButton().setGraphic(imageView);
 
         }
     }

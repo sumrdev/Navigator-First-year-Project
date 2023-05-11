@@ -9,13 +9,13 @@ import marp.view.gui.buttons.MapButton;
 import java.util.Objects;
 
 public class MinimizedPanel extends MenuPanel {
-    public MapButton directionsButton;
-    public MapButton settingsButton;
-    public MapButton minimizeButton;
-    public SearchBar searchBar;
-    public MapButton searchButton;
-    public MapButton pointOfInterestButton;
-    public MapButton takeSnapshotButton;
+    private MapButton directionsButton;
+    private MapButton settingsButton;
+    private MapButton minimizeButton;
+    private SearchBar searchBar;
+    private MapButton searchButton;
+    private MapButton pointOfInterestButton;
+    private MapButton takeSnapshotButton;
 
     public MinimizedPanel(Model model) {
 
@@ -73,5 +73,33 @@ public class MinimizedPanel extends MenuPanel {
         pointOfInterestButton.activateDarkMode(activate);
 
         takeSnapshotButton.activateDarkMode(activate);
+    }
+
+    public MapButton getDirectionsButton() {
+        return directionsButton;
+    }
+
+    public MapButton getSettingsButton() {
+        return settingsButton;
+    }
+
+    public MapButton getMinimizeButton() {
+        return minimizeButton;
+    }
+
+    public SearchBar getSearchBar() {
+        return searchBar;
+    }
+
+    public MapButton getSearchButton() {
+        return searchButton;
+    }
+
+    public MapButton getPointOfInterestButton() {
+        return pointOfInterestButton;
+    }
+
+    public MapButton getTakeSnapshotButton() {
+        return takeSnapshotButton;
     }
 }

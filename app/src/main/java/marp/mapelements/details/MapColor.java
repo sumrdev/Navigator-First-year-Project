@@ -108,7 +108,7 @@ public class MapColor {
         deuteranopiaBlindColorMap.put("TEXT", Color.BLACK);
 
         // Red blindness
-        protanopiaBlindColorMap.put("WATER", Color.rgb(176, 211, 232,1));
+        protanopiaBlindColorMap.put("BACKGROUND", Color.rgb(176, 211, 232,1));
         protanopiaBlindColorMap.put("WATER", Color.rgb(176, 211, 232,1));
         protanopiaBlindColorMap.put("BUILDING", Color.rgb(190, 190, 190,1));
         protanopiaBlindColorMap.put("COASTLINE", Color.rgb(206, 234, 214,1));

@@ -100,12 +100,14 @@ public class Controller {
                 } else { // else we find the nearest normal point and select it.
                     //if the search bars in the directions panel are focussed we want to set the start and end location on click.
                     if (view.getMapMenu().getDirectionsPanel().endLocationField.isFocused()) {
-                        view.getMapMenu().getDirectionsPanel().endLocationField.setText(closestAddressToPointAsString(nearestPoint));
+                        view.getMapMenu().getDirectionsPanel().endLocationField
+                                .setText(closestAddressToPointAsString(nearestPoint));
                         setEndLocation(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress(), false);
                         model.getMapObjects().clearRoute();
                         view.getMapScene().redraw();
                     } else if (view.getMapMenu().getDirectionsPanel().startLocationField.isFocused()) {
-                        view.getMapMenu().getDirectionsPanel().startLocationField.setText(closestAddressToPointAsString(nearestPoint));
+                        view.getMapMenu().getDirectionsPanel().startLocationField
+                                .setText(closestAddressToPointAsString(nearestPoint));
                         model.getMapObjects().clearRoute();
                         view.getMapScene().redraw();
                         setStartLocation(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress(), false);
@@ -121,14 +123,15 @@ public class Controller {
                     view.getMapScene().redraw();
                     }
                 }
-            } else if(e.getButton() == MouseButton.SECONDARY) {
+            } else if (e.getButton() == MouseButton.SECONDARY) {
                 view.getMapScene().redraw();
-                view.getMapScene().drawUserMadeLine(new Point2D(mouseDragStartPositionX, mouseDragStartPositionY), new Point2D(e.getX(), e.getY()));
+                view.getMapScene().drawUserMadeLine(new Point2D(mouseDragStartPositionX, mouseDragStartPositionY),
+                        new Point2D(e.getX(), e.getY()));
             }
         });
 
         view.getCanvas().setOnMouseDragged(e -> {
-            if(e.getButton() == MouseButton.PRIMARY) {
+            if (e.getButton() == MouseButton.PRIMARY) {
                 // When dragging the mouse we pan with the difference in mouse x and y of the
                 // mouse position.
                 float dx = (float) (e.getX() - lastX);
@@ -274,7 +277,7 @@ public class Controller {
             model.transportMode = 2;
             model.getMapObjects().getDigraph().setWalking();
         });
-        view.getMapMenu().getDirectionsPanel().findRouteButton.setOnAction( e -> {
+        view.getMapMenu().getDirectionsPanel().findRouteButton.setOnAction(e -> {
             calculateRoute();
         });
 
@@ -421,7 +424,7 @@ public class Controller {
             view.getMapScene().redraw();
         });
 
-        view.getMapMenu().getColorblindnessModePanel().getNormalButton().setOnAction(e->{
+        view.getMapMenu().getColorblindnessModePanel().getNormalButton().setOnAction(e -> {
             MapColor.getInstance().changeTheme("default");
 
             view.getMapMenu().getSettingsPanel().activateDarkMode(false);
@@ -550,7 +553,7 @@ public class Controller {
             takeSnapShot();
         });
     }
-    
+
     // ##########################################################
     // ############# CHOOSE MAP SCENE ###########################
     // ##########################################################
@@ -558,7 +561,7 @@ public class Controller {
     public void createChooseMapSceneButtons() {
         view.chooseMapScene.loadDefaultBinaryButton.setOnAction(e -> {
             try {
-                Model.updateModel(getClass().getResource("/maps/"+Model.getDefaultMap()));
+                Model.updateModel(getClass().getResource("/maps/" + Model.getDefaultMap()));
             } catch (ClassNotFoundException | URISyntaxException | XMLStreamException | FactoryConfigurationError
                     | IOException e1) {
                 // TODO Auto-generated catch block
@@ -617,15 +620,14 @@ public class Controller {
         });
     }
 
-
     private String closestAddressToPointAsString(MapPoint selectedPont) {
         // Not all selected points are addresses. We find the closest address and add it
         // to the destination searchbar on the directions panel.
         Address closestAddress = model.getMapObjects().getAddressTree().getNearest(
-                new float[] {(float) (selectedPont.getX()/0.56), -selectedPont.getY() });
+                new float[] { (float) (selectedPont.getX() / 0.56), -selectedPont.getY() });
         // Add the address to the searchbar as text.
         return closestAddress.getStreet() + " " + closestAddress.getHouseNumber() + " "
-                        + closestAddress.getPostCode() + " " + closestAddress.getCity();
+                + closestAddress.getPostCode() + " " + closestAddress.getCity();
     }
 
     private void setStartLocation(Address address, boolean shouldPan) {
@@ -642,7 +644,6 @@ public class Controller {
         // Redraw the view
         view.getMapScene().redraw();
     }
-
 
     private void setEndLocation(Address address, boolean shouldPan) {
         if (shouldPan) {
@@ -702,7 +703,7 @@ public class Controller {
                 // point.
                 Point2D firstPoint = view.getMapScene().screenCoordsToMapCoords(
                         new Point2D(view.getCanvas().getWidth() / 2, view.getMapScene().getHeight() / 2));
-               panToPoint(mapPoint);
+                panToPoint(mapPoint);
             }
             if (shouldSetMarker) {
                 // Make a custom landmark to show the selected point
@@ -713,6 +714,7 @@ public class Controller {
             }
         }
     }
+
     public void panToPoint(MapPoint mapPoint) {
         // Find the middle screen coordinate and find the map coordinates for this
         // point.
@@ -748,12 +750,15 @@ public class Controller {
         try {
             PrinterJob job = PrinterJob.createPrinterJob();
             job.getPrinter().createPageLayout(Paper.A4, PageOrientation.LANDSCAPE, Printer.MarginType.DEFAULT);
-            if (job != null) {
-                view.getCanvas().getTransforms().add(new Scale(0.2, 0.2));
-                job.printPage(view.getCanvas());
-                job.endJob();
-                view.getCanvas().getTransforms().add(new Scale(5, 5));
-            }
+
+            view.getCanvas().getTransforms().add(new Scale(0.2, 0.2));
+
+            job.showPrintDialog(stage);
+            job.printPage(view.getCanvas());
+            job.endJob();
+
+            view.getCanvas().getTransforms().add(new Scale(5, 5));
+
         } catch (Exception e) {
             e.printStackTrace();
             Alert errorMsg = new Alert(AlertType.ERROR);
@@ -763,17 +768,22 @@ public class Controller {
             errorMsg.show();
         }
     }
+
     private void calculateRoute() {
-        if (view.getMapMenu().getDirectionsPanel().startLocationField.getAddress() != null && view.getMapMenu().getDirectionsPanel().endLocationField.getAddress() != null) {
-            RoadNode start = model.getMapObjects().getRoadNodeRTree().getNearest(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress());
-            RoadNode end = model.getMapObjects().getRoadNodeRTree().getNearest(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress());
+        if (view.getMapMenu().getDirectionsPanel().startLocationField.getAddress() != null
+                && view.getMapMenu().getDirectionsPanel().endLocationField.getAddress() != null) {
+            RoadNode start = model.getMapObjects().getRoadNodeRTree()
+                    .getNearest(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress());
+            RoadNode end = model.getMapObjects().getRoadNodeRTree()
+                    .getNearest(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress());
             setStartLocation(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress(), false);
             setEndLocation(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress(), false);
             List<String> directions = model.getMapObjects().getDigraph().aStar(end, start, true);
             float distance = model.getMapObjects().getDigraph().getDistance();
             int travelTime = model.getMapObjects().getDigraph().getTravelTime(model.getTransportMode());
-            //model.graph.runaStarWithNodeIndex(Integer.parseInt(view.getMapMenu().getDirectionsPanel().startLocationField.getText()), Integer.parseInt(view.getMapMenu().getDirectionsPanel().endLocationField.getText()));
-            //view.getMapMenu().getDirectionsPanel().receiveGuideList(null);
+            // model.graph.runaStarWithNodeIndex(Integer.parseInt(view.getMapMenu().getDirectionsPanel().startLocationField.getText()),
+            // Integer.parseInt(view.getMapMenu().getDirectionsPanel().endLocationField.getText()));
+            // view.getMapMenu().getDirectionsPanel().receiveGuideList(null);
             view.getMapMenu().getDirectionsPanel().setGuideShow(true);
             view.getMapMenu().getDirectionsPanel().receiveGuideList(directions);
             view.getMapMenu().getDirectionsPanel().updateDistanceAndTime(distance, travelTime);

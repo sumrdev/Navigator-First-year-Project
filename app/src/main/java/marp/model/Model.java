@@ -47,7 +47,7 @@ public final class Model implements Serializable {
     }
 
     public static String getDefaultMap() {
-        return "denmark-latest.osm";
+        return "denmark-latest.bin";
     }
 
     public static Model getInstance() {
@@ -69,7 +69,7 @@ public final class Model implements Serializable {
         return findLoadType(new FileInputStream(file), file.getName());
     }
 
-    public static Model createModel(InputStream inputStream, String filename)
+    public static Model updateModel(InputStream inputStream, String filename)
             throws URISyntaxException, XMLStreamException,
             FactoryConfigurationError, ClassNotFoundException, IOException {
         return findLoadType(inputStream, filename);
@@ -134,13 +134,14 @@ public final class Model implements Serializable {
     }
 
     private void save(String filename) {
-        if (filename.split("\\.")[1].equals("bin"))
+        System.out.println(filename);
+        if (filename.equals("bin") || filename.split("\\.")[1].equals("bin"))
             return;
         new Thread(() -> {
             Time time = new Time(System.currentTimeMillis());
             String fn = filename.split("\\.")[0] + ".bin";
             try (var out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("data/maps/" + fn)))) {
-                out.writeObject(this);
+                out.writeObject(Model.getInstance());
                 System.out.println("Saved to: " + fn);
                 System.out.println(
                         "Saved in: " + (new Time(System.currentTimeMillis()).getTime() - time.getTime()) / 1000 + "s");

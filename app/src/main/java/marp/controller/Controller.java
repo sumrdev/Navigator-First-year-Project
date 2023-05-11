@@ -561,7 +561,7 @@ public class Controller {
     public void createChooseMapSceneButtons() {
         view.getChooseMapScene().getLoadDefaultBinaryButton().setOnAction(e -> {
             try {
-                Model.updateModel(getClass().getResource("/maps/" + Model.getDefaultMap()));
+                Model.updateModel(getClass().getResourceAsStream("/maps/" + Model.getDefaultMap()), Model.getDefaultMap());
             } catch (ClassNotFoundException | URISyntaxException | XMLStreamException | FactoryConfigurationError
                     | IOException e1) {
                 // TODO Auto-generated catch block

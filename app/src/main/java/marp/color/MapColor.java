@@ -77,8 +77,8 @@ public class MapColor {
         darkColorMap.put("TEXT", Color.WHITE);
 
         // Green blindness
-        deuteranopiaBlindColorMap.put("BACKGROUND", Color.rgb(187, 169, 149,1));
-        deuteranopiaBlindColorMap.put("WATER", Color.rgb(187, 169, 149,1));
+        deuteranopiaBlindColorMap.put("BACKGROUND", Color.rgb(176, 211, 232));
+        deuteranopiaBlindColorMap.put("WATER", Color.rgb(176, 211, 232));
         deuteranopiaBlindColorMap.put("BUILDING", Color.rgb(190, 190, 190,1));
         deuteranopiaBlindColorMap.put("COASTLINE", Color.rgb(203, 196, 220,1));
         deuteranopiaBlindColorMap.put("coastline_near", Color.rgb(255, 255, 255,1));

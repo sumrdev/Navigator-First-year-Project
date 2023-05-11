@@ -32,6 +32,8 @@ public class DigraphTest {
         long roadNodeIDA = 423493290;
         long roadNodeIDB = 298861825;
         List<String> directions = model.getMapObjects().getDigraph().aStar( roadNodeIDA, roadNodeIDB, true);
-        assertEquals(directions.size(), 5);
+        assertEquals(5, directions.size());
+        directions = model.getMapObjects().getDigraph().aStar( roadNodeIDA, roadNodeIDB, false);
+        assertEquals(1, directions.size());
     }
 }

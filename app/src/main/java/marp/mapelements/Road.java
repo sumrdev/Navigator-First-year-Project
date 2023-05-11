@@ -24,6 +24,13 @@ public class Road extends Element{
 
     String name;
 
+    double angle;
+
+    double distance;
+
+    double middleX;
+    double middleY;
+
     private float[] boundingCoords = {Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY};
     
     public Road(long id, ArrayList<RoadNode> nodes, RoadType type, int speed, boolean oneway, boolean roundabout, String name) {
@@ -49,6 +56,28 @@ public class Road extends Element{
             }
             if (roadNode.getY() > boundingCoords[3]){
                 boundingCoords[3] = roadNode.getY();
+            }
+        }
+
+        if (name != null) {
+            double firstX = nodes.get(0).x;
+            double firstY = nodes.get(0).y;
+            double lastX = nodes.get(nodes.size()-1).x;
+            double lastY = nodes.get(nodes.size()-1).y;
+            middleX = nodes.get(nodes.size()/2).x;
+            middleY = nodes.get(nodes.size()/2).y;
+            //determine if road is too short to have road displayed in order to avoid showing too many names:
+            double distanceX = lastX - firstX;
+            double distanceY = lastY - firstY;
+            distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+
+            //calculate angle from first and last node to get approximation of slope of road
+            this.angle = Math.toDegrees(Math.atan2(lastY - firstY, lastX - firstX));
+            if (angle > 90) {
+                angle = angle - 180;
+            } else if (angle < -90) {
+                angle = angle + 180;
             }
         }
     }
@@ -120,6 +149,7 @@ public class Road extends Element{
 
         gc.setLineWidth((zoom * roadType.getRoadWidth()));
         gc.setStroke(MapColor.getInstance().colorMap.get(roadType.toString()));
+        //if(this.oneway) gc.setStroke(Color.BLUE);
         draw(gc,1, zoom);
     }
 
@@ -140,54 +170,35 @@ public class Road extends Element{
     }
 
     public void drawName(GraphicsContext gc, double zoom){
-        if (name != null) {
-            double firstX = nodes.get(0).x;
-            double firstY = nodes.get(0).y;
-            double lastX = nodes.get(nodes.size()-1).x;
-            double lastY = nodes.get(nodes.size()-1).y;
-            double middleX = nodes.get(nodes.size()/2).x;
-            double middleY = nodes.get(nodes.size()/2).y;
-            //determine if road is too short to have road displayed in order to avoid showing too many names:
-            double distanceX = lastX - firstX;
-            double distanceY = lastY - firstY;
-            double distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-            if (distance > 0.0005) {
-                gc.setFill(Color.rgb(30, 30, 30, 1));
-                gc.setStroke(Color.WHITE);
-                gc.setLineWidth(zoom * 2);
-                gc.setFont(Font.font("Helvetica Neue", zoom * 10));
 
-                //calculate angle from first and last node to get approximation of slope of road
-                double angle = Math.toDegrees(Math.atan2(lastY - firstY, lastX - firstX));
-                if (angle > 90) {
-                    angle = angle - 180;
-                } else if (angle < -90) {
-                    angle = angle + 180;
-                }
+        if (this.distance > 0.0005) {
+            gc.setFill(MapColor.getInstance().colorMap.get("TEXT"));
+            gc.setStroke(MapColor.getInstance().colorMap.get("TEXT_OUTLINE"));
+            gc.setLineWidth(zoom * 2);
+            gc.setFont(Font.font("Helvetica Neue", zoom * 10));
 
-                //Save the current state of the graphics context
-                gc.save();
+            //Save the current state of the graphics context
+            gc.save();
 
-                //Translate the gc to the middleX and middleY coordinates and rotate by angle
-                gc.translate(middleX, middleY);
-                gc.rotate(angle);
+            //Translate the gc to the middleX and middleY coordinates and rotate by angle
+            gc.translate(this.middleX, this.middleY);
+            gc.rotate(this.angle);
 
 
-                // Calculates the dimensions of the text
-                Text text = new Text(name);
-                text.setFont(Font.font("Helvetica Neue", zoom * 10));
-                double textWidth = text.getLayoutBounds().getWidth();
-                double textHeight = text.getLayoutBounds().getHeight();
+            // Calculates the dimensions of the text
+            Text text = new Text(name);
+            text.setFont(Font.font("Helvetica Neue", zoom * 10));
+            double textWidth = text.getLayoutBounds().getWidth();
+            double textHeight = text.getLayoutBounds().getHeight();
 
-                // Translates the gc back to the original position
-                gc.translate(-textWidth / 2, textHeight / 2);
+            // Translates the gc back to the original position
+            gc.translate(-textWidth / 2, textHeight / 2);
 
-                // Draws the rotated text at (0, 0) in the translated gc
-                gc.strokeText(name, 0, 0);
-                gc.fillText(name, 0, 0);
+            // Draws the rotated text at (0, 0) in the translated gc
+            gc.strokeText(name, 0, 0);
+            gc.fillText(name, 0, 0);
 
-                gc.restore(); // Restores the saved state of the graphics context
-            }
+            gc.restore(); // Restores the saved state of the graphics context
         }
     }
     @Override

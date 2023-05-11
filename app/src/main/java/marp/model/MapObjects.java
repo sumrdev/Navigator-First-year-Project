@@ -238,6 +238,27 @@ public class MapObjects implements Serializable{
         return roadNodeRTree;
     }
 
+    //#####################################################
+    //######## Waterways and railways lists and trees #####
+    //#####################################################
+
+    private final ArrayList<SimpleShape> railwayList = new ArrayList<>();
+    private final ArrayList<SimpleShape> waterwayList = new ArrayList<>();
+    private RTree<SimpleShape> railwayTree = new RTree<>(railwayList);
+    private RTree<SimpleShape> waterwayTree = new RTree<>(waterwayList);
+    public ArrayList<SimpleShape> getRailwayList() {
+        return railwayList;
+    }
+    public ArrayList<SimpleShape> getWaterwayList() {
+        return waterwayList;
+    }
+    public RTree<SimpleShape> getRailwayTree() {
+        return railwayTree;
+    }
+    public RTree<SimpleShape> getWaterwayTree() {
+        return waterwayTree;
+    }
+
     public void buildTrees() {
         Thread address = new Thread(() -> {
             Time startTime = new Time(System.currentTimeMillis());
@@ -288,6 +309,8 @@ public class MapObjects implements Serializable{
             Time startTime = new Time(System.currentTimeMillis());
             waterAreasTree = new RTree<>(waterAreasList);
             terrainAreasTree = new RTree<>(terrainAreasList);
+            waterwayTree = new RTree<>(waterwayList);
+            railwayTree = new RTree<>(railwayList);
             Time endTime = new Time(System.currentTimeMillis());
             System.out.println("Time to build terrain and water trees: " + (endTime.getTime() - startTime.getTime()) + "ms");
         });

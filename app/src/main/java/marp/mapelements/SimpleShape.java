@@ -8,6 +8,9 @@ import marp.mapelements.details.FontSize;
 import marp.mapelements.details.MapColor;
 import marp.mapelements.details.ShapeType;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class SimpleShape extends Element {
     private ShapeType type;
     protected float[] x;
@@ -19,6 +22,29 @@ public class SimpleShape extends Element {
         this.x = x;
         this.y = y;
 
+        for (int i = 0; i < x.length; i++) {
+            if(x[i] < boundingCoords[0]){
+                boundingCoords[0] = x[i];
+            }
+            if (x[i] > boundingCoords[2]){
+                boundingCoords[2] = x[i];
+            }
+            if(y[i] < boundingCoords[1]){
+                boundingCoords[1] = y[i];
+            }
+            if (y[i] > boundingCoords[3]){
+                boundingCoords[3] = y[i];
+            }
+        }
+    }
+    public SimpleShape(ShapeType type, ArrayList<RoadNode> nodes){
+        this.type = type;
+        this.x = new float[nodes.size()];
+        this.y = new float[nodes.size()];
+        for (int i = 0; i < nodes.size(); i++) {
+            x[i] = nodes.get(i).getX();
+            y[i] = nodes.get(i).getY();
+        }
         for (int i = 0; i < x.length; i++) {
             if(x[i] < boundingCoords[0]){
                 boundingCoords[0] = x[i];
@@ -130,6 +156,16 @@ public class SimpleShape extends Element {
         }
         gc.closePath();
         gc.fill();
+    }
+    public void drawLine(GraphicsContext gc, double zoom) {
+        gc.setStroke(MapColor.getInstance().colorMap.get(type.toString()));
+        gc.setLineWidth(1*zoom);
+        gc.beginPath();
+        gc.moveTo(x[0], y[0]);
+        for (int i = 1; i < x.length; i++) {
+            gc.lineTo(x[i], y[i]);
+        }
+        gc.stroke();
     }
 
     @Override

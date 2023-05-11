@@ -9,6 +9,8 @@ public enum ShapeType {
     CEMENT,
     COMMERCIAL_GROUND,
     FARMLAND,
+    WATERWAY,
+    RAILWAY,
     UNDEFINED, 
     DELETE;
 }

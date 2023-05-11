@@ -3,6 +3,7 @@ package marp.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import javafx.geometry.Point2D;
 import marp.mapelements.*;
@@ -11,7 +12,7 @@ import marp.mapelements.details.PointType;
 import marp.mapelements.details.RoadType;
 import marp.mapelements.details.ShapeType;
 
-public class MapObjectInParsing implements Serializable{
+public class MapObjectInParsing implements Serializable {
 
     private HashMap<Long, Point> pointIDtoPoint = new HashMap<>();
     private HashMap<Long, RoadNode> roadNodeIDtoRoadNode = new HashMap<>();
@@ -26,9 +27,10 @@ public class MapObjectInParsing implements Serializable{
     private boolean isOneWay;
     private boolean roundabout;
     private int speed;
+    private boolean isTunnel = false;
     private Point unfinishedPoint;
 
-    public long unfinishedSimpleShapeID; 
+    public long unfinishedSimpleShapeID;
     private ArrayList<SimpleShape> coastLineSegmentList = new ArrayList<>();
 
     //private Road unfinishedRoad;
@@ -128,7 +130,7 @@ public class MapObjectInParsing implements Serializable{
             Address address = new Address(this.street, this.housenumber, this.postcode, this.city, unfinishedPoint.getX(), unfinishedPoint.getY());
             mapObjects.getAddressList().add(address);
             mapObjects.getTrie().insert(address);
-        } else if(fontSize != FontSize.UNDEFINED){
+        } else if (fontSize != FontSize.UNDEFINED) {
             PlaceName placeName = new PlaceName(this.name, this.fontSize, this.unfinishedPoint.getX(), this.unfinishedPoint.getY());
             switch (fontSize) {
                 case QUITE_SMALL:
@@ -172,6 +174,7 @@ public class MapObjectInParsing implements Serializable{
         cleanUpAddressVariables();
         this.unfinishedPoint = null;
         this.unfinishedPointType = PointType.UNDEFINED;
+        this.unfinishedShapeType = ShapeType.UNDEFINED;
         this.fontSize = FontSize.UNDEFINED;
         this.name = null;
     }
@@ -209,8 +212,15 @@ public class MapObjectInParsing implements Serializable{
                     case FOREST:
                     case CEMENT:
                     case COMMERCIAL_GROUND:
-                    // case FARMLAND:
-                        mapObjects.getTerrainAreasList().add(new SimpleShape( this.unfinishedShapeType, coords.get(0), coords.get(1)));
+                        mapObjects.getTerrainAreasList().add(new SimpleShape(this.unfinishedShapeType, coords.get(0), coords.get(1)));
+                        break;
+                    case WATERWAY:
+                        mapObjects.getWaterwayList().add(new SimpleShape(this.unfinishedShapeType, coords.get(0), coords.get(1)));
+                        break;
+                    case RAILWAY:
+                        if (!isTunnel) {
+                            mapObjects.getRailwayList().add(new SimpleShape(this.unfinishedShapeType, coords.get(0), coords.get(1)));
+                        }
                         break;
                     default:
                         break;
@@ -223,7 +233,7 @@ public class MapObjectInParsing implements Serializable{
                     speed = unfinishedRoadType.getSpeed();
                 }
             }
-            ArrayList<RoadNode> roadNodes = new ArrayList<>(); 
+            ArrayList<RoadNode> roadNodes = new ArrayList<>();
             for(Point point: this.unfinishedSimpleShapePoints){
                 if(!roadNodeIDtoRoadNode.containsKey(point.getID())){
                     roadNodeIDtoRoadNode.put(point.getID(), new RoadNode(point));
@@ -232,6 +242,7 @@ public class MapObjectInParsing implements Serializable{
             }
             Road road = new Road(this.unfinishedSimpleShapeID, roadNodes, this.unfinishedRoadType, this.speed, this.isOneWay, this.roundabout, this.name);
             mapObjects.getRoadsList().add(road);
+            SimpleShapeIDToSimpleShape.put(this.unfinishedSimpleShapeID, new SimpleShape(this.unfinishedShapeType, roadNodes));
             switch (unfinishedRoadType) {
                 case MOTORWAY:
                     mapObjects.getMotorWaysList().add(road);
@@ -260,6 +271,7 @@ public class MapObjectInParsing implements Serializable{
         roundabout = false;
         isOneWay = false;
         speed = -1;
+        isTunnel = false;
         unfinishedRoadType = RoadType.UNDEFINED;
         cleanUpAddressVariables();
     }
@@ -294,7 +306,6 @@ public class MapObjectInParsing implements Serializable{
                 case FOREST:
                 case CEMENT:
                 case COMMERCIAL_GROUND:
-                // case FARMLAND:
                     mapObjects.getTerrainAreasList().add(new ComplexShape(this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
                     break;
                 default:
@@ -345,8 +356,12 @@ public class MapObjectInParsing implements Serializable{
         return coastLineSegmentList;
     }
 
-    public void deletePointHashMap(){
-        if(this.pointIDtoPoint!=null){
+    public void setIsTunnel(boolean tunnel) {
+        this.isTunnel = tunnel;
+    }
+
+    public void deletePointHashMap() {
+        if (this.pointIDtoPoint != null) {
             this.pointIDtoPoint = null;
             System.gc();
         }

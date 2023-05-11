@@ -139,6 +139,17 @@ public class OSMParser {
                                 case "building":
                                     mapObjectInParsing.setShapeType(ShapeType.BUILDING);
                                     break;
+                                case "railway":
+                                    switch (value) {
+                                        case "rail":
+                                        case "subway":
+                                            mapObjectInParsing.setShapeType(ShapeType.RAILWAY);
+                                            break;
+                                    }
+                                    break;
+                                case "tunnel":
+                                    mapObjectInParsing.setIsTunnel(value.equals("yes"));
+                                    break;
                                 case "natural":
                                     switch (value) {
                                         case "wood":
@@ -169,6 +180,9 @@ public class OSMParser {
                                 case "harbour":
                                     mapObjectInParsing.setShapeType(ShapeType.WATER);
                                     break;
+                                case "waterway":
+                                    mapObjectInParsing.setShapeType(ShapeType.WATERWAY);
+                                    break;
                                 case "landuse":
                                     switch (value) {
                                         case "grass":
@@ -192,21 +206,23 @@ public class OSMParser {
                                         case "industrial":
                                         case "residential":
                                         case "landfill":
+                                        case "railway":
                                             mapObjectInParsing.setShapeType(ShapeType.CEMENT);
                                             break;
                                         case "commercial":
                                         case "retail":
                                             mapObjectInParsing.setShapeType(ShapeType.COMMERCIAL_GROUND);
                                             break;
-                                        case "allotments":
-                                        case "farmland":
-                                        case "farmyard":
-                                        case "orchard":
-                                        case "vineyard":
-                                            mapObjectInParsing.setShapeType(ShapeType.FARMLAND);
-                                            break;
                                         default:
                                             break;
+                                    }
+                                    break;
+                                case "leisure":
+                                    switch (value) {
+                                        case "garden":
+                                        case "park":
+                                        mapObjectInParsing.setShapeType(ShapeType.GRASS);
+                                        break;
                                     }
                                     break;
                                 case "addr:city":
@@ -284,10 +300,8 @@ public class OSMParser {
                                             mapObjectInParsing.setFontSize(FontSize.QUITE_LARGE);
                                         case "region":
                                         case "sea":
-                                            mapObjectInParsing.setFontSize(FontSize.LARGE);
-                                            break;
                                         case "city":
-                                            mapObjectInParsing.setFontSize(FontSize.MEDIUM_LARGE);
+                                            mapObjectInParsing.setFontSize(FontSize.LARGE);
                                             break;
                                         case "town":
                                         case "borough":

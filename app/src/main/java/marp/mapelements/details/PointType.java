@@ -17,7 +17,7 @@ public enum PointType {
     HEALTHCARE(new Image(Objects.requireNonNull(PointType.class.getResourceAsStream("/icons/healthcare.png"))), "Healthcare"),
     THEATRE(new Image(Objects.requireNonNull(PointType.class.getResourceAsStream("/icons/theatre.png"))), "Theatre"),
     TOILETS(new Image(Objects.requireNonNull(PointType.class.getResourceAsStream("/icons/toilets.png"))), "Toilets"),
-    FAVOURITE(new Image(Objects.requireNonNull(PointType.class.getResourceAsStream("/icons/heart.png"))), ""),
+    FAVOURITE(new Image(Objects.requireNonNull(PointType.class.getResourceAsStream("/icons/heart.png"))), "Favourite"),
     CUSTOM(new Image(Objects.requireNonNull(PointType.class.getResourceAsStream("/icons/custompoint.png"))), ""),
     SELECTED(new Image(Objects.requireNonNull(PointType.class.getResourceAsStream("/icons/selected.png"))), ""),
     START_LOCATION(new Image(Objects.requireNonNull(PointType.class.getResourceAsStream("/icons/start.png"))), ""),

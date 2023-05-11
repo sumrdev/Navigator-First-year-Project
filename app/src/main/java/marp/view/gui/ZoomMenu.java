@@ -3,9 +3,13 @@ package marp.view.gui;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Control;
+import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
+import marp.view.gui.buttons.MapButton;
 import marp.view.gui.buttons.MapTextButton;
+
+import java.util.Objects;
 
 public class ZoomMenu extends VBox {
     double zoomlevel;
@@ -15,8 +19,8 @@ public class ZoomMenu extends VBox {
 
     MapLabelSmall zoomLevelLabel;
 
-    public MapTextButton zoomIn;
-    public MapTextButton zoomOut;
+    public MapButton zoomIn;
+    public MapButton zoomOut;
 
     // Distance line
     public Line distanceLine;
@@ -33,12 +37,10 @@ public class ZoomMenu extends VBox {
         zoomLevelLabel = new MapLabelSmall("Distance: " + zoomlevel);
 
         // Zoom in button
-        zoomIn = new MapTextButton("+");
-        zoomIn.setMaxSize(48, 48);
+        zoomIn = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/plus.png"))));
 
         // Zoom out button
-        zoomOut = new MapTextButton("-");
-        zoomOut.setMaxSize(48, 48);
+        zoomOut = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/minus.png"))));
 
         this.getChildren().addAll(zoomIn, zoomOut, zoomLevelLabel, distanceLine);
         this.setPadding(new Insets(5));

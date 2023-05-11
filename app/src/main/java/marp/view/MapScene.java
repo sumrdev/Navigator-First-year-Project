@@ -245,7 +245,7 @@ public class MapScene extends Scene{
         }
     }
     private void drawPlaceNames(Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 500 && zoomMenu.getZoomlevel() > 150) {
+        if (zoomMenu.getZoomlevel() < 15000 && zoomMenu.getZoomlevel() > 150) {
             for (PlaceName placeName : model.getMapObjects().getMediumPlaceNameTree().getElementsInRange(bounds)) {
                 placeName.draw(gc, (float) (1 / Math.sqrt(trans.determinant())));
             }
@@ -281,7 +281,7 @@ public class MapScene extends Scene{
         }
     }
     private void drawLargeRoads(Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 7500 && zoomMenu.getZoomlevel() > 50) {
+        if (zoomMenu.getZoomlevel() < 10000 && zoomMenu.getZoomlevel() > 50) {
             if (model.isRoadsVisible) {
                 for (Road road : model.getMapObjects().getLargeRoadsTree().getElementsInRange(bounds)) {
                     road.drawOutline(gc, (1 / Math.sqrt(trans.determinant())));
@@ -305,7 +305,7 @@ public class MapScene extends Scene{
         }
     }
     private void drawSmallRoads(Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 800 && zoomMenu.getZoomlevel() > 50) {
+        if (zoomMenu.getZoomlevel() < 750 && zoomMenu.getZoomlevel() > 50) {
             if (model.isRoadsVisible) {
                 for (Road road : model.getMapObjects().getSmallRoadsTree().getElementsInRange(bounds)) {
                     road.drawOutline(gc, (1 / Math.sqrt(trans.determinant())));
@@ -418,7 +418,7 @@ public class MapScene extends Scene{
         }
     }
     private void drawRailway(Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 800) {
+        if (zoomMenu.getZoomlevel() < 750) {
             if (model.isRoadsVisible) {
                 for (SimpleShape railway : model.getMapObjects().getRailwayTree().getElementsInRange(bounds)) {
                     railway.drawLine(gc, (1 / Math.sqrt(trans.determinant())));
@@ -427,7 +427,7 @@ public class MapScene extends Scene{
         }
     }
     private void drawWaterway(Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 800) {
+        if (zoomMenu.getZoomlevel() < 1500) {
             if (model.isRoadsVisible) {
                 for (SimpleShape waterway : model.getMapObjects().getWaterwayTree().getElementsInRange(bounds)) {
                     waterway.drawLine(gc, (1 / Math.sqrt(trans.determinant())));

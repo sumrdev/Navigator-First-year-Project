@@ -213,13 +213,6 @@ public class OSMParser {
                                         case "retail":
                                             mapObjectInParsing.setShapeType(ShapeType.COMMERCIAL_GROUND);
                                             break;
-                                        case "allotments":
-                                        case "farmland":
-                                        case "farmyard":
-                                        case "orchard":
-                                        case "vineyard":
-                                            mapObjectInParsing.setShapeType(ShapeType.FARMLAND);
-                                            break;
                                         default:
                                             break;
                                     }

@@ -25,7 +25,7 @@ public class SettingsPanel extends MenuPanel {
     
     private MapToggleButton normalModeButton;
     private MapToggleButton nightModeButton;
-    private MapToggleButton colorBlindModeButton;
+    private MapTextButton colorBlindModeButton;
     private MapCheckBox hideAddressesCheckbox;
     private MapCheckBox hideLandmarkCheckbox;
     private MapCheckBox hideRoadsCheckbox;
@@ -87,7 +87,7 @@ public class SettingsPanel extends MenuPanel {
      * 
      * @return MapToggleButton colorBlindModeButton
      */
-    public MapToggleButton getColorBlindModeButton() {
+    public MapTextButton getColorBlindModeButton() {
         return colorBlindModeButton;
     }
     
@@ -188,10 +188,10 @@ public class SettingsPanel extends MenuPanel {
         normalModeButton.setMinWidth(110);
         nightModeButton = new MapToggleButton("Night Mode");
         nightModeButton.setMinWidth(100);
-        colorBlindModeButton = new MapToggleButton("Color Blind Mode");
+        colorBlindModeButton = new MapTextButton("Color Blind Mode");
         colorBlindModeButton.setMinWidth(120);
         ToggleGroup mapModeToggleGroup = new ToggleGroup();
-        mapModeToggleGroup.getToggles().addAll(normalModeButton, nightModeButton, colorBlindModeButton);
+        mapModeToggleGroup.getToggles().addAll(normalModeButton, nightModeButton);
         HBox mapDisplayButtons = new HBox(normalModeButton, nightModeButton, colorBlindModeButton);
         mapDisplayButtons.setSpacing(10);
 

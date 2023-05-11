@@ -153,8 +153,8 @@ public class Road extends Element{
             double distanceY = lastY - firstY;
             double distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
             if (distance > 0.0005) {
-                gc.setFill(Color.rgb(30, 30, 30, 1));
-                gc.setStroke(Color.WHITE);
+                gc.setFill(MapColor.getInstance().colorMap.get("TEXT"));
+                gc.setStroke(MapColor.getInstance().colorMap.get("TEXT_OUTLINE"));
                 gc.setLineWidth(zoom * 2);
                 gc.setFont(Font.font("Helvetica Neue", zoom * 10));
 

@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import marp.mapelements.details.FontSize;
+import marp.mapelements.details.MapColor;
 
 public class PlaceName extends Point {
     String name;
@@ -17,8 +18,8 @@ public class PlaceName extends Point {
     }
     public void draw(GraphicsContext gc, float zoom) {
         gc.setFont(Font.font("Helvetica Neue", zoom * fontSize.getSize()));
-        gc.setFill(Color.rgb(30, 30,30,1));
-        gc.setStroke(Color.WHITE);
+        gc.setFill(MapColor.getInstance().colorMap.get("TEXT"));
+        gc.setStroke(MapColor.getInstance().colorMap.get("TEXT_OUTLINE"));
         gc.setLineWidth(zoom*2);
         Text text = new Text(name);
         text.setFont(gc.getFont());

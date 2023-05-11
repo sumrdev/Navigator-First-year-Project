@@ -288,6 +288,7 @@ public class Controller {
             // Set the selectedPointMarker to null so no selected point is shown when the
             // minimized menu is shown.
             model.setSelectedPointMarker(null);
+            view.getMapScene().redraw();
         });
 
         view.getMapMenu().getSelectedPointPanel().directionsButton.setOnAction(e -> {

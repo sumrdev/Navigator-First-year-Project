@@ -212,7 +212,6 @@ public class MapObjectInParsing implements Serializable {
                     case FOREST:
                     case CEMENT:
                     case COMMERCIAL_GROUND:
-                    case FARMLAND:
                         mapObjects.getTerrainAreasList().add(new SimpleShape(this.unfinishedShapeType, coords.get(0), coords.get(1)));
                         break;
                     case WATERWAY:
@@ -307,8 +306,6 @@ public class MapObjectInParsing implements Serializable {
                 case FOREST:
                 case CEMENT:
                 case COMMERCIAL_GROUND:
-                case FARMLAND:
-                // case FARMLAND:
                     mapObjects.getTerrainAreasList().add(new ComplexShape(this.unfinishedShapeType, this.unfinishedRelationSimpleShapes));
                     break;
                 default:

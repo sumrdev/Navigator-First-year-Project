@@ -415,7 +415,7 @@ public class Controller {
             view.getMapScene().redraw();
         });
 
-        view.getMapMenu().getColorblindnessModePanel().getNormalButton().setOnAction(e -> {
+        view.getMapMenu().getColorblindnessModePanel().getNoneButton().setOnAction(e -> {
             MapColor.getInstance().changeTheme("default");
 
             view.getMapMenu().getSettingsPanel().activateDarkMode(false);

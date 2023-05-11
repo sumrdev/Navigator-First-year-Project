@@ -43,6 +43,11 @@ public class DirectionsPanel extends MenuPanel {
     public MapLabelSmall timeLabel;
     public HBox distanceAndTime;
 
+    private MapLabel findRouteLabel = new MapLabel("Find the best route to your destination");
+    private MapLabelSmall startLocatLabelSmall = new MapLabelSmall("Start location: ");
+    private MapLabelSmall destinationLabelSmall = new MapLabelSmall("Destination: ");
+    private MapLabelSmall modeLabelSmall = new MapLabelSmall("Mode of transportation");
+
     VBox startAndEndLocation;
 
 
@@ -71,7 +76,7 @@ public class DirectionsPanel extends MenuPanel {
         HBox modeOfTransportationButtons = new HBox(carButton, walkButton, bikeButton);
         modeOfTransportationButtons.setSpacing(30);
         modeOfTransportationButtons.setAlignment(Pos.CENTER);
-        VBox modeOfTransportationContainer = new VBox(new MapLabelSmall("Mode of transportation"), modeOfTransportationButtons);
+        VBox modeOfTransportationContainer = new VBox(modeLabelSmall, modeOfTransportationButtons);
         modeOfTransportationContainer.setSpacing(10);
 
         //Create new search bars for start and end locations
@@ -89,9 +94,9 @@ public class DirectionsPanel extends MenuPanel {
         endLocationSearchbarBox.setSpacing(10);
 
         //Create containers for search bars with buttons and text
-        VBox startSearchBarBox = new VBox(new MapLabelSmall("Start location: "), startLocationSearchbarBox);
+        VBox startSearchBarBox = new VBox(startLocatLabelSmall, startLocationSearchbarBox);
         startSearchBarBox.setSpacing(5);
-        VBox endSearchBarBox = new VBox(new MapLabelSmall("Destination: "), endLocationSearchbarBox);
+        VBox endSearchBarBox = new VBox(destinationLabelSmall, endLocationSearchbarBox);
         endSearchBarBox.setSpacing(5);
 
         // Create HBox with distance and estimated travel time.
@@ -133,7 +138,7 @@ public class DirectionsPanel extends MenuPanel {
         guideView.setVisible(false);
 
         // Create a VBox to hold start and end location search bars with buttons and labels, swap button, find route button, and labels
-        startAndEndLocation = new VBox(new MapLabel("Find the best route to your destination"), startSearchBarBox, swapButton, endSearchBarBox, modeOfTransportationContainer, findRouteButton, distanceAndTime, guideView);
+        startAndEndLocation = new VBox(findRouteLabel, startSearchBarBox, swapButton, endSearchBarBox, modeOfTransportationContainer, findRouteButton, distanceAndTime, guideView);
         startAndEndLocation.setMaxHeight(400);
         startSearchButton.setAlignment(Pos.TOP_CENTER);
         startAndEndLocation.setBackground(new Background(new BackgroundFill(Color.web("#efefef"), new CornerRadii(24), Insets.EMPTY)));
@@ -209,5 +214,13 @@ public class DirectionsPanel extends MenuPanel {
         walkButton.activateDarkMode(activate);
 
         bikeButton.activateDarkMode(activate);
+
+        findRouteLabel.activateDarkMode(activate);
+
+        startLocatLabelSmall.activateDarkMode(activate);
+
+        destinationLabelSmall.activateDarkMode(activate);
+
+        modeLabelSmall.activateDarkMode(activate);
     }
 }

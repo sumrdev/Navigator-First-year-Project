@@ -21,13 +21,16 @@ public class ColorblindnessModePanel extends MenuPanel {
 	public MapButton exitButton;
 	private int buttonsMinWidth = 150;
 	private VBox colorBlindModesDisplay;
+	private MapLabel chooseModeLabel;
 
-	public MapToggleButton getNormalButton() {
+	public MapToggleButton getNoneButton() {
 		return normalButton;
 	}
 
 	public ColorblindnessModePanel() {
 		super();
+		chooseModeLabel = new MapLabel("Choose color blind mode:");
+
 		exitButton = new MapButton(
 				new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/menu.png"))));
 
@@ -46,18 +49,18 @@ public class ColorblindnessModePanel extends MenuPanel {
 		colorBlindnessModeToggleGroup.getToggles().addAll(normalButton, deuteranopiaButton, tritanopiaButton,
 				protanopiaButton,
 				monochromacyButton);
-		colorBlindModesDisplay = new VBox(new MapLabel("Choose color blind mode:"), normalButton,
+		colorBlindModesDisplay = new VBox(chooseModeLabel, normalButton,
 				deuteranopiaButton,
 				tritanopiaButton, protanopiaButton, monochromacyButton);
 		colorBlindModesDisplay.getStylesheets().addAll("CSS/darkmodesheet.css", "CSS/stylesheet.css");
+		colorBlindModesDisplay.getStyleClass().add("map-vbox");
 		colorBlindModesDisplay.setMinWidth(400);
 		colorBlindModesDisplay.setMaxHeight(400);
 		colorBlindModesDisplay.setAlignment(Pos.TOP_CENTER);
-		
+
 		colorBlindModesDisplay.setPadding(new Insets(20));
 		colorBlindModesDisplay.setSpacing(20);
 		colorBlindModesDisplay.setAlignment(Pos.TOP_CENTER);
-		colorBlindModesDisplay.getStyleClass().add("map-vbox");
 
 		this.getChildren().addAll(colorBlindModesDisplay, exitButton);
 		this.setPadding(new Insets(20));
@@ -73,16 +76,17 @@ public class ColorblindnessModePanel extends MenuPanel {
 	public void activateDarkMode(boolean activate) {
 		if (activate) {
 			if (colorBlindModesDisplay.getStylesheets().contains("CSS/stylesheet.css")) {
-                colorBlindModesDisplay.getStylesheets().remove("CSS/stylesheet.css");
-                colorBlindModesDisplay.getStylesheets().add("CSS/darkmodesheet.css");
-            }
+				colorBlindModesDisplay.getStylesheets().remove("CSS/stylesheet.css");
+				colorBlindModesDisplay.getStylesheets().add("CSS/darkmodesheet.css");
+			}
 		} else {
 			if (colorBlindModesDisplay.getStylesheets().contains("CSS/darkmodesheet.css")) {
-                colorBlindModesDisplay.getStylesheets().remove("CSS/darkmodesheet.css");
-                colorBlindModesDisplay.getStylesheets().add("CSS/stylesheet.css");
-            }
+				colorBlindModesDisplay.getStylesheets().remove("CSS/darkmodesheet.css");
+				colorBlindModesDisplay.getStylesheets().add("CSS/stylesheet.css");
+			}
 		}
 
+		chooseModeLabel.activateDarkMode(activate);
 		exitButton.activateDarkMode(activate);
 
 	}

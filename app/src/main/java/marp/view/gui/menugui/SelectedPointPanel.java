@@ -22,8 +22,8 @@ import java.util.Objects;
 
 public class SelectedPointPanel extends MenuPanel {
     Address address;
-    Label selectedPointName;
-    Label selectedPointType;
+    MapLabel selectedPointName;
+    MapLabelSmall selectedPointType;
 
     public SearchBar searchBar;
     public MapButton directionsButton;
@@ -141,5 +141,9 @@ public class SelectedPointPanel extends MenuPanel {
         directionsToSelectedPointButton.activateDarkMode(activate);
 
         searchButton.activateDarkMode(activate);
+
+        selectedPointName.activateDarkMode(activate);
+
+        selectedPointType.activateDarkMode(activate);
     }
 }

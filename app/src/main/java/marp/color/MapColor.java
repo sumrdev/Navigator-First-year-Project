@@ -23,7 +23,7 @@ public class MapColor {
         defaultColorMap.put("BUILDING", Color.rgb(190, 190, 190));
         defaultColorMap.put("BUILDING_close", Color.rgb(190, 190, 190));
         defaultColorMap.put("COASTLINE", Color.rgb(206, 234, 214));
-        defaultColorMap.put("coastline_near", Color.rgb(255, 255, 255));
+        defaultColorMap.put("coastline_near", Color.rgb(233, 233, 233));
         defaultColorMap.put("coastline_far", Color.rgb(206, 234, 214));
         defaultColorMap.put("GRASS", Color.rgb(206, 234, 214));
         defaultColorMap.put("GRASS_close", Color.rgb(206, 234, 214));

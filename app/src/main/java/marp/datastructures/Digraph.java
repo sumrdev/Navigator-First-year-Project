@@ -2,6 +2,7 @@ package marp.datastructures;
 
 import java.io.Serializable;
 import java.sql.Time;
+import java.text.DecimalFormat;
 import java.util.*;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -302,7 +303,8 @@ public class Digraph implements Serializable {
             distance = (float) (distance + MathFunctions.distanceInMeters((float) (nodes.get(edge.start).getX()),
                     nodes.get(edge.start).getY(), (float) (nodes.get(edge.end).getX()), nodes.get(edge.end).getY()));
         }
-        return Math.round((distance / 1000.0));
+        DecimalFormat df = new DecimalFormat("#.#");
+        return Float.parseFloat(df.format(distance / 1000.0f));
     }
 
     public int getTravelTime(int transportationMethod) {

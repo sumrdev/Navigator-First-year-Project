@@ -14,17 +14,33 @@ import javafx.scene.layout.VBox;
 public class ColorblindnessModePanel extends MenuPanel {
 
 	private MapToggleButton normalButton;
-	public MapToggleButton deuteranopiaButton;
-	public MapToggleButton protanopiaButton;
-	public MapToggleButton tritanopiaButton;
-	public MapToggleButton monochromacyButton;
-	public MapButton exitButton;
+	private MapToggleButton deuteranopiaButton;
+	private MapToggleButton protanopiaButton;
+	private MapToggleButton tritanopiaButton;
+	private MapToggleButton monochromacyButton;
+	private MapButton exitButton;
 	private int buttonsMinWidth = 150;
 	private VBox colorBlindModesDisplay;
 	private MapLabel chooseModeLabel;
 
 	public MapToggleButton getNoneButton() {
 		return normalButton;
+	}
+
+	public MapToggleButton getDeuteranopiaButton(){
+		return deuteranopiaButton;
+	}
+	public MapToggleButton getProtanopiaButton(){
+		return protanopiaButton;
+	}
+	public MapToggleButton getTritanopiaButton(){
+		return tritanopiaButton;
+	}
+	public MapToggleButton getMonochromacyButton(){
+		return monochromacyButton;
+	}
+	public MapButton getExitButton(){
+		return exitButton;
 	}
 
 	public ColorblindnessModePanel() {

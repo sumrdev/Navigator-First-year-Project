@@ -12,16 +12,28 @@ import marp.view.gui.buttons.MapTextButton;
 import java.util.Objects;
 
 public class PointOfInterestPanel extends MenuPanel {
-    public TextField pointNameField;
+    private TextField pointNameField;
 
-    public MapTextButton createPointButton;
-    public MapButton cancelButton;
+    private MapTextButton createPointButton;
+    private MapButton cancelButton;
     private MapButton takeSnapShotButton;
     private MapLabel createPOILabel = new MapLabel("Create a new point of interest");
     private MapLabelSmall nameOfPOI = new MapLabelSmall("Name of your point of interest:");
 
     public MapButton getTakeSnapShotButton() {
         return takeSnapShotButton;
+    }
+
+    public TextField getPointNameField(){
+        return pointNameField;
+    }
+
+    public MapTextButton getCreatePointButton(){
+        return createPointButton;
+    }
+
+    public MapButton getCancelButton(){
+        return cancelButton;
     }
 
     public VBox newPointMenu;

@@ -343,14 +343,14 @@ public class Controller {
                                 (float) (view.getMapMenu().getSelectedPointPanel().getMapPoint().getX() / 0.56),
                                 -view.getMapMenu().getSelectedPointPanel().getMapPoint().getY(), true));
                 //We then minimize the panel...
-                view.getMapMenu().getPointOfInterestPanel().pointNameField.clear();
+                view.getMapMenu().getPointOfInterestPanel().getPointNameField().clear();
                 view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
                 model.setSelectedPointMarker(null);
                 view.getMapScene().redraw();
             } else {
                 // If the point has the type Favourite, and the button is pressed we want to delete the point.
                 model.getMapObjects().getFavouritesMarkerList().remove(model.getSelectedPoint());
-                view.getMapMenu().getPointOfInterestPanel().pointNameField.clear();
+                view.getMapMenu().getPointOfInterestPanel().getPointNameField().clear();
                 view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
                 model.setSelectedPointMarker(null);
                 view.getMapScene().redraw();
@@ -439,11 +439,11 @@ public class Controller {
             view.getMapScene().redraw();
         });
 
-        view.getMapMenu().getColorblindnessModePanel().exitButton.setOnAction(e -> {
+        view.getMapMenu().getColorblindnessModePanel().getExitButton().setOnAction(e -> {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getSettingsPanel());
         });
 
-        view.getMapMenu().getColorblindnessModePanel().deuteranopiaButton.setOnAction(e -> {
+        view.getMapMenu().getColorblindnessModePanel().getDeuteranopiaButton().setOnAction(e -> {
 
             view.getMapMenu().getSettingsPanel().activateDarkMode(false);
             view.getMapMenu().getMinimizedPanel().activateDarkMode(false);
@@ -458,7 +458,7 @@ public class Controller {
             view.getMapScene().redraw();
         });
 
-        view.getMapMenu().getColorblindnessModePanel().protanopiaButton.setOnAction(e -> {
+        view.getMapMenu().getColorblindnessModePanel().getProtanopiaButton().setOnAction(e -> {
 
             view.getMapMenu().getSettingsPanel().activateDarkMode(false);
             view.getMapMenu().getMinimizedPanel().activateDarkMode(false);
@@ -473,7 +473,7 @@ public class Controller {
             view.getMapScene().redraw();
         });
 
-        view.getMapMenu().getColorblindnessModePanel().tritanopiaButton.setOnAction(e -> {
+        view.getMapMenu().getColorblindnessModePanel().getTritanopiaButton().setOnAction(e -> {
 
             view.getMapMenu().getSettingsPanel().activateDarkMode(false);
             view.getMapMenu().getMinimizedPanel().activateDarkMode(false);
@@ -488,7 +488,7 @@ public class Controller {
             view.getMapScene().redraw();
         });
 
-        view.getMapMenu().getColorblindnessModePanel().monochromacyButton.setOnAction(e -> {
+        view.getMapMenu().getColorblindnessModePanel().getMonochromacyButton().setOnAction(e -> {
 
             view.getMapMenu().getSettingsPanel().activateDarkMode(false);
             view.getMapMenu().getMinimizedPanel().activateDarkMode(false);
@@ -533,19 +533,19 @@ public class Controller {
         // ############# Create point panel #########################
         // ##########################################################
 
-        view.getMapMenu().getPointOfInterestPanel().createPointButton.setOnAction(e -> {
+        view.getMapMenu().getPointOfInterestPanel().getCreatePointButton().setOnAction(e -> {
             Point2D customPointCoords = view.getMapScene().screenCoordsToMapCoords(new Point2D(lastX, lastY));
 
             model.getMapObjects().getCustomPOIList()
-                    .add(new PointOfInterest(view.getMapMenu().getPointOfInterestPanel().pointNameField.getText(),
+                    .add(new PointOfInterest(view.getMapMenu().getPointOfInterestPanel().getPointNameField().getText(),
                             PointType.CUSTOM, (float) (customPointCoords.getX()), (float) customPointCoords.getY(),
                             false));
-            view.getMapMenu().getPointOfInterestPanel().pointNameField.clear();
+            view.getMapMenu().getPointOfInterestPanel().getPointNameField().clear();
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
             view.getMapScene().redraw();
         });
 
-        view.getMapMenu().getPointOfInterestPanel().cancelButton.setOnAction(e -> {
+        view.getMapMenu().getPointOfInterestPanel().getCancelButton().setOnAction(e -> {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
         });
 
@@ -559,7 +559,7 @@ public class Controller {
     // ##########################################################
 
     public void createChooseMapSceneButtons() {
-        view.getChooseMapScene().loadDefaultBinaryButton.setOnAction(e -> {
+        view.getChooseMapScene().getLoadDefaultBinaryButton().setOnAction(e -> {
             try {
                 Model.updateModel(getClass().getResource("/maps/" + Model.getDefaultMap()));
             } catch (ClassNotFoundException | URISyntaxException | XMLStreamException | FactoryConfigurationError
@@ -595,7 +595,7 @@ public class Controller {
 
         });
 
-        view.getChooseMapScene().chooseOwnFileButton.setOnAction(e -> {
+        view.getChooseMapScene().getChooseOwnFileButton().setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             try {
                 fileChooser.getExtensionFilters().addAll(

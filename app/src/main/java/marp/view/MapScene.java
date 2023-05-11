@@ -101,10 +101,6 @@ public class MapScene extends Scene{
         zoomMenu.setDistance(x);
     }
 
-    public void resetAffine() {
-        trans = new Affine();
-    }
-
     public void redraw() {
         gc.setTransform(new Affine());
         gc.setFill(MapColor.getInstance().colorMap.get("BACKGROUND"));

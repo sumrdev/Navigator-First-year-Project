@@ -47,7 +47,7 @@ public final class Model implements Serializable{
     }
 
     public static String getDefaultMap(){
-        return "denmark-latest.osm";
+        return "denmark-latest.bin";
     }
 
     public static Model getInstance(){
@@ -130,6 +130,7 @@ public final class Model implements Serializable{
     }
 
     private void save(String filename) {
+        if(filename.split("\\.")[1].equals("bin")) return;
         new Thread(() -> {
             Time time = new Time(System.currentTimeMillis());
             String fn = filename.split("\\.")[0] + ".bin";

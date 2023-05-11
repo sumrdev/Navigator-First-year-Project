@@ -1,4 +1,4 @@
-package marp.mapelements.details;
+package marp.color;
 
 import javafx.scene.paint.Color;
 
@@ -239,8 +239,6 @@ public class MapColor {
             colorMap.put("COASTLINE", coastlineFar);
         } else {
             double t = (zoomLevel - 300) / 600.0;
-            System.out.println("FACTOR t: " + t);
-
             Color interpolatedColor = coastlineNear.interpolate(coastlineFar, t);
             colorMap.put("COASTLINE", interpolatedColor);
 

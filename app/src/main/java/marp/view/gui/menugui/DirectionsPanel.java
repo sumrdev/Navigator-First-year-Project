@@ -23,25 +23,25 @@ import java.util.List;
 import java.util.Objects;
 
 public class DirectionsPanel extends MenuPanel {
-    public SearchBar startLocationField;
-    public SearchBar endLocationField;
-    public MapButton minimizeButton;
-    public MapButton settingsButton;
-    public MapButton takesnapshoButton;
-    public MapButton directionsButton;
-    public MapButton swapButton;
-    public MapTextButton findRouteButton;
-    public MapButton startSearchButton;
-    public MapButton endSearchButton;
-    public MapToggleButton carButton;
-    public MapToggleButton walkButton;
+    private SearchBar startLocationField;
+    private SearchBar endLocationField;
+    private MapButton minimizeButton;
+    private MapButton settingsButton;
+    private MapButton takesnapshoButton;
+    private MapButton directionsButton;
+    private MapButton swapButton;
+    private MapTextButton findRouteButton;
+    private MapButton startSearchButton;
+    private MapButton endSearchButton;
+    private MapToggleButton carButton;
+    private MapToggleButton walkButton;
 
-    public MapToggleButton bikeButton;
-    public ObservableList<String> guideList;
-    public ListView<String> guideView;
-    public MapLabelSmall distanceLabel;
-    public MapLabelSmall timeLabel;
-    public HBox distanceAndTime;
+    private MapToggleButton bikeButton;
+    private ObservableList<String> guideList;
+    private ListView<String> guideView;
+    private MapLabelSmall distanceLabel;
+    private MapLabelSmall timeLabel;
+    private HBox distanceAndTime;
 
     private MapLabel findRouteLabel = new MapLabel("Find the best route to your destination");
     private MapLabelSmall startLocatLabelSmall = new MapLabelSmall("Start location: ");
@@ -223,4 +223,56 @@ public class DirectionsPanel extends MenuPanel {
 
         modeLabelSmall.activateDarkMode(activate);
     }
+
+    public SearchBar getStartLocationField() {
+        return startLocationField;
+    }
+
+    public SearchBar getEndLocationField() {
+        return endLocationField;
+    }
+
+    public MapButton getMinimizeButton() {
+        return minimizeButton;
+    }
+
+    public MapButton getSettingsButton() {
+        return settingsButton;
+    }
+
+    public MapButton getTakesnapshoButton() {
+        return takesnapshoButton;
+    }
+
+    public MapButton getDirectionsButton() {
+        return directionsButton;
+    }
+
+    public MapButton getStartSearchButton() {
+        return startSearchButton;
+    }
+
+    public MapButton getEndSearchButton() {
+        return endSearchButton;
+    }
+
+    public MapButton getSwapButton() {
+        return swapButton;
+    }
+
+    public MapTextButton getFindRouteButton() {
+        return findRouteButton;
+    }
+
+    public MapToggleButton getCarButton() {
+        return carButton;
+    }
+
+    public MapToggleButton getWalkButton() {
+        return walkButton;
+    }
+
+    public MapToggleButton getBikeButton() {
+        return bikeButton;
+    }    
 }

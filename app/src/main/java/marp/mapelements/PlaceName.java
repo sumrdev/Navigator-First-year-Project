@@ -4,8 +4,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import marp.color.MapColor;
 import marp.mapelements.details.FontSize;
-import marp.mapelements.details.MapColor;
 
 public class PlaceName extends Point {
     String name;

@@ -25,17 +25,17 @@ public class SelectedPointPanel extends MenuPanel {
     MapLabel selectedPointName;
     MapLabelSmall selectedPointType;
 
-    public SearchBar searchBar;
-    public MapButton directionsButton;
-    public MapButton settingsButton;
-    public MapButton minimizeButton;
-    public MapToggleButton saveLocationButton;
-    public MapTextButton directionsToSelectedPointButton;
-    public MapPoint mapPoint;
-    public MapButton searchButton;
+    private SearchBar searchBar;
+    private MapButton directionsButton;
+    private MapButton settingsButton;
+    private MapButton minimizeButton;
+    private MapToggleButton saveLocationButton;
+    private MapTextButton directionsToSelectedPointButton;
+    private MapPoint mapPoint;
+    private MapButton searchButton;
 
-    public VBox selectedPointInfo;
-    public VBox buttonContainer;
+    private VBox selectedPointInfo;
+    private VBox buttonContainer;
 
     public SelectedPointPanel(Model model) {
         super();
@@ -145,5 +145,45 @@ public class SelectedPointPanel extends MenuPanel {
         selectedPointName.activateDarkMode(activate);
 
         selectedPointType.activateDarkMode(activate);
+    }
+
+    public SearchBar getSearchBar() {
+        return searchBar;
+    }
+
+    public MapButton getDirectionsButton() {
+        return directionsButton;
+    }
+
+    public MapButton getSettingsButton() {
+        return settingsButton;
+    }
+
+    public MapButton getMinimizeButton() {
+        return minimizeButton;
+    }
+
+    public MapToggleButton getSaveLocationButton() {
+        return saveLocationButton;
+    }
+
+    public MapTextButton getDirectionsToSelectedPointButton() {
+        return directionsToSelectedPointButton;
+    }
+
+    public MapPoint getMapPoint() {
+        return mapPoint;
+    }
+
+    public MapButton getSearchButton() {
+        return searchButton;
+    }
+
+    public VBox getSelectedPointInfo() {
+        return selectedPointInfo;
+    }
+
+    public VBox getButtonContainer() {
+        return buttonContainer;
     }
 }

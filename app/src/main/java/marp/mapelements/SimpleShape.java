@@ -4,8 +4,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import marp.color.MapColor;
 import marp.mapelements.details.FontSize;
-import marp.mapelements.details.MapColor;
 import marp.mapelements.details.ShapeType;
 
 import java.lang.reflect.Array;

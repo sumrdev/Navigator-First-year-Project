@@ -50,27 +50,36 @@ public class DirectionsPanel extends MenuPanel {
 
     VBox startAndEndLocation;
 
-
     // Constructor
     public DirectionsPanel(Model model) {
 
         // Create buttons
-        minimizeButton = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/cross.png"))));
-        settingsButton = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/settings.png"))));
-        directionsButton = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/directions.png"))), true);
-        takesnapshoButton = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/camera.png"))));
-        startSearchButton = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/search.png"))));
-        endSearchButton = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/search.png"))));
-        swapButton = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/swap.png"))));
+        minimizeButton = new MapButton(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/cross.png"))));
+        settingsButton = new MapButton(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/settings.png"))));
+        directionsButton = new MapButton(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/directions.png"))), true);
+        takesnapshoButton = new MapButton(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/camera.png"))));
+        startSearchButton = new MapButton(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/search.png"))));
+        endSearchButton = new MapButton(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/search.png"))));
+        swapButton = new MapButton(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/swap.png"))));
         findRouteButton = new MapTextButton("Find the best route!");
         findRouteButton.setMinHeight(48);
         findRouteButton.setMinWidth(200);
 
-        //create buttons for transportation method
-        carButton = new MapToggleButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/car.png"))));
+        // create buttons for transportation method
+        carButton = new MapToggleButton(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/car.png"))));
         carButton.setSelected(true);
-        walkButton = new MapToggleButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/walk.png"))));
-        bikeButton = new MapToggleButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/bike.png"))));
+        walkButton = new MapToggleButton(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/walk.png"))));
+        bikeButton = new MapToggleButton(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/bike.png"))));
         ToggleGroup mapModeToggleGroup = new ToggleGroup();
         mapModeToggleGroup.getToggles().addAll(carButton, walkButton, bikeButton);
         HBox modeOfTransportationButtons = new HBox(carButton, walkButton, bikeButton);
@@ -79,7 +88,7 @@ public class DirectionsPanel extends MenuPanel {
         VBox modeOfTransportationContainer = new VBox(modeLabelSmall, modeOfTransportationButtons);
         modeOfTransportationContainer.setSpacing(10);
 
-        //Create new search bars for start and end locations
+        // Create new search bars for start and end locations
         startLocationField = new SearchBar(model, 5);
         endLocationField = new SearchBar(model, 5);
         startLocationField.setMinWidth(302);
@@ -87,13 +96,13 @@ public class DirectionsPanel extends MenuPanel {
         endLocationField.setMinWidth(302);
         endLocationField.setPromptText("Where are you traveling to?");
 
-        //Create containers for search bars and buttons
+        // Create containers for search bars and buttons
         HBox startLocationSearchbarBox = new HBox(startLocationField, startSearchButton);
         startLocationSearchbarBox.setSpacing(10);
         HBox endLocationSearchbarBox = new HBox(endLocationField, endSearchButton);
         endLocationSearchbarBox.setSpacing(10);
 
-        //Create containers for search bars with buttons and text
+        // Create containers for search bars with buttons and text
         VBox startSearchBarBox = new VBox(startLocatLabelSmall, startLocationSearchbarBox);
         startSearchBarBox.setSpacing(5);
         VBox endSearchBarBox = new VBox(destinationLabelSmall, endLocationSearchbarBox);
@@ -105,7 +114,6 @@ public class DirectionsPanel extends MenuPanel {
         distanceLabelContainer.setAlignment(Pos.CENTER_RIGHT);
         HBox.setHgrow(distanceLabelContainer, Priority.ALWAYS);
 
-
         timeLabel = new MapLabelSmall("30 min");
         HBox timeLabelContainer = new HBox(timeLabel);
         timeLabelContainer.setAlignment(Pos.CENTER_LEFT);
@@ -115,15 +123,15 @@ public class DirectionsPanel extends MenuPanel {
         distanceAndTime.setAlignment(Pos.CENTER);
         distanceAndTime.setVisible(false);
 
-        //Create guide view to hold directions
+        // Create guide view to hold directions
         guideList = FXCollections.observableArrayList();
         guideView = new ListView<>();
 
         final Clipboard clipboard = Clipboard.getSystemClipboard();
         final ClipboardContent content = new ClipboardContent();
-        
-        guideView.setOnMouseClicked((e) ->{
-            if(e.getClickCount() == 2){
+
+        guideView.setOnMouseClicked((e) -> {
+            if (e.getClickCount() == 2) {
                 String selected = guideView.getSelectionModel().getSelectedItem();
                 content.putString(selected);
                 clipboard.setContent(content);
@@ -137,11 +145,14 @@ public class DirectionsPanel extends MenuPanel {
         guideView.setItems(guideList);
         guideView.setVisible(false);
 
-        // Create a VBox to hold start and end location search bars with buttons and labels, swap button, find route button, and labels
-        startAndEndLocation = new VBox(findRouteLabel, startSearchBarBox, swapButton, endSearchBarBox, modeOfTransportationContainer, findRouteButton, distanceAndTime, guideView);
+        // Create a VBox to hold start and end location search bars with buttons and
+        // labels, swap button, find route button, and labels
+        startAndEndLocation = new VBox(findRouteLabel, startSearchBarBox, swapButton, endSearchBarBox,
+                modeOfTransportationContainer, findRouteButton, distanceAndTime, guideView);
         startAndEndLocation.setMaxHeight(400);
         startSearchButton.setAlignment(Pos.TOP_CENTER);
-        startAndEndLocation.setBackground(new Background(new BackgroundFill(Color.web("#efefef"), new CornerRadii(24), Insets.EMPTY)));
+        startAndEndLocation.setBackground(
+                new Background(new BackgroundFill(Color.web("#efefef"), new CornerRadii(24), Insets.EMPTY)));
         startAndEndLocation.setPadding(new Insets(20));
         startAndEndLocation.setSpacing(20);
         startAndEndLocation.setAlignment(Pos.TOP_CENTER);
@@ -149,33 +160,35 @@ public class DirectionsPanel extends MenuPanel {
         startAndEndLocation.getStylesheets().addAll("CSS/darkmodesheet.css", "CSS/stylesheet.css");
         startAndEndLocation.getStyleClass().add("map-vbox");
 
-        //Add generic menu navigation buttons
-        this.getChildren().addAll(startAndEndLocation, minimizeButton, directionsButton, settingsButton, takesnapshoButton);
+        // Add generic menu navigation buttons
+        this.getChildren().addAll(startAndEndLocation, minimizeButton, directionsButton, settingsButton,
+                takesnapshoButton);
         this.setPadding(new Insets(20, 20, 40, 20));
         this.setSpacing(10);
         this.setPickOnBounds(false);
     }
-    public void receiveGuideList(List<String> list){
+
+    public void receiveGuideList(List<String> list) {
         guideList.clear();
         guideList.addAll(list);
     }
-    
-    public void setGuideShow(boolean shouldShow){
+
+    public void setGuideShow(boolean shouldShow) {
         guideView.setVisible(shouldShow);
         distanceAndTime.setVisible(shouldShow);
-        if (shouldShow){
+        if (shouldShow) {
             startAndEndLocation.setMaxHeight(10000);
-        }
-        else {
+        } else {
             startAndEndLocation.setMaxHeight(400);
         }
     }
+
     public void updateDistanceAndTime(float dist, int time) {
         distanceLabel.setText(dist + " km");
         timeLabel.setText(time + " min");
     }
 
-     /**
+    /**
      * Changes CSS sheets if parameter is set to true
      * 
      * @param activate
@@ -274,5 +287,5 @@ public class DirectionsPanel extends MenuPanel {
 
     public MapToggleButton getBikeButton() {
         return bikeButton;
-    }    
+    }
 }

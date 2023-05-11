@@ -9,7 +9,7 @@ public class MapLabelSmall extends Label {
         getStyleClass().add("map-label-small");
     }
 
-     /**
+    /**
      * Changes CSS sheets of this MapLabelSmall if parameter is set to true
      * 
      * @param activate (if activated then darkmode will be set)

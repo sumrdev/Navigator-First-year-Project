@@ -9,7 +9,7 @@ public class MapLabel extends Label {
         getStyleClass().add("map-label");
     }
 
-     /**
+    /**
      * Changes CSS sheets of this MapLabel if parameter is set to true
      * 
      * @param activate (if activated then darkmode will be set)

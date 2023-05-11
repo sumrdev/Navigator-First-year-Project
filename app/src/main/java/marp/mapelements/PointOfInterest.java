@@ -6,11 +6,11 @@ import marp.mapelements.details.PointType;
 public class PointOfInterest extends Point implements MapPoint {
 
     String name;
-    //The type of the landmark ie. "Library", "Memorial", etc.
+    // The type of the landmark ie. "Library", "Memorial", etc.
     PointType type;
     boolean isFavourite;
 
-    public PointOfInterest(String name, PointType type, float x, float y, boolean isFavourite){
+    public PointOfInterest(String name, PointType type, float x, float y, boolean isFavourite) {
         super(x, y);
         this.name = name;
         this.type = type;
@@ -39,14 +39,15 @@ public class PointOfInterest extends Point implements MapPoint {
             gc.drawImage(type.icon, this.x - (size) / 2, this.y - (size) / 2, size, size);
         }
     }
+
     @Override
     public float getX() {
         return x;
     }
+
     @Override
     public float getY() {
         return y;
     }
 
 }
-

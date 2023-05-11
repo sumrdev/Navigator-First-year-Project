@@ -47,7 +47,7 @@ public final class Model implements Serializable {
     }
 
     public static String getDefaultMap() {
-        return "denmark-latest.bin";
+        return "denmark-latest.osm";
     }
 
     public static Model getInstance() {
@@ -119,7 +119,6 @@ public final class Model implements Serializable {
 
     private static Model loadBIN(InputStream inputStream) throws IOException, ClassNotFoundException {
         Time time = new Time(System.currentTimeMillis());
-        System.out.println("inputstream:" + inputStream);
         try (var bin = new ObjectInputStream(new BufferedInputStream(inputStream))) {
             System.gc();
             Model model = (Model) bin.readObject();

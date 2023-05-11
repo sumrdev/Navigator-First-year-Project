@@ -6,26 +6,27 @@ public class Point extends Element {
     float x;
     float y;
 
-    public Point(long id, float x, float y){
+    public Point(long id, float x, float y) {
         this.id = id;
-        this.x = 0.56f*x;
+        this.x = 0.56f * x;
         this.y = -y;
     }
-    public Point(float x, float y){
+
+    public Point(float x, float y) {
         this.id = -1;
         this.x = x;
         this.y = y;
     }
 
-    public long getID(){
+    public long getID() {
         return this.id;
     }
 
-    public float getX(){
+    public float getX() {
         return this.x;
     }
 
-    public float getY(){
+    public float getY() {
         return this.y;
     }
 
@@ -37,8 +38,9 @@ public class Point extends Element {
 
     @Override
     public float[] getBounds() {
-        return new float[]{ x, y, x, y};
+        return new float[] { x, y, x, y };
     }
+
     @Override
     public void drawBounds(GraphicsContext gc, float zoom) {
         ;

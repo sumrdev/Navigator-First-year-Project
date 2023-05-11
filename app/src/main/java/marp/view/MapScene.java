@@ -70,17 +70,13 @@ public class MapScene extends Scene {
         // Then we add the position of the mouse back in order to move the map back into
         // its original position.
 
-        if ((zoomMenu.getZoomlevel() <= 15) && (factor > 1)) {
-            System.out.println("CANNOT ZOOM IN FURTHER");
-        } else if ((zoomMenu.getZoomlevel() >= 50000) && (factor < 1)) {
-            System.out.println("CANNOT ZOOM OUT FURTHER");
-        } else {
-            pan(-x, -y);
-            trans.prependScale(factor, factor);
-            pan(x, y);
+        if (((zoomMenu.getZoomlevel() <= 15) && (factor > 1)) || (zoomMenu.getZoomlevel() >= 50000) && (factor < 1))
+            return;
+        pan(-x, -y);
+        trans.prependScale(factor, factor);
+        pan(x, y);
 
-            zoomMenu.updateZoomLevel(factor);
-        }
+        zoomMenu.updateZoomLevel(factor);
     }
 
     public Point2D screenCoordsToMapCoords(Point2D point) {

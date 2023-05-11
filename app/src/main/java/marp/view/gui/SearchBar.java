@@ -36,7 +36,6 @@ public class SearchBar extends TextField {
         getStylesheets().addAll("CSS/darkmodesheet.css", "CSS/stylesheet.css");
         getStyleClass().add("map-button");
 
-
         this.setText("this is to make the suggestions appear on first typing");
         this.setText("");
 
@@ -59,10 +58,10 @@ public class SearchBar extends TextField {
         for (String address : model.getSuggestionTrie().getAddressSuggestions(newText, suggestionAmount)) {
             createAddressElement(address);
         }
-        if (popupList.size() > 0){
+        if (popupList.size() > 0) {
             createAddressExpander(newText);
         }
-        //show only if the searchbar exists in a scene
+        // show only if the searchbar exists in a scene
         if (this.getScene() != null) {
             popup.show(this, Side.BOTTOM, 0, 0);
         }
@@ -75,7 +74,7 @@ public class SearchBar extends TextField {
         for (String houseNumber : model.getSuggestionTrie().getHouseNumberSuggestions(newText, suggestionAmount)) {
             createHouseElement(newText, houseNumber);
         }
-        if (popupList.size() > 0){
+        if (popupList.size() > 0) {
             createHouseExpander(newText);
         }
         popup.show(this, Side.BOTTOM, 0, 0);
@@ -86,9 +85,9 @@ public class SearchBar extends TextField {
 
     private void createAddressElement(String popupText) {
         matcher = PATTERN.matcher(model.getSuggestionTrie().getFullAddress(popupText));
-            // åbenbart nødvendigt at lave matcher.matches() også selvom det ikke bruges?
-            matcher.matches();
-        String text = matcher.group("street") +" "+" "+ matcher.group("postcode") + " " + matcher.group("city");
+        // åbenbart nødvendigt at lave matcher.matches() også selvom det ikke bruges?
+        matcher.matches();
+        String text = matcher.group("street") + " " + " " + matcher.group("postcode") + " " + matcher.group("city");
         Label suggestion = new Label(popupText);
         CustomMenuItem popupItem = new CustomMenuItem(suggestion, false);
         popupList.add(popupItem);
@@ -96,7 +95,7 @@ public class SearchBar extends TextField {
             setText(text);
             int length = matcher.group("street").length() + 1;
             this.positionCaret(length);
-            
+
         });
     }
 
@@ -104,7 +103,8 @@ public class SearchBar extends TextField {
         matcher = PATTERN.matcher(model.getSuggestionTrie().getFullAddress(popupText));
         // åbenbart nødvendigt at lave matcher.matches() også selvom det ikke bruges?
         matcher.matches();
-        String textWithNumber = matcher.group("street") +" "+ houseNumber +" "+ matcher.group("postcode") + " " + matcher.group("city");
+        String textWithNumber = matcher.group("street") + " " + houseNumber + " " + matcher.group("postcode") + " "
+                + matcher.group("city");
         Label suggestion = new Label(textWithNumber);
         CustomMenuItem popupItem = new CustomMenuItem(suggestion, true);
         popupList.add(popupItem);
@@ -135,15 +135,17 @@ public class SearchBar extends TextField {
         });
     }
 
-    public Address getAddress(){
+    public Address getAddress() {
         Matcher matcher = PATTERN.matcher(getText());
 
-        if (matcher.matches() && matcher.group("house") != null && model.getSuggestionTrie().fullContainsSearch(matcher.group("street") + " " + matcher.group("postcode") + " "
-                + matcher.group("city"))){
-            return model.getSuggestionTrie().getAddressObject(matcher.group("street") + " " + matcher.group("postcode") + " "
-                    + matcher.group("city"), matcher.group("house"));
-        }
-        else {
+        if (matcher.matches() && matcher.group("house") != null
+                && model.getSuggestionTrie()
+                        .fullContainsSearch(matcher.group("street") + " " + matcher.group("postcode") + " "
+                                + matcher.group("city"))) {
+            return model.getSuggestionTrie()
+                    .getAddressObject(matcher.group("street") + " " + matcher.group("postcode") + " "
+                            + matcher.group("city"), matcher.group("house"));
+        } else {
             return null;
         }
     }

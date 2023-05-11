@@ -63,9 +63,29 @@ public class RTree<T extends Element> implements Serializable {
                 size = high.getSize() + low.getSize();
             } else {
                 this.value = values.get(0);
-                boundingRect = value.getBounds();
+                boundingRect = getNodeBounds(values);
                 size = values.size();
             }
+        }
+
+        protected float[] getNodeBounds(List<T> values){
+            float[] result = new float[]{Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY};
+            for(var element : values){
+                float[] bounds = element.getBounds();
+                if(bounds[0] < result[0]){
+                    result[0] = bounds[0];
+                }
+                if(bounds[2] > result[2]) {
+                    result[2] = bounds[2];
+                }
+                if(bounds[1] < result[1]){
+                    result[1] = bounds[1];
+                }
+                if(bounds[3] > result[3]){
+                    result[3] = bounds[3];
+                }
+            }
+            return result;
         }
 
         /**
@@ -176,6 +196,8 @@ public class RTree<T extends Element> implements Serializable {
                 lowest.update(value, distance(point[0], point[1], value));
             }
         }
+
+
 
         /**
          *

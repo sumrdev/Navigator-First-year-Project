@@ -19,8 +19,8 @@ public class ZoomMenu extends VBox {
 
     MapLabelSmall zoomLevelLabel;
 
-    public MapButton zoomIn;
-    public MapButton zoomOut;
+    public MapTextButton zoomIn;
+    public MapTextButton zoomOut;
 
     // Distance line
     public Line distanceLine;
@@ -37,10 +37,10 @@ public class ZoomMenu extends VBox {
         zoomLevelLabel = new MapLabelSmall("Distance: " + zoomlevel);
 
         // Zoom in button
-        zoomIn = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/plus.png"))));
+        zoomIn = new MapTextButton("+");
 
         // Zoom out button
-        zoomOut = new MapButton(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/minus.png"))));
+        zoomOut = new MapTextButton("-");
 
         this.getChildren().addAll(zoomIn, zoomOut, zoomLevelLabel, distanceLine);
         this.setPadding(new Insets(5));

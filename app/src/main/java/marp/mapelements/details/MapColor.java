@@ -244,9 +244,6 @@ public class MapColor {
             Color interpolatedColor = coastlineNear.interpolate(coastlineFar, t);
             colorMap.put("COASTLINE", interpolatedColor);
 
-            System.out.println("RED: " + colorMap.get("COASTLINE").getRed()
-                    + " GREEN: " + colorMap.get("COASTLINE").getGreen()
-                    + " BLUE: " + colorMap.get("COASTLINE").getBlue());
         }
     }
 

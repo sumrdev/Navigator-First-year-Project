@@ -177,6 +177,8 @@ public class MapObjectInParsing implements Serializable {
         this.unfinishedShapeType = ShapeType.UNDEFINED;
         this.fontSize = FontSize.UNDEFINED;
         this.name = null;
+        this.unfinishedRoadType = RoadType.UNDEFINED;
+        this.isRoad = false;
     }
 
     public void finishSimpleShape(){

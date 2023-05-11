@@ -33,7 +33,6 @@ public class View {
         appName.setFont(Font.font("Montserrat", FontWeight.SEMI_BOLD, 36));
         appName.setTextAlignment(TextAlignment.CENTER);
         StackPane.setAlignment(appName, Pos.TOP_CENTER);
-        
 
         chooseMapScene = new ChooseMapScene(model, listView, this);
         primaryStage.setTitle("Navigator");
@@ -41,13 +40,13 @@ public class View {
         primaryStage.show();
     }
 
-    public void creatMenusForMapScene(Model model){
+    public void creatMenusForMapScene(Model model) {
         this.mapMenu = new MapMenu(model);
         this.canvas = new Canvas(1000, 700);
         this.zoomMenu = new ZoomMenu(1000);
         this.nearestRoadInfo = new NearestRoadInfo();
         createNewMapScene(model);
-        
+
         canvas.widthProperty().bind(primaryStage.widthProperty());
         canvas.heightProperty().bind(primaryStage.heightProperty());
     }
@@ -83,6 +82,7 @@ public class View {
     public MapMenu getMapMenu() {
         return mapMenu;
     }
+
     public NearestRoadInfo getNearestRoadInfo() {
         return nearestRoadInfo;
     }

@@ -3,14 +3,9 @@ package marp.view.gui;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Control;
-import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
-import marp.view.gui.buttons.MapButton;
 import marp.view.gui.buttons.MapTextButton;
-
-import java.util.Objects;
-
 public class ZoomMenu extends VBox {
     double zoomlevel;
     public double getZoomlevel() {

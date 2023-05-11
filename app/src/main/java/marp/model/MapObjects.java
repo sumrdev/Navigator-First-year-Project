@@ -10,28 +10,26 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MapObjects implements Serializable{
-    //#####################################################
-    //######## Bounds #####################################
-    //#####################################################
+public class MapObjects implements Serializable {
+    //Bounds
     private float minX;
     private float minY;
     private float maxX;
     private float maxY;
 
-    public void setMinX(float value){
+    public void setMinX(float value) {
         this.minX = value;
     }
 
-    public void setMinY(float value){
+    public void setMinY(float value) {
         this.minY = value;
     }
 
-    public void setMaxX(float value){
+    public void setMaxX(float value) {
         this.maxX = value;
     }
 
-    public void setMaxY(float value){
+    public void setMaxY(float value) {
         this.maxY = value;
     }
 
@@ -51,20 +49,19 @@ public class MapObjects implements Serializable{
         return maxY;
     }
 
-    //#####################################################
-    //######## Address list and tree ######################
-    //#####################################################
+    //Address list and tree
     private final ArrayList<Address> addressList = new ArrayList<>();
     private RTree<Address> addressTree;
+
     public RTree<Address> getAddressTree() {
         return addressTree;
     }
+
     public ArrayList<Address> getAddressList() {
         return addressList;
     }
-    //#####################################################
-    //######## POI lists and trees ########################
-    //#####################################################
+
+    //POI lists and trees
     private final ArrayList<PointOfInterest> trainPOIList = new ArrayList<>();
     private RTree<PointOfInterest> trainPOITree;
     private final ArrayList<PointOfInterest> busPOIList = new ArrayList<>();
@@ -73,34 +70,40 @@ public class MapObjects implements Serializable{
     private RTree<PointOfInterest> POITree;
     private final ArrayList<PointOfInterest> customPOIList = new ArrayList<>();
     public final ArrayList<PointOfInterest> favouritesMarkerList = new ArrayList<>();
+
     public ArrayList<PointOfInterest> getTrainPOIList() {
         return trainPOIList;
     }
+
     public ArrayList<PointOfInterest> getBusPOIList() {
         return busPOIList;
     }
+
     public ArrayList<PointOfInterest> getPOIList() {
         return POIList;
     }
+
     public RTree<PointOfInterest> getTrainPOITree() {
         return trainPOITree;
     }
+
     public RTree<PointOfInterest> getBusPOITree() {
         return busPOITree;
     }
+
     public RTree<PointOfInterest> getPOITree() {
         return POITree;
     }
+
     public ArrayList<PointOfInterest> getCustomPOIList() {
         return customPOIList;
     }
+
     public ArrayList<PointOfInterest> getFavouritesMarkerList() {
         return favouritesMarkerList;
     }
 
-    //#####################################################
-    //######## Place name lists and trees #################
-    //#####################################################
+    // Place name lists and trees 
     private final ArrayList<PlaceName> quiteSmallPlaceNameList = new ArrayList<>();
     private RTree<PlaceName> quiteSmallPlaceNameTree;
     private final ArrayList<PlaceName> smallPlaceNameList = new ArrayList<>();
@@ -113,24 +116,31 @@ public class MapObjects implements Serializable{
     private RTree<PlaceName> largeNameTree;
     private final ArrayList<PlaceName> quiteLargePlaceNameList = new ArrayList<>();
     private RTree<PlaceName> quiteLargeNameTree;
+
     public RTree<PlaceName> getQuiteSmallPlaceNameTree() {
         return quiteSmallPlaceNameTree;
     }
+
     public RTree<PlaceName> getSmallPlaceNameTree() {
         return smallPlaceNameTree;
     }
+
     public RTree<PlaceName> getMediumPlaceNameTree() {
         return mediumPlaceNameTree;
     }
+
     public RTree<PlaceName> getMediumLargePlaceNameTree() {
         return mediumLargePlaceNameTree;
     }
+
     public RTree<PlaceName> getLargeNameTree() {
         return largeNameTree;
     }
+
     public RTree<PlaceName> getQuiteLargeNameTree() {
         return quiteLargeNameTree;
     }
+
     public ArrayList<PlaceName> getQuiteSmallPlaceNamesList() {
         return quiteSmallPlaceNameList;
     }
@@ -138,50 +148,56 @@ public class MapObjects implements Serializable{
     public ArrayList<PlaceName> getSmallPlaceNamesList() {
         return smallPlaceNameList;
     }
+
     public ArrayList<PlaceName> getMediumPlaceNamesList() {
         return mediumPlaceNameList;
     }
+
     public ArrayList<PlaceName> getMediumLargePlaceNamesList() {
         return mediumLargePlaceNameList;
     }
+
     public ArrayList<PlaceName> getLargePlaceNamesList() {
         return largePlaceNameList;
     }
+
     public ArrayList<PlaceName> getQuiteLargePlaceNamesList() {
         return quiteLargePlaceNameList;
     }
 
-    //#####################################################
-    //######## Areas and buildings lists and trees ########
-    //#####################################################
+    //Areas and buildings lists and trees
     private final ArrayList<Element> buildingsList = new ArrayList<>();
     private RTree<Element> buildingsTree;
     private final ArrayList<Element> waterAreasList = new ArrayList<>();
     private RTree<Element> waterAreasTree;
     private final ArrayList<Element> terrainAreasList = new ArrayList<>();
     private RTree<Element> terrainAreasTree;
+
     public RTree<Element> getBuildingsTree() {
         return buildingsTree;
     }
+
     public RTree<Element> getWaterAreasTree() {
         return waterAreasTree;
     }
+
     public RTree<Element> getTerrainAreasTree() {
         return terrainAreasTree;
     }
+
     public ArrayList<Element> getBuildingsList() {
         return buildingsList;
     }
+
     public ArrayList<Element> getWaterAreasList() {
         return waterAreasList;
     }
+
     public ArrayList<Element> getTerrainAreasList() {
         return terrainAreasList;
     }
 
-    //#####################################################
-    //######## Roads lists and trees ######################
-    //#####################################################
+    //Roads lists and trees
     private final ArrayList<Road> roadsList = new ArrayList<>();
     private final ArrayList<Road> motorWaysList = new ArrayList<>();
     private RTree<Road> motorWaysTree;
@@ -194,67 +210,88 @@ public class MapObjects implements Serializable{
     private final ArrayList<Road> footpathList = new ArrayList<>();
     private RTree<Road> footPathsTree;
     private RTree<RoadNode> roadNodeRTree;
+
     public RTree<Road> getMotorWaysTree() {
         return motorWaysTree;
     }
+
     public RTree<Road> getLargeRoadsTree() {
         return largeRoadsTree;
     }
-    public RTree<Road> getMediumRoadsTree() { return mediumRoadsTree; }
+
+    public RTree<Road> getMediumRoadsTree() {
+        return mediumRoadsTree;
+    }
+
     public RTree<Road> getSmallRoadsTree() {
         return smallRoadsTree;
     }
+
     public RTree<Road> getFootPathsTree() {
         return footPathsTree;
     }
+
     public ArrayList<Road> getRoadsList() {
         return roadsList;
     }
+
     public ArrayList<Road> getMotorWaysList() {
         return motorWaysList;
     }
+
     public ArrayList<Road> getLargeRoadsList() {
         return largeRoadsList;
     }
-    public ArrayList<Road> getMediumRoadsList() { return mediumRoadsList; }
+
+    public ArrayList<Road> getMediumRoadsList() {
+        return mediumRoadsList;
+    }
+
     public ArrayList<Road> getSmallRoadsList() {
         return smallRoadsList;
     }
+
     public ArrayList<Road> getFootPathsList() {
         return footpathList;
     }
-    //#####################################################
-    //######## Coastline lists and trees ##################
-    //#####################################################
+
+    // #####################################################
+    // ######## Coastline lists and trees ##################
+    // #####################################################
     public ArrayList<SimpleShape> coastLineAreasList = new ArrayList<>();
+
     public ArrayList<SimpleShape> getCoastLineAreasList() {
         return coastLineAreasList;
     }
+
     private RTree<SimpleShape> coastLineAreasTree;
+
     public RTree<SimpleShape> getCoastLinesAreaTree() {
         return coastLineAreasTree;
     }
-    public RTree<RoadNode> getRoadNodeRTree(){
+
+    public RTree<RoadNode> getRoadNodeRTree() {
         return roadNodeRTree;
     }
 
-    //#####################################################
-    //######## Waterways and railways lists and trees #####
-    //#####################################################
-
+    // Waterways and railways lists and trees
     private final ArrayList<SimpleShape> railwayList = new ArrayList<>();
     private final ArrayList<SimpleShape> waterwayList = new ArrayList<>();
     private RTree<SimpleShape> railwayTree = new RTree<>(railwayList);
     private RTree<SimpleShape> waterwayTree = new RTree<>(waterwayList);
+
     public ArrayList<SimpleShape> getRailwayList() {
         return railwayList;
     }
+
     public ArrayList<SimpleShape> getWaterwayList() {
         return waterwayList;
     }
+
     public RTree<SimpleShape> getRailwayTree() {
         return railwayTree;
     }
+
     public RTree<SimpleShape> getWaterwayTree() {
         return waterwayTree;
     }
@@ -296,7 +333,8 @@ public class MapObjects implements Serializable{
             smallRoadsTree = new RTree<>(smallRoadsList);
             footPathsTree = new RTree<>(footpathList);
             Time endTime = new Time(System.currentTimeMillis());
-            System.out.println("Time to build roads and coastline trees: " + (endTime.getTime() - startTime.getTime()) + "ms");
+            System.out.println(
+                    "Time to build roads and coastline trees: " + (endTime.getTime() - startTime.getTime()) + "ms");
         });
         Thread buildings = new Thread(() -> {
             Time startTime = new Time(System.currentTimeMillis());
@@ -312,7 +350,8 @@ public class MapObjects implements Serializable{
             waterwayTree = new RTree<>(waterwayList);
             railwayTree = new RTree<>(railwayList);
             Time endTime = new Time(System.currentTimeMillis());
-            System.out.println("Time to build terrain and water trees: " + (endTime.getTime() - startTime.getTime()) + "ms");
+            System.out.println(
+                    "Time to build terrain and water trees: " + (endTime.getTime() - startTime.getTime()) + "ms");
         });
 
         poi.start();
@@ -334,21 +373,24 @@ public class MapObjects implements Serializable{
         }
     }
 
-    public void buildDigraph(HashMap<Long, RoadNode> roadNodes){
+    public void buildDigraph(HashMap<Long, RoadNode> roadNodes) {
         roadNodeRTree = new RTree<>(new ArrayList<>(roadNodes.values()));
         digraph = new Digraph(roadsList, roadNodes);
     }
 
     private Trie trie = new Trie();
-    public Trie getTrie(){
+
+    public Trie getTrie() {
         return trie;
     }
 
     private Digraph digraph;
-    public Digraph getDigraph(){
+
+    public Digraph getDigraph() {
         return digraph;
     }
-    public void clearRoute(){
+
+    public void clearRoute() {
         digraph.clearNavigation();
     }
 }

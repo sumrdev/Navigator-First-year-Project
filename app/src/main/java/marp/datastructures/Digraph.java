@@ -48,36 +48,30 @@ public class Digraph implements Serializable {
                 + (endTime.getTime() - starTime.getTime()) / 1000 + " s");
     }
 
-    private ArrayList<ArrayList<Edge>> categorizeEdgesOnConnectedComponents() {
-        ArrayList<ArrayList<Edge>> edges = new ArrayList<>();
-        HashSet<Long> visited = new HashSet<>();
-        for (RoadNode node : nodes.values()) {
-            if (!visited.contains(node.getID())) {
-                ArrayList<Edge> component = new ArrayList<>();
-                Stack<Long> stack = new Stack<>();
-                stack.push(node.getID());
-                visited.add(node.getID());
-                while (!stack.isEmpty()) {
-                    RoadNode currentNode = nodes.get(stack.pop());
-                    for (Edge edge : currentNode.getEdges()) {
-                        if (!visited.contains(edge.end)) {
-                            visited.add(edge.end);
-                            stack.push(edge.end);
-                        }
-                        component.add(edge);
-                    }
-                }
-                edges.add(component);
-            }
-        }
-        return edges;
-    }
-
-    // public void setAverageSpeed(int speed) {
-    //     float temp = averageSpeed * averageSpeedCount;
-    //     temp += speed * 10;
-    //     this.averageSpeedCount++;
-    //     this.averageSpeed = temp / averageSpeedCount;
+    //FUNCTION FOR TESTING PURPOSES, NOT USED IN THE APPLICATION
+    // private ArrayList<ArrayList<Edge>> categorizeEdgesOnConnectedComponents() {
+    //     ArrayList<ArrayList<Edge>> edges = new ArrayList<>();
+    //     HashSet<Long> visited = new HashSet<>();
+    //     for (RoadNode node : nodes.values()) {
+    //         if (!visited.contains(node.getID())) {
+    //             ArrayList<Edge> component = new ArrayList<>();
+    //             Stack<Long> stack = new Stack<>();
+    //             stack.push(node.getID());
+    //             visited.add(node.getID());
+    //             while (!stack.isEmpty()) {
+    //                 RoadNode currentNode = nodes.get(stack.pop());
+    //                 for (Edge edge : currentNode.getEdges()) {
+    //                     if (!visited.contains(edge.end)) {
+    //                         visited.add(edge.end);
+    //                         stack.push(edge.end);
+    //                     }
+    //                     component.add(edge);
+    //                 }
+    //             }
+    //             edges.add(component);
+    //         }
+    //     }
+    //     return edges;
     // }
 
     public List<String> aStar(long start, long end, boolean walking) {
@@ -260,10 +254,6 @@ public class Digraph implements Serializable {
     }
 
     public void draw(GraphicsContext gc) {
-        drawNavigation(gc);
-    }
-
-    public void drawNavigation(GraphicsContext gc) {
         if (this.navigation == null)
             return;
         if(roadColor == 2){ // if red blindness mode 
@@ -278,6 +268,8 @@ public class Digraph implements Serializable {
                     nodes.get(edge.end).getY());
         }
     }
+
+
 
     public void drawConnectedComponents(GraphicsContext gc) {
         for (ArrayList<Edge> arrayList : connectedComponents) {

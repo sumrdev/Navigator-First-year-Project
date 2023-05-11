@@ -65,7 +65,7 @@ public class MapColor {
         darkColorMap.put("TERTIARY_OUTLINE", Color.DARKGRAY);
 
         // Green blindness
-        deuteranopiaBlindColorMap.put("BACKGROUND", Color.rgb(255, 255, 255,1));
+        deuteranopiaBlindColorMap.put("BACKGROUND", Color.rgb(176, 211, 232,1));
         deuteranopiaBlindColorMap.put("WATER", Color.rgb(176, 211, 232,1));
         deuteranopiaBlindColorMap.put("BUILDING", Color.rgb(190, 190, 190,1));
         deuteranopiaBlindColorMap.put("COASTLINE", Color.web("#CEBCD6"));
@@ -90,7 +90,7 @@ public class MapColor {
         deuteranopiaBlindColorMap.put("TERTIARY_OUTLINE", Color.LIGHTGRAY);
 
         // Red blindness
-        protanopiaBlindColorMap.put("BACKGROUND", Color.rgb(255, 255, 255,1));
+        protanopiaBlindColorMap.put("BACKGROUND", Color.rgb(176, 211, 232,1));
         protanopiaBlindColorMap.put("WATER", Color.rgb(176, 211, 232,1));
         protanopiaBlindColorMap.put("BUILDING", Color.rgb(190, 190, 190,1));
         protanopiaBlindColorMap.put("COASTLINE", Color.rgb(206, 234, 214,1));

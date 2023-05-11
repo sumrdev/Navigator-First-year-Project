@@ -14,6 +14,8 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 import marp.color.MapColor;
 import marp.mapelements.*;
+import marp.mapelements.details.RoadType;
+import marp.mapelements.details.ShapeType;
 import marp.model.Model;
 import marp.utilities.MathFunctions;
 import marp.view.gui.NearestRoadInfo;
@@ -130,9 +132,8 @@ public class MapScene extends Scene {
 
         // Draw all elements in correct order
         drawCoastlines(levelOfDetails, bounds);
-        drawWaterAreas(levelOfDetails, bounds);
-        // drawBounds(bounds);
         drawTerrain(levelOfDetails, bounds);
+        drawWaterAreas(levelOfDetails, bounds);
         drawWaterway(bounds);
         drawBuildings(levelOfDetails, bounds);
         drawPaths(bounds);
@@ -148,11 +149,11 @@ public class MapScene extends Scene {
         drawLargeRoadNames(bounds);
         drawMediumRoadNames(bounds);
         drawSmallRoadNames(bounds);
-        drawCountryNames(bounds);
-        drawCityNames(bounds);
-        drawTownNames(bounds);
-        drawPlaceNames(bounds);
         drawSmallPlaceNames(bounds);
+        drawPlaceNames(bounds);
+        drawTownNames(bounds);
+        drawCityNames(bounds);
+        drawCountryNames(bounds);
         drawLandmarks(bounds);
         drawBusLandmarks(bounds);
         drawTrainLandmarks(bounds);
@@ -246,6 +247,7 @@ public class MapScene extends Scene {
 
     private void drawCityNames(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 100000 && zoomMenu.getZoomlevel() > 150) {
+            MapColor.getInstance().fadeTextColor((zoomMenu.getZoomlevel()), 100000, 5000);
             for (PlaceName placeName : model.getMapObjects().getLargeNameTree().getElementsInRange(bounds)) {
                 placeName.draw(gc, (float) (1 / Math.sqrt(trans.determinant())));
             }
@@ -254,6 +256,7 @@ public class MapScene extends Scene {
 
     private void drawTownNames(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 7000 && zoomMenu.getZoomlevel() > 150) {
+            MapColor.getInstance().fadeTextColor((zoomMenu.getZoomlevel()), 7000, 1000);
             for (PlaceName placeName : model.getMapObjects().getMediumLargePlaceNameTree().getElementsInRange(bounds)) {
                 placeName.draw(gc, (float) (1 / Math.sqrt(trans.determinant())));
             }
@@ -262,6 +265,7 @@ public class MapScene extends Scene {
 
     private void drawPlaceNames(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 7500 && zoomMenu.getZoomlevel() > 150) {
+            MapColor.getInstance().fadeTextColor((zoomMenu.getZoomlevel()), 7500, 1000);
             for (PlaceName placeName : model.getMapObjects().getMediumPlaceNameTree().getElementsInRange(bounds)) {
                 placeName.draw(gc, (float) (1 / Math.sqrt(trans.determinant())));
             }
@@ -270,6 +274,7 @@ public class MapScene extends Scene {
 
     private void drawSmallPlaceNames(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 2500 && zoomMenu.getZoomlevel() > 150) {
+            MapColor.getInstance().fadeTextColor((zoomMenu.getZoomlevel()), 2500, 500);
             for (PlaceName placeName : model.getMapObjects().getSmallPlaceNameTree().getElementsInRange(bounds)) {
                 placeName.draw(gc, (float) (1 / Math.sqrt(trans.determinant())));
             }
@@ -277,7 +282,8 @@ public class MapScene extends Scene {
     }
 
     private void drawAddress(Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 20) {
+        if (zoomMenu.getZoomlevel() < 20 ) {
+            MapColor.getInstance().fadeTextColor((zoomMenu.getZoomlevel()), 20, 5);
             if (model.isAddressVisible) {
                 gc.setFill(Color.rgb(30, 30, 30, 1));
                 for (Address address : model.getMapObjects().getAddressTree().getElementsInRange(bounds)) {
@@ -288,7 +294,9 @@ public class MapScene extends Scene {
     }
 
     private void drawMotorways(Bounds bounds) {
-        if (zoomMenu.getZoomlevel() < 100000 && zoomMenu.getZoomlevel() > 50) {
+        if (zoomMenu.getZoomlevel() < 50000 && zoomMenu.getZoomlevel() > 50) {
+            MapColor.getInstance().fadeRoadColor((zoomMenu.getZoomlevel()),RoadType.MOTORWAY, 50000, 5000);
+
             if (model.isRoadsVisible) {
                 for (Road road : model.getMapObjects().getMotorWaysTree().getElementsInRange(bounds)) {
                     road.drawOutline(gc, (1 / Math.sqrt(trans.determinant())));
@@ -302,6 +310,7 @@ public class MapScene extends Scene {
 
     private void drawLargeRoads(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 15000 && zoomMenu.getZoomlevel() > 50) {
+            MapColor.getInstance().fadeRoadColor((zoomMenu.getZoomlevel()),RoadType.PRIMARY, 15000, 3000);
             if (model.isRoadsVisible) {
                 for (Road road : model.getMapObjects().getLargeRoadsTree().getElementsInRange(bounds)) {
                     road.drawOutline(gc, (1 / Math.sqrt(trans.determinant())));
@@ -315,6 +324,7 @@ public class MapScene extends Scene {
 
     private void drawMediumRoads(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 2500 && zoomMenu.getZoomlevel() > 50) {
+            MapColor.getInstance().fadeRoadColor((zoomMenu.getZoomlevel()),RoadType.TERTIARY, 2500, 150);
             if (model.isRoadsVisible) {
                 for (Road road : model.getMapObjects().getMediumRoadsTree().getElementsInRange(bounds)) {
                     road.drawOutline(gc, (1 / Math.sqrt(trans.determinant())));
@@ -329,6 +339,9 @@ public class MapScene extends Scene {
     private void drawSmallRoads(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 750 && zoomMenu.getZoomlevel() > 50) {
             if (model.isRoadsVisible) {
+                MapColor.getInstance().fadeRoadColor((zoomMenu.getZoomlevel()),RoadType.RESIDENTIAL, 750, 100);
+                MapColor.getInstance().fadeRoadColor((zoomMenu.getZoomlevel()),RoadType.PEDESTRIAN, 750, 100);
+
                 for (Road road : model.getMapObjects().getSmallRoadsTree().getElementsInRange(bounds)) {
                     road.drawOutline(gc, (1 / Math.sqrt(trans.determinant())));
                 }
@@ -372,6 +385,7 @@ public class MapScene extends Scene {
 
     private void drawSmallRoadNames(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 35) {
+            MapColor.getInstance().fadeTextColor((zoomMenu.getZoomlevel()), 35, 10);
             if (model.isRoadsVisible) {
                 for (Road road : model.getMapObjects().getSmallRoadsTree().getElementsInRange(bounds)) {
                     road.drawName(gc, (1 / Math.sqrt(trans.determinant())));
@@ -382,6 +396,7 @@ public class MapScene extends Scene {
 
     private void drawMediumRoadNames(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 50) {
+            MapColor.getInstance().fadeTextColor((zoomMenu.getZoomlevel()), 50, 10);
             if (model.isRoadsVisible) {
                 for (Road road : model.getMapObjects().getMediumRoadsTree().getElementsInRange(bounds)) {
                     road.drawName(gc, (1 / Math.sqrt(trans.determinant())));
@@ -392,6 +407,7 @@ public class MapScene extends Scene {
 
     private void drawLargeRoadNames(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 50) {
+            MapColor.getInstance().fadeTextColor((zoomMenu.getZoomlevel()), 50, 10);
             if (model.isRoadsVisible) {
                 for (Road road : model.getMapObjects().getLargeRoadsTree().getElementsInRange(bounds)) {
                     road.drawName(gc, (1 / Math.sqrt(trans.determinant())));
@@ -402,6 +418,7 @@ public class MapScene extends Scene {
 
     private void drawMotorwayNames(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 175) {
+            MapColor.getInstance().fadeTextColor((zoomMenu.getZoomlevel()), 175, 50);
             if (model.isRoadsVisible) {
                 for (Road road : model.getMapObjects().getMotorWaysTree().getElementsInRange(bounds)) {
                     road.drawName(gc, (1 / Math.sqrt(trans.determinant())));
@@ -413,14 +430,18 @@ public class MapScene extends Scene {
     private void drawPaths(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 200) {
             if (model.isRoadsVisible) {
+                MapColor.getInstance().fadeRoadColor((zoomMenu.getZoomlevel()), RoadType.PATH, 200, 50);
                 for (Road road : model.getMapObjects().getFootPathsTree().getElementsInRange(bounds)) {
                     road.draw(gc, (1 / Math.sqrt(trans.determinant())));
                 }
             }
         }
     }
-
-    private void drawTerrain(int levelOfDetail, Bounds bounds) {
+    private void drawTerrain (int levelOfDetail, Bounds bounds) {
+        MapColor.getInstance().fadeElementColor((zoomMenu.getZoomlevel()), ShapeType.GRASS, 5000, 700);
+        MapColor.getInstance().fadeElementColor((zoomMenu.getZoomlevel()), ShapeType.FOREST, 5000, 700);
+        MapColor.getInstance().fadeElementColor((zoomMenu.getZoomlevel()), ShapeType.CEMENT, 5000, 700);
+        MapColor.getInstance().fadeElementColor((zoomMenu.getZoomlevel()), ShapeType.COMMERCIAL_GROUND, 5000, 700);
         if (zoomMenu.getZoomlevel() < 5000) {
             if (model.isTerrainVisible) {
                 for (Element terrainElement : model.getMapObjects().getTerrainAreasTree().getElementsInRange(bounds)) {
@@ -432,6 +453,7 @@ public class MapScene extends Scene {
 
     private void drawWaterAreas(int levelOfDetail, Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 10000) {
+            MapColor.getInstance().fadeElementColor((zoomMenu.getZoomlevel()), ShapeType.WATER, 10000, 700);
             for (Element waterAreaElement : model.getMapObjects().getWaterAreasTree().getElementsInRange(bounds)) {
                 waterAreaElement.draw(gc, levelOfDetail, 1);
             }
@@ -440,6 +462,7 @@ public class MapScene extends Scene {
 
     private void drawBuildings(int levelOfDetail, Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 200) {
+            MapColor.getInstance().fadeElementColor((zoomMenu.getZoomlevel()), ShapeType.BUILDING, 200, 50);
             if (model.isBuildingsVisible) {
                 for (Element elementBuilding : model.getMapObjects().getBuildingsTree().getElementsInRange(bounds)) {
                     elementBuilding.draw(gc, levelOfDetail, 1);
@@ -450,6 +473,7 @@ public class MapScene extends Scene {
 
     private void drawRailway(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 750) {
+            MapColor.getInstance().fadeElementColor((zoomMenu.getZoomlevel()), ShapeType.RAILWAY, 750, 200);
             if (model.isRoadsVisible) {
                 for (SimpleShape railway : model.getMapObjects().getRailwayTree().getElementsInRange(bounds)) {
                     railway.drawLine(gc, (1 / Math.sqrt(trans.determinant())));
@@ -460,6 +484,7 @@ public class MapScene extends Scene {
 
     private void drawWaterway(Bounds bounds) {
         if (zoomMenu.getZoomlevel() < 1500) {
+            MapColor.getInstance().fadeElementColor((zoomMenu.getZoomlevel()), ShapeType.WATERWAY, 1500, 500);
             if (model.isRoadsVisible) {
                 for (SimpleShape waterway : model.getMapObjects().getWaterwayTree().getElementsInRange(bounds)) {
                     waterway.drawLine(gc, (1 / Math.sqrt(trans.determinant())));
@@ -481,5 +506,4 @@ public class MapScene extends Scene {
             element.drawBounds(gc, (float) (1 / Math.sqrt(trans.determinant())));
         }
     }
-
 }

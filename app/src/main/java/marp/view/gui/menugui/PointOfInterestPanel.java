@@ -17,6 +17,8 @@ public class PointOfInterestPanel extends MenuPanel {
     public MapTextButton createPointButton;
     public MapButton cancelButton;
     private MapButton takeSnapShotButton;
+    private MapLabel createPOILabel = new MapLabel("Create a new point of interest");
+    private MapLabelSmall nameOfPOI = new MapLabelSmall("Name of your point of interest:");
 
     public MapButton getTakeSnapShotButton() {
         return takeSnapShotButton;
@@ -37,11 +39,11 @@ public class PointOfInterestPanel extends MenuPanel {
         createPointButton.setMinWidth(200);
 
         // create container + label
-        VBox pointBox = new VBox(new MapLabelSmall("Name of your point of interest:"), pointNameField);
+        VBox pointBox = new VBox(nameOfPOI, pointNameField);
         pointBox.setSpacing(5);
 
         // Create a VBox to hold the textfield and button
-        newPointMenu = new VBox(new MapLabel("Create a new point of interest"), pointBox, createPointButton);
+        newPointMenu = new VBox(createPOILabel, pointBox, createPointButton);
         newPointMenu.getStylesheets().addAll("CSS/darkmodesheet.css", "CSS/stylesheet.css");
         newPointMenu.getStyleClass().add("map-vbox");
         newPointMenu.setMaxHeight(250);
@@ -81,6 +83,8 @@ public class PointOfInterestPanel extends MenuPanel {
         createPointButton.activateDarkMode(activate);
         cancelButton.activateDarkMode(activate);
         takeSnapShotButton.activateDarkMode(activate);
+        createPOILabel.activateDarkMode(activate);
+        nameOfPOI.activateDarkMode(activate);
 
     }
 }

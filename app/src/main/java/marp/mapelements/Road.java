@@ -4,7 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import marp.mapelements.details.MapColor;
+import marp.color.MapColor;
 import marp.mapelements.details.RoadType;
 
 import java.util.ArrayList;

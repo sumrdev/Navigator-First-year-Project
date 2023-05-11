@@ -21,6 +21,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import marp.color.MapColor;
 import marp.datastructures.Digraph;
 import marp.mapelements.*;
 import marp.model.Model;
@@ -99,18 +100,18 @@ public class Controller {
                     view.getMapScene().redraw();
                 } else { // else we find the nearest normal point and select it.
                     //if the search bars in the directions panel are focussed we want to set the start and end location on click.
-                    if (view.getMapMenu().getDirectionsPanel().endLocationField.isFocused()) {
-                        view.getMapMenu().getDirectionsPanel().endLocationField
+                    if (view.getMapMenu().getDirectionsPanel().getEndLocationField().isFocused()) {
+                        view.getMapMenu().getDirectionsPanel().getEndLocationField()
                                 .setText(closestAddressToPointAsString(nearestPoint));
-                        setEndLocation(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress(), false);
+                        setEndLocation(view.getMapMenu().getDirectionsPanel().getEndLocationField().getAddress(), false);
                         model.getMapObjects().clearRoute();
                         view.getMapScene().redraw();
-                    } else if (view.getMapMenu().getDirectionsPanel().startLocationField.isFocused()) {
-                        view.getMapMenu().getDirectionsPanel().startLocationField
+                    } else if (view.getMapMenu().getDirectionsPanel().getStartLocationField().isFocused()) {
+                        view.getMapMenu().getDirectionsPanel().getStartLocationField()
                                 .setText(closestAddressToPointAsString(nearestPoint));
                         model.getMapObjects().clearRoute();
                         view.getMapScene().redraw();
-                        setStartLocation(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress(), false);
+                        setStartLocation(view.getMapMenu().getDirectionsPanel().getStartLocationField().getAddress(), false);
                     } else {
                     model.setSelectedPoint(nearestPoint);
                     // focus on the point without panning
@@ -168,28 +169,28 @@ public class Controller {
         // ############# Minimized panel buttons ####################
         // ##########################################################
 
-        view.getMapMenu().getMinimizedPanel().directionsButton.setOnAction(e -> {
+        view.getMapMenu().getMinimizedPanel().getDirectionsButton().setOnAction(e -> {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getDirectionsPanel());
-            // Update navigation visibility so navigation elements are shown when the navigation menu is shown.
+            // Update navigation visibility so nsavigation elements are shown when the navigation menu is shown.
             model.setNavigationVisibility(true);
             view.getMapScene().redraw();
         });
-        view.getMapMenu().getMinimizedPanel().settingsButton.setOnAction(e -> {
+        view.getMapMenu().getMinimizedPanel().getSettingsButton().setOnAction(e -> {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getSettingsPanel());
         });
-        view.getMapMenu().getMinimizedPanel().searchBar.setOnAction(e -> {
-            focusOnPoint(view.getMapMenu().getMinimizedPanel().searchBar.getAddress(), true, true);
-            view.getMapMenu().getMinimizedPanel().searchBar.clear();
+        view.getMapMenu().getMinimizedPanel().getSearchBar().setOnAction(e -> {
+            focusOnPoint(view.getMapMenu().getMinimizedPanel().getSearchBar().getAddress(), true, true);
+            view.getMapMenu().getMinimizedPanel().getSearchBar().clear();
         });
-        view.getMapMenu().getMinimizedPanel().searchButton.setOnAction(e -> {
-            focusOnPoint(view.getMapMenu().getMinimizedPanel().searchBar.getAddress(), true, true);
-            view.getMapMenu().getMinimizedPanel().searchBar.clear();
+        view.getMapMenu().getMinimizedPanel().getSearchButton().setOnAction(e -> {
+            focusOnPoint(view.getMapMenu().getMinimizedPanel().getSearchBar().getAddress(), true, true);
+            view.getMapMenu().getMinimizedPanel().getSearchBar().clear();
         });
-        view.getMapMenu().getMinimizedPanel().pointOfInterestButton.setOnAction(e -> {
+        view.getMapMenu().getMinimizedPanel().getPointOfInterestButton().setOnAction(e -> {
             toggleIsCreatingCustomPointOfInterest();
         });
 
-        view.getMapMenu().getMinimizedPanel().takeSnapshotButton.setOnAction(e -> {
+        view.getMapMenu().getMinimizedPanel().getTakeSnapshotButton().setOnAction(e -> {
             takeSnapShot();
         });
 
@@ -197,7 +198,7 @@ public class Controller {
         // ############# Directions panel buttons ###################
         // ##########################################################
 
-        view.getMapMenu().getDirectionsPanel().minimizeButton.setOnAction(e -> {
+        view.getMapMenu().getDirectionsPanel().getMinimizeButton().setOnAction(e -> {
             // Set the menu panel to the minimized menu panel
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
             view.getMapMenu().getDirectionsPanel().setGuideShow(false);
@@ -209,7 +210,7 @@ public class Controller {
             view.getMapScene().redraw();
         });
 
-        view.getMapMenu().getDirectionsPanel().settingsButton.setOnAction(e -> {
+        view.getMapMenu().getDirectionsPanel().getSettingsButton().setOnAction(e -> {
             view.getMapMenu().getDirectionsPanel().setGuideShow(false);
 
             // Set the menu panel to the settings menu panel
@@ -219,65 +220,62 @@ public class Controller {
             view.getMapScene().redraw();
         });
 
-        view.getMapMenu().getDirectionsPanel().takesnapshoButton.setOnAction(e -> {
+        view.getMapMenu().getDirectionsPanel().getTakesnapshoButton().setOnAction(e -> {
             takeSnapShot();
         });
 
-        view.getMapMenu().getDirectionsPanel().swapButton.setOnAction(e -> {
+        view.getMapMenu().getDirectionsPanel().getSwapButton().setOnAction(e -> {
             // First get the start location field text and save it as temp text,
             // then set ge start location field text to the text from the end location
             // field,
             // then set the temp text in the end location field.
-            String tempText = view.getMapMenu().getDirectionsPanel().startLocationField.getText();
-            view.getMapMenu().getDirectionsPanel().startLocationField
-                    .setText(view.getMapMenu().getDirectionsPanel().endLocationField.getText());
-            view.getMapMenu().getDirectionsPanel().endLocationField.setText(tempText);
+            String tempText = view.getMapMenu().getDirectionsPanel().getStartLocationField().getText();
+            view.getMapMenu().getDirectionsPanel().getStartLocationField()
+                    .setText(view.getMapMenu().getDirectionsPanel().getEndLocationField().getText());
+            view.getMapMenu().getDirectionsPanel().getEndLocationField().setText(tempText);
         });
-        view.getMapMenu().getDirectionsPanel().startLocationField.setOnAction(e -> {
-            if (view.getMapMenu().getDirectionsPanel().startLocationField.getAddress() != null) {
-                setStartLocation(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress(), true);
-                view.getMapMenu().getMinimizedPanel().searchBar.clear();
+        view.getMapMenu().getDirectionsPanel().getStartLocationField().setOnAction(e -> {
+            if (view.getMapMenu().getDirectionsPanel().getStartLocationField().getAddress() != null) {
+                setStartLocation(view.getMapMenu().getDirectionsPanel().getStartLocationField().getAddress(), true);
+                view.getMapMenu().getMinimizedPanel().getSearchBar().clear();
                 model.getMapObjects().clearRoute();
                 view.getMapScene().redraw();
             }
         });
-        view.getMapMenu().getDirectionsPanel().startSearchButton.setOnAction(e -> {
-            if (view.getMapMenu().getDirectionsPanel().startLocationField.getAddress() != null) {
-                setStartLocation(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress(), true);
-                view.getMapMenu().getMinimizedPanel().searchBar.clear();
+        view.getMapMenu().getDirectionsPanel().getStartSearchButton().setOnAction(e -> {
+            if (view.getMapMenu().getDirectionsPanel().getStartLocationField().getAddress() != null) {
+                setStartLocation(view.getMapMenu().getDirectionsPanel().getStartLocationField().getAddress(), true);
+                view.getMapMenu().getMinimizedPanel().getSearchBar().clear();
                 model.getMapObjects().clearRoute();
                 view.getMapScene().redraw();
             }
         });
-        view.getMapMenu().getDirectionsPanel().endLocationField.setOnAction(e -> {
-            if (view.getMapMenu().getDirectionsPanel().endLocationField.getAddress() != null) {
-                setEndLocation(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress(), true);
-                view.getMapMenu().getMinimizedPanel().searchBar.clear();
+        view.getMapMenu().getDirectionsPanel().getEndLocationField().setOnAction(e -> {
+            if (view.getMapMenu().getDirectionsPanel().getEndLocationField().getAddress() != null) {
+                setEndLocation(view.getMapMenu().getDirectionsPanel().getEndLocationField().getAddress(), true);
+                view.getMapMenu().getMinimizedPanel().getSearchBar().clear();
                 model.getMapObjects().clearRoute();
                 view.getMapScene().redraw();
             }
         });
-        view.getMapMenu().getDirectionsPanel().endSearchButton.setOnAction(e -> {
-            if (view.getMapMenu().getDirectionsPanel().endLocationField.getAddress() != null) {
-                setEndLocation(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress(), true);
-                view.getMapMenu().getMinimizedPanel().searchBar.clear();
+        view.getMapMenu().getDirectionsPanel().getEndSearchButton().setOnAction(e -> {
+            if (view.getMapMenu().getDirectionsPanel().getEndLocationField().getAddress() != null) {
+                setEndLocation(view.getMapMenu().getDirectionsPanel().getEndLocationField().getAddress(), true);
+                view.getMapMenu().getMinimizedPanel().getSearchBar().clear();
                 model.getMapObjects().clearRoute();
                 view.getMapScene().redraw();
             }
         });
-        view.getMapMenu().getDirectionsPanel().carButton.setOnAction(e -> {
+        view.getMapMenu().getDirectionsPanel().getCarButton().setOnAction(e -> {
             model.transportMode = 0;
-            model.getMapObjects().getDigraph().setDriving();
         });
-        view.getMapMenu().getDirectionsPanel().walkButton.setOnAction(e -> {
+        view.getMapMenu().getDirectionsPanel().getWalkButton().setOnAction(e -> {
             model.transportMode = 1;
-            model.getMapObjects().getDigraph().setWalking();
         });
-        view.getMapMenu().getDirectionsPanel().bikeButton.setOnAction(e -> {
+        view.getMapMenu().getDirectionsPanel().getBikeButton().setOnAction(e -> {
             model.transportMode = 2;
-            model.getMapObjects().getDigraph().setWalking();
         });
-        view.getMapMenu().getDirectionsPanel().findRouteButton.setOnAction(e -> {
+        view.getMapMenu().getDirectionsPanel().getFindRouteButton().setOnAction(e -> {
             calculateRoute();
         });
 
@@ -285,7 +283,7 @@ public class Controller {
         // ############# Selected point panel #######################
         // ##########################################################
 
-        view.getMapMenu().getSelectedPointPanel().minimizeButton.setOnAction(e -> {
+        view.getMapMenu().getSelectedPointPanel().getMinimizeButton().setOnAction(e -> {
             // Set the menu panel to the minimized menu panel
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
             // Set the selectedPointMarker to null so no selected point is shown when the
@@ -294,37 +292,37 @@ public class Controller {
             view.getMapScene().redraw();
         });
 
-        view.getMapMenu().getSelectedPointPanel().directionsButton.setOnAction(e -> {
+        view.getMapMenu().getSelectedPointPanel().getDirectionsButton().setOnAction(e -> {
             // Set the menu panel to the directions menu panel
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getDirectionsPanel());
             // Update navigation visibility so navigation elements are shown when the navigation menu is shown.
             model.setNavigationVisibility(true);
             view.getMapScene().redraw();
         });
-        view.getMapMenu().getSelectedPointPanel().settingsButton.setOnAction(e -> {
+        view.getMapMenu().getSelectedPointPanel().getSettingsButton().setOnAction(e -> {
             // Set the menu panel to the settings menu panel
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getSettingsPanel());
         });
-        view.getMapMenu().getSelectedPointPanel().searchBar.setOnAction(e -> {
+        view.getMapMenu().getSelectedPointPanel().getSearchBar().setOnAction(e -> {
             // On enter pressed in the searchbar, focus on and pan to the point of the
             // address in the search bar.
-            focusOnPoint(view.getMapMenu().getSelectedPointPanel().searchBar.getAddress(), true, true);
+            focusOnPoint(view.getMapMenu().getSelectedPointPanel().getSearchBar().getAddress(), true, true);
             // Clear the searchbar text
-            view.getMapMenu().getSelectedPointPanel().searchBar.clear();
+            view.getMapMenu().getSelectedPointPanel().getSearchBar().clear();
         });
-        view.getMapMenu().getSelectedPointPanel().searchButton.setOnAction(e -> {
+        view.getMapMenu().getSelectedPointPanel().getSearchButton().setOnAction(e -> {
             // On clicking search button, focus on and pan to the point of the address in
             // the search bar.
-            focusOnPoint(view.getMapMenu().getSelectedPointPanel().searchBar.getAddress(), true, true);
+            focusOnPoint(view.getMapMenu().getSelectedPointPanel().getSearchBar().getAddress(), true, true);
             // Clear the searchbar text
-            view.getMapMenu().getSelectedPointPanel().searchBar.clear();
+            view.getMapMenu().getSelectedPointPanel().getSearchBar().clear();
         });
-        view.getMapMenu().getSelectedPointPanel().directionsToSelectedPointButton.setOnAction(e -> {
-            view.getMapMenu().getDirectionsPanel().endLocationField.setText(closestAddressToPointAsString(model.getSelectedPoint()));
+        view.getMapMenu().getSelectedPointPanel().getDirectionsToSelectedPointButton().setOnAction(e -> {
+            view.getMapMenu().getDirectionsPanel().getEndLocationField().setText(closestAddressToPointAsString(model.getSelectedPoint()));
             // Change the menu panel to the directions panel
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getDirectionsPanel());
-            setEndLocation(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress(), false);
-            if (view.getMapMenu().getDirectionsPanel().startLocationField.getAddress() != null) {
+            setEndLocation(view.getMapMenu().getDirectionsPanel().getEndLocationField().getAddress(), false);
+            if (view.getMapMenu().getDirectionsPanel().getStartLocationField().getAddress() != null) {
                 calculateRoute();
             } else {
                 model.getMapObjects().clearRoute();
@@ -333,7 +331,7 @@ public class Controller {
             model.setNavigationVisibility(true);
             view.getMapScene().redraw();
         });
-        view.getMapMenu().getSelectedPointPanel().saveLocationButton.setOnAction(e -> {
+        view.getMapMenu().getSelectedPointPanel().getSaveLocationButton().setOnAction(e -> {
             // When pressing the save point button we first check the status of the button
             // to see if we need to save a point
             // or delete a saved point.
@@ -342,8 +340,8 @@ public class Controller {
                 model.getMapObjects().getFavouritesMarkerList()
                         .add(new PointOfInterest(model.getSelectedPoint().getName(),
                                 PointType.FAVOURITE,
-                                (float) (view.getMapMenu().getSelectedPointPanel().mapPoint.getX() / 0.56),
-                                -view.getMapMenu().getSelectedPointPanel().mapPoint.getY(), true));
+                                (float) (view.getMapMenu().getSelectedPointPanel().getMapPoint().getX() / 0.56),
+                                -view.getMapMenu().getSelectedPointPanel().getMapPoint().getY(), true));
                 //We then minimize the panel...
                 view.getMapMenu().getPointOfInterestPanel().pointNameField.clear();
                 view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
@@ -385,7 +383,7 @@ public class Controller {
 
         view.getMapMenu().getSettingsPanel().getLoadAnotherOSMButton().setOnAction(e -> {
             // set the scene to chooseMapScene
-            this.stage.setScene(view.chooseMapScene);
+            this.stage.setScene(view.getChooseMapScene());
             this.stage.show();
         });
 
@@ -559,7 +557,7 @@ public class Controller {
     // ##########################################################
 
     public void createChooseMapSceneButtons() {
-        view.chooseMapScene.loadDefaultBinaryButton.setOnAction(e -> {
+        view.getChooseMapScene().loadDefaultBinaryButton.setOnAction(e -> {
             try {
                 Model.updateModel(getClass().getResource("/maps/" + Model.getDefaultMap()));
             } catch (ClassNotFoundException | URISyntaxException | XMLStreamException | FactoryConfigurationError
@@ -574,15 +572,15 @@ public class Controller {
         });
 
         try {
-            this.view.listView.getItems().addAll(fileList);
+            this.view.getListView().getItems().addAll(fileList);
         } catch (Exception e) {
             System.out.println("Error getting items from List View: ");
             e.printStackTrace();
         }
 
-        view.listView.setOnMouseClicked(e -> {
+        view.getListView().setOnMouseClicked(e -> {
             try {
-                URL fileURL = new URL(Paths.get("data/maps/" + view.listView.getSelectionModel().getSelectedItem())
+                URL fileURL = new URL(Paths.get("data/maps/" + view.getListView().getSelectionModel().getSelectedItem())
                         .toUri().toURL().toString());
                 Model.updateModel(fileURL);
                 view.creatMenusForMapScene(Model.getInstance());
@@ -595,7 +593,7 @@ public class Controller {
 
         });
 
-        view.chooseMapScene.chooseOwnFileButton.setOnAction(e -> {
+        view.getChooseMapScene().chooseOwnFileButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             try {
                 fileChooser.getExtensionFilters().addAll(
@@ -603,7 +601,7 @@ public class Controller {
                         new FileChooser.ExtensionFilter("BIN files", "*.bin"),
                         new FileChooser.ExtensionFilter("ZIP files", "*.zip"),
                         new FileChooser.ExtensionFilter("All files", "*.*"));
-                File selectedFile = fileChooser.showOpenDialog(view.primaryStage);
+                File selectedFile = fileChooser.showOpenDialog(view.getPrimaryStage());
                 if (selectedFile != null) {
                     Model.updateModel(selectedFile.toURI().toURL());
                     System.out.println(selectedFile.toURI().toURL().toString());
@@ -672,7 +670,7 @@ public class Controller {
             ImageView imageView = new ImageView(newPointIcon);
             imageView.setFitHeight(48);
             imageView.setFitWidth(48);
-            view.getMapMenu().getMinimizedPanel().pointOfInterestButton.setGraphic(imageView);
+            view.getMapMenu().getMinimizedPanel().getPointOfInterestButton().setGraphic(imageView);
         } else {
             isCreatingCustomPointOfInterest = true;
             // set the cursor to the crosshair cursor.
@@ -684,7 +682,7 @@ public class Controller {
             ImageView imageView = new ImageView(cancelIcon);
             imageView.setFitHeight(48);
             imageView.setFitWidth(48);
-            view.getMapMenu().getMinimizedPanel().pointOfInterestButton.setGraphic(imageView);
+            view.getMapMenu().getMinimizedPanel().getPointOfInterestButton().setGraphic(imageView);
 
         }
     }
@@ -770,18 +768,18 @@ public class Controller {
     }
 
     private void calculateRoute() {
-        if (view.getMapMenu().getDirectionsPanel().startLocationField.getAddress() != null
-                && view.getMapMenu().getDirectionsPanel().endLocationField.getAddress() != null) {
+        if (view.getMapMenu().getDirectionsPanel().getStartLocationField().getAddress() != null
+                && view.getMapMenu().getDirectionsPanel().getEndLocationField().getAddress() != null) {
             RoadNode start = model.getMapObjects().getRoadNodeRTree()
-                    .getNearest(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress());
+                    .getNearest(view.getMapMenu().getDirectionsPanel().getStartLocationField().getAddress());
             RoadNode end = model.getMapObjects().getRoadNodeRTree()
-                    .getNearest(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress());
-            setStartLocation(view.getMapMenu().getDirectionsPanel().startLocationField.getAddress(), false);
-            setEndLocation(view.getMapMenu().getDirectionsPanel().endLocationField.getAddress(), false);
-            List<String> directions = model.getMapObjects().getDigraph().aStar(end, start, true);
+                    .getNearest(view.getMapMenu().getDirectionsPanel().getEndLocationField().getAddress());
+            setStartLocation(view.getMapMenu().getDirectionsPanel().getStartLocationField().getAddress(), false);
+            setEndLocation(view.getMapMenu().getDirectionsPanel().getEndLocationField().getAddress(), false);
+            List<String> directions = model.getMapObjects().getDigraph().aStar(end, start, model.getTransportMode() > 0);
             float distance = model.getMapObjects().getDigraph().getDistance();
             int travelTime = model.getMapObjects().getDigraph().getTravelTime(model.getTransportMode());
-            // model.graph.runaStarWithNodeIndex(Integer.parseInt(view.getMapMenu().getDirectionsPanel().startLocationField.getText()),
+            // model.graph.runaStarWithNodeIndex(Integer.parseInt(view.getMapMenu().getDirectionsPanel().getStartLocationField.getText()),
             // Integer.parseInt(view.getMapMenu().getDirectionsPanel().endLocationField.getText()));
             // view.getMapMenu().getDirectionsPanel().receiveGuideList(null);
             view.getMapMenu().getDirectionsPanel().setGuideShow(true);

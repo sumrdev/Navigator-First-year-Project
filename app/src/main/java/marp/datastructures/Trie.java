@@ -7,7 +7,7 @@ import marp.mapelements.Address;
 public class Trie implements Serializable{
     private TrieNode root;
     private TrieNode currentNode;
-    /**
+/**
  * Constructor for Trie
  */
     public Trie() {

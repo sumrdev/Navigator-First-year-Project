@@ -8,8 +8,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.FillRule;
 import javafx.scene.text.Font;
+import marp.color.MapColor;
 import marp.mapelements.details.FontSize;
-import marp.mapelements.details.MapColor;
 import marp.mapelements.details.ShapeType;
 
 public class ComplexShape extends Element {

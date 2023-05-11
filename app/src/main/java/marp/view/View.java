@@ -13,15 +13,15 @@ import marp.view.gui.ZoomMenu;
 import marp.view.gui.menugui.MapMenu;
 
 public class View {
-    public Stage primaryStage;
-    public Model model;
+    private Stage primaryStage;
+    private Model model;
     private MapScene mapScene;
     private MapMenu mapMenu;
     private ZoomMenu zoomMenu;
     private Canvas canvas;
-    public ChooseMapScene chooseMapScene;
-    public ListView<String> listView;
-    public NearestRoadInfo nearestRoadInfo;
+    private ChooseMapScene chooseMapScene;
+    private ListView<String> listView;
+    private NearestRoadInfo nearestRoadInfo;
 
     public View(Stage primaryStage, Model model) {
         this.primaryStage = primaryStage;
@@ -85,5 +85,45 @@ public class View {
     }
     public NearestRoadInfo getNearestRoadInfo() {
         return nearestRoadInfo;
+    }
+
+    public ListView<String> getListView() {
+        return listView;
+    }
+
+    public void setListView(ListView<String> listView) {
+        this.listView = listView;
+    }
+
+    public void setChooseMapScene(ChooseMapScene chooseMapScene) {
+        this.chooseMapScene = chooseMapScene;
+    }
+
+    public void setMapScene(MapScene mapScene) {
+        this.mapScene = mapScene;
+    }
+
+    public void setMapMenu(MapMenu mapMenu) {
+        this.mapMenu = mapMenu;
+    }
+
+    public void setZoomMenu(ZoomMenu zoomMenu) {
+        this.zoomMenu = zoomMenu;
+    }
+
+    public void setCanvas(Canvas canvas) {
+        this.canvas = canvas;
+    }
+
+    public void setNearestRoadInfo(NearestRoadInfo nearestRoadInfo) {
+        this.nearestRoadInfo = nearestRoadInfo;
+    }
+
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
     }
 }

@@ -46,7 +46,6 @@ public class Digraph implements Serializable {
         Time endTime = new Time(System.currentTimeMillis());
         System.out.println("Created graph with : " + this.nodes.size() + " nodes in "
                 + (endTime.getTime() - starTime.getTime()) / 1000 + " s");
-        aStar(nodes.get(Long.parseLong("423493290")), nodes.get(Long.parseLong("6164191924")), true);
     }
 
     public void setWalking() {
@@ -94,8 +93,6 @@ public class Digraph implements Serializable {
     }
 
     public List<String> aStar(RoadNode start, RoadNode end, boolean walking) {
-        System.out.println(start.getID() + " " + end.getID());
-        System.out.println();
         Time startTime = new Time(System.currentTimeMillis());
         averageSpeedCount = 0;
         averageSpeed = 0;
@@ -124,7 +121,7 @@ public class Digraph implements Serializable {
                 return createTextDescriptionFromNavigation();
             }
             closedSet.add(current);
-            for (Edge edge : current.getEdges()) {
+            for (Edge edge : current.getEdges(walking)) {
                 if (!closedSet.contains(nodes.get(edge.end))) {
                     float tentativeGScore = gScore.get(current) + getWeight(edge, walking);
                     if (gScore.get(nodes.get(edge.end)) != null && tentativeGScore >= gScore.get(nodes.get(edge.end)))
@@ -147,9 +144,9 @@ public class Digraph implements Serializable {
 
     private float getWeight(Edge edge, boolean walking) {
         if (walking && !edge.isWalkable())
-            return 100000f;
+            return Float.POSITIVE_INFINITY;
         else if (!walking && !edge.isDriveable())
-            return 100000f;
+            return Float.POSITIVE_INFINITY;
         else if (walking)
             return (float) MathFunctions.distanceInMeters(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(),
                     nodes.get(edge.end).getX(), nodes.get(edge.end).getY());

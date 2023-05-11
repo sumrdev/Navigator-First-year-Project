@@ -12,6 +12,25 @@ public class RoadNode extends Point implements Serializable {
         this.id = node.getID();
         this.edges = new ArrayList<Edge>();        
     }
+    public ArrayList<Edge> getEdges(boolean walking){
+        ArrayList<Edge> edges = new ArrayList<Edge>();
+        if(walking){
+            for (Edge edge : this.edges){
+                if(edge.isWalkable()){
+                    edges.add(edge);
+                }
+            }
+            return edges;
+        } else {
+            for (Edge edge : this.edges){
+                if(edge.isDriveable()){
+                    edges.add(edge);
+                }
+            }
+            return edges;
+        }
+    }
+
     public ArrayList<Edge> getEdges(){
         return this.edges;
     }

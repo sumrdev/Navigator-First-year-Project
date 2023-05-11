@@ -266,7 +266,13 @@ public class Digraph implements Serializable {
     public void drawNavigation(GraphicsContext gc) {
         if (this.navigation == null)
             return;
-        gc.setStroke(Color.rgb(192, 48, 48));
+        if(roadColor == 2){ // if red blindness mode 
+            gc.setStroke(Color.rgb(102, 0, 102));
+        } else if(roadColor == 3){ // if greyscale mode
+            gc.setStroke(Color.rgb(26, 26, 26));
+        } else { // else just default reddish color
+            gc.setStroke(Color.rgb(192, 48, 48));
+        }
         for (Edge edge : navigation) {
             gc.strokeLine(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(),
                     nodes.get(edge.end).getY());
@@ -284,6 +290,10 @@ public class Digraph implements Serializable {
         }
     }
 
+    /**
+     * 
+     * 1 = normal, 2 = red blindness, 3 = greyscale
+     */
     public static void setColor(int n) {
         roadColor = n;
     }

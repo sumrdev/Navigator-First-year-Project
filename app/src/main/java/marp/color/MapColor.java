@@ -123,12 +123,12 @@ public class MapColor {
         protanopiaBlindColorMap.put("RAILWAY", Color.rgb(190, 190, 190,1));
         protanopiaBlindColorMap.put("SECONDARY", Color.WHITE);
         protanopiaBlindColorMap.put("SECONDARY_OUTLINE", Color.LIGHTGRAY);
-        protanopiaBlindColorMap.put("MOTORWAY", Color.rgb(234, 176, 183,1));
-        protanopiaBlindColorMap.put("MOTORWAY_OUTLINE", Color.rgb(201, 136, 142,1));
-        protanopiaBlindColorMap.put("PEDESTRIAN", Color.rgb(230, 230, 230,1));
+        protanopiaBlindColorMap.put("MOTORWAY", Color.YELLOW);
+        protanopiaBlindColorMap.put("MOTORWAY_OUTLINE", Color.ORANGE);
+        protanopiaBlindColorMap.put("PEDESTRIAN", Color.rgb(230, 230, 230));
         protanopiaBlindColorMap.put("PEDESTRIAN_OUTLINE", Color.LIGHTGRAY);
-        protanopiaBlindColorMap.put("PRIMARY", Color.rgb(245, 216, 217,1));
-        protanopiaBlindColorMap.put("PRIMARY_OUTLINE", Color.rgb(234, 176, 183,1));
+        protanopiaBlindColorMap.put("PRIMARY", Color.LIGHTYELLOW);
+        protanopiaBlindColorMap.put("PRIMARY_OUTLINE", Color.YELLOW);
         protanopiaBlindColorMap.put("PATH", Color.GREEN);
         protanopiaBlindColorMap.put("PATH_OUTLINE", Color.TRANSPARENT);
         protanopiaBlindColorMap.put("RESIDENTIAL", Color.WHITE);

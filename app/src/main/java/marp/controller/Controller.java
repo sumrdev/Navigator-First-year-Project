@@ -399,6 +399,7 @@ public class Controller {
             view.getMapMenu().getColorblindnessModePanel().activateDarkMode(false);
             view.getZoomMenu().activateDarkMode(false);
 
+            Digraph.setColor(1);
             view.getMapScene().redraw();
         });
 
@@ -414,6 +415,7 @@ public class Controller {
             view.getMapMenu().getColorblindnessModePanel().activateDarkMode(true);
             view.getZoomMenu().activateDarkMode(true);
 
+            Digraph.setColor(1);
             view.getMapScene().redraw();
         });
 

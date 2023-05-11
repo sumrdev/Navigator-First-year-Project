@@ -56,7 +56,7 @@ public class RTreeTest {
         //bound contains the point it is "random" witch is chosen
         data = new ArrayList<>();
         Random random = new Random();
-        for(int i = 0; i<10_000; i++){
+        for(int i = 0; i<10_001; i++){
             float x = random.nextFloat()*maxValue;
             float y = random.nextFloat()*maxValue;
             data.add(new Point(0, x, y));
@@ -67,35 +67,38 @@ public class RTreeTest {
         float[] pointArray = new float[]{point.getX(), point.getY()};
         Element lowest = data.get(0);
         for(Element element: data){
-            if(distanceToPoint(element.getBounds(), pointArray) < distanceToPoint(lowest.getBounds(), pointArray))
+            if(distanceToPoint(pointArray, element.getBounds()) < distanceToPoint(pointArray, lowest.getBounds()))
                 lowest = element;
         }
-        rTree.getNearest(point);
-        rTree.getNearest(pointArray);
-        //Assertions.assertEquals(lowest, rTree.getNearest(point));
-        //Assertions.assertEquals(lowest, rTree.getNearest(pointArray));
+        Element elementFromPoint = rTree.getNearest(point);
+        Element elementFromPointArray = rTree.getNearest(pointArray);
+        //Assertions.assertEquals(distanceToPoint(pointArray, lowest.getBounds()), distanceToPoint(pointArray, elementFromPointArray.getBounds()));
+        //Assertions.assertEquals(lowest, elementFromPoint);
+        //Assertions.assertEquals(lowest, elementFromPointArray);
         Assertions.assertNull(emptyRTree.getNearest(pointArray));
     }
-    public double distanceToPoint(float[] element, float[] point){
+    protected float distanceToPoint(float[] point, float[] bounds){
+        float x = point[0];
+        float y = point[1];
         float elementX;
         float elementY;
         //find closest x element to the current element
-        if(point[0] > element[2]){
-            elementX = element[2];
-        }else if(point[0] < element[0]){
-            elementX = element[0];
+        if(x > bounds[2]){
+            elementX = bounds[2];
+        }else if(x < bounds[0]){
+            elementX = bounds[0];
         }else{
-            elementX = point[0];
+            elementX = x;
         }
         //find closest y element to the current element
-        if(point[1] > element[3]){
-            elementY = element[3];
-        }else if(point[1] < element[1]){
-            elementY = element[1];
+        if(y > bounds[3]){
+            elementY = bounds[3];
+        }else if(y < bounds[1]){
+            elementY = bounds[1];
         }else{
-            elementY = point[1];
+            elementY = y;
         }
-        return MathFunctions.distanceInMeters(point[0], point[1], elementX, elementY);
+        return MathFunctions.distanceInMeters(x, y, elementX, elementY);
     }
     @Test
     public void getElementsInRangeTest(){

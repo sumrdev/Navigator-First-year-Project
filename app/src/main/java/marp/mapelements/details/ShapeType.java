@@ -11,6 +11,6 @@ public enum ShapeType {
     FARMLAND,
     WATERWAY,
     RAILWAY,
-    UNDEFINED, 
+    UNDEFINED,
     DELETE;
 }

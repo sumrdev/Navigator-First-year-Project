@@ -19,10 +19,10 @@ import marp.view.gui.MapLabel;
 import marp.view.gui.buttons.MapTextButton;
 
 public class ChooseMapScene extends Scene{
-    public MapTextButton loadDefaultBinaryButton;
-    public MapTextButton chooseOwnFileButton;
+    private MapTextButton loadDefaultBinaryButton;
+    private MapTextButton chooseOwnFileButton;
     private Model model;
-    ListView<String> filelist;
+    private ListView<String> filelist;
 
     public ChooseMapScene(Model model, ListView<String> listView, View view) {
         super(new VBox());
@@ -92,5 +92,13 @@ public class ChooseMapScene extends Scene{
 
         // add contents to scene
         this.setRoot(sceneContents);
+    }
+
+    public MapTextButton getLoadDefaultBinaryButton(){
+        return loadDefaultBinaryButton;
+    }
+
+    public MapTextButton getChooseOwnFileButton(){
+        return chooseOwnFileButton;
     }
 }

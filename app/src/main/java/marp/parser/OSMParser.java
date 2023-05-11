@@ -1,14 +1,8 @@
 package marp.parser;
 
 import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
-import java.lang.reflect.Array;
 import java.sql.Time;
-import java.util.ArrayList;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
@@ -18,7 +12,6 @@ import javax.xml.stream.XMLStreamReader;
 
 import marp.mapelements.ComplexShape;
 import marp.mapelements.Point;
-import marp.mapelements.SimpleShape;
 import marp.mapelements.details.FontSize;
 import marp.mapelements.details.PointType;
 import marp.mapelements.details.RoadType;
@@ -124,7 +117,7 @@ public class OSMParser {
                                     mapObjectInParsing.setRoadOneWay(value.equals("yes"));
                                     break;
                                 case "junction":
-                                    if(value.equals("roundabout")) {
+                                    if (value.equals("roundabout")) {
                                         mapObjectInParsing.setRoadRoundabout(true);
                                     }
                                     break;
@@ -221,8 +214,8 @@ public class OSMParser {
                                     switch (value) {
                                         case "garden":
                                         case "park":
-                                        mapObjectInParsing.setShapeType(ShapeType.GRASS);
-                                        break;
+                                            mapObjectInParsing.setShapeType(ShapeType.GRASS);
+                                            break;
                                     }
                                     break;
                                 case "addr:city":

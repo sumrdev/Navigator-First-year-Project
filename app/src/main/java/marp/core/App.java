@@ -15,9 +15,6 @@ public class App extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // String defaultFilename = "denmark-latest.osm";
-        // InputStream defaultFile = getClass().getResourceAsStream("/maps/"+defaultFilename);
-
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/logo.png")));
         Model model = Model.getInstance();
         View view = new View(primaryStage, model);

@@ -30,6 +30,5 @@ public enum PointType {
     PointType(Image icon, String typename) {
         this.icon = icon;
         this.typeName = typename;
-
     }
 }

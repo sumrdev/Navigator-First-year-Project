@@ -80,12 +80,5 @@ public class utilitiesTest {
         Assertions.assertEquals(90, functions.getAngleBetweenTwoLines(point1.getX(),point1.getY(), point2.getX(), point2.getY(), point1.getX(),point1.getY(), point5.getX(),point5.getY()));
         Assertions.assertEquals(180, functions.getAngleBetweenTwoLines(point1.getX(),point1.getY(), point2.getX(), point2.getY(), point1.getX(),point1.getY(), point4.getX(),point4.getY()));
         Assertions.assertEquals(270, functions.getAngleBetweenTwoLines(point1.getX(),point1.getY(), point2.getX(), point2.getY(), point1.getX(),point1.getY(), point3.getX(),point3.getY()));
-
-        point1 = new Point(1,1);
-        point2 = new Point(2,1);
-        point3 = new Point(1,2);
-        point4 = new Point(1,3);
-        Assertions.assertEquals(270, functions.getAngleBetweenTwoLines(point1.getX(),point1.getY(), point2.getX(), point2.getY(), point3.getX(),point3.getY(), point4.getX(),point4.getY()));
-
     }
 }

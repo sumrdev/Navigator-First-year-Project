@@ -64,7 +64,7 @@ public class RTree<T extends Element> implements Serializable {
             } else {
                 this.value = values.get(0);
                 boundingRect = value.getBounds();
-                size = 1;
+                size = values.size();
             }
         }
 
@@ -171,7 +171,8 @@ public class RTree<T extends Element> implements Serializable {
             }
             if(high != null && high.distance(point) < lowest.distance) {
                 high.getNearest(point, lowest);
-            } else if(low == null) {
+            }
+            if(value != null) {
                 lowest.update(value, distance(point[0], point[1], value));
             }
         }
@@ -277,7 +278,7 @@ public class RTree<T extends Element> implements Serializable {
     private class NodeDistance{
         T element;
         float distance;
-        private NodeDistance(T element, float distance) {
+        public NodeDistance(T element, float distance) {
             this.element = element;
             this.distance = distance;
         }

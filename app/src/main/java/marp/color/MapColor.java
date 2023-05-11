@@ -1,6 +1,8 @@
-package marp.mapelements.details;
+package marp.color;
 
 import javafx.scene.paint.Color;
+import marp.mapelements.details.RoadType;
+import marp.mapelements.details.ShapeType;
 
 import java.util.HashMap;
 

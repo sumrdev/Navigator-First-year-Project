@@ -11,15 +11,15 @@ import marp.mapelements.RoadNode;
 import marp.utilities.MathFunctions;
 
 public class Digraph implements Serializable {
-    boolean notInCar;
     ArrayList<Road> roads;
     HashMap<Long, Road> roadsMap;
     HashMap<Long, RoadNode> nodes;
     ArrayList<ArrayList<Edge>> connectedComponents;
     ArrayList<Edge> navigation;
     HashSet<RoadNode> closedSet;
+    PriorityQueue<RoadNode> openSetQueue;
     int averageSpeedCount;
-    float averageSpeed = 70;
+    float averageSpeed = 50;
     boolean activeRoute;
     static int roadColor = 1;
 
@@ -48,44 +48,30 @@ public class Digraph implements Serializable {
                 + (endTime.getTime() - starTime.getTime()) / 1000 + " s");
     }
 
-    public void setWalking() {
-        notInCar = true;
-    }
-
-    public void setDriving() {
-        notInCar = false;
-    }
-
-    private ArrayList<ArrayList<Edge>> categorizeEdgesOnConnectedComponents() {
-        ArrayList<ArrayList<Edge>> edges = new ArrayList<>();
-        HashSet<Long> visited = new HashSet<>();
-        for (RoadNode node : nodes.values()) {
-            if (!visited.contains(node.getID())) {
-                ArrayList<Edge> component = new ArrayList<>();
-                Stack<Long> stack = new Stack<>();
-                stack.push(node.getID());
-                visited.add(node.getID());
-                while (!stack.isEmpty()) {
-                    RoadNode currentNode = nodes.get(stack.pop());
-                    for (Edge edge : currentNode.getEdges()) {
-                        if (!visited.contains(edge.end)) {
-                            visited.add(edge.end);
-                            stack.push(edge.end);
-                        }
-                        component.add(edge);
-                    }
-                }
-                edges.add(component);
-            }
-        }
-        return edges;
-    }
-
-    // public void setAverageSpeed(int speed) {
-    //     float temp = averageSpeed * averageSpeedCount;
-    //     temp += speed * 10;
-    //     this.averageSpeedCount++;
-    //     this.averageSpeed = temp / averageSpeedCount;
+    //FUNCTION FOR TESTING PURPOSES, NOT USED IN THE APPLICATION
+    // private ArrayList<ArrayList<Edge>> categorizeEdgesOnConnectedComponents() {
+    //     ArrayList<ArrayList<Edge>> edges = new ArrayList<>();
+    //     HashSet<Long> visited = new HashSet<>();
+    //     for (RoadNode node : nodes.values()) {
+    //         if (!visited.contains(node.getID())) {
+    //             ArrayList<Edge> component = new ArrayList<>();
+    //             Stack<Long> stack = new Stack<>();
+    //             stack.push(node.getID());
+    //             visited.add(node.getID());
+    //             while (!stack.isEmpty()) {
+    //                 RoadNode currentNode = nodes.get(stack.pop());
+    //                 for (Edge edge : currentNode.getEdges()) {
+    //                     if (!visited.contains(edge.end)) {
+    //                         visited.add(edge.end);
+    //                         stack.push(edge.end);
+    //                     }
+    //                     component.add(edge);
+    //                 }
+    //             }
+    //             edges.add(component);
+    //         }
+    //     }
+    //     return edges;
     // }
 
     public List<String> aStar(long start, long end, boolean walking) {
@@ -94,13 +80,11 @@ public class Digraph implements Serializable {
 
     public List<String> aStar(RoadNode start, RoadNode end, boolean walking) {
         Time startTime = new Time(System.currentTimeMillis());
-        averageSpeedCount = 0;
-        averageSpeed = 0;
         closedSet = new HashSet<>();
         HashMap<RoadNode, RoadNode> cameFrom = new HashMap<>();
         HashMap<RoadNode, Float> gScore = new HashMap<>();
         HashMap<RoadNode, Float> fScore = new HashMap<>();
-        PriorityQueue<RoadNode> openSetQueue = new PriorityQueue<>(new Comparator<RoadNode>() {
+        openSetQueue = new PriorityQueue<>(new Comparator<RoadNode>() {
             @Override
             public int compare(RoadNode o1, RoadNode o2) {
                 return fScore.get(o1).compareTo(fScore.get(o2));
@@ -127,6 +111,7 @@ public class Digraph implements Serializable {
                     if (gScore.get(nodes.get(edge.end)) != null && tentativeGScore >= gScore.get(nodes.get(edge.end)))
                         continue;
                     cameFrom.put(nodes.get(edge.end), current);
+
                     gScore.put(nodes.get(edge.end), tentativeGScore);
                     fScore.put(nodes.get(edge.end),
                             gScore.get(nodes.get(edge.end)) + getHScore(nodes.get(edge.end), end, walking));
@@ -152,15 +137,14 @@ public class Digraph implements Serializable {
                     nodes.get(edge.end).getX(), nodes.get(edge.end).getY());
         else
             return (float) (MathFunctions.distanceInMeters(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(),
-                    nodes.get(edge.end).getX(), nodes.get(edge.end).getY()) / (roadsMap.get(edge.road).getSpeed()*1000))*60;
+                    nodes.get(edge.end).getX(), nodes.get(edge.end).getY()) / (roadsMap.get(edge.road).getSpeed()*1000)*60);
     }
 
     private float getHScore(RoadNode start, RoadNode end, boolean walking) {
         if (walking)
             return (float) MathFunctions.distanceInMeters(start.getX(), start.getY(), end.getX(), end.getY());
         else
-            return (float) MathFunctions.distanceInMeters(start.getX(), start.getY(), end.getX(), end.getY())
-                    / averageSpeed;
+            return (float) MathFunctions.distanceInMeters(start.getX(), start.getY(), end.getX(), end.getY())/(averageSpeed*1000/60);
     }
 
     private void reconstructPath(HashMap<RoadNode, RoadNode> cameFrom, RoadNode current) {
@@ -175,7 +159,7 @@ public class Digraph implements Serializable {
                     break;
                 }
             }
-        }
+        }   
     }
 
     public List<String> createTextDescriptionFromNavigation() {
@@ -270,18 +254,22 @@ public class Digraph implements Serializable {
     }
 
     public void draw(GraphicsContext gc) {
-        drawNavigation(gc);
-    }
-
-    public void drawNavigation(GraphicsContext gc) {
         if (this.navigation == null)
             return;
-        gc.setStroke(Color.rgb(192, 48, 48));
+        if(roadColor == 2){ // if red blindness mode 
+            gc.setStroke(Color.rgb(102, 0, 102));
+        } else if(roadColor == 3){ // if greyscale mode
+            gc.setStroke(Color.rgb(26, 26, 26));
+        } else { // else just default reddish color
+            gc.setStroke(Color.rgb(192, 48, 48));
+        }
         for (Edge edge : navigation) {
             gc.strokeLine(nodes.get(edge.start).getX(), nodes.get(edge.start).getY(), nodes.get(edge.end).getX(),
                     nodes.get(edge.end).getY());
         }
     }
+
+
 
     public void drawConnectedComponents(GraphicsContext gc) {
         for (ArrayList<Edge> arrayList : connectedComponents) {
@@ -294,6 +282,10 @@ public class Digraph implements Serializable {
         }
     }
 
+    /**
+     * 
+     * 1 = normal, 2 = red blindness, 3 = greyscale
+     */
     public static void setColor(int n) {
         roadColor = n;
     }

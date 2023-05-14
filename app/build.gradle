@@ -52,7 +52,7 @@ dependencies {
 application {
     // Define the main class for the application.
     mainClass = 'marp.core.Start'
-    applicationDefaultJvmArgs = ["-Xmx8192m"]
+    applicationDefaultJvmArgs = ["-Xmx8500m"]
 }
 
 mainClassName = 'marp.core.Start'
@@ -63,6 +63,7 @@ jar {
     attributes(
         'Main-Class': 'marp.core.Start'
     )
+    
   }
   from {
     configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }

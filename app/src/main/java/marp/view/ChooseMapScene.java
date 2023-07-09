@@ -49,15 +49,16 @@ public class ChooseMapScene extends Scene{
         
         filelist.setOnDragDropped((DragEvent event) -> {
             Dragboard dragBoard = event.getDragboard();
+            String trimURL = "";
             if (dragBoard.hasUrl()) {
-                System.out.println("Received file: " + dragBoard.getUrl());
+                trimURL = dragBoard.getUrl().substring(6);
+                System.out.println("Received file: " + trimURL);
                 event.setDropCompleted(true);
             } else {
                 event.setDropCompleted(false);
             }
             try {
-                String dragBoardUrl = dragBoard.getUrl();
-                File file = new File(dragBoardUrl);
+                File file = new File(trimURL);
                 URL fileToURL = file.toURI().toURL();
                 Model.updateModel(fileToURL);
                 view.creatMenusForMapScene(Model.getInstance());

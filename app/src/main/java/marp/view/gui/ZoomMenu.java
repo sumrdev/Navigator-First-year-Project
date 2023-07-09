@@ -35,9 +35,11 @@ public class ZoomMenu extends VBox {
 
         // Zoom in button
         zoomIn = new MapTextButton("+");
+        zoomIn.setStyle("-fx-padding: 20px;");
 
         // Zoom out button
         zoomOut = new MapTextButton("-");
+        zoomOut.setStyle("-fx-padding: 20px;");
 
         this.getChildren().addAll(zoomIn, zoomOut, zoomLevelLabel, distanceLine);
         this.setPadding(new Insets(5));

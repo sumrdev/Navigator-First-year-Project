@@ -7,6 +7,11 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.control.TextArea;
 import marp.mapelements.Address;
 import marp.mapelements.MapPoint;
 import marp.mapelements.details.PointType;
@@ -37,6 +42,15 @@ public class SelectedPointPanel extends MenuPanel {
     private VBox selectedPointInfo;
     private VBox buttonContainer;
 
+    private TextArea notesTextArea;
+    public TextArea getNotesTextArea() {
+        return notesTextArea;
+    }
+
+    private Text takeNoteText;
+    private Text takeNoteText2;
+    private String selectedAddressString = "";
+
     public SelectedPointPanel(Model model) {
         super();
 
@@ -62,6 +76,13 @@ public class SelectedPointPanel extends MenuPanel {
         selectedPointType = new MapLabelSmall("Type");
         selectedPointType.setTextAlignment(TextAlignment.LEFT);
 
+        // Create text area for notes
+        notesTextArea = new TextArea();
+        takeNoteText = new Text("Write notes for this Bookmark:");
+        takeNoteText.setFont(Font.font("verdana", FontWeight.MEDIUM, FontPosture.REGULAR, 19)); 
+        takeNoteText2 = new Text("Bookmark this point to save your notes\n(If already bookmarked, just press close to save your edit)");
+        takeNoteText2.setFont(Font.font("verdana", FontWeight.MEDIUM, FontPosture.ITALIC, 11)); 
+
         // Create a buttons to bookmark the location and get directions
         saveLocationButton = new MapToggleButton(
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/bookmark.png"))));
@@ -74,7 +95,7 @@ public class SelectedPointPanel extends MenuPanel {
         saveAndDirectionsButtons.setAlignment(Pos.CENTER);
 
         // Create container for labels + buttons
-        selectedPointInfo = new VBox(selectedPointName, selectedPointType, saveAndDirectionsButtons);
+        selectedPointInfo = new VBox(selectedPointName, selectedPointType, saveAndDirectionsButtons, takeNoteText, takeNoteText2, notesTextArea);
         selectedPointInfo.getStylesheets().addAll("CSS/darkmodesheet.css", "CSS/stylesheet.css");
         selectedPointInfo.getStyleClass().add("map-vbox");
         selectedPointInfo.setMaxHeight(500);
@@ -103,7 +124,7 @@ public class SelectedPointPanel extends MenuPanel {
         this.mapPoint = mapPoint;
         selectedPointName.setText(mapPoint.getName());
         selectedPointType.setText(mapPoint.getType().typeName);
-
+        selectedAddressString = mapPoint.getName();
     }
 
     public void setSavePointButtonMode(PointType pointType) {
@@ -147,6 +168,10 @@ public class SelectedPointPanel extends MenuPanel {
         selectedPointType.activateDarkMode(activate);
     }
 
+    public String getNote(){
+        return notesTextArea.getText();
+    }
+
     public SearchBar getSearchBar() {
         return searchBar;
     }
@@ -185,5 +210,9 @@ public class SelectedPointPanel extends MenuPanel {
 
     public VBox getButtonContainer() {
         return buttonContainer;
+    }
+
+    public String getSelectedAddress(){
+        return selectedAddressString;
     }
 }

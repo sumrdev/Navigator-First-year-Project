@@ -33,6 +33,8 @@ public class Controller {
     Model model;
     View view;
 
+    Notes notes;
+
     float lastX;
     float lastY;
 
@@ -42,6 +44,8 @@ public class Controller {
     Stage stage;
 
     double zoomFactor = 1.0;
+
+    String nearestRoad = "";
 
     private float mouseDragStartPositionX;
     private float mouseDragStartPositionY;
@@ -54,6 +58,7 @@ public class Controller {
         setFileChooser();
         this.stage = view.getPrimaryStage();
         createChooseMapSceneButtons();
+        notes = new Notes();
     }
 
     private void setFileChooser() {
@@ -71,6 +76,8 @@ public class Controller {
         view.getCanvas().setOnMouseMoved(e -> {
             view.getNearestRoadInfo().setRoadNameText(model.getNearestRoadNameForMapSelection(
                     view.getMapScene().screenCoordsToMapCoords(new Point2D(e.getX(), e.getY()))));
+
+            nearestRoad = view.getMapMenu().getSelectedPointPanel().getSelectedAddress();
         });
         view.getCanvas().setOnMousePressed(e -> {
             lastX = (float) e.getX();
@@ -85,25 +92,39 @@ public class Controller {
             // current position, it counts as a mouse click.
 
             if (mouseDragStartPositionX == (float) e.getX() && mouseDragStartPositionY == (float) e.getY()) {
-                // There are tree cases: Either we are making a new POI, selecting a favourite point or selecting a
+                // There are tree cases: Either we are making a new POI, selecting a favourite
+                // point or selecting a
                 // normal point.
                 // convert the screen coords of the mouse click to map coords
                 Point2D point = view.getMapScene().screenCoordsToMapCoords(new Point2D(lastX, lastY));
                 MapPoint nearestPoint = model.getNearestPointForMapSelection(point);
-                PointOfInterest favouritePoint = model.getFavouritePointForSelection(new Point2D(nearestPoint.getX()/0.56, -nearestPoint.getY()));
-                if (isCreatingCustomPointOfInterest) { //first we check if the user is in the process of making a new point of interest
+                nearestRoad = nearestPoint.getName();
+                System.out.println("nearestPoint: " + nearestRoad);
+                PointOfInterest favouritePoint = model
+                        .getFavouritePointForSelection(new Point2D(nearestPoint.getX() / 0.56, -nearestPoint.getY()));
+                if (notes.getNoteFromAddress(nearestRoad) != null) {
+                    view.getMapMenu().getSelectedPointPanel().getNotesTextArea()
+                            .setText(notes.getNoteFromAddress(nearestPoint.getName()));
+                } else {
+                    view.getMapMenu().getSelectedPointPanel().getNotesTextArea().setText("");
+                }
+                if (isCreatingCustomPointOfInterest) { // first we check if the user is in the process of making a new
+                                                       // point of interest
                     view.getMapMenu().changeMenuPanel(view.getMapMenu().getPointOfInterestPanel());
                     toggleIsCreatingCustomPointOfInterest();
-                } else if (favouritePoint != null) {//We check if the point is a favourite point and focus on the favourite point if it is.
+                } else if (favouritePoint != null) {// We check if the point is a favourite point and focus on the
+                                                    // favourite point if it is.
                     model.setSelectedPoint(favouritePoint);
                     focusOnPoint(favouritePoint, false, true);
                     view.getMapScene().redraw();
                 } else { // else we find the nearest normal point and select it.
-                    //if the search bars in the directions panel are focussed we want to set the start and end location on click.
+                    // if the search bars in the directions panel are focussed we want to set the
+                    // start and end location on click.
                     if (view.getMapMenu().getDirectionsPanel().getEndLocationField().isFocused()) {
                         view.getMapMenu().getDirectionsPanel().getEndLocationField()
                                 .setText(closestAddressToPointAsString(nearestPoint));
-                        setEndLocation(view.getMapMenu().getDirectionsPanel().getEndLocationField().getAddress(), false);
+                        setEndLocation(view.getMapMenu().getDirectionsPanel().getEndLocationField().getAddress(),
+                                false);
                         model.getMapObjects().clearRoute();
                         view.getMapScene().redraw();
                     } else if (view.getMapMenu().getDirectionsPanel().getStartLocationField().isFocused()) {
@@ -111,17 +132,19 @@ public class Controller {
                                 .setText(closestAddressToPointAsString(nearestPoint));
                         model.getMapObjects().clearRoute();
                         view.getMapScene().redraw();
-                        setStartLocation(view.getMapMenu().getDirectionsPanel().getStartLocationField().getAddress(), false);
+                        setStartLocation(view.getMapMenu().getDirectionsPanel().getStartLocationField().getAddress(),
+                                false);
                     } else {
-                    model.setSelectedPoint(nearestPoint);
-                    // focus on the point without panning
-                    focusOnPoint(nearestPoint, false, false);
-                    // set marker point on selected point.
-                    model.setSelectedPointMarker(new PointOfInterest("", PointType.SELECTED,
-                            (float) (nearestPoint.getX() / 0.56), -nearestPoint.getY(), false));
-                    // Update navigation visibility so navigation elements are not shown when the navigation menu is not shown.
-                    model.setNavigationVisibility(false);
-                    view.getMapScene().redraw();
+                        model.setSelectedPoint(nearestPoint);
+                        // focus on the point without panning
+                        focusOnPoint(nearestPoint, false, false);
+                        // set marker point on selected point.
+                        model.setSelectedPointMarker(new PointOfInterest("", PointType.SELECTED,
+                                (float) (nearestPoint.getX() / 0.56), -nearestPoint.getY(), false));
+                        // Update navigation visibility so navigation elements are not shown when the
+                        // navigation menu is not shown.
+                        model.setNavigationVisibility(false);
+                        view.getMapScene().redraw();
                     }
                 }
             } else if (e.getButton() == MouseButton.SECONDARY) {
@@ -171,7 +194,8 @@ public class Controller {
 
         view.getMapMenu().getMinimizedPanel().getDirectionsButton().setOnAction(e -> {
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getDirectionsPanel());
-            // Update navigation visibility so nsavigation elements are shown when the navigation menu is shown.
+            // Update navigation visibility so nsavigation elements are shown when the
+            // navigation menu is shown.
             model.setNavigationVisibility(true);
             view.getMapScene().redraw();
         });
@@ -205,7 +229,8 @@ public class Controller {
             // Set the selectedPointMarker to null so no selected point is shown when the
             // minimized menu is shown.
             model.setSelectedPointMarker(null);
-            // Update navigation visibility so navigation elements are not shown when the navigation menu is not shown.
+            // Update navigation visibility so navigation elements are not shown when the
+            // navigation menu is not shown.
             model.setNavigationVisibility(false);
             view.getMapScene().redraw();
         });
@@ -215,7 +240,8 @@ public class Controller {
 
             // Set the menu panel to the settings menu panel
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getSettingsPanel());
-            // Update navigation visibility so navigation elements are not shown when the navigation menu is not shown.
+            // Update navigation visibility so navigation elements are not shown when the
+            // navigation menu is not shown.
             model.setNavigationVisibility(false);
             view.getMapScene().redraw();
         });
@@ -284,6 +310,14 @@ public class Controller {
         // ##########################################################
 
         view.getMapMenu().getSelectedPointPanel().getMinimizeButton().setOnAction(e -> {
+
+            if (model.getSelectedPoint().getType() == PointType.FAVOURITE) {
+                notes.NewNote(nearestRoad, view.getMapMenu().getSelectedPointPanel().getNote());
+                System.out.println("For address: " + nearestRoad + " \nNew note: "
+                        + notes.getNoteFromAddress(nearestRoad));
+            }
+            view.getMapMenu().getSelectedPointPanel().getNotesTextArea().setText("");
+
             // Set the menu panel to the minimized menu panel
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
             // Set the selectedPointMarker to null so no selected point is shown when the
@@ -295,7 +329,8 @@ public class Controller {
         view.getMapMenu().getSelectedPointPanel().getDirectionsButton().setOnAction(e -> {
             // Set the menu panel to the directions menu panel
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getDirectionsPanel());
-            // Update navigation visibility so navigation elements are shown when the navigation menu is shown.
+            // Update navigation visibility so navigation elements are shown when the
+            // navigation menu is shown.
             model.setNavigationVisibility(true);
             view.getMapScene().redraw();
         });
@@ -318,7 +353,8 @@ public class Controller {
             view.getMapMenu().getSelectedPointPanel().getSearchBar().clear();
         });
         view.getMapMenu().getSelectedPointPanel().getDirectionsToSelectedPointButton().setOnAction(e -> {
-            view.getMapMenu().getDirectionsPanel().getEndLocationField().setText(closestAddressToPointAsString(model.getSelectedPoint()));
+            view.getMapMenu().getDirectionsPanel().getEndLocationField()
+                    .setText(closestAddressToPointAsString(model.getSelectedPoint()));
             // Change the menu panel to the directions panel
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getDirectionsPanel());
             setEndLocation(view.getMapMenu().getDirectionsPanel().getEndLocationField().getAddress(), false);
@@ -327,7 +363,8 @@ public class Controller {
             } else {
                 model.getMapObjects().clearRoute();
             }
-            // Update navigation visibility so navigation elements are not shown when the navigation menu is not shown.
+            // Update navigation visibility so navigation elements are not shown when the
+            // navigation menu is not shown.
             model.setNavigationVisibility(true);
             view.getMapScene().redraw();
         });
@@ -336,24 +373,37 @@ public class Controller {
             // to see if we need to save a point
             // or delete a saved point.
             if (model.getSelectedPoint().getType() != PointType.FAVOURITE) {
-               // If the point is not already favourited, then we need to make a new point marker and add it to the favourite point list.
+                // If the point is not already favourited, then we need to make a new point
+                // marker and add it to the favourite point list.
                 model.getMapObjects().getFavouritesMarkerList()
                         .add(new PointOfInterest(model.getSelectedPoint().getName(),
                                 PointType.FAVOURITE,
                                 (float) (view.getMapMenu().getSelectedPointPanel().getMapPoint().getX() / 0.56),
                                 -view.getMapMenu().getSelectedPointPanel().getMapPoint().getY(), true));
-                //We then minimize the panel...
+                notes.NewNote(nearestRoad, view.getMapMenu().getSelectedPointPanel().getNote());
+                System.out.println("For address: " + nearestRoad + " \nNote: "
+                        + notes.getNoteFromAddress(nearestRoad));
+                view.getMapMenu().getSelectedPointPanel().getNotesTextArea().setText("");
+
+                // We then minimize the panel...
                 view.getMapMenu().getPointOfInterestPanel().getPointNameField().clear();
                 view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
                 model.setSelectedPointMarker(null);
                 view.getMapScene().redraw();
             } else {
-                // If the point has the type Favourite, and the button is pressed we want to delete the point.
+                // If the point has the type Favourite, and the button is pressed we want to
+                // delete the point.
                 model.getMapObjects().getFavouritesMarkerList().remove(model.getSelectedPoint());
                 view.getMapMenu().getPointOfInterestPanel().getPointNameField().clear();
                 view.getMapMenu().changeMenuPanel(view.getMapMenu().getMinimizedPanel());
                 model.setSelectedPointMarker(null);
                 view.getMapScene().redraw();
+                try {
+                    notes.getHashMapForPOI().remove(nearestRoad);
+                    System.out.println("Removed note for POI: " + nearestRoad);
+                } catch (Exception e1) {
+                    // TODO: handle exception
+                }
             }
         });
 
@@ -376,7 +426,8 @@ public class Controller {
         view.getMapMenu().getSettingsPanel().getDirectionsButton().setOnAction(e -> {
             // Set the menu panel to the directions menu panel
             view.getMapMenu().changeMenuPanel(view.getMapMenu().getDirectionsPanel());
-            // Update navigation visibility so navigation elements are shown when the navigation menu is shown.
+            // Update navigation visibility so navigation elements are shown when the
+            // navigation menu is shown.
             model.setNavigationVisibility(true);
             view.getMapScene().redraw();
         });
@@ -561,7 +612,8 @@ public class Controller {
     public void createChooseMapSceneButtons() {
         view.getChooseMapScene().getLoadDefaultBinaryButton().setOnAction(e -> {
             try {
-                Model.updateModel(getClass().getResourceAsStream("/maps/" + Model.getDefaultMap()), Model.getDefaultMap());
+                Model.updateModel(getClass().getResourceAsStream("/maps/" + Model.getDefaultMap()),
+                        Model.getDefaultMap());
             } catch (ClassNotFoundException | URISyntaxException | XMLStreamException | FactoryConfigurationError
                     | IOException e1) {
                 // TODO Auto-generated catch block
@@ -778,7 +830,8 @@ public class Controller {
                     .getNearest(view.getMapMenu().getDirectionsPanel().getEndLocationField().getAddress());
             setStartLocation(view.getMapMenu().getDirectionsPanel().getStartLocationField().getAddress(), false);
             setEndLocation(view.getMapMenu().getDirectionsPanel().getEndLocationField().getAddress(), false);
-            List<String> directions = model.getMapObjects().getDigraph().aStar(end, start, model.getTransportMode() > 0);
+            List<String> directions = model.getMapObjects().getDigraph().aStar(end, start,
+                    model.getTransportMode() > 0);
             float distance = model.getMapObjects().getDigraph().getDistance();
             int travelTime = model.getMapObjects().getDigraph().getTravelTime(model.getTransportMode());
             // model.graph.runaStarWithNodeIndex(Integer.parseInt(view.getMapMenu().getDirectionsPanel().getStartLocationField.getText()),

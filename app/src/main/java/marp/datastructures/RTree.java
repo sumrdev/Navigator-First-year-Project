@@ -151,38 +151,11 @@ public class RTree<T extends Element> implements Serializable {
             quickselect(values, 0, values.size() - 1, values.size() - 1);
         }
 
-        protected void quickSort(List<T> values, int low, int high) {
-            
-            if (low < high) {
-    
-                int pivot = values.size()/2, indexOfNext = low - 1;
-                float pivotElement = values.get(pivot).getBounds()[layer % dimensions];
-                for (int i = low; i < high; i++) {
-
-                    // if element at index i is less than the pivot,
-                    // then rearrange the elements
-                    if (values.get(i).getBounds()[layer % dimensions] <= pivotElement) {
-                        indexOfNext++;
-                        reorder(values, i, indexOfNext);
-                    }
-
-                }
-
-                reorder(values, pivot+1, high);
-                indexOfNext++;
-                
-                quickSort(values, low, indexOfNext-1); // quicksort left-side
-                quickSort(values, indexOfNext+1, high); // quicksort right-side
-                
-            }
-
-        }
-
         protected void quickselect(List<T> values, int low, int high, int k) {
             
             if (low < high) {
     
-                int pivot = high, indexOfNext = low;
+                int pivot = values.size()/2, indexOfNext = low;
                 float pivotElement = values.get(pivot).getBounds()[layer % dimensions];
                 for (int i = low; i < high; i++) {
 
@@ -195,7 +168,7 @@ public class RTree<T extends Element> implements Serializable {
 
                 }
 
-                reorder(values, indexOfNext, high);
+                reorder(values, indexOfNext, pivot);
                 indexOfNext++;
                 
                 if (pivot < k) {

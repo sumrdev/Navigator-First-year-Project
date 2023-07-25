@@ -99,7 +99,6 @@ public class Controller {
                 Point2D point = view.getMapScene().screenCoordsToMapCoords(new Point2D(lastX, lastY));
                 MapPoint nearestPoint = model.getNearestPointForMapSelection(point);
                 nearestRoad = nearestPoint.getName();
-                System.out.println("nearestPoint: " + nearestRoad);
                 PointOfInterest favouritePoint = model
                         .getFavouritePointForSelection(new Point2D(nearestPoint.getX() / 0.56, -nearestPoint.getY()));
                 if (notes.getNoteFromAddress(nearestRoad) != null) {
@@ -313,8 +312,6 @@ public class Controller {
 
             if (model.getSelectedPoint().getType() == PointType.FAVOURITE) {
                 notes.NewNote(nearestRoad, view.getMapMenu().getSelectedPointPanel().getNote());
-                System.out.println("For address: " + nearestRoad + " \nNew note: "
-                        + notes.getNoteFromAddress(nearestRoad));
             }
             view.getMapMenu().getSelectedPointPanel().getNotesTextArea().setText("");
 
@@ -342,8 +339,11 @@ public class Controller {
             // On enter pressed in the searchbar, focus on and pan to the point of the
             // address in the search bar.
             focusOnPoint(view.getMapMenu().getSelectedPointPanel().getSearchBar().getAddress(), true, true);
+
             // Clear the searchbar text
             view.getMapMenu().getSelectedPointPanel().getSearchBar().clear();
+            // Save entered road
+            nearestRoad = view.getMapMenu().getSelectedPointPanel().getSearchBar().getAddress().toString();
         });
         view.getMapMenu().getSelectedPointPanel().getSearchButton().setOnAction(e -> {
             // On clicking search button, focus on and pan to the point of the address in
@@ -381,8 +381,6 @@ public class Controller {
                                 (float) (view.getMapMenu().getSelectedPointPanel().getMapPoint().getX() / 0.56),
                                 -view.getMapMenu().getSelectedPointPanel().getMapPoint().getY(), true));
                 notes.NewNote(nearestRoad, view.getMapMenu().getSelectedPointPanel().getNote());
-                System.out.println("For address: " + nearestRoad + " \nNote: "
-                        + notes.getNoteFromAddress(nearestRoad));
                 view.getMapMenu().getSelectedPointPanel().getNotesTextArea().setText("");
 
                 // We then minimize the panel...
@@ -400,9 +398,8 @@ public class Controller {
                 view.getMapScene().redraw();
                 try {
                     notes.getHashMapForPOI().remove(nearestRoad);
-                    System.out.println("Removed note for POI: " + nearestRoad);
                 } catch (Exception e1) {
-                    // TODO: handle exception
+                    e1.printStackTrace();
                 }
             }
         });
@@ -628,7 +625,6 @@ public class Controller {
         try {
             this.view.getListView().getItems().addAll(fileList);
         } catch (Exception e) {
-            System.out.println("Error getting items from List View: ");
             e.printStackTrace();
         }
 

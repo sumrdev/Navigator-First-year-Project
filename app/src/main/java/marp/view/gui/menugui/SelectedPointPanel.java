@@ -78,6 +78,7 @@ public class SelectedPointPanel extends MenuPanel {
 
         // Create text area for notes
         notesTextArea = new TextArea();
+        notesTextArea.setFont(Font.font("verdana", FontWeight.MEDIUM, FontPosture.REGULAR, 16)); 
         takeNoteText = new Text("Write notes for this Bookmark:");
         takeNoteText.setFont(Font.font("verdana", FontWeight.MEDIUM, FontPosture.REGULAR, 19)); 
         takeNoteText2 = new Text("Bookmark this point to save your notes\n(If already bookmarked, just press close to save your edit)");

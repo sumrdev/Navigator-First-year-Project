@@ -148,14 +148,16 @@ public class RTree<T extends Element> implements Serializable {
          * @param values the values that should be sorted
          */
         protected void sortList(List<T> values) {
-            quickselect(values, 0, values.size() - 1, values.size() - 1);
+            quickselect(values, 0, values.size() - 1, values.size()/2);
         }
 
         protected void quickselect(List<T> values, int low, int high, int k) {
             
             if (low < high) {
+
+                Random rand = new Random();
     
-                int pivot = values.size()/2; // pivot is the median
+                int pivot = rand.nextInt(low, high + 1); // random pivot is choosen each time
                 int indexOfNext = low; // next element to be swapped
                 float pivotElement = values.get(pivot).getBounds()[layer % dimensions];
                 for (int i = low; i < high; i++) {
@@ -170,11 +172,10 @@ public class RTree<T extends Element> implements Serializable {
                 }
 
                 reorder(values, indexOfNext, pivot);
-                indexOfNext++;
                 
-                if (pivot < k) {
+                if (indexOfNext < k) {
                     quickselect(values, indexOfNext+1, high, k); // quickselect right-side
-                } else if (pivot > k) {
+                } else if (indexOfNext > k) {
                     quickselect(values, low, indexOfNext-1, k); // quickselect left-side
                 }
                 

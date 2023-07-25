@@ -47,7 +47,7 @@ public final class Model implements Serializable {
     }
 
     public static String getDefaultMap() {
-        return "denmark-latest.bin";
+        return "bornholm.bin";
     }
 
     public static Model getInstance() {

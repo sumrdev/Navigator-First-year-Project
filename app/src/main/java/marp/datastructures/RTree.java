@@ -155,7 +155,8 @@ public class RTree<T extends Element> implements Serializable {
             
             if (low < high) {
     
-                int pivot = values.size()/2, indexOfNext = low;
+                int pivot = values.size()/2; // pivot is the median
+                int indexOfNext = low; // next element to be swapped
                 float pivotElement = values.get(pivot).getBounds()[layer % dimensions];
                 for (int i = low; i < high; i++) {
 

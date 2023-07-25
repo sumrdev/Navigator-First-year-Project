@@ -43,6 +43,8 @@ public final class Model implements Serializable {
     public boolean isTerrainVisible = true;
     public boolean isBuildingsVisible = true;
 
+    private static final long serialVersionUID = 42L;
+
     private Model() {
     }
 
